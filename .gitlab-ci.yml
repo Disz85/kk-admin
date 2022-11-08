@@ -1,0 +1,124 @@
+stages:
+  - build
+  - test
+  - deploy
+
+composer:
+  image: composer:2.0.8
+  stage: build
+  artifacts:
+    paths:
+      - vendor/
+    expire_in: 1 week
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-composer
+    paths:
+      - vendor/
+  script:
+    - composer install
+  tags:
+    - kremmania
+  only:
+    - test@kremmania/km-admin
+    - production@kremmania/km-admin
+
+node_test:
+  image: node:19
+  stage: build
+  artifacts:
+    paths:
+      - node_modules/
+      - public/images
+      - public/fonts
+      - public/css
+      - public/js
+      - public/mix-manifest.json
+    expire_in: 1 week
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-node
+    paths:
+      - node_modules/
+  script:
+    - cp .env.testing .env
+    - npm install
+    - npm run dev
+  tags:
+    - kremmania
+  only:
+    - test@kremmania/km-admin
+
+node_production:
+  image: node:19
+  stage: build
+  artifacts:
+    paths:
+      - node_modules/
+      - public/images
+      - public/fonts
+      - public/css
+      - public/js
+      - public/mix-manifest.json
+    expire_in: 1 week
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-node
+    paths:
+      - node_modules/
+  script:
+    - sh generate_production_env.sh
+    - npm install
+    - npm run production
+  tags:
+    - kremmania
+  only:
+    - production@kremmania/km-admin
+
+phpunit:
+  image: php:8.1
+  stage: test
+  script:
+    - php vendor/bin/phpunit --testdox
+  tags:
+    - kremmania
+  only:
+    - test@kremmania/km-admin
+    - production@kremmania/km-admin
+
+deploy_test:
+  image: centralmediacsoport/nosalty-ci:1.4
+  stage: deploy
+  script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - echo -n "$SSH_PRIVATE_KEY" | ssh-add -
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - 'cp .env.testing .env'
+    - 'php vendor/bin/dep deploy test'
+  environment:
+    name: test
+    url: 'https://admin.kremmania.p24.hu/'
+  when: always
+  tags:
+    - kremmania
+  only:
+    - test@kremmania/km-admin
+
+deploy_production:
+  image: centralmediacsoport/nosalty-ci:1.4
+  stage: deploy
+  script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - echo -n "$SSH_PRIVATE_KEY" | ssh-add -
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - 'sh generate_production_env.sh'
+    - 'php vendor/bin/dep deploy production --parallel --limit=1'
+  environment:
+    name: production
+    url: 'https://admin.kremmania.hu/'
+  when: manual
+  tags:
+    - kremmania
+  only:
+    - production@kremmania/km-admin

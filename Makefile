@@ -54,7 +54,7 @@ npm-run-dev: ## Setup step #5: Run npm run dev
 npm-watch: ## Run npm run dev
 	docker run -u $(USER_ID):$(GROUP_ID) -i -v $(PWD):/application -w /application node:19 npm run watch
 
-install: config composer-install artisan-install npm-install npm-run-dev  ## Run the setup steps automatically
+install: config composer-install artisan-install npm-install ## Run the setup steps automatically
 
 uninstall: ## Cleanup project by removing .env, PHP packages, node modules, files under the storage directory, etc.
 	rm -f .env

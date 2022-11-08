@@ -1,6 +1,11 @@
 /node_modules
 /public/hot
 /public/storage
+/public/css/*
+/public/js/*
+/public/images/*
+/public/fonts/*
+/public/vendor
 /storage/*.key
 /vendor
 .env
@@ -13,3 +18,10 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+
+keys
+
+*.sh
+!generate_production_env.sh
+public/keycloak.json
+public/mix-manifest.json

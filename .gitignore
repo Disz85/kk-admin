@@ -22,6 +22,6 @@ yarn-error.log
 keys
 
 *.sh
-!generate_production_env.sh
+!generate-env.sh
 public/keycloak.json
 public/mix-manifest.json

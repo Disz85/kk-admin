@@ -39,7 +39,7 @@ node_test:
     paths:
       - node_modules/
   script:
-    - cp .env.testing .env
+    - sh generate-env.sh
     - npm install
     - npm run dev
   tags:
@@ -64,7 +64,7 @@ node_production:
     paths:
       - node_modules/
   script:
-    - sh generate_production_env.sh
+    - sh generate-env.sh
     - npm install
     - npm run production
   tags:
@@ -92,7 +92,7 @@ deploy_test:
     - eval $(ssh-agent -s)
     - echo -n "$SSH_PRIVATE_KEY" | ssh-add -
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - 'cp .env.testing .env'
+    - 'sh generate-env.sh'
     - 'php vendor/bin/dep deploy test'
   environment:
     name: test
@@ -112,7 +112,7 @@ deploy_production:
     - eval $(ssh-agent -s)
     - echo -n "$SSH_PRIVATE_KEY" | ssh-add -
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - 'sh generate_production_env.sh'
+    - 'sh generate-env.sh'
     - 'php vendor/bin/dep deploy production --parallel --limit=1'
   environment:
     name: production

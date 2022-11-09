@@ -26,17 +26,16 @@ host('[TODO-CI]')
     ->set('http_user', 'nginx')
     ->set('branch', 'test')
     ->set('deploy_path', '/www/local/{{application}}')
-    ->user('admin.kremmania.deploy')
+    ->user('[TODO-CI]')
     ->forwardAgent(true)
     ->multiplexing(true);
 
-//host('wm208.p24.hu', 'wm209.p24.hu')
 host('[TODO-CI]')
     ->stage('production')
     ->set('http_user', 'nginx')
     ->set('branch', 'production')
     ->set('deploy_path', '/www/local/{{application}}')
-    ->user('admin.kremmania.deploy')
+    ->user('[TODO-CI]')
     ->forwardAgent(true)
     ->multiplexing(true);
 

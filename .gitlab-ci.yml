@@ -1,5 +1,6 @@
 stages:
   - build
+  - analysis
   - test
   - deploy
 
@@ -22,7 +23,7 @@ composer:
     - test@kremmania/km-admin
     - production@kremmania/km-admin
 
-node_test:
+.node:
   image: node:19
   stage: build
   artifacts:
@@ -32,7 +33,6 @@ node_test:
       - public/fonts
       - public/css
       - public/js
-      - public/mix-manifest.json
     expire_in: 1 week
   cache:
     key: ${CI_COMMIT_REF_SLUG}-node
@@ -44,32 +44,40 @@ node_test:
     - npm run dev
   tags:
     - kremmania
+
+node-test:
+  extends: .node
   only:
     - test@kremmania/km-admin
 
-node_production:
-  image: node:19
-  stage: build
-  artifacts:
-    paths:
-      - node_modules/
-      - public/images
-      - public/fonts
-      - public/css
-      - public/js
-      - public/mix-manifest.json
-    expire_in: 1 week
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}-node
-    paths:
-      - node_modules/
+node-production:
+  extends: .node
+  only:
+    - production@kremmania/km-admin
+
+phpcsfixer:
+  stage: analysis
+  dependencies:
+    - composer
   script:
-    - sh generate-env.sh
-    - npm install
-    - npm run production
+    - composer dry-format
+    #- ./vendor/bin/php-cs-fixer fix -vvv --config=.php-cs-fixer.php --dry-run --format gitlab --using-cache false > gl-php-cs-fixer-report.json || exit 0
   tags:
     - kremmania
   only:
+    - test@kremmania/km-admin
+    - production@kremmania/km-admin
+
+phpstan:
+  stage: analysis
+  dependencies:
+    - composer
+  script:
+    - composer analyze
+  tags:
+    - kremmania
+  only:
+    - test@kremmania/km-admin
     - production@kremmania/km-admin
 
 phpunit:
@@ -83,7 +91,7 @@ phpunit:
     - test@kremmania/km-admin
     - production@kremmania/km-admin
 
-deploy_test:
+deploy-test:
   image: centralmediacsoport/nosalty-ci:1.4
   stage: deploy
   script:
@@ -97,13 +105,13 @@ deploy_test:
   environment:
     name: test
     url: 'https://admin.kremmania.p24.hu/'
-  when: always
+  when: manual
   tags:
     - kremmania
   only:
     - test@kremmania/km-admin
 
-deploy_production:
+deploy-production:
   image: centralmediacsoport/nosalty-ci:1.4
   stage: deploy
   script:

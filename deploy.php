@@ -5,7 +5,7 @@ namespace Deployer;
 require 'recipe/laravel.php';
 
 ### Project #####################################################
-set('application', 'admin');
+set('application', 'km-admin');
 set('allow_anonymous_stats', false);
 
 add('shared_dirs', [
@@ -21,12 +21,12 @@ add('writable_dirs', [
 ]);
 
 ### Hosts #####################################################
-host('[TODO-CI]')
+host('km-test-01')
     ->stage('test')
     ->set('http_user', 'nginx')
     ->set('branch', 'test')
     ->set('deploy_path', '/www/local/{{application}}')
-    ->user('[TODO-CI]')
+    ->user('admin.kremmania.deploy')
     ->forwardAgent(true)
     ->multiplexing(true);
 
@@ -35,7 +35,7 @@ host('[TODO-CI]')
     ->set('http_user', 'nginx')
     ->set('branch', 'production')
     ->set('deploy_path', '/www/local/{{application}}')
-    ->user('[TODO-CI]')
+    ->user('admin.kremmania.deploy')
     ->forwardAgent(true)
     ->multiplexing(true);
 
@@ -51,11 +51,11 @@ task('artisan:editor', function () {
 
 task('fpm-reload', function () {
     run('sudo systemctl reload php-fpm');
-})->onHosts([ '[TODO-CI]']);
+})->onHosts([ 'km-test-01']);
 
 task('worker-restart', function () {
     run('{{bin/php}} {{release_path}}/artisan queue:restart');
-})->onHosts(['[TODO-CI]']);
+})->onHosts(['km-test-01']);
 
 task('release', [
     'deploy:prepare',

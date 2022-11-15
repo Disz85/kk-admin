@@ -6,7 +6,6 @@ echo APP_ENV=\"$APP_ENV\"
 echo APP_KEY=\"$APP_KEY\"
 echo APP_DEBUG=false
 echo APP_URL=\"$APP_URL\"
-echo MIX_APP_URL=\"$MIX_APP_URL\"
 
 echo LOG_CHANNEL=stack
 echo LOG_DEPRECATIONS_CHANNEL=null

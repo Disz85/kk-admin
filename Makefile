@@ -9,6 +9,8 @@ up upd stop
 .DEFAULT_GOAL := help
 
 PHP_CONTAINER := kremmania-admin-php-fpm
+NODE_CONTAINER := node:19
+NODE_VITE_PORT := 5173:5173
 
 # Set dir of Makefile to a variable to use later
 MAKEPATH := $(abspath $(lastword $(MAKEFILE_LIST)))
@@ -46,13 +48,19 @@ artisan-seed: ## Run php artisan seed
 	docker exec -it $(PHP_CONTAINER) php artisan db:seed
 
 npm-install: ## Setup step #4: Run npm install
-	docker run -u $(USER_ID):$(GROUP_ID) -i -v $(PWD):/application -w /application node:19 npm install
+	docker run -u $(USER_ID):$(GROUP_ID) -i -v $(PWD):/application -w /application --rm $(NODE_CONTAINER) npm install
 
-npm-run-dev: ## Setup step #5: Run npm run dev
-	docker run -u $(USER_ID):$(GROUP_ID) -i -v $(PWD):/application -w /application node:19 npm run dev
+npm-dev: ## Setup step #5: Run npm run dev
+	docker run -u $(USER_ID):$(GROUP_ID) -i -v $(PWD):/application -w /application -p $(NODE_VITE_PORT) --rm $(NODE_CONTAINER) npm run dev
 
-npm-watch: ## Run npm run dev
-	docker run -u $(USER_ID):$(GROUP_ID) -i -v $(PWD):/application -w /application node:19 npm run watch
+npm-build: ## Run npm run build
+	docker run -u $(USER_ID):$(GROUP_ID) -i -v $(PWD):/application -w /application -p $(NODE_VITE_PORT) --rm $(NODE_CONTAINER) npm run build
+
+npm-lint-fix: ## Run npm run lint
+	docker run -u $(USER_ID):$(GROUP_ID) -i -v $(PWD):/application -w /application --rm $(NODE_CONTAINER) npm run lint
+
+npm-test: ## Run npm run test
+	docker run -u $(USER_ID):$(GROUP_ID) -i -v $(PWD):/application -w /application --rm $(NODE_CONTAINER) npm run test
 
 install: config composer-install artisan-install npm-install ## Run the setup steps automatically
 

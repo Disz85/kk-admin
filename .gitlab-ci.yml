@@ -5,7 +5,7 @@ stages:
   - deploy
 
 composer:
-  image: composer:2.0.8
+  image: composer:2.4.4
   stage: build
   artifacts:
     paths:
@@ -16,7 +16,7 @@ composer:
     paths:
       - vendor/
   script:
-    - composer install
+    - composer install --ignore-platform-reqs
   tags:
     - kremmania
   only:
@@ -41,7 +41,7 @@ composer:
   script:
     - sh generate-env.sh
     - npm install
-    - npm run dev
+    - npm run build
   tags:
     - kremmania
 
@@ -57,11 +57,10 @@ node-production:
 
 phpcsfixer:
   stage: analysis
-  dependencies:
-    - composer
+  image: composer:2.4.4
   script:
     - composer dry-format
-    #- ./vendor/bin/php-cs-fixer fix -vvv --config=.php-cs-fixer.php --dry-run --format gitlab --using-cache false > gl-php-cs-fixer-report.json || exit 0
+  allow_failure: true
   tags:
     - kremmania
   only:
@@ -70,10 +69,16 @@ phpcsfixer:
 
 phpstan:
   stage: analysis
-  dependencies:
-    - composer
+  image: composer:2.4.4
+  before_script:
+    - composer require nunomaduro/larastan:2.2 --dev --no-plugins --no-interaction --no-scripts --prefer-dist --ignore-platform-reqs
   script:
     - composer analyze
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-larastan
+    paths:
+      - vendor/
+  allow_failure: true
   tags:
     - kremmania
   only:
@@ -92,16 +97,15 @@ phpunit:
     - production@kremmania/km-admin
 
 deploy-test:
-  image: centralmediacsoport/nosalty-ci:1.4
+  image: centralmediacsoport/hazipatika-ci:1.1
   stage: deploy
   script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - mkdir -p ~/.ssh
     - eval $(ssh-agent -s)
     - echo -n "$SSH_PRIVATE_KEY" | ssh-add -
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - 'sh generate-env.sh'
-    - 'php vendor/bin/dep deploy test'
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - sh generate-env.sh
+    - php vendor/bin/dep deploy test
   environment:
     name: test
     url: 'https://admin.kremmania.p24.hu/'
@@ -112,16 +116,15 @@ deploy-test:
     - test@kremmania/km-admin
 
 deploy-production:
-  image: centralmediacsoport/nosalty-ci:1.4
+  image: centralmediacsoport/hazipatika-ci:1.1
   stage: deploy
   script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - mkdir -p ~/.ssh
     - eval $(ssh-agent -s)
     - echo -n "$SSH_PRIVATE_KEY" | ssh-add -
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - 'sh generate-env.sh'
-    - 'php vendor/bin/dep deploy production --parallel --limit=1'
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - sh generate-env.sh
+    - php vendor/bin/dep deploy production --parallel --limit=1
   environment:
     name: production
     url: 'https://admin.kremmania.hu/'

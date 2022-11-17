@@ -4,6 +4,15 @@ namespace Deployer;
 
 require 'recipe/laravel.php';
 
+// Config
+set('repository', 'gitlab@glab.p24.hu:kremmania/km-admin.git');
+set('remote_user', 'admin.kremmania.deploy');
+set('http_user', 'nginx');
+set('deploy_path', '/www/local/km-admin');
+set('forwardAgent', true);
+set('multiplexing', true);
+
+
 ### Project #####################################################
 set('application', 'km-admin');
 set('allow_anonymous_stats', false);
@@ -21,23 +30,13 @@ add('writable_dirs', [
 ]);
 
 ### Hosts #####################################################
-host('km-test-01')
-    ->stage('test')
-    ->set('http_user', 'nginx')
-    ->set('branch', 'test')
-    ->set('deploy_path', '/www/local/{{application}}')
-    ->user('admin.kremmania.deploy')
-    ->forwardAgent(true)
-    ->multiplexing(true);
+host('test')
+    ->setHostname('km-test-02')
+    ->set('branch', 'test');
 
-host('[TODO-CI]')
-    ->stage('production')
-    ->set('http_user', 'nginx')
-    ->set('branch', 'production')
-    ->set('deploy_path', '/www/local/{{application}}')
-    ->user('admin.kremmania.deploy')
-    ->forwardAgent(true)
-    ->multiplexing(true);
+host('production')
+    ->setHostName('[TODO-CI]')
+    ->set('branch', 'production');
 
 ### Tasks #####################################################
 
@@ -51,16 +50,16 @@ task('artisan:editor', function () {
 
 task('fpm-reload', function () {
     run('sudo systemctl reload php-fpm');
-})->onHosts([ 'km-test-01']);
+});
 
 task('worker-restart', function () {
     run('{{bin/php}} {{release_path}}/artisan queue:restart');
-})->onHosts(['km-test-01']);
+});
 
-task('release', [
+task('deploy', [
     'deploy:prepare',
-    'deploy:release',
     'upload',
+    'deploy:vendors',
     'artisan:migrate',
     'artisan:storage:link',
     'artisan:editor',
@@ -69,10 +68,10 @@ task('release', [
     'deploy:symlink',
     'fpm-reload',
     'worker-restart',
+    'deploy:cleanup',
+    'deploy:success'
 ]);
 
-task('deploy', [
-    'release',
-    'cleanup',
-    'success'
-]);
+// [Optional] if deploy fails automatically unlock.
+after('deploy:failed', 'deploy:unlock');
+

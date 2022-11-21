@@ -14,11 +14,17 @@ return new class () extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->unsignedBigInteger('legacy_id');
+            $table->string('sso_id')->nullable()->unique();
+            $table->string('title', 10)->nullable();
+            $table->string('lastname')->nullable();
+            $table->string('firstname')->nullable();
+            $table->string('username')->unique();
+            $table->string('email')->nullable()->unique();
+            $table->string('slug')->nullable();
+            $table->text('description')->nullable();
+            $table->foreignId('image_id')->nullable()->constrained('media')
+                ->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

@@ -2,11 +2,10 @@
 
 namespace App\Repositories;
 
-use Http;
 use Illuminate\Contracts\Filesystem\FileExistsException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Storage;
 use Illuminate\Http\File;
+use Storage;
 use Str;
 
 class MediaRepository implements MediaRepositoryInterface
@@ -45,8 +44,8 @@ class MediaRepository implements MediaRepositoryInterface
 
             $context = stream_context_create([
                 'http' => [
-                    'header' => $cred
-                ]
+                    'header' => $cred,
+                ],
             ]);
         }
 

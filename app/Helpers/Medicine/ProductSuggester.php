@@ -51,7 +51,7 @@ class ProductSuggester
             $search_result = $this->repository->searchProducts([
                 'price_from' => $min_price,
                 'price_to' => $max_price,
-                'per_page' => $search_limit
+                'per_page' => $search_limit,
             ]);
 
             $items = $search_result->items;

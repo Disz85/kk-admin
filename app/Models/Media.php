@@ -19,12 +19,12 @@ class Media extends Model
         'y',
     ];
 
-    public function getCreatedAtAttribute(?string $value) : ?string
+    public function getCreatedAtAttribute(?string $value): ?string
     {
         return Helpers::getFormattedDate($value);
     }
 
-    public function getUpdatedAtAttribute(?string $value) : ?string
+    public function getUpdatedAtAttribute(?string $value): ?string
     {
         return Helpers::getFormattedDate($value);
     }

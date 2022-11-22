@@ -53,6 +53,7 @@ class ImportArticleAuthors extends Command
                 if (! $deleteIfExist) {
                     $skipped++;
                     $progress->advance();
+
                     return;
                 }
 

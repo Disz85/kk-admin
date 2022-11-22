@@ -17,6 +17,7 @@ class ProductHelper
         $prefix = config('medicine.product_url.prefix');
         $name_without_slashes = Str::replace('/', '_', $name);
         $slug = Str::slug($name_without_slashes, '_');
+
         return "{$prefix}/{$slug}/{$id}";
     }
 }

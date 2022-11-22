@@ -29,7 +29,7 @@ class MedicineTagRuleProcessor
                 default => null,
             };
 
-            if ($key && !empty($params[$key])) {
+            if ($key && ! empty($params[$key])) {
                 if (Str::contains($params[$key], Str::lower($rule->filter))) {
                     $result = $result->merge($rule->tags);
                 }

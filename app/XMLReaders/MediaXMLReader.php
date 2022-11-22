@@ -20,9 +20,9 @@ class MediaXMLReader extends AbstractXMLReader
 
         $metaKey = trim($this->reader->value);
 
-        if (in_array($metaKey, ))
-
-        return [ $metaKey => $metaValue ];
+        if (in_array($metaKey, )) {
+            return [ $metaKey => $metaValue ];
+        }
     }
 
     /**
@@ -69,10 +69,12 @@ class MediaXMLReader extends AbstractXMLReader
                 case 'description':
                     $this->reader->read();
                     $article[$field] = trim($this->reader->value);
+
                     break;
                 case 'tag':
                     $this->reader->read();
                     $article['tags'][] = (int)trim($this->reader->getAttribute('id'));
+
                     break;
                 case 'author_id':
                 case 'modified_show':
@@ -80,6 +82,7 @@ class MediaXMLReader extends AbstractXMLReader
                 case 'branded_content':
                     $this->reader->read();
                     $article[$field] = (int)trim($this->reader->value);
+
                     break;
             }
         }

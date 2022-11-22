@@ -40,7 +40,7 @@ interface MediaRepositoryInterface
 
     /**
      * @param array|string $paths
-     * @return boolean
+     * @return bool
      */
     public function delete(array|string $paths): bool;
 

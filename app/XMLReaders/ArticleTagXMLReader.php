@@ -45,6 +45,7 @@ class ArticleTagXMLReader extends AbstractXMLReader
                     $tag['slug'] = trim($this->reader->getAttribute('nicename'));
                     $this->reader->read();
                     $tag['name'] = trim($this->reader->value);
+
                     break;
             }
         }

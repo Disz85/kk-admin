@@ -3,6 +3,7 @@
 namespace App\Helpers\Import;
 
 use App\Helpers\ImportImage;
+use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Dom\Node\AbstractNode;
 use PHPHtmlParser\Dom\Node\HtmlNode;
@@ -13,10 +14,7 @@ use PHPHtmlParser\Exceptions\ContentLengthException;
 use PHPHtmlParser\Exceptions\LogicalException;
 use PHPHtmlParser\Exceptions\NotLoadedException;
 use PHPHtmlParser\Exceptions\StrictException;
-use PHPHtmlParser\Exceptions\Tag\AttributeNotFoundException;
 use PHPHtmlParser\Exceptions\UnknownChildTypeException;
-use Illuminate\Support\Str;
-use stringEncode\Exception;
 
 class HtmlToEditorJsConverter
 {
@@ -42,7 +40,6 @@ class HtmlToEditorJsConverter
     public function convert(string $html, string|null $type = null): array
     {
         if ($type == 'article') {
-
             $translate_article = [
                 '<div class="box-top-cikkek-ajanlo">[TOP-CIKKEK-AJANLO]</div>' => '',
                 '<a href="http:' => '<a href="https:',
@@ -55,7 +52,7 @@ class HtmlToEditorJsConverter
                 '<p class="header">' => '<p>',
                 '<p class="nomargin">' => '<p>',
                 '<em>' => '',
-                '</em>' => ''
+                '</em>' => '',
             ];
             $html = strtr($html, $translate_article);
         }
@@ -84,6 +81,7 @@ class HtmlToEditorJsConverter
     public function convertArticleDescription(string $text): array
     {
         $result['blocks'][] = $this->makeBlock($text, 'paragraph', 'paragraph');
+
         return $result;
     }
 
@@ -116,7 +114,7 @@ class HtmlToEditorJsConverter
 
                 if ((in_array($type, ['article', 'betlex', 'examination', 'labresult', 'herbal'])) && $tag == 'p') {
                     $this->processSubContent($node, $blocks, $type, $recursionDepth);
-                } else if ($type == 'vitamin' && $tag == 'table') {
+                } elseif ($type == 'vitamin' && $tag == 'table') {
                     $text = str_replace('&amp;', '&', $text);
                     $blocks[] = $this->makeBlock($text, 'table');
                 } else {
@@ -128,10 +126,11 @@ class HtmlToEditorJsConverter
                             } catch (\Exception $e) {
                                 var_dump($e->getMessage());
                             }
+
                             break;
-                        // article img
+                            // article img
                         case 'img':
-                        // Betlex special image
+                            // Betlex special image
                         case 'kep':
                             try {
                                 // In case of img tag, the outer html is needed to process
@@ -139,6 +138,7 @@ class HtmlToEditorJsConverter
                             } catch (\Exception $e) {
                                 var_dump($e->getMessage());
                             }
+
                             break;
                         case 'div':
                             $tag_classes = '';
@@ -166,7 +166,7 @@ class HtmlToEditorJsConverter
                                             }
 
                                             if ($child instanceof TextNode) {
-                                                if (!empty($description)) {
+                                                if (! empty($description)) {
                                                     $description .= '. ';
                                                 }
 
@@ -270,7 +270,7 @@ class HtmlToEditorJsConverter
                                 }
                             }
 
-                            if (Str::contains($tag_classes, 'cikkdoboz') && !Str::contains($tag_classes, 'box-video')) {
+                            if (Str::contains($tag_classes, 'cikkdoboz') && ! Str::contains($tag_classes, 'box-video')) {
                                 $result = $this->tryMakeSpecialBlock($text, 'highlighted');
 
                                 if ($result) {
@@ -308,9 +308,11 @@ class HtmlToEditorJsConverter
                             if ($node->hasChildren()) {
                                 $this->processSubContent($node, $blocks, $type, $recursionDepth);
                             }
+
                             break;
                         case 'iframe':
                             $blocks[] = $this->makeBlock($node->outerHtml(), $tag);
+
                             break;
                         case 'b':
                         case 'strong':
@@ -324,12 +326,13 @@ class HtmlToEditorJsConverter
                             if ($new_block) {
                                 $blocks[] = $new_block;
                             }
+
                             break;
                         default:
                             $blocks[] = $this->makeBlock($text, $tag, $type);
                     }
                 }
-            } else if ($node instanceof TextNode) {
+            } elseif ($node instanceof TextNode) {
                 // Tries to append the pure text content into the latest paragraph
                 // Spaces are intentionally not trimmed
                 $text = $node->innerHtml();
@@ -343,6 +346,7 @@ class HtmlToEditorJsConverter
                 }
             }
         }
+
         return $blocks;
     }
 
@@ -392,6 +396,7 @@ class HtmlToEditorJsConverter
 
         if ($count > 0 && ($blocks[$count - 1]['type'] ?? null) === 'paragraph') {
             $this->convertParagraph($blocks[$count - 1], $text, true);
+
             return null;
         } else {
             return $this->makeBlock($text, 'paragraph');
@@ -430,27 +435,33 @@ class HtmlToEditorJsConverter
         switch ($type) {
             case 'paragraph':
                 $this->convertParagraph($block, $text);
+
                 break;
             case 'header':
                 $this->convertHeader($block, $tag, $text);
+
                 break;
             case 'list':
                 $this->convertList($block, $tag, $text);
+
                 break;
             case 'image':
                 if ($tag === 'kep') {
                     $this->convertImage($block, $text);
-                } else if ($tag === 'figure') {
+                } elseif ($tag === 'figure') {
                     $this->convertFigure($block, $text);
                 } else {
                     $this->convertImage2($block, $text);
                 }
+
                 break;
             case 'table':
                 $this->convertTable($block, $text);
+
                 break;
             case 'embed':
                 $this->convertEmbed($block, $tag, $text);
+
                 break;
         }
 
@@ -511,8 +522,7 @@ class HtmlToEditorJsConverter
 
                     if (in_array($tag_name, ['b', 'strong', 'em', 'i', 'a', 'link', 'u'])) {
                         $content = $child->outerHtml();
-                    }
-                    else {
+                    } else {
                         $content = $child->innerhtml();
                     }
 
@@ -597,7 +607,7 @@ class HtmlToEditorJsConverter
 
         $images = $dom->find('img');
 
-        if (!$images || count($images) === 0) {
+        if (! $images || count($images) === 0) {
             return;
         }
 
@@ -625,7 +635,7 @@ class HtmlToEditorJsConverter
         $src = $node->getAttribute('src');
         $alt = $node->getAttribute('alt');
 
-        if (!$src) {
+        if (! $src) {
             return;
         }
 
@@ -690,7 +700,7 @@ class HtmlToEditorJsConverter
             $content = $node->innerhtml();
 
             // Filter out separator nodes
-            if (!empty(trim($content))) {
+            if (! empty(trim($content))) {
                 $items[] = $content;
             }
         }
@@ -758,18 +768,21 @@ class HtmlToEditorJsConverter
                         $block['data']['service'] = 'jw';
                         $block['data']['width'] = 500;
                         $block['data']['height'] = 281;
+
                         break;
                     case 'youtube.com':
                     case 'www.youtube.com':
                         $block['data']['service'] = 'youtube';
                         $block['data']['width'] = 560;
                         $block['data']['height'] = 315;
+
                         break;
                     case 'instagram.com':
                     case 'www.instagram.com':
                         $block['data']['service'] = 'instagram';
                         $block['data']['width'] = 500;
                         $block['data']['height'] = 832;
+
                         break;
                     case 'facebook.com':
                     case 'www.facebook.com':
@@ -778,6 +791,7 @@ class HtmlToEditorJsConverter
                             $block['data']['width'] = 500;
                             $block['data']['height'] = 506;
                         }
+
                         break;
                 }
 
@@ -785,7 +799,7 @@ class HtmlToEditorJsConverter
                 $block['data']['embed'] = $src;
                 $block['data']['caption'] = null;
 
-                if (!isset($block['data']['service'])) {
+                if (! isset($block['data']['service'])) {
                     $block = $this->rawBlockFallback('<iframe src="'. $src .'" width="500px" height="300px"></iframe>');
                 }
             }
@@ -802,6 +816,7 @@ class HtmlToEditorJsConverter
         $block = [];
         $block['type'] = 'raw';
         $block['data']['html'] = $text;
+
         return $block;
     }
 }

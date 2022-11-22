@@ -41,13 +41,16 @@ class PharmIndexSearchQueryBuilder
         switch ($search_type) {
             case 'nevben':
                 $query['queryString'] = $conditions['search'];
+
                 break;
             case 'hatoanyagban':
                 $query['moleculeName'] = $conditions['search'];
+
                 break;
             case 'mindenhol':
                 $query['queryString'] = $conditions['search'];
                 $query['moleculeName'] = $conditions['search'];
+
                 break;
         }
     }
@@ -65,7 +68,7 @@ class PharmIndexSearchQueryBuilder
     {
         $product_type_ids = $conditions['product_type_ids'] ?? [];
 
-        if (!empty($product_type_ids)) {
+        if (! empty($product_type_ids)) {
             $query['typeIds'] = $product_type_ids;
         }
     }
@@ -84,7 +87,7 @@ class PharmIndexSearchQueryBuilder
             $prescription_codes[] = 'VN';
         }
 
-        if (!empty($prescription_codes)) {
+        if (! empty($prescription_codes)) {
             $query['presc'] = implode(',', $prescription_codes);
         }
 

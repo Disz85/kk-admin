@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Utility;
 
 use Illuminate\Support\Carbon;
@@ -24,16 +25,20 @@ class Helpers
      */
     public static function formatSecToISO8601($second): string
     {
-        $h = intval($second/3600);
-        $m = intval(($second -$h*3600)/60);
-        $s = $second -($h*3600 + $m*60);
+        $h = intval($second / 3600);
+        $m = intval(($second - $h * 3600) / 60);
+        $s = $second - ($h * 3600 + $m * 60);
         $ret = 'PT';
-        if ($h)
-            $ret.=$h.'H';
-        if ($m)
-            $ret.=$m.'M';
-        if ((!$h && !$m) || $s)
-            $ret.=$s.'S';
+        if ($h) {
+            $ret .= $h.'H';
+        }
+        if ($m) {
+            $ret .= $m.'M';
+        }
+        if ((! $h && ! $m) || $s) {
+            $ret .= $s.'S';
+        }
+
         return $ret;
     }
 

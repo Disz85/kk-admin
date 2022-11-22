@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Traits;
-
 
 trait GeneratesPath
 {
@@ -10,8 +8,7 @@ trait GeneratesPath
     {
         $path = [];
 
-        foreach ($categories as $category)
-        {
+        foreach ($categories as $category) {
             $path[] = $category->slug;
         }
 
@@ -21,13 +18,11 @@ trait GeneratesPath
     public static function bootGeneratesPath()
     {
         static::saving(function ($model) {
-
-            if (!$model->slug) {
+            if (! $model->slug) {
                 $model->generateSlug();
             }
 
             $model->path = $model->generatePath($model->hierarchy);
         });
     }
-
 }

@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands\Import;
 
+use App\Helpers\Import\HtmlToEditorJsConverter;
 use App\Models\Category;
 use App\XMLReaders\ArticleCategoryXMLReader;
 use Illuminate\Console\Command;
-use App\Helpers\Import\HtmlToEditorJsConverter;
 
 class ImportArticleCategories extends Command
 {
@@ -56,9 +56,10 @@ class ImportArticleCategories extends Command
                 ->first() ?? new Category();
 
             if ($article_category->exists) {
-                if (!$deleteIfExist) {
+                if (! $deleteIfExist) {
                     $skipped++;
                     $progress->advance();
+
                     return;
                 }
 
@@ -81,6 +82,7 @@ class ImportArticleCategories extends Command
 
         $progress->finish();
         $this->info("\nImporting is finished. Number of skipped records: " . $skipped);
+
         return 0;
     }
 }

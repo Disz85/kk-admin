@@ -11,7 +11,7 @@ class Tag extends Model
 {
     use HasFactory;
 
-    const TYPE_ARTICLE = 'article';
+    public const TYPE_ARTICLE = 'article';
 
     protected $fillable = [
         'name',

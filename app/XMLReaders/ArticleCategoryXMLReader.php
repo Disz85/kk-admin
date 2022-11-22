@@ -46,6 +46,7 @@ class ArticleCategoryXMLReader extends AbstractXMLReader
                     $article_category['slug'] = trim($this->reader->getAttribute('nicename'));
                     $this->reader->read();
                     $article_category['name'] = trim($this->reader->value);
+
                     break;
             }
         }

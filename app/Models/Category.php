@@ -15,7 +15,7 @@ class Category extends Model
     use GeneratesSlug;
     use CategoryHierarchy;
 
-    const TYPE_ARTICLE = 'article';
+    public const TYPE_ARTICLE = 'article';
 
     protected $table = 'categories';
 

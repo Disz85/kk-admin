@@ -2,11 +2,11 @@
 
 namespace App\Helpers;
 
+use App\Models\Media;
 use App\Repositories\MediaRepositoryInterface;
 use Exception;
 use GuzzleHttp\Psr7\MimeType;
 use Illuminate\Http\File;
-use App\Models\Media;
 
 class ImportImage
 {
@@ -22,7 +22,7 @@ class ImportImage
         try {
             $tempPath = storage_path('tmp/uploads/');
             $fileInfo = pathinfo($imageUrl);
-            if (!file_exists($tempPath)) {
+            if (! file_exists($tempPath)) {
                 mkdir($tempPath, 0777, true);
             }
             $this->downloadFile($tempPath, $imageUrl, $fileInfo['basename']);
@@ -52,7 +52,7 @@ class ImportImage
     {
         $tempPath = storage_path('tmp/uploads/');
         $fileInfo = pathinfo($imageUrl);
-        if (!file_exists($tempPath)) {
+        if (! file_exists($tempPath)) {
             mkdir($tempPath, 0777, true);
         }
         $this->downloadFile($tempPath, $imageUrl, $fileInfo['basename']);
@@ -75,7 +75,7 @@ class ImportImage
     {
         $remote_stream = fopen($url, 'r');
 
-        if (!$remote_stream || !file_put_contents($path . $filename, $remote_stream)) {
+        if (! $remote_stream || ! file_put_contents($path . $filename, $remote_stream)) {
             throw new Exception('Failed to download.');
         }
     }
@@ -86,5 +86,4 @@ class ImportImage
             unlink($path);
         }
     }
-
 }

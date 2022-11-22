@@ -5,13 +5,10 @@ namespace App\Console\Commands\Import;
 use App\Helpers\Import\HtmlToEditorJsConverter;
 use App\Helpers\Import\TimestampToDateConverter;
 use App\Helpers\ImportImage;
-use App\Models\Article;
 //use App\Models\Author;
-use App\Models\Category;
 use App\Models\Tag;
 
 use App\XMLReaders\ArticleTagXMLReader;
-use App\XMLReaders\ArticleXMLReader;
 use Illuminate\Console\Command;
 
 class ImportArticleTags extends Command
@@ -49,7 +46,6 @@ class ImportArticleTags extends Command
      *
      * @return int
      */
-
     public function handle(ArticleTagXMLReader $articleXMLReader, HtmlToEditorJsConverter $converter, TimestampToDateConverter $timeconverter)
     {
         $skipped = 0;
@@ -65,9 +61,10 @@ class ImportArticleTags extends Command
                 ->first() ?? new Tag();
 
             if ($tag->exists) {
-                if (!$deleteIfExist) {
+                if (! $deleteIfExist) {
                     $skipped++;
                     $progress->advance();
+
                     return;
                 }
 
@@ -90,6 +87,7 @@ class ImportArticleTags extends Command
 
         $progress->finish();
         $this->info("\nImporting is finished. Number of skipped records: " . $skipped);
+
         return 0;
     }
 }

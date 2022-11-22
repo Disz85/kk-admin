@@ -1,4 +1,5 @@
 <?php
+
 namespace App\XMLReaders;
 
 use App\XMLReaders\Abstracts\AbstractXMLReader;
@@ -44,10 +45,12 @@ class ArticleAuthorXMLReader extends AbstractXMLReader
                     $this->reader->read();
                     $key = str_replace([ 'wp:author_', '_' ], '', $field);
                     $author[$key] = trim($this->reader->value);
+
                     break;
                 case 'wp:author_display_name':
                     $this->reader->read();
                     $author['username'] = trim($this->reader->value);
+
                     break;
             }
         }

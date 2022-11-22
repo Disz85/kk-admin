@@ -46,7 +46,6 @@ class ImportMedia extends Command
      *
      * @return int
      */
-
     public function handle(MediaXMLReader $articleXMLReader, HtmlToEditorJsConverter $converter, TimestampToDateConverter $timeconverter)
     {
         $skipped = 0;
@@ -60,9 +59,10 @@ class ImportMedia extends Command
             $article = Article::where('id', $data['id'])->first() ?? new Article();
 
             if ($article->exists) {
-                if (!$deleteIfExist) {
+                if (! $deleteIfExist) {
                     $skipped++;
                     $progress->advance();
+
                     return;
                 }
                 $article->delete();
@@ -78,10 +78,10 @@ class ImportMedia extends Command
                 }
                 if ($data['created'] == 0 && $data['modified'] != 0) {
                     $data['created'] = $data['modified'];
-                } else if ($data['created'] == 0 && $data['modified'] == 0) {
+                } elseif ($data['created'] == 0 && $data['modified'] == 0) {
                     $data['created'] = $data['valid_from'];
                     $data['modified'] = $data['valid_from'];
-                } else if ($data['valid_from'] == 0) {
+                } elseif ($data['valid_from'] == 0) {
                     $data['valid_from'] = $data['modified'];
                 }
 
@@ -123,8 +123,7 @@ class ImportMedia extends Command
                 $article->syncTags($tags);
 
                 if (isset($data['category_id'])) {
-                    $category = Category
-                        ::ofType(Category::TYPE_ARTICLE)
+                    $category = Category::ofType(Category::TYPE_ARTICLE)
                         ->whereLegacyId($data['category_id'])
                         ->first();
 
@@ -141,6 +140,7 @@ class ImportMedia extends Command
 
         $progress->finish();
         $this->info("\nImporting is finished. Number of skipped records: " . $skipped);
+
         return 0;
     }
 }

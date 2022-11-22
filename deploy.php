@@ -30,12 +30,12 @@ add('writable_dirs', [
 ]);
 
 ### Hosts #####################################################
-host('test')
-    ->setHostname('km-test-02')
+host('km-test-02')
+    ->setLabels(['stage' => 'test'])
     ->set('branch', 'test');
 
-host('production')
-    ->setHostName('[TODO-CI]')
+host('km-web-02', 'km-web-03')
+    ->setLabels(['stage' => 'production'])
     ->set('branch', 'production');
 
 ### Tasks #####################################################
@@ -46,10 +46,6 @@ task('upload', function () {
 
 task('artisan:editor', function () {
     run('{{bin/php}} {{release_path}}/artisan vendor:publish --provider="VanOns\Laraberg\LarabergServiceProvider"');
-});
-
-task('fpm-reload', function () {
-    run('sudo systemctl reload php-fpm');
 });
 
 task('worker-restart', function () {
@@ -66,8 +62,8 @@ task('deploy', [
     'artisan:config:cache',
     'deploy:shared',
     'deploy:symlink',
-    'fpm-reload',
     'worker-restart',
+    'deploy:unlock',
     'deploy:cleanup',
     'deploy:success'
 ]);

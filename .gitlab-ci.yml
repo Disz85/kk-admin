@@ -105,7 +105,7 @@ deploy-test:
     - echo -n "$SSH_PRIVATE_KEY" | ssh-add -
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - sh generate-env.sh
-    - php vendor/bin/dep deploy test
+    - php vendor/bin/dep deploy stage=test
   environment:
     name: test
     url: 'https://admin.kremmania.p24.hu/'
@@ -124,7 +124,7 @@ deploy-production:
     - echo -n "$SSH_PRIVATE_KEY" | ssh-add -
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - sh generate-env.sh
-    - php vendor/bin/dep deploy production --parallel --limit=1
+    - php vendor/bin/dep deploy stage=production
   environment:
     name: production
     url: 'https://admin.kremmania.hu/'

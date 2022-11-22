@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'disk' => env('FILE_STORAGE_DISK'),
+    'disk' => env('FILE_STORAGE_DISK', 'minio'),
 ];

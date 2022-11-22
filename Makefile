@@ -83,3 +83,14 @@ stop: ## Stop docker containers
 	cd ../km-main && docker-compose -p kremmania stop
 	cd -
 
+test: ## Run PHP tests
+	docker exec -it $(PHP_CONTAINER) ./vendor/bin/phpunit --testdox --configuration phpunit.xml
+
+dry-format: ## Check PHP format with Php-cs-fixer
+	docker exec -it $(PHP_CONTAINER) composer dry-format
+
+format: ## Format PHP with Php-cs-fixer
+	docker exec -it $(PHP_CONTAINER) composer format
+
+analyze: ## Check PHP format with Larastan
+	docker exec -it $(PHP_CONTAINER) composer analyze

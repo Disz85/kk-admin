@@ -14,13 +14,11 @@ return new class () extends Migration {
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('legacy_id');
+            $table->unsignedBigInteger('legacy_id')->nullable();
             $table->string('title');
             $table->string('slug');
             $table->text('lead')->nullable();
             $table->text('body')->nullable();
-            $table->foreignId('category_id')->constrained('categories')
-                ->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('image_id')->nullable()->constrained('media')
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->boolean('active')->default(false);

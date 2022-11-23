@@ -15,6 +15,7 @@ return new class () extends Migration {
             $table->foreignId('image_id')->nullable()->constrained('media')
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
+            $table->index('slug','slug_index');
         });
     }
 

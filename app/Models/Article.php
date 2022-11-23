@@ -6,6 +6,7 @@ use App\Traits\GeneratesSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Article extends Model
@@ -72,6 +73,11 @@ class Article extends Model
     {
         return $this->morphToMany(Category::class, 'categoryable')
             ->using(Categoryable::class);
+    }
+
+    public function authors(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class,'authors');
     }
 
     protected function prependSlugWithArticleType(): self

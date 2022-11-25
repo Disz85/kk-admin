@@ -35,6 +35,7 @@ class ImportImage
             $path = $this->mediaRepository->storeWithPrefix(new File($tempPath . '/' . $fileInfo['basename']), $path);
 
             $media = new Media(['path' => $path, 'type' => $mimetypes]);
+            $media->legacy_url = $imageUrl;
             $media->save();
             $this->deleteFile($tempPath . '/' . $fileInfo['basename']);
 
@@ -65,6 +66,7 @@ class ImportImage
         $path = $this->mediaRepository->storeWithPrefix(new File($tempPath . '/' . $fileInfo['basename']), $path);
 
         $media = new Media(['path' => $path, 'type' => $mimetypes]);
+        $media->legacy_url = $imageUrl;
         $media->save();
         $this->deleteFile($tempPath . '/' . $fileInfo['basename']);
 

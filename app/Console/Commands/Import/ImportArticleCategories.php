@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Import;
 
-use App\Helpers\Import\HtmlToEditorJsConverter;
+use App\Helpers\Import\HtmlToEditorJsConverterMagazine;
 use App\Models\Category;
 use App\XMLReaders\ArticleCategoryXMLReader;
 use Illuminate\Console\Command;
@@ -41,7 +41,7 @@ class ImportArticleCategories extends Command
      * @param ArticleCategoryXMLReader $articleCategoryXMLReader
      * @return int
      */
-    public function handle(ArticleCategoryXMLReader $articleCategoryXMLReader, HtmlToEditorJsConverter $converter): int
+    public function handle(ArticleCategoryXMLReader $articleCategoryXMLReader, HtmlToEditorJsConverterMagazine $converter): int
     {
         $skipped = 0;
         $path = $this->option('path');
@@ -51,8 +51,7 @@ class ImportArticleCategories extends Command
         $progress->start();
 
         $articleCategoryXMLReader->read($path, function (array $data) use ($converter, $deleteIfExist, &$skipped, $progress) {
-            $article_category = Category::where('type', '=', Category::TYPE_ARTICLE)
-                ->where('slug', '=', $data['slug'])
+            $article_category = Category::where('slug', '=', $data['slug'])
                 ->first() ?? new Category();
 
             if ($article_category->exists) {
@@ -70,7 +69,6 @@ class ImportArticleCategories extends Command
             try {
                 $article_category->name = $data['name'];
                 $article_category->slug = $data['slug'];
-                $article_category->type = Category::TYPE_ARTICLE;
 
                 $article_category->save();
             } catch (\Throwable $e) {

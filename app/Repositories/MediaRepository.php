@@ -5,8 +5,8 @@ namespace App\Repositories;
 use Illuminate\Contracts\Filesystem\FileExistsException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\File;
-use Storage;
-use Str;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class MediaRepository implements MediaRepositoryInterface
 {

@@ -37,17 +37,20 @@ class ImportArticleAuthors extends Command
     /**
      * Execute the console command.
      */
-    public function handle(ArticleAuthorXMLReader $authorXMLReader): void
+    public function handle(ArticleAuthorXMLReader $articleAuthorXMLReader): void
     {
         $skipped = 0;
         $path = $this->option('path');
         $deleteIfExist = $this->option('delete');
 
-        $progress = $this->output->createProgressBar($authorXMLReader->count($path));
+        $progress = $this->output->createProgressBar($articleAuthorXMLReader->count($path));
         $progress->start();
 
-        $authorXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress) {
-            $author = User::find($data['id']) ?? new User();
+        $articleAuthorXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress) {
+            $author = User::query()
+                ->where('legacy_id', '=', $data['id'])
+                ->first()
+                ?? new User();
 
             if ($author->exists) {
                 if (! $deleteIfExist) {
@@ -61,7 +64,7 @@ class ImportArticleAuthors extends Command
                 $author = new User();
             }
 
-            $author->id = $data['id'];
+            $author->legacy_id = $data['id'];
             $author->lastname = $data['lastname'] ?? null;
             $author->firstname = $data['firstname'] ?? null;
             $author->email = $data['email'] ?? null;

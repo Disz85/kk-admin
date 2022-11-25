@@ -3,6 +3,7 @@
 namespace App\Helpers\Import;
 
 use App\Helpers\ImportImage;
+use App\Models\Media;
 use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Dom\Node\AbstractNode;
@@ -16,7 +17,7 @@ use PHPHtmlParser\Exceptions\NotLoadedException;
 use PHPHtmlParser\Exceptions\StrictException;
 use PHPHtmlParser\Exceptions\UnknownChildTypeException;
 
-class HtmlToEditorJsConverter
+class HtmlToEditorJsConverterMagazine
 {
     private ImportImage $save_image;
 
@@ -41,16 +42,12 @@ class HtmlToEditorJsConverter
     {
         if ($type == 'article') {
             $translate_article = [
-                '<div class="box-top-cikkek-ajanlo">[TOP-CIKKEK-AJANLO]</div>' => '',
                 '<a href="http:' => '<a href="https:',
                 '<a href="//' => '<a href="https://',
-                '<a href="www.hazipatika.com' => '<a href="https://www.hazipatika.com',
-                '<a href="hazipatika.com' => '<a href="https://www.hazipatika.com',
-                '<h2 class="bekezdes">' => '<h2>',
                 '<blockquote>' => '',
                 '</blockquote>' => '',
-                '<p class="header">' => '<p>',
-                '<p class="nomargin">' => '<p>',
+                '<strong>' => '',
+                '</strong>' => '',
                 '<em>' => '',
                 '</em>' => '',
             ];
@@ -112,11 +109,8 @@ class HtmlToEditorJsConverter
                 $text = $node->innerHtml();
                 $tag = $node->tag->name();
 
-                if ((in_array($type, ['article', 'betlex', 'examination', 'labresult', 'herbal'])) && $tag == 'p') {
+                if ((in_array($type, ['article'])) && $tag == 'p') {
                     $this->processSubContent($node, $blocks, $type, $recursionDepth);
-                } elseif ($type == 'vitamin' && $tag == 'table') {
-                    $text = str_replace('&amp;', '&', $text);
-                    $blocks[] = $this->makeBlock($text, 'table');
                 } else {
                     switch ($tag) {
                         // article figure
@@ -130,8 +124,6 @@ class HtmlToEditorJsConverter
                             break;
                             // article img
                         case 'img':
-                            // Betlex special image
-                        case 'kep':
                             try {
                                 // In case of img tag, the outer html is needed to process
                                 $blocks[] = $this->makeBlock($node->outerHtml(), $tag, $type);
@@ -146,153 +138,6 @@ class HtmlToEditorJsConverter
                                 $tag_classes = $node->tag->getAttribute('class')->getValue();
                             }
 
-                            // article gallery
-                            if (Str::contains($tag_classes, 'imagesSlideshowHp')) {
-                                $li_items = $node->find('li');
-                                $gallery_items = [];
-
-                                foreach ($li_items as $li_item) {
-                                    if ($li_item instanceof HtmlNode) {
-                                        $image_source = null;
-                                        $description = '';
-
-                                        foreach ($li_item->getChildren() as $child) {
-                                            if ($child instanceof HtmlNode && $child->tag->name() === 'img') {
-                                                $image_source = $child->getAttribute('src');
-                                            }
-
-                                            if ($child instanceof HtmlNode && $child->tag->name() === 'h2') {
-                                                $description .= $child->innerText();
-                                            }
-
-                                            if ($child instanceof TextNode) {
-                                                if (! empty($description)) {
-                                                    $description .= '. ';
-                                                }
-
-                                                $description .= $child->innerHtml(); // Has no innerText method
-                                            }
-                                        }
-
-                                        if ($image_source !== null) {
-                                            $gallery_items[] = [
-                                                'image' => $image_source,
-                                                'description' => $description,
-                                            ];
-                                        }
-                                    }
-                                }
-
-                                if (count($gallery_items) > 0) {
-                                    $gallery = [];
-                                    $gallery['type'] = 'gallery';
-                                    $gallery['data'] = ['title' => ''];
-
-                                    foreach ($gallery_items as $gallery_item) {
-                                        $image_data = $this->save_image->saveImage2(trim($gallery_item['image']), 'import');
-
-                                        $gallery['data']['gallery_items'][] = [
-                                            'id' => $image_data->id,
-                                            'path' => $image_data->path,
-                                            'description' => $gallery_item['description'],
-                                        ];
-                                    }
-
-                                    $blocks[] = $gallery;
-                                }
-                            }
-
-                            // article image slider
-                            if (Str::contains($tag_classes, 'imagesSliderHp')) {
-                                preg_match_all('/src=\"(.*?)\"/', $text, $slides2);
-
-                                if ($slides2) {
-                                    $gallery = [];
-                                    $gallery['title'] = '';
-                                    $gallery['type'] = 'gallery';
-                                    $gallery['data'] = ['title' => ''];
-
-                                    for ($i = 0; $i < count($slides2[1]); $i++) {
-                                        $image_data = $this->save_image->saveImage2(trim($slides2[1][$i]), 'import');
-
-                                        $gallery['data']['gallery_items'][] = [
-                                            'id' => $image_data->id,
-                                            'path' => $image_data->path,
-                                            'description' => '',
-                                        ];
-                                    }
-
-                                    $blocks[] = $gallery;
-                                }
-                            }
-
-                            if (
-                                // Examples:
-                                // <div class="col-uxs-12 col-xs-12 col-sm-12 marginbottom-20 cikkdoboz box-video">
-                                // <div class="embed-responsive embed-responsive-16by9 embed-responsive-item b-lazy newytembed">
-                                // <div itemscope="" itemtype="https://schema.org/VideoObject">
-                                // <div style="position:relative; padding-bottom:56.25%; overflow:hidden;">
-                                Str::contains($tag_classes, 'box-video') ||
-                                Str::contains($tag_classes, 'embed-responsive') ||
-                                $node->getAttribute('itemtype') === 'https://schema.org/VideoObject' ||
-                                // Special embed case in betlexes
-                                ($type === 'betlex' && $node->getAttribute('style') === 'position:relative; padding-bottom:56.25%; overflow:hidden;')
-                            ) {
-                                $iframes = $node->find('iframe');
-
-                                if ($iframes && count($iframes) > 0) {
-                                    /** @var HtmlNode $iframe */
-                                    foreach ($iframes as $iframe) {
-                                        $blocks[] = $this->makeBlock($iframe->outerHtml(), 'iframe');
-                                    }
-                                } else {
-                                    $metas = $node->find('meta[itemprop="contentUrl"]');
-
-                                    if ($metas && count($metas) > 0) {
-                                        foreach ($metas as $meta) {
-                                            /** @var HtmlNode $meta */
-                                            $content = $meta->getAttribute('content');
-
-                                            if ($content) {
-                                                $parsed_content = parse_url($content);
-
-                                                if (Str::contains($parsed_content['host'], ['content.jwplatform.com', 'cdn.jwplayer.com'])) {
-                                                    $video_id = pathinfo(basename($content), PATHINFO_FILENAME);
-
-                                                    if ($video_id) {
-                                                        //The Embed plugin works with iframes, pass an iframe alternative for processing
-                                                        $blocks[] = $this->makeBlock('<iframe src="' . $parsed_content['scheme'] . '://' . $parsed_content['host'] . '/players/' . $video_id . '.html' . '"></iframe>', 'iframe');
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (Str::contains($tag_classes, 'cikkdoboz') && ! Str::contains($tag_classes, 'box-video')) {
-                                $result = $this->tryMakeSpecialBlock($text, 'highlighted');
-
-                                if ($result) {
-                                    $blocks[] = $result;
-                                }
-                            }
-
-                            if (Str::contains($tag_classes, 'bekezdes') || Str::contains($tag_classes, 'pic') || $type === 'labresult') {
-                                // Recursively process the inner content
-                                if ($node->hasChildren()) {
-                                    $this->processSubContent($node, $blocks, $type, $recursionDepth);
-                                }
-                            }
-
-                            if ($type === 'herbal' && $node->getAttribute('type') === 'curiosity') {
-                                $blocks[] = $this->makeBlock('Érdekesség', 'h2');
-
-                                if ($node->hasChildren()) {
-                                    $this->processSubContent($node, $blocks, $type, $recursionDepth);
-                                }
-                            }
-
                             if (Str::contains($tag_classes, 'instagram-media') && $node->hasAttribute('data-instgrm-permalink')) {
                                 // The Embed plugin works with iframes, pass an iframe alternative for processing
                                 $url_info = parse_url($node->getAttribute('data-instgrm-permalink'));
@@ -302,8 +147,6 @@ class HtmlToEditorJsConverter
 
                             break;
                         case 'section':
-                        case 'center':
-                        case 'bekezdes':
                             // Recursively process the inner content
                             if ($node->hasChildren()) {
                                 $this->processSubContent($node, $blocks, $type, $recursionDepth);
@@ -446,9 +289,7 @@ class HtmlToEditorJsConverter
 
                 break;
             case 'image':
-                if ($tag === 'kep') {
-                    $this->convertImage($block, $text);
-                } elseif ($tag === 'figure') {
+                if ($tag === 'figure') {
                     $this->convertFigure($block, $text);
                 } else {
                     $this->convertImage2($block, $text);
@@ -639,7 +480,8 @@ class HtmlToEditorJsConverter
             return;
         }
 
-        $image_storage_path = $this->save_image->saveImage($src, 'import', true);
+        $existingImage = Media::query()->where('legacy_url', '=', $src)->first();
+        $image_storage_path = $existingImage->path ?? $this->save_image->saveImage($src, 'import', true);
 
         $block['data']['path'] = $image_storage_path;
         $block['data']['caption'] = '';

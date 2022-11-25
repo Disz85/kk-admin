@@ -66,7 +66,7 @@ class Article extends Model
 
     public function tags(): MorphToMany
     {
-        return $this->morphToMany(self::getTagClassName(), 'taggable', 'taggables', null, 'tag_id');
+        return $this->morphToMany(Tag::class, 'taggable', 'taggables', null, 'tag_id');
     }
 
     public function categories(): MorphToMany
@@ -77,7 +77,7 @@ class Article extends Model
 
     public function authors(): BelongsToMany
     {
-        return $this->belongsToMany(User::class,'authors');
+        return $this->belongsToMany(User::class, 'authors');
     }
 
     protected function prependSlugWithArticleType(): self

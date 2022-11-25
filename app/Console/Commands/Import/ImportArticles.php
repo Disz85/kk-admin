@@ -2,14 +2,15 @@
 
 namespace App\Console\Commands\Import;
 
-use App\Helpers\Import\HtmlToEditorJsConverter;
+use App\Helpers\Import\HtmlToEditorJsConverterMagazine;
 use App\Helpers\Import\TimestampToDateConverter;
 use App\Helpers\ImportImage;
 use App\Models\Article;
-use App\Models\Author;
 use App\Models\Category;
+use App\Models\Media;
 use App\Models\Tag;
 
+use App\Models\User;
 use App\XMLReaders\ArticleXMLReader;
 use Illuminate\Console\Command;
 
@@ -48,7 +49,7 @@ class ImportArticles extends Command
      *
      * @return int
      */
-    public function handle(ArticleXMLReader $articleXMLReader, HtmlToEditorJsConverter $converter, TimestampToDateConverter $timeconverter)
+    public function handle(ArticleXMLReader $articleXMLReader, HtmlToEditorJsConverterMagazine $converter, TimestampToDateConverter $timeconverter)
     {
         $skipped = 0;
         $path = $this->option('path');
@@ -58,7 +59,7 @@ class ImportArticles extends Command
         $progress->start();
 
         $articleXMLReader->read($path, function (array $data) use ($converter, $deleteIfExist, &$skipped, $progress, $timeconverter) {
-            $article = Article::where('id', $data['id'])->first() ?? new Article();
+            $article = Article::where('legacy_id', '=', $data['id'])->first() ?? new Article();
 
             if ($article->exists) {
                 if (! $deleteIfExist) {
@@ -71,67 +72,50 @@ class ImportArticles extends Command
                 $article = new Article();
             }
 
-            $body = ($data['body_autolink'] != 0) ? $data['body_autolink'] : $data['body'];
+            $body = (implode('', $data['embeds']) . $data['body']) ?? null;
 
             try {
+                $article->legacy_id = $data['id'] ?? null;
+
                 $imageId = null;
-                if ($data['image'] !== '') {
-                    $imageId = $this->save_image->saveImage($data['image'], 'articles');
-                }
-                if ($data['created'] == 0 && $data['modified'] != 0) {
-                    $data['created'] = $data['modified'];
-                } elseif ($data['created'] == 0 && $data['modified'] == 0) {
-                    $data['created'] = $data['valid_from'];
-                    $data['modified'] = $data['valid_from'];
-                } elseif ($data['valid_from'] == 0) {
-                    $data['valid_from'] = $data['modified'];
+                if ($data['_thumbnail_id'] ?? false) {
+                    $imageId = Media::query()
+                        ->where('legacy_id', '=', $data['_thumbnail_id'])
+                        ->first()?->id;
                 }
 
-                $lectorId = Author::whereName($data['lecturer'])->value('id');
-
-                $article->id = $data['id'];
-                $article->legacy_id = $data['legacy_id'];
-                $article->author_id = (($data['author_id'] === 0) || $data['author_id'] == 309) ? 743 : $data['author_id'];      //Default "Hazipatika" author; 309 is a deleted author
-                $article->lector_id = $lectorId ?? null;
-                $article->user_id = 1;
                 $article->image_id = $imageId;
-                $article->title = $data['title'];
-                $article->slug_frozen = true;
-                $article->slug = $data['slug'];
-                $article->lakmusz_title = $data['subtitle'];
-                $article->hirkereso_title = $data['hirkereso_title'];
-                $article->lead = $data['lead'];
-                $article->body = $converter->convert($body, 'article');
-                $article->fb_title = $data['og_title'];
-                $article->fb_description = $data['og_description'];
-                $article->fb_post = $data['og_post_text'];
-                $article->active = $data['status'] === 'e';
-                $article->forbidden_update_date = $data['modified_show'];
-                $article->campaign = $data['editor_note'];
-                $article->adult_content = $data['is_adult'] === 'y';
-                $article->noindex = $data['nofollow'] === 'y';
-                $article->hidden_from_home = $data['not_show_on_index'] === 'y';
-                $article->pr = $data['type'] === 'p';
-                $article->branded_content = $data['branded_content'];
-                $article->not_share_on_fb = ($data['exclude_from_fbfeed'] !== '') ? $data['exclude_from_fbfeed'] : 1;
 
-                $article->published_at = $timeconverter->convert($data['valid_from']);
-                $article->created_at = $timeconverter->convert($data['created']);
-                $article->updated_at = $timeconverter->convert($data['modified']);
+                $article->title = $data['_aioseop_title'] ?? $data['title'];
+                $article->title .= ! $data['active'] ? ' [DRAFT]' : '';
+
+                $article->slug = $data['slug'];
+                $article->lead = $data['_aioseop_description'] ?? $data['lead'] ?? null;
+                $article->body = $body ? $converter->convert($body, 'article') : null;
+
+                $article->published_at = $data['active'] ? $data['created_at'] : null;
+                $article->created_at = $data['created_at'];
+
+                $article->active = $data['active'];
 
                 $article->save();
 
-                $tags = Tag::whereIn('id', $data['tags'])->get();
-                $article->syncTags($tags);
+                $data['authors'] = array_filter($data['authors']);
+                if ($data['authors']) {
+                    $authors = User::whereIn('slug', $data['authors'])->get();
+                    $article->authors()->sync($authors);
+                }
 
-                if (isset($data['category_id'])) {
-                    $category = Category::ofType(Category::TYPE_ARTICLE)
-                        ->whereLegacyId($data['category_id'])
-                        ->first();
+                $data['tags'] = array_filter($data['tags']);
+                if ($data['tags']) {
+                    $tags = Tag::whereIn('slug', $data['tags'])->get();
+                    $article->tags()->sync($tags);
+                }
 
-                    if ($category) {
-                        $article->categories()->sync($category);
-                    }
+                $data['categories'] = array_filter($data['categories']);
+                if ($data['categories']) {
+                    $categories = Category::whereIn('slug', $data['categories'])->get();
+                    $article->categories()->sync($categories);
                 }
             } catch (\Throwable $e) {
                 $this->info("\nException: " . $e->getMessage());

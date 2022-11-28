@@ -15,7 +15,7 @@ return new class () extends Migration {
         Schema::create('media', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('legacy_id')->nullable();
-            $table->string('legacy_url')->nullable();
+            $table->string('legacy_url', 2000)->nullable();
             $table->text('path');
             $table->string('type', 100);
             $table->string('title')->nullable();

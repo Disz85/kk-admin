@@ -26,7 +26,12 @@ class ImportImage
                 mkdir($tempPath, 0777, true);
             }
             $this->downloadFile($tempPath, $imageUrl, $fileInfo['basename']);
-            $mimetypes = MimeType::fromExtension($fileInfo['extension']);
+            if( isset($fileInfo['extension']) ) {
+                $mimetypes = MimeType::fromExtension($fileInfo['extension']);
+            }
+            else {
+                $mimetypes='';
+            }
             if ($mimetypes == '' || $mimetypes == '?') {
                 $mimetypes = 'image/jpeg';
             }

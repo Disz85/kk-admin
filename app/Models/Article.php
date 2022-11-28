@@ -77,7 +77,7 @@ class Article extends Model
 
     public function authors(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'authors');
+        return $this->belongsToMany(Author::class);
     }
 
     protected function prependSlugWithArticleType(): self

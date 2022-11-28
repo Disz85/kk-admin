@@ -14,15 +14,14 @@ return new class () extends Migration {
     {
         Schema::create('authors', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->string('name');
             $table->string('slug');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->foreignId('image_id')->nullable()->constrained('media')
                 ->cascadeOnUpdate()->cascadeOnDelete();
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->timestamps();
-            $table->unique('email');
             $table->unique('slug');
         });
     }

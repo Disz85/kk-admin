@@ -18,7 +18,7 @@ return new class () extends Migration {
             $table->string('title');
             $table->string('slug');
             $table->text('lead')->nullable();
-            $table->mediumText('body')->nullable();
+            $table->longText('body')->nullable();
             $table->foreignId('image_id')->nullable()->constrained('media')
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->boolean('active')->default(false);

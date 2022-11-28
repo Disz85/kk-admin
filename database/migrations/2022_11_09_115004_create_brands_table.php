@@ -17,7 +17,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('legacy_id');
             $table->string('title');
             $table->string('slug');
-            $table->text('description')->nullable();
+            $table->longText('description')->nullable();
             $table->foreignId('image_id')->nullable()->constrained('media')
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->unsignedBigInteger('parent_id')->nullable();

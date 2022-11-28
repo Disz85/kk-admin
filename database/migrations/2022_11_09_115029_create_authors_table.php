@@ -14,11 +14,16 @@ return new class () extends Migration {
     {
         Schema::create('authors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('article_id')->constrained('articles')
+            $table->string('title');
+            $table->string('name');
+            $table->string('slug');
+            $table->string('email');
+            $table->foreignId('image_id')->nullable()->constrained('media')
                 ->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained('users')
-                ->cascadeOnUpdate()->cascadeOnDelete();
-            $table->unique([ 'article_id', 'user_id' ], 'author');
+            $table->longText('description');
+            $table->timestamps();
+            $table->unique('email');
+            $table->unique('slug');
         });
     }
 
@@ -29,6 +34,6 @@ return new class () extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('articles');
+        Schema::dropIfExists('authors');
     }
 };

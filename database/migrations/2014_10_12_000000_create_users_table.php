@@ -22,7 +22,7 @@ return new class () extends Migration {
             $table->string('username')->unique();
             $table->string('email')->nullable()->unique();
             $table->string('slug')->nullable();
-            $table->text('description')->nullable();
+            $table->longText('description')->nullable();
             $table->foreignId('image_id')->nullable()->constrained('media')
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();

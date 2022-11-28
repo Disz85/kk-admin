@@ -17,7 +17,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('legacy_id')->nullable();
             $table->string('name');
             $table->string('slug');
-            $table->text('description')->nullable();
+            $table->longText('description')->nullable();
             $table->foreignId('category_id')->nullable()->constrained('categories')
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('image_id')->nullable()->constrained('media')

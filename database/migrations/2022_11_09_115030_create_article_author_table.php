@@ -12,17 +12,13 @@ return new class () extends Migration {
      */
     public function up()
     {
-        Schema::create('shelves', function (Blueprint $table) {
+        Schema::create('article_author', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('legacy_id')->nullable();
-            $table->string('title');
-            $table->string('slug');
-            $table->foreignId('user_id')->nullable()->constrained('users')
+            $table->foreignId('article_id')->constrained('articles')
                 ->cascadeOnUpdate()->cascadeOnDelete();
-            $table->timestamps();
-
-            $table->unique([ 'title', 'user_id' ]);
-            $table->unique([ 'slug', 'user_id' ]);
+            $table->foreignId('author_id')->constrained('authors')
+                ->cascadeOnUpdate()->cascadeOnDelete();
+            $table->unique([ 'article_id', 'author_id' ], 'author');
         });
     }
 
@@ -33,6 +29,6 @@ return new class () extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('shelves');
+        Schema::dropIfExists('article_author');
     }
 };

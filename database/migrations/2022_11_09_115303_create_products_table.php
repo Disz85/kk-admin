@@ -18,7 +18,7 @@ return new class () extends Migration {
             $table->string('name');
             $table->string('canonical_name')->nullable();
             $table->string('slug');
-            $table->text('description')->nullable();
+            $table->longText('description')->nullable();
             $table->foreignId('brand_id')->constrained('brands')
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('category_id')->constrained('categories')
@@ -40,6 +40,6 @@ return new class () extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('shops');
+        Schema::dropIfExists('products');
     }
 };

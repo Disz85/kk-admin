@@ -21,8 +21,6 @@ return new class () extends Migration {
             $table->longText('description')->nullable();
             $table->foreignId('brand_id')->constrained('brands')
                 ->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('category_id')->constrained('categories')
-                ->cascadeOnUpdate()->cascadeOnDelete();
             $table->boolean('active')->default(false);
             $table->boolean('hidden')->default(false);
             $table->boolean('sponsored')->default(false);

@@ -19,7 +19,7 @@ class Article extends Model
         'tags',
     ];
 
-    protected $slugFrom = 'title';
+    protected string $slugFrom = 'title';
 
     protected $casts = [
         'body' => 'array',

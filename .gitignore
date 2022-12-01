@@ -25,6 +25,9 @@ keys
 *.sh
 !generate-env.sh
 
+*.xml
+!phpunit.xml
+
 public/keycloak.json
 public/mix-manifest.json
 

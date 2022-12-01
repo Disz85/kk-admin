@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Wishlist;
+use App\Models\Shelf;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class WishlistPolicy
+class ShelfPolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class WishlistPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Wishlist  $wishlists
+     * @param Shelf $shelves
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Wishlist $wishlists)
+    public function view(User $user, Shelf $shelves)
     {
         //
     }
@@ -48,10 +48,10 @@ class WishlistPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Wishlist  $wishlists
+     * @param Shelf $shelves
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Wishlist $wishlists)
+    public function update(User $user, Shelf $shelves)
     {
         //
     }
@@ -60,10 +60,10 @@ class WishlistPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Wishlist  $wishlists
+     * @param Shelf $shelves
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Wishlist $wishlists)
+    public function delete(User $user, Shelf $shelves)
     {
         //
     }
@@ -72,10 +72,10 @@ class WishlistPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Wishlist  $wishlists
+     * @param Shelf $shelves
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Wishlist $wishlists)
+    public function restore(User $user, Shelf $shelves)
     {
         //
     }
@@ -84,10 +84,10 @@ class WishlistPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Wishlist  $wishlists
+     * @param Shelf $shelves
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Wishlist $wishlists)
+    public function forceDelete(User $user, Shelf $shelves)
     {
         //
     }

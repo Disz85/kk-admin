@@ -14,9 +14,9 @@ return new class () extends Migration {
     {
         Schema::create('shelves', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('legacy_id')->nullable();
             $table->string('title');
             $table->string('slug');
+            $table->boolean('is_private')->default(true);
             $table->foreignId('user_id')->nullable()->constrained('users')
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();

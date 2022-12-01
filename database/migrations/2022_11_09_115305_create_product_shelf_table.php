@@ -14,7 +14,6 @@ return new class () extends Migration {
     {
         Schema::create('product_shelf', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('legacy_id')->nullable();
             $table->foreignId('shelf_id')->constrained('shelves')
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('product_id')->constrained('products')

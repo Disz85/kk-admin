@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreWishlistRequest;
-use App\Http\Requests\UpdateWishlistRequest;
-use App\Models\Wishlist;
+use App\Http\Requests\StoreShelfRequest;
+use App\Http\Requests\UpdateShelfRequest;
+use App\Models\Shelf;
 
-class WishlistController extends Controller
+class ShelfController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,10 @@ class WishlistController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreWishlistRequest  $request
+     * @param StoreShelfRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreWishlistRequest $request)
+    public function store(StoreShelfRequest $request)
     {
         //
     }
@@ -42,10 +42,10 @@ class WishlistController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Wishlist  $wishlists
+     * @param Shelf $shelves
      * @return \Illuminate\Http\Response
      */
-    public function show(Wishlist $wishlists)
+    public function show(Shelf $shelves)
     {
         //
     }
@@ -53,10 +53,10 @@ class WishlistController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Wishlist  $wishlists
+     * @param Shelf $shelves
      * @return \Illuminate\Http\Response
      */
-    public function edit(Wishlist $wishlists)
+    public function edit(Shelf $shelves)
     {
         //
     }
@@ -64,11 +64,11 @@ class WishlistController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateWishlistRequest  $request
-     * @param  \App\Models\Wishlist  $wishlists
+     * @param UpdateShelfRequest $request
+     * @param Shelf $shelves
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateWishlistRequest $request, Wishlist $wishlists)
+    public function update(UpdateShelfRequest $request, Shelf $shelves)
     {
         //
     }
@@ -76,10 +76,10 @@ class WishlistController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Wishlist  $wishlists
+     * @param Shelf $shelves
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Wishlist $wishlists)
+    public function destroy(Shelf $shelves)
     {
         //
     }

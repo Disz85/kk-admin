@@ -14,13 +14,19 @@ return new class () extends Migration {
     {
         Schema::create('brands', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('legacy_id');
+            $table->unsignedBigInteger('legacy_id')->nullable();
             $table->string('title');
             $table->string('slug');
+            $table->string('url')->nullable();
             $table->longText('description')->nullable();
             $table->foreignId('image_id')->nullable()->constrained('media')
                 ->cascadeOnUpdate()->cascadeOnDelete();
-            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->text('where_to_find')->nullable();
+            $table->dateTime('approved')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users')
+                ->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')
+                ->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

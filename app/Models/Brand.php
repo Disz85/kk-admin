@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
+use App\Traits\GeneratesSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * Class Brand
@@ -23,5 +24,36 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Brand extends Model
 {
+    use GeneratesSlug;
     use HasFactory;
+
+    protected $with = [
+        'tags',
+    ];
+
+    protected $slugFrom = 'title';
+
+    protected $casts = [
+        'description' => 'array',
+        'approved' => 'datetime',
+    ];
+
+    protected $fillable = [
+        'id',
+        'legacy_id',
+        'title',
+        'slug',
+        'url',
+        'description',
+        'image_id',
+        'where_to_find',
+        'created_by',
+        'updated_by',
+        'approved',
+    ];
+
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'taggable', 'taggables', null, 'tag_id');
+    }
 }

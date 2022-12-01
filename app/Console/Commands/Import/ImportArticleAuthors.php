@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Import;
 
-use App\Models\User;
+use App\Models\Author;
 use App\XMLReaders\ArticleAuthorXMLReader;
 use Illuminate\Console\Command;
 
@@ -47,10 +47,10 @@ class ImportArticleAuthors extends Command
         $progress->start();
 
         $articleAuthorXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress) {
-            $author = User::query()
+            $author = Author::query()
                 ->where('legacy_id', '=', $data['id'])
                 ->first()
-                ?? new User();
+                ?? new Author();
 
             if ($author->exists) {
                 if (! $deleteIfExist) {
@@ -61,7 +61,7 @@ class ImportArticleAuthors extends Command
                 }
 
                 $author->delete();
-                $author = new User();
+                $author = new Author();
             }
 
             $author->legacy_id = $data['id'];

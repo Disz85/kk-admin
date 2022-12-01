@@ -55,4 +55,5 @@ abstract class AbstractXMLReader
      * @param callable $callback
      */
     abstract public function read(string $path, callable $callback): void;
+
 }

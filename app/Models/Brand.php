@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\GeneratesSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
@@ -51,6 +52,11 @@ class Brand extends Model
         'updated_by',
         'approved',
     ];
+
+    public function image(): BelongsTo
+    {
+        return $this->belongsTo(Media::class, 'image_id');
+    }
 
     public function tags(): MorphToMany
     {

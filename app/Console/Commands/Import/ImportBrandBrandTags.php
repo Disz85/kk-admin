@@ -4,19 +4,19 @@ namespace App\Console\Commands\Import;
 
 use App\Helpers\Import\HtmlToEditorJsConverterMagazine;
 use App\Helpers\Import\TimestampToDateConverter;
+use App\Models\Brand;
 use App\Models\Tag;
-
-use App\XMLReaders\BrandTagXMLReader;
+use App\XMLReaders\BrandBrandTagXMLReader;
 use Illuminate\Console\Command;
 
-class ImportBrandTags extends Command
+class ImportBrandBrandTags extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'import:brand-tags
+    protected $signature = 'import:brand-brand-tags
                             {--path= : The path of the XML file}
                             {--delete : Deletes the existing records before saving}';
 
@@ -25,7 +25,7 @@ class ImportBrandTags extends Command
      *
      * @var string
      */
-    protected $description = 'Imports brand tags from XML file';
+    protected $description = 'Imports brand - tags connections from XML file';
 
     /**
      * Create a new command instance.
@@ -42,39 +42,24 @@ class ImportBrandTags extends Command
      *
      * @return int
      */
-    public function handle(BrandTagXMLReader $brandTagXMLReader, HtmlToEditorJsConverterMagazine $converter, TimestampToDateConverter $timeconverter)
+    public function handle(BrandBrandTagXMLReader $brandBrandTagXMLReader, HtmlToEditorJsConverterMagazine $converter, TimestampToDateConverter $timeconverter)
     {
         $skipped = 0;
         $path = $this->option('path');
         $deleteIfExist = $this->option('delete');
 
-        $progress = $this->output->createProgressBar($brandTagXMLReader->count($path));
+        $progress = $this->output->createProgressBar($brandBrandTagXMLReader->count($path));
         $progress->start();
 
-        $brandTagXMLReader->read($path, function (array $data) use ($converter, $deleteIfExist, &$skipped, $progress, $timeconverter) {
-            $tag = Tag::where('legacy_id', '=', $data['id'])
+        $brandBrandTagXMLReader->read($path, function (array $data) use ($converter, $deleteIfExist, &$skipped, $progress, $timeconverter) {
+            $brand = Brand::where('legacy_id', '=', $data['brand_id'])
+                ->first() ?? new Brand();
+
+            $tag = Tag::where('legacy_id', '=', $data['tag_id'])
                 ->first() ?? new Tag();
 
-            if ($tag->exists) {
-                if (! $deleteIfExist) {
-                    $skipped++;
-                    $progress->advance();
-
-                    return;
-                }
-
-                $tag->delete();
-                $tag = new Tag();
-            }
-
             try {
-                $tag->legacy_id = $data['id'];
-                $tag->name = $data['name'];
-                $tag->slug = $data['slug'];
-                $tag->description = $data['description'];
-                $tag->created_at = $data['created_at'];
-                $tag->updated_at = $data['updated_at'];
-
+                $brand->tags()->attach($tag);
                 $tag->save();
             } catch (\Throwable $e) {
                 $this->info("\nException: " . $e->getMessage());

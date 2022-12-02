@@ -8,12 +8,7 @@ use XMLReader;
 
 class BrandTagXMLReader extends AbstractXMLReader
 {
-    private const PARENT_NODE = 'item';
-    private const META_KEYS = [
-        '_thumbnail_id',
-        '_aioseop_description',
-        '_aioseop_title',
-    ];
+    private const PARENT_NODE = 'KREMMANIA.dbo.BrandTags';
 
     /**
      * @inheritDoc
@@ -30,21 +25,13 @@ class BrandTagXMLReader extends AbstractXMLReader
     {
         $this->reader->open($path);
 
-        $article = [];
-        $article['authors'] = [];
-        $article['tags'] = [];
-        $article['categories'] = [];
-        $article['embeds'] = [];
+        $brandTag = [];
 
         while ($this->reader->read()) {
             if ($this->reader->nodeType === XMLReader::END_ELEMENT) {
                 if ($this->reader->name === self::PARENT_NODE) {
-                    $callback($article);
-                    $article = [];
-                    $article['authors'] = [];
-                    $article['tags'] = [];
-                    $article['categories'] = [];
-                    $article['embeds'] = [];
+                    $callback($brandTag);
+                    $brandTag = [];
                 } else {
                     continue;
                 }
@@ -53,122 +40,54 @@ class BrandTagXMLReader extends AbstractXMLReader
             $field = $this->reader->name;
 
             switch ($field) {
-                case 'wp:post_id':
+                case 'Id':
                     $this->reader->read();
-                    $article['id'] = (int) trim($this->reader->value);
+                    $brandTag['id'] = trim($this->reader->value);
 
                     break;
 
-                case 'wp:post_date':
+                case 'Title':
                     $this->reader->read();
-
-                    $date = Carbon::createFromFormat('Y-m-d H:i:s', trim($this->reader->value), 'UTC');
-                    $date->setTimezone('Europe/Budapest');
-                    $article['created_at'] = $date->format('Y-m-d H:i:s');
-
+                    $brandTag['name'] = trim($this->reader->value) ?? null;
                     break;
 
-                case 'wp:status':
+                case 'Slug':
                     $this->reader->read();
-                    $article['active'] = match (trim($this->reader->value)) {
-                        'draft' => 0,
-                        'publish' => 1,
-                    };
-
+                    $brandTag['slug'] = trim($this->reader->value) ?? null;
                     break;
 
-//                case 'wp:post_name':
-                case 'title':
+                case 'Plural':
                     $this->reader->read();
-                    $article[$field] = trim($this->reader->value);
-
+                    $brandTag['description'] = trim($this->reader->value) ?? null;
                     break;
 
-                case 'link':
+                case 'CretOn':
                     $this->reader->read();
-                    $article['slug'] = str_replace(
-                        'https://magazin.kremmania.hu/',
-                        '',
-                        trim($this->reader->value)
-                    );
 
-                    break;
+                    $date = trim($this->reader->value);
 
-                case 'dc:creator':
-                    $this->reader->read();
-                    $article['authors'][] = trim($this->reader->value);
-
-                    break;
-
-                case 'content:encoded':
-                    $this->reader->read();
-                    $article['body'] = trim($this->reader->value);
-
-                    break;
-
-                case 'excerpt:encoded':
-                    $this->reader->read();
-                    $article['lead'] = trim($this->reader->value);
-
-                    break;
-
-                case 'guid':
-                case 'description':
-                    $this->reader->read();
-                    $article[$field] = trim($this->reader->value);
-
-                    break;
-
-                case 'category':
-                    $domain = $this->reader->getAttribute('domain');
-
-                    if ($domain === 'post_tag') {
-                        $article['tags'][] = trim($this->reader->getAttribute('nicename'));
+                    $format = 'Y-m-d\TH:i:s';
+                    if (str_contains($date, '.')) {
+                        $format = 'Y-m-d\TH:i:s.u';
                     }
 
-                    if ($domain === 'category') {
-                        $article['categories'][] = trim($this->reader->getAttribute('nicename'));
-                    }
+                    $date = Carbon::createFromFormat($format, $date);
+                    $brandTag['created_at'] = $date->format('Y-m-d H:i:s');
 
                     break;
 
-                case 'wp:meta_key':
+                case 'ModOn':
                     $this->reader->read();
-                    $metaKey = trim($this->reader->value);
 
-                    if (str_contains($metaKey, '_oembed_') && ! str_contains($metaKey, '_oembed_time_')) {
-                        $this->reader->next();
-                        $this->reader->next();
-                        $this->reader->next();
-                        $this->reader->read();
+                    $date = trim($this->reader->value);
 
-                        $metaValue = trim($this->reader->value);
-
-                        if ($metaValue === '{{unknown}}') {
-                            break;
-                        }
-
-                        $article['embeds'][] = $metaValue;
-
-                        break;
+                    $format = 'Y-m-d\TH:i:s';
+                    if (str_contains($date, '.')) {
+                        $format = 'Y-m-d\TH:i:s.u';
                     }
 
-                    if (in_array($metaKey, self::META_KEYS)) {
-                        $this->reader->next();
-                        $this->reader->next();
-                        $this->reader->next();
-                        $this->reader->read();
-
-                        $metaValue = trim($this->reader->value);
-
-                        if ($metaKey === '_thumbnail_id') {
-                            $metaValue = (int) $metaValue;
-                        }
-
-                        $article[$metaKey] = $metaValue;
-
-                        break;
-                    }
+                    $date = Carbon::createFromFormat($format, $date);
+                    $brandTag['updated_at'] = $date->format('Y-m-d H:i:s');
 
                     break;
             }

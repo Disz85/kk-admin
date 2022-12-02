@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { placeholder, title } from '../scss/components/cms.module.scss';
+import style from '../scss/components/cms.module.scss';
 
 function Cms() {
     return (
-        <div className={placeholder}>
-            <h1 className={title}>This is the Krémmánia Admin!</h1>
+        <div className={style.placeholder}>
+            <h1 className={style.title}>This is the Krémmánia Admin!</h1>
         </div>
     );
 }

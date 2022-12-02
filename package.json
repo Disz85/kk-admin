@@ -3,8 +3,11 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "lint": "eslint ./resources/**/*.jsx --fix",
+        "lint-js": "eslint ./resources/**/*.jsx --fix",
+        "lint-style": "stylelint resources/**/*.scss",
+        "lint-fix": "npm run lint-js && npm run lint-style",
         "test": "vitest run",
+        "test-watch": "vitest --watch",
         "coverage": "vitest run --coverage"
     },
     "browserslist": {

@@ -19,6 +19,8 @@ PWD := $(dir $(MAKEPATH))
 USER_ID=$(shell id -u)
 GROUP_ID=$(shell id -g)
 
+NODE := docker run -u $(USER_ID):$(GROUP_ID) -it -v $(PWD):/application -w /application -p $(NODE_VITE_PORT) --rm node:19
+
 help: ## * Show help (Default task)
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
@@ -48,19 +50,26 @@ artisan-seed: ## Run php artisan seed
 	docker exec -it $(PHP_CONTAINER) php artisan db:seed
 
 npm-install: ## Setup step #4: Run npm install
-	docker run -u $(USER_ID):$(GROUP_ID) -i -v $(PWD):/application -w /application --rm $(NODE_CONTAINER) npm install
+	$(NODE) npm install
 
 npm-dev: ## Setup step #5: Run npm run dev
-	docker run -u $(USER_ID):$(GROUP_ID) -i -v $(PWD):/application -w /application -p $(NODE_VITE_PORT) --rm $(NODE_CONTAINER) npm run dev
+	$(NODE) npm run dev
 
 npm-build: ## Run npm run build
-	docker run -u $(USER_ID):$(GROUP_ID) -i -v $(PWD):/application -w /application -p $(NODE_VITE_PORT) --rm $(NODE_CONTAINER) npm run build
+	$(NODE) npm run build
 
 npm-lint-fix: ## Run npm run lint
-	docker run -u $(USER_ID):$(GROUP_ID) -i -v $(PWD):/application -w /application --rm $(NODE_CONTAINER) npm run lint
+	$(NODE) npm run lint-fix
 
 npm-test: ## Run npm run test
-	docker run -u $(USER_ID):$(GROUP_ID) -i -v $(PWD):/application -w /application --rm $(NODE_CONTAINER) npm run test
+	$(NODE) npm run test
+
+npm-test-watch: ## Run npm run test in watch mode
+	$(NODE) npm run test-watch
+
+npm-test-coverage: ## Run npm run test coverage
+	$(NODE) npm run coverage
+
 
 install: config composer-install artisan-install npm-install ## Run the setup steps automatically
 

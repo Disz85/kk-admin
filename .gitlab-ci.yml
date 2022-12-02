@@ -96,6 +96,17 @@ phpunit:
     - test@kremmania/km-admin
     - production@kremmania/km-admin
 
+vitest:
+  extends: .node
+  stage: test
+  script:
+    - npm run test
+  tags:
+    - kremmania
+  only:
+    - test@kremmania/km-frontend
+    - production@kremmania/km-frontend
+
 deploy-test:
   image: centralmediacsoport/hazipatika-ci:1.1
   stage: deploy

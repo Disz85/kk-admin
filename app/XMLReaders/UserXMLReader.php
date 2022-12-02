@@ -9,7 +9,10 @@ class UserXMLReader
 {
     protected XMLReader $reader;
 
-    private const PARENT_NODES = ['KREMMANIA.dbo.Users', 'KREMMANIA.dbo.AspNetUsers', 'KREMMANIA.dbo.UserNickConnections'];
+    private const PARENT_NODES = [
+        'KREMMANIA.dbo.Users',
+        'KREMMANIA.dbo.AspNetUsers',
+    ];
 
     /**
      * AbstractXMLReader constructor.
@@ -32,7 +35,9 @@ class UserXMLReader
         $this->reader->open($path);
 
         while ($this->reader->read()) {
-            if ($this->reader->nodeType === XMLReader::ELEMENT && in_array($this->reader->name, self::PARENT_NODES)) {
+            if ($this->reader->nodeType === XMLReader::ELEMENT
+                && in_array($this->reader->name, self::PARENT_NODES)
+            ) {
                 $elements++;
             }
         }
@@ -61,14 +66,17 @@ class UserXMLReader
     {
         $this->reader->open($path);
 
-        $wishList = [];
+        $user = [];
+
         $depth = 1;
         while ($this->reader->read() && $depth != 0) {
-            if ($this->reader->nodeType === XMLReader::ELEMENT && in_array($this->reader->name, self::PARENT_NODES)) {
+            if ($this->reader->nodeType === XMLReader::ELEMENT
+                && in_array($this->reader->name, self::PARENT_NODES)
+            ) {
                 $lastNodeName = '';
                 while ($this->reader->read() && ! ($this->reader->nodeType === XMLReader::END_ELEMENT && in_array($this->reader->name, self::PARENT_NODES))) {
                     if ($this->reader->nodeType == XMLReader::TEXT) {
-                        $wishList[$lastNodeName] = trim($this->reader->value);
+                        $user[$lastNodeName] = trim($this->reader->value);
                     }
 
                     $lastNodeName = $this->reader->name;
@@ -77,8 +85,8 @@ class UserXMLReader
 
             if ($this->reader->nodeType === XMLReader::END_ELEMENT) {
                 if (in_array($this->reader->name, self::PARENT_NODES)) {
-                    $callback($wishList);
-                    $wishList = [];
+                    $callback($user);
+                    $user = [];
                 }
             }
         }

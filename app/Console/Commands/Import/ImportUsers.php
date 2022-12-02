@@ -6,13 +6,13 @@ use App\Enum\SkinConcernEnum;
 use App\Enum\SkinTypeEnum;
 use App\Models\User;
 use App\XMLReaders\UserXMLReader;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class ImportUsers extends Command
 {
     public const TYPE_ASPNET = 'AspNetUsers';
     public const TYPE_USERS = 'Users';
-    public const TYPE_CONNECTION = 'UserNickConnections';
 
     /**
      * The name and signature of the console command.
@@ -56,10 +56,7 @@ class ImportUsers extends Command
                 $this->importUsers($userXMLReader, $path);
 
                 break;
-            case self::TYPE_CONNECTION:
-                $this->importNicknameUsernameConnections($userXMLReader, $path);
 
-                break;
             default:
                 $this->info("\n This XML is wrong, maybe it's not a user file.");
 
@@ -85,9 +82,20 @@ class ImportUsers extends Command
 
                 $user = User::where(['email' => $email])->first() ?? new User();
 
+                $user->legacy_id = trim($data['Id']);
                 $user->username = trim($data['UserName']);
                 $user->email = $email;
-                $user->created_at = $data['CreateDate'];
+
+                $date = trim($data['CreateDate']);
+
+                $format = 'Y-m-d\TH:i:s';
+                if (str_contains($date, '.')) {
+                    $format = 'Y-m-d\TH:i:s.u';
+                }
+
+                $date = Carbon::createFromFormat($format, $date);
+                $user->created_at = $date->format('Y-m-d H:i:s');
+
                 $user->save();
             } else {
                 $skipped++;
@@ -112,20 +120,18 @@ class ImportUsers extends Command
         $progress->start();
 
         $userXMLReader->read($path, function (array $data) use ($progress) {
-            if ($data['NickName'] !== '----------') {
-                $user = User::where(['legacy_nickname' => $data['NickName']])->orWhere(['username' => $data['NickName']])->first() ?? new User();
+            $user = User::where(['legacy_nickname' => $data['NickName']])->orWhere(['username' => $data['NickName']])->first() ?? new User();
 
-                if (! $user->legacy_username) {
-                    $user->legacy_nickname = $data['NickName'];
-                    $user->username = $data['NickName'];
-                }
-
-                $user->slug = array_key_exists('Slug', $data) ? $data['Slug'] : null;
-                $user->birth_year = array_key_exists('BirthYear', $data) ? $data['BirthYear'] : null;
-                $user->skin_type = array_key_exists('SkinTypeID', $data) ? $this->getSkinType($data['SkinTypeID']) : SkinTypeEnum::NORMAL;
-                $user->skin_concern = array_key_exists('SkinConcernID', $data) ? $this->getSkinConcern($data['SkinConcernID']) : SkinConcernEnum::NONE;
-                $user->save();
+            if (! $user->legacy_username) {
+                $user->legacy_nickname = $data['NickName'];
+                $user->username = $data['NickName'];
             }
+
+            $user->slug = array_key_exists('Slug', $data) ? $data['Slug'] : null;
+            $user->birth_year = array_key_exists('BirthYear', $data) ? $data['BirthYear'] : null;
+            $user->skin_type = array_key_exists('SkinTypeID', $data) ? $this->getSkinType($data['SkinTypeID']) : SkinTypeEnum::NORMAL;
+            $user->skin_concern = array_key_exists('SkinConcernID', $data) ? $this->getSkinConcern($data['SkinConcernID']) : SkinConcernEnum::NONE;
+            $user->save();
 
             $progress->advance();
         });
@@ -135,52 +141,19 @@ class ImportUsers extends Command
         $this->info("\n Users importing is finished.");
     }
 
-    /** Import Nickname-Username connections */
-    private function importNicknameUsernameConnections($userXMLReader, $path)
-    {
-        $progress = $this->output->createProgressBar($userXMLReader->count($path));
-        $progress->start();
-
-        $skipped = 0;
-        $userNames = [];
-        $userXMLReader->read($path, function (array $data) use ($progress, &$skipped, &$userNames) {
-            $username = trim($data['UserName']);
-            if (! in_array($username, $userNames)) {
-                $userNames[] = $data['UserName'];
-                $user = User::where(['username' => $username])->first() ?? new User();
-
-                $user->legacy_username = $username;
-                $user->legacy_nickname = $data['NickName'];
-                $user->username = $username;
-                $user->timestamps = false;
-                $user->save();
-            } else {
-                $skipped++;
-            }
-
-            $progress->advance();
-        });
-
-        $progress->finish();
-
-        $this->info("\n Nickname - Username importing is finished. Skipped because of duplicated usernames: " . $skipped);
-    }
-
     private function getSkinType($skinTypeId)
     {
-        $skinTypes = [
+        return match ($skinTypeId) {
             '2-1' => SkinTypeEnum::DRY,
             '2-2' => SkinTypeEnum::NORMAL,
             '2-3' => SkinTypeEnum::COMBINED,
             '2-4' => SkinTypeEnum::GREASY,
-        ];
-
-        return $skinTypes[$skinTypeId];
+        };
     }
 
     private function getSkinConcern($skinConcernId)
     {
-        $skinConcerns = [
+        return match ($skinConcernId) {
             '3-1' => SkinConcernEnum::ACNE,
             '3-2' => SkinConcernEnum::REDNESS,
             '3-3' => SkinConcernEnum::UNEVEN_SKIN,
@@ -189,9 +162,7 @@ class ImportUsers extends Command
             '3-6' => SkinConcernEnum::SKIN_AGING,
             '3-7' => SkinConcernEnum::DEHYDRATED_SKIN,
             '3-8' => SkinConcernEnum::HYPERSENSITIVITY,
-        ];
-
-        return $skinConcerns[$skinConcernId];
+        };
     }
 
     private function stripAccents($str)

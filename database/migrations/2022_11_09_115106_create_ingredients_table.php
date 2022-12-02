@@ -20,6 +20,11 @@ return new class () extends Migration {
             $table->longText('description')->nullable();
             $table->foreignId('category_id')->nullable()->constrained('categories')
                 ->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('ewg_data')->nullable();
+            $table->integer('ewg_score')->nullable();
+            $table->integer('ewg_score_max')->nullable();
+            $table->integer('comedogen_index')->nullable();
+            $table->boolean('is_approved')->default(0);
             $table->foreignId('image_id')->nullable()->constrained('media')
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();

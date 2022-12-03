@@ -8,22 +8,6 @@ use XMLReader;
 class ArticleBloggerXMLReader extends AbstractXMLReader
 {
     private const PARENT_NODE = 'entry';
-    private const META_KEYS = [
-        '_thumbnail_id',
-        '_aioseop_description',
-        '_aioseop_title',
-    ];
-
-    private function meta($node)
-    {
-        $node->reader->read();
-
-        $metaKey = trim($this->reader->value);
-
-        if (in_array($metaKey, )) {
-            return [ $metaKey => $metaValue ];
-        }
-    }
 
     /**
      * @inheritDoc

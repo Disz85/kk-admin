@@ -14,7 +14,7 @@ return new class () extends Migration {
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('legacy_id')->nullable();
+            $table->text('legacy_id')->nullable();
             $table->string('name');
             $table->string('slug');
             $table->longText('description')->nullable();

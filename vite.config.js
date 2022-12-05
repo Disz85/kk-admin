@@ -30,47 +30,60 @@ const config = {
             emitWarningAsError: true,
             include: [
                 'resources/**/*.scss'
+
             ]
         }),
         react(),
     ],
     css: {
         modules: {
-            modules: {
-                localsConvention: "camelCase",
-                generateScopedName: "[name]__[local]__[hash:base64:5]",
+            localsConvention: "camelCase",
+            generateScopedName(name, cssFileName) {
+                const scss = {
+                    fileName : path.basename(cssFileName, ".module.scss"),
+                    route : path.dirname(cssFileName),
+                };
+
+                const hash = crypto.createHash("shake256", { outputLength: 2 }).update(name).digest('hex');
+
+                return `${scss.fileName}__${name}__${hash}`;
             }
         }
+    },
+    esbuild: {
+        jsxFactory: 'h',
+        jsxFragment: 'Fragment'
     },
     test: {
         globals: true,
         environment: 'happy-dom',
     },
-    build: {
-        rollupOptions: {
-            output: {
-                assetFileNames: (assetInfo) => {
-                    const { name } = assetInfo;
-                    let extType = name.slice(name.lastIndexOf('.')).replace('.', '');
-                    const route = path.dirname(name);
-                    const subPath = route.slice(route.search(extType)).replace(`${extType}/`, "");
-                    if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
-                        extType = 'img';
-                    }
-
-                    const partOfPath = subPath === extType ? '' : `/${subPath}`
-
-                    return `assets/${extType}${partOfPath}/[name].[hash][extname]`;
-                },
-                chunkFileNames: 'assets/js/[${name}].[hash].js',
-                entryFileNames: 'assets/js/[name].[hash].js',
-            },
-        },
-    }
 };
 
+const prodConfig = {
+    css: {
+        modules: {
+            localsConvention: "camelCase",
+            generateScopedName(name, cssFileName) {
+                const scss = {
+                    fileName : path.basename(cssFileName, ".module.scss?used"),
+                    route : path.dirname(cssFileName),
+                };
+
+                const hash = crypto.createHash("shake256", { outputLength: 2 }).update(name).digest('hex');
+
+                return `${scss.fileName}__${name}__${hash}`;
+            }
+        }
+    },
+}
+
 export default defineConfig(({ command, mode, ssrBuild }) => {
-    if (mode === 'development' || mode === 'production') {
+    if (mode === 'development') {
         return config;
+    }
+
+    if (mode === 'production') {
+        return {...config, ...prodConfig}
     }
 });

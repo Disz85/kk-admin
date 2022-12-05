@@ -2,10 +2,10 @@
 
 namespace app\Enum;
 
-enum SkinTypeEnum:string
+enum SkinTypeEnum: string
 {
-    case DRY        = 'száraz';
-    case COMBINED   = 'kombinált';
-    case NORMAL     = 'normál';
-    case GREASY     = 'zsíros';
+    case DRY = 'száraz';
+    case COMBINED = 'kombinált';
+    case NORMAL = 'normál';
+    case GREASY = 'zsíros';
 }

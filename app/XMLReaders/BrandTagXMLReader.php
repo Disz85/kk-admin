@@ -49,16 +49,19 @@ class BrandTagXMLReader extends AbstractXMLReader
                 case 'Title':
                     $this->reader->read();
                     $brandTag['name'] = trim($this->reader->value) ?? null;
+
                     break;
 
                 case 'Slug':
                     $this->reader->read();
                     $brandTag['slug'] = trim($this->reader->value) ?? null;
+
                     break;
 
                 case 'Plural':
                     $this->reader->read();
                     $brandTag['description'] = trim($this->reader->value) ?? null;
+
                     break;
 
                 case 'CretOn':

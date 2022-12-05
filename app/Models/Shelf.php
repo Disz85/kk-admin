@@ -7,8 +7,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * Class Shelf
@@ -25,7 +23,8 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  */
 class Shelf extends Model
 {
-    use HasFactory, GeneratesSlug;
+    use HasFactory;
+    use GeneratesSlug;
 
     protected $slugFrom = 'title';
 

@@ -34,7 +34,7 @@ class Ingredient extends Model
         'ewg_data',
         'ewg_score',
         'ewg_score_max',
-        'comedogen_index'
+        'comedogen_index',
     ];
 
     /**
@@ -67,5 +67,4 @@ class Ingredient extends Model
         return $this->morphToMany(Category::class, 'categoryable')
             ->using(Categoryable::class);
     }
-
 }

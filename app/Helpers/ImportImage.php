@@ -20,24 +20,23 @@ class ImportImage
     public function saveImage(mixed $imageUrl, string $resource, bool $isImport = false)
     {
         try {
-            $tempPath = storage_path('tmp/uploads/');
+            $tempPath = storage_path('/tmp/uploads');
             $fileInfo = pathinfo($imageUrl);
             if (! file_exists($tempPath)) {
                 mkdir($tempPath, 0777, true);
             }
             $this->downloadFile($tempPath, $imageUrl, $fileInfo['basename']);
-            if( isset($fileInfo['extension']) ) {
+            if (isset($fileInfo['extension'])) {
                 $mimetypes = MimeType::fromExtension($fileInfo['extension']);
-            }
-            else {
-                $mimetypes='';
+            } else {
+                $mimetypes = '';
             }
             if ($mimetypes == '' || $mimetypes == '?') {
                 $mimetypes = 'image/jpeg';
             }
 
             $path = implode('/', array_filter(['images', $resource]));
-            $path = $this->mediaRepository->storeWithPrefix(new File($tempPath . '/' . $fileInfo['basename']), $path);
+            $path = $this->mediaRepository->storeWithPrefix(new File($tempPath . '/' . $fileInfo['basename']), $path, $fileInfo['filename']);
 
             $media = new Media(['path' => $path, 'type' => $mimetypes]);
             $media->legacy_url = $imageUrl;
@@ -54,35 +53,11 @@ class ImportImage
         }
     }
 
-    public function saveImage2(mixed $imageUrl, string $resource)
-    {
-        $tempPath = storage_path('tmp/uploads/');
-        $fileInfo = pathinfo($imageUrl);
-        if (! file_exists($tempPath)) {
-            mkdir($tempPath, 0777, true);
-        }
-        $this->downloadFile($tempPath, $imageUrl, $fileInfo['basename']);
-        $mimetypes = MimeType::fromExtension($fileInfo['extension']);
-        if ($mimetypes == '' || $mimetypes == '?') {
-            $mimetypes = 'image/jpeg';
-        }
-
-        $path = implode('/', array_filter(['images', $resource]));
-        $path = $this->mediaRepository->storeWithPrefix(new File($tempPath . '/' . $fileInfo['basename']), $path);
-
-        $media = new Media(['path' => $path, 'type' => $mimetypes]);
-        $media->legacy_url = $imageUrl;
-        $media->save();
-        $this->deleteFile($tempPath . '/' . $fileInfo['basename']);
-
-        return $media;
-    }
-
     private function downloadFile(string $path, string $url, string $filename): void
     {
         $remote_stream = fopen($url, 'r');
 
-        if (! $remote_stream || ! file_put_contents($path . $filename, $remote_stream)) {
+        if (! $remote_stream || ! file_put_contents($path . '/' . $filename, $remote_stream)) {
             throw new Exception('Failed to download.');
         }
     }

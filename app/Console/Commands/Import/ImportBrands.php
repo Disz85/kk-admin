@@ -5,11 +5,8 @@ namespace App\Console\Commands\Import;
 use App\Helpers\Import\HtmlToEditorJsConverterMagazine;
 use App\Helpers\Import\TimestampToDateConverter;
 use App\Helpers\ImportImage;
-use App\Models\Article;
 use App\Models\Brand;
-use App\Models\Category;
 use App\Models\Media;
-use App\Models\Tag;
 
 use App\Models\User;
 use App\XMLReaders\BrandXMLReader;
@@ -106,7 +103,6 @@ class ImportBrands extends Command
 //                }
 
                 $brand->save();
-
             } catch (\Throwable $e) {
                 $this->info("\nException: " . $e->getMessage());
             } finally {

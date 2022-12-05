@@ -9,7 +9,6 @@ use Illuminate\Console\Command;
 
 class ImportIngredientCategories extends Command
 {
-
     /**
      * The name and signature of the console command.
      *

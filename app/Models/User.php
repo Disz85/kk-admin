@@ -6,11 +6,10 @@ use app\Enum\SkinConcernEnum;
 use app\Enum\SkinTypeEnum;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Collection;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -49,7 +48,7 @@ class User extends Authenticatable
 
     protected string $slugFrom = 'username';
 
-    public   $rules = [
+    public $rules = [
         'email' => 'required|email',
         'username' => 'required',
     ];
@@ -84,8 +83,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'skin_type'         => SkinTypeEnum::class,
-        'skin_concern'      => SkinConcernEnum::class
+        'skin_type' => SkinTypeEnum::class,
+        'skin_concern' => SkinConcernEnum::class,
     ];
-
 }

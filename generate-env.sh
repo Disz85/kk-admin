@@ -37,12 +37,6 @@ echo MAIL_ENCRYPTION=null
 echo MAIL_FROM_ADDRESS=info@kremmania.hu
 echo MAIL_FROM_NAME=Kremmania
 
-echo AWS_ACCESS_KEY_ID=
-echo AWS_SECRET_ACCESS_KEY=
-echo AWS_DEFAULT_REGION=
-echo AWS_BUCKET=
-echo AWS_URL=
-
 # File Storage
 echo MINIO_ENDPOINT=\"$MINIO_ENDPOINT\"
 echo MINIO_KEY=\"$MINIO_KEY\"

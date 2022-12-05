@@ -3,7 +3,6 @@
 namespace App\XMLReaders;
 
 use App\XMLReaders\Abstracts\AbstractXMLReader;
-use Carbon\Carbon;
 use XMLReader;
 
 class BrandBrandTagXMLReader extends AbstractXMLReader

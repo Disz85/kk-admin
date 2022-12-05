@@ -8,7 +8,8 @@ use App\Models\User;
 use App\XMLReaders\WishListXMLReader;
 use Illuminate\Console\Command;
 
-class ImportWishLists extends Command{
+class ImportWishLists extends Command
+{
     /**
      * The name and signature of the console command.
      *
@@ -65,12 +66,12 @@ class ImportWishLists extends Command{
 
             $user = User::where(['legacy_nickname' => $data['NickName']])->first();
 
-            if($user){
+            if ($user) {
                 $shelf->user_id = $user->id;
                 $shelf->title = 'Kívánságlista';
                 $shelf->is_private = true;
 
-                if($shelf->save()){
+                if ($shelf->save()) {
                     $product = Product::where(['legacy_id' => $data['CremeId']])->first();
                     $shelf->products()->sync($product->id, false);
                 }

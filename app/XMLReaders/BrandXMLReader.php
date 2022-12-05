@@ -43,6 +43,7 @@ class BrandXMLReader extends AbstractXMLReader
                 case 'Id':
                     $this->reader->read();
                     $brand['id'] = (int) trim($this->reader->value);
+
                     break;
 
                 case 'Link':
@@ -63,16 +64,19 @@ class BrandXMLReader extends AbstractXMLReader
                 case 'WhereToFind':
                     $this->reader->read();
                     $brand['where_to_find'] = trim($this->reader->value);
+
                     break;
 
                 case 'IsApproved':
                     $this->reader->read();
                     $brand['approved'] = (int) trim($this->reader->value) === 1 ? now()->format('Y-m-d H:i:s') : null;
+
                     break;
 
                 case 'PictureURL':
                     $this->reader->read();
                     $brand['image'] = trim($this->reader->value);
+
                     break;
 
                 case 'CretOn':
@@ -108,11 +112,13 @@ class BrandXMLReader extends AbstractXMLReader
                 case 'CretBy':
                     $this->reader->read();
                     $brand['created_by'] = trim($this->reader->value);
+
                     break;
 
                 case 'ModBy':
                     $this->reader->read();
                     $brand['updated_by'] = trim($this->reader->value);
+
                     break;
 
                 case 'Title':
@@ -120,8 +126,8 @@ class BrandXMLReader extends AbstractXMLReader
                 case 'Slug':
                     $this->reader->read();
                     $brand[strtolower($field)] = trim($this->reader->value) ?? null;
-                    break;
 
+                    break;
             }
         }
 

@@ -3,7 +3,6 @@
 namespace App\Helpers\Import;
 
 use App\Helpers\ImportImage;
-use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Dom\Node\AbstractNode;
 use PHPHtmlParser\Dom\Node\HtmlNode;

@@ -11,7 +11,7 @@ class IngredientXMLReader extends AbstractXMLReader
     private const FIELDS_TO_INT = [
         "ewgscore",
         "ewgscoremax",
-        "comedogenicindex"
+        "comedogenicindex",
     ];
 
     /**

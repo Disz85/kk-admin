@@ -2,12 +2,12 @@
 
 namespace app\Console\Commands\Import;
 
-use App\Models\Brand;
 use App\Models\Product;
 use App\XMLReaders\CremeXMLReader;
 use Illuminate\Console\Command;
 
-class ImportCremes extends Command{
+class ImportCremes extends Command
+{
     /**
      * The name and signature of the console command.
      *

@@ -8,11 +8,11 @@ use App\Models\User;
 use App\XMLReaders\UserXMLReader;
 use Illuminate\Console\Command;
 
-class ImportUsers extends Command {
-
-    const TYPE_ASPNET      = 'AspNetUsers';
-    const TYPE_USERS       = 'Users';
-    const TYPE_CONNECTION  = 'UserNickConnections';
+class ImportUsers extends Command
+{
+    public const TYPE_ASPNET = 'AspNetUsers';
+    public const TYPE_USERS = 'Users';
+    public const TYPE_CONNECTION = 'UserNickConnections';
 
     /**
      * The name and signature of the console command.
@@ -47,21 +47,29 @@ class ImportUsers extends Command {
         $path = $this->option('path');
         $type = $userXMLReader->getType($path);
 
-        switch($type){
+        switch($type) {
             case self::TYPE_ASPNET:
-                $this->importAspNetUsers($userXMLReader, $path); break;
+                $this->importAspNetUsers($userXMLReader, $path);
+
+                break;
             case self::TYPE_USERS:
-                $this->importUsers($userXMLReader, $path); break;
+                $this->importUsers($userXMLReader, $path);
+
+                break;
             case self::TYPE_CONNECTION:
-                $this->importNicknameUsernameConnections($userXMLReader, $path); break;
+                $this->importNicknameUsernameConnections($userXMLReader, $path);
+
+                break;
             default:
                 $this->info("\n This XML is wrong, maybe it's not a user file.");
+
                 break;
         }
     }
 
     /** Import ApsNetUsers */
-    private function importAspNetUsers($userXMLReader, $path){
+    private function importAspNetUsers($userXMLReader, $path)
+    {
         $progress = $this->output->createProgressBar($userXMLReader->count($path));
         $progress->start();
 
@@ -72,7 +80,7 @@ class ImportUsers extends Command {
             $email = $this->stripAccents(strtolower(trim($data['Email'])));
             $email = preg_replace('/\s+/', '', $email);
 
-            if(!in_array($email, $userEmails) && filter_var($email, FILTER_VALIDATE_EMAIL)){
+            if (! in_array($email, $userEmails) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $userEmails[] = $email;
 
                 $user = User::where(['email' => $email])->first() ?? new User();
@@ -81,11 +89,10 @@ class ImportUsers extends Command {
                 $user->email = $email;
                 $user->created_at = $data['CreateDate'];
                 $user->save();
-            }
-            else{
+            } else {
                 $skipped++;
             }
-            if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+            if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $wrongEmails[] = $email;
             }
 
@@ -99,22 +106,22 @@ class ImportUsers extends Command {
     }
 
     /** Import Users */
-    private function importUsers($userXMLReader, $path){
+    private function importUsers($userXMLReader, $path)
+    {
         $progress = $this->output->createProgressBar($userXMLReader->count($path));
         $progress->start();
 
         $userXMLReader->read($path, function (array $data) use ($progress) {
-
-            if($data['NickName'] !== '----------'){
+            if ($data['NickName'] !== '----------') {
                 $user = User::where(['legacy_nickname' => $data['NickName']])->orWhere(['username' => $data['NickName']])->first() ?? new User();
 
-                if(!$user->legacy_username){
+                if (! $user->legacy_username) {
                     $user->legacy_nickname = $data['NickName'];
                     $user->username = $data['NickName'];
                 }
 
-                $user->slug = array_key_exists('Slug', $data) ? $data['Slug'] : NULL;
-                $user->birth_year = array_key_exists('BirthYear', $data) ? $data['BirthYear'] : NULL;
+                $user->slug = array_key_exists('Slug', $data) ? $data['Slug'] : null;
+                $user->birth_year = array_key_exists('BirthYear', $data) ? $data['BirthYear'] : null;
                 $user->skin_type = array_key_exists('SkinTypeID', $data) ? $this->getSkinType($data['SkinTypeID']) : SkinTypeEnum::NORMAL;
                 $user->skin_concern = array_key_exists('SkinConcernID', $data) ? $this->getSkinConcern($data['SkinConcernID']) : SkinConcernEnum::NONE;
                 $user->save();
@@ -129,7 +136,8 @@ class ImportUsers extends Command {
     }
 
     /** Import Nickname-Username connections */
-    private function importNicknameUsernameConnections($userXMLReader, $path){
+    private function importNicknameUsernameConnections($userXMLReader, $path)
+    {
         $progress = $this->output->createProgressBar($userXMLReader->count($path));
         $progress->start();
 
@@ -137,7 +145,7 @@ class ImportUsers extends Command {
         $userNames = [];
         $userXMLReader->read($path, function (array $data) use ($progress, &$skipped, &$userNames) {
             $username = trim($data['UserName']);
-            if(!in_array($username, $userNames)){
+            if (! in_array($username, $userNames)) {
                 $userNames[] = $data['UserName'];
                 $user = User::where(['username' => $username])->first() ?? new User();
 
@@ -146,8 +154,7 @@ class ImportUsers extends Command {
                 $user->username = $username;
                 $user->timestamps = false;
                 $user->save();
-            }
-            else{
+            } else {
                 $skipped++;
             }
 
@@ -159,18 +166,20 @@ class ImportUsers extends Command {
         $this->info("\n Nickname - Username importing is finished. Skipped because of duplicated usernames: " . $skipped);
     }
 
-    private function getSkinType($skinTypeId){
+    private function getSkinType($skinTypeId)
+    {
         $skinTypes = [
             '2-1' => SkinTypeEnum::DRY,
             '2-2' => SkinTypeEnum::NORMAL,
             '2-3' => SkinTypeEnum::COMBINED,
-            '2-4' => SkinTypeEnum::GREASY
+            '2-4' => SkinTypeEnum::GREASY,
         ];
 
         return $skinTypes[$skinTypeId];
     }
 
-    private function getSkinConcern($skinConcernId){
+    private function getSkinConcern($skinConcernId)
+    {
         $skinConcerns = [
             '3-1' => SkinConcernEnum::ACNE,
             '3-2' => SkinConcernEnum::REDNESS,
@@ -179,13 +188,14 @@ class ImportUsers extends Command {
             '3-5' => SkinConcernEnum::WIDE_PORES,
             '3-6' => SkinConcernEnum::SKIN_AGING,
             '3-7' => SkinConcernEnum::DEHYDRATED_SKIN,
-            '3-8' => SkinConcernEnum::HYPERSENSITIVITY
+            '3-8' => SkinConcernEnum::HYPERSENSITIVITY,
         ];
 
         return $skinConcerns[$skinConcernId];
     }
 
-    private function stripAccents($str) {
+    private function stripAccents($str)
+    {
         return strtr(utf8_decode($str), utf8_decode('áéíóöőúüű'), 'aeiooouuu');
     }
 }

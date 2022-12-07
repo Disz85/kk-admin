@@ -8,7 +8,6 @@ use XMLReader;
 
 class ImportXML extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -25,22 +24,25 @@ class ImportXML extends Command
     protected $description = 'Import XML file into a temporary table';
 
     // Get tablename from filename based on the pattern kremmania-TABLENAME-YYYY-MM-DD.xml
-    private function getTableName($xmlFile) {
+    private function getTableName($xmlFile)
+    {
         preg_match('/(?<=kremmania-)(.*?)(?=-\d{4}-\d{2}-\d{2}.xml)/', basename($xmlFile), $match);
+
         return '_tmp_' . $match[0];
     }
 
     // Get all columns from first table node
-    private function getColumns($xmlFile) {
+    private function getColumns($xmlFile)
+    {
         $reader = new XMLReader();
         $reader->open($xmlFile);
 
         $columns = [];
         $iteration = 0;
         while ($reader->read()) {
-
             if ($reader->depth === 1) {
                 $iteration++;
+                $rowIdentifier = $reader->name;
             }
 
             if (
@@ -48,9 +50,8 @@ class ImportXML extends Command
                 && $reader->depth === 2
                 && $iteration === 1
             ) {
-                $columns[] = $reader->name;
+                $columns[$rowIdentifier][] = $reader->name;
             }
-
         }
 
         $reader->close();
@@ -58,13 +59,28 @@ class ImportXML extends Command
         return $columns;
     }
 
-    // Create index query for all tables
-    private function getCreateIndexQuery($path) {
+    private function getColumnNames($columns)
+    {
+        return array_values($columns)[0];
+    }
+
+    private function getColumnDefinitions($columns)
+    {
+        $columnDefinitions = array_map(function ($column) {
+            return "$column LONGTEXT DEFAULT NULL";
+        }, $this->getColumnNames($columns));
+
+        return implode(",\n", $columnDefinitions);
+    }
+
+    private function createIndexQuery($path)
+    {
+        $columns = $this->getColumns($path);
         $tableName = $this->getTableName($path);
 
         $createIndexStatements = array_map(function ($column) use ($tableName) {
             return "CREATE INDEX idx_$column ON $tableName ($column);";
-        }, $this->getColumns($path));
+        }, $this->getColumnNames($columns));
 
         return implode("\n", $createIndexStatements);
     }
@@ -81,20 +97,19 @@ class ImportXML extends Command
         }
 
         $tableName = $this->getTableName($path);
-
-        $createIndexStatements = $this->getCreateIndexQuery($path);
+        $columns = $this->getColumns($path);
+        $rowIdentifier = array_key_first($columns);
+        $columnDefinitions = $this->getColumnDefinitions($columns);
 
         DB::unprepared("
             DROP TABLE IF EXISTS $tableName;
 
-            CREATE TABLE $tableName
-            ENGINE=CONNECT COLLATE='latin2_hungarian_ci' TABLE_TYPE=XML FILE_NAME='$path'
-            TABNAME='data';
+            CREATE TABLE $tableName ($columnDefinitions)
+            ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-            ALTER TABLE $tableName ENGINE = InnoDB;
+            LOAD XML LOCAL INFILE '$path' INTO TABLE $tableName ROWS IDENTIFIED BY '<$rowIdentifier>';
 
-            $createIndexStatements
+            {$this->createIndexQuery($path)}
         ");
-
     }
 }

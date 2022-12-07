@@ -49,6 +49,7 @@ class ImportCremeCategories extends Command
                 if (! $deleteIfExist) {
                     $skipped++;
                     $progress->advance();
+
                     return;
                 }
 
@@ -60,6 +61,7 @@ class ImportCremeCategories extends Command
                 $category->name = $data['title'];
                 $category->slug = $data['slug'];
                 $category->legacy_id = $data['id'];
+                $category->type = Category::TYPE_PRODUCT;
                 if (! is_null($parentLegacyId)) {
                     $category->parent_id = $parent->id;
                 }

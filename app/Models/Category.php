@@ -16,6 +16,7 @@ class Category extends Model
     use CategoryHierarchy;
 
     public const TYPE_ARTICLE = 'article';
+    public const TYPE_PRODUCT = 'product';
 
     protected $table = 'categories';
 
@@ -41,5 +42,10 @@ class Category extends Model
     public function articles(): MorphToMany
     {
         return $this->morphedByMany(Article::class, 'categoryable');
+    }
+
+    public function products(): MorphToMany
+    {
+        return $this->morphedByMany(Product::class, 'categoryable');
     }
 }

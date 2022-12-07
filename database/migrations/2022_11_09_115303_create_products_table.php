@@ -28,6 +28,7 @@ return new class () extends Migration {
             $table->boolean('is_18_plus')->default(false);
             $table->timestamps();
             $table->dateTime('published_at')->nullable();
+            $table->index('legacy_id', 'legacy_id_index');
         });
     }
 

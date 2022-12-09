@@ -67,6 +67,7 @@ class ImportArticleAuthors extends Command
             $author->legacy_id = $data['id'];
             $author->email = $data['email'] ?? null;
             $author->name = $data['lastname'] . ' ' . $data['firstname'] . ' (' . $data['username'] . ')';
+            $author->slug = $data['username'];
 
             $author->save();
 

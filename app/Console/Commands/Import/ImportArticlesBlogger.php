@@ -77,7 +77,7 @@ class ImportArticlesBlogger extends Command
             }
 
             try {
-                $author = Author::where('name', 'like', $data['author'])->first();
+                $author = Author::where('slug', '=', Str::slug($data['author']))->first();
                 if (! $author) {
                     $author = new Author();
                     $author->slug = Str::slug($data['author']);

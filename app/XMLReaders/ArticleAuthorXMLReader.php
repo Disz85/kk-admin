@@ -39,6 +39,11 @@ class ArticleAuthorXMLReader extends AbstractXMLReader
             $field = $this->reader->name;
             switch ($field) {
                 case 'wp:author_id':
+                    $this->reader->read();
+                    $author['id'] = trim($this->reader->value);
+
+                    break;
+
                 case 'wp:author_email':
                 case 'wp:author_first_name':
                 case 'wp:author_last_name':
@@ -47,9 +52,15 @@ class ArticleAuthorXMLReader extends AbstractXMLReader
                     $author[$key] = trim($this->reader->value);
 
                     break;
-                case 'wp:author_display_name':
+                case 'wp:author_login':
                     $this->reader->read();
                     $author['username'] = trim($this->reader->value);
+
+                    break;
+
+                case 'wp:author_display_name':
+                    $this->reader->read();
+                    $author['slug'] = trim($this->reader->value);
 
                     break;
             }

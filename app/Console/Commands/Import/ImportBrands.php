@@ -72,6 +72,23 @@ class ImportBrands extends Command
 
             $description = $data['description'] ?? null;
 
+            $imageId = null;
+            $legacyImage = $data['image'] ?? null;
+            $legacyImageUrl = null;
+
+            if ($legacyImage) {
+                $legacyImageUrl = $this->save_image->getLegacyImageUrl('UploadedImages', strtolower($legacyImage));
+
+                $imageId = Media::query()
+                    ->where('legacy_url', '=', $legacyImageUrl)
+                    ->first()
+                    ->id ?? null;
+            }
+
+            if ($legacyImageUrl && ! $imageId) {
+                $imageId = $this->save_image->saveImage($legacyImageUrl, 'brands');
+            }
+
             try {
                 $brand->legacy_id = $data['id'] ?? null;
 
@@ -79,12 +96,7 @@ class ImportBrands extends Command
                 $brand->slug = $data['slug'];
                 $brand->description = $description ? $converter->convert($description, 'article') : $description;
 
-                $imageId = Media::query()
-                    ->orderBy('id', 'DESC')
-                    ->first()
-                    ->id ?? null;
-
-                $brand->image_id = $imageId ?? null;
+                $brand->image_id = $imageId;
 
                 $brand->created_at = $data['created_at'] ?? null;
                 $brand->updated_at = $data['updated_at'] ?? null;
@@ -94,13 +106,13 @@ class ImportBrands extends Command
 
                 $brand->approved = $data['approved'];
 
-//                if ($data['created_by']) {
-//                    $brand->created_by = User::whereIn('username', $data['created_by'])->first()->id;
-//                }
+                if ($data['created_by']) {
+                    $brand->created_by = User::where('username', '=', $data['created_by'])->first()->id ?? null;
+                }
 
-//                if ($data['updated_by']) {
-//                    $brand->updated_by = User::whereIn('username', $data['updated_by'])->first()->id;
-//                }
+                if ($data['updated_by']) {
+                    $brand->updated_by = User::where('username', '=', $data['updated_by'])->first()->id ?? null;
+                }
 
                 $brand->save();
             } catch (\Throwable $e) {

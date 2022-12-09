@@ -26,12 +26,20 @@ class BrandXMLReader extends AbstractXMLReader
         $this->reader->open($path);
 
         $brand = [];
+        $brand['description'] = null;
+        $brand['image'] = null;
+        $brand['created_by'] = null;
+        $brand['updated_by'] = null;
 
         while ($this->reader->read()) {
             if ($this->reader->nodeType === XMLReader::END_ELEMENT) {
                 if ($this->reader->name === self::PARENT_NODE) {
                     $callback($brand);
                     $brand = [];
+                    $brand['description'] = null;
+                    $brand['image'] = null;
+                    $brand['created_by'] = null;
+                    $brand['updated_by'] = null;
                 } else {
                     continue;
                 }

@@ -68,4 +68,11 @@ class ImportImage
             unlink($path);
         }
     }
+
+    public function getLegacyImageUrl(string $imageRoot, string $fileName): string
+    {
+        $folder = unpack('C*', md5($fileName, true))[1];
+
+        return "https://kremmania.hu/$imageRoot/$folder/$fileName";
+    }
 }

@@ -17,6 +17,8 @@ class Category extends Model
 
     public const TYPE_ARTICLE = 'article';
     public const TYPE_PRODUCT = 'product';
+    public const TYPE_SKINTYPE = 'skintype';
+    public const TYPE_SKINPROBLEM = 'skinproblem';
 
     protected $table = 'categories';
 

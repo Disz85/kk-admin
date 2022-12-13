@@ -35,8 +35,15 @@ class ImportCremeCategories extends Command
 
         $categoryXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress) {
             $parentLegacyId = null;
+            $baseCategoryId = substr($data['id'], 0, 1);
+            if ($baseCategoryId == 4 || $data['id'] == 1) {
+                return;
+            }
             if (str_contains($data['id'], '-')) {
                 $parentLegacyId = substr($data['id'], 0, strrpos($data['id'], '-'));
+            }
+            if ($parentLegacyId == '1') {
+                $parentLegacyId = null;
             }
             if (! is_null($parentLegacyId)) {
                 $parent = Category::where('legacy_id', '=', $parentLegacyId)->first();
@@ -61,7 +68,18 @@ class ImportCremeCategories extends Command
                 $category->name = $data['title'];
                 $category->slug = $data['slug'];
                 $category->legacy_id = $data['id'];
-                $category->type = Category::TYPE_PRODUCT;
+                switch ($baseCategoryId) {
+                    case '2':
+                        $category->type = Category::TYPE_SKINTYPE;
+
+                        break;
+                    case '3':
+                        $category->type = Category::TYPE_SKINPROBLEM;
+
+                        break;
+                    default:
+                        $category->type = Category::TYPE_PRODUCT;
+                }
                 if (! is_null($parentLegacyId)) {
                     $category->parent_id = $parent->id;
                 }

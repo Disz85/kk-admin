@@ -74,7 +74,7 @@ class ImportCremeCategories extends Command
 
                         break;
                     case '3':
-                        $category->type = Category::TYPE_SKINPROBLEM;
+                        $category->type = Category::TYPE_SKINCONCERN;
 
                         break;
                     default:

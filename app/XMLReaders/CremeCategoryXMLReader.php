@@ -39,12 +39,14 @@ class CremeCategoryXMLReader extends AbstractXMLReader
                 case 'Id':
                     $this->reader->read();
                     $category['id'] = trim($this->reader->value);
+
                     break;
                 case 'Title':
                 case 'Description':
                 case 'Slug':
                     $this->reader->read();
                     $category[strtolower($field)] = trim($this->reader->value) ?? null;
+
                     break;
                 case 'CretOn':
                     $this->reader->read();
@@ -79,16 +81,16 @@ class CremeCategoryXMLReader extends AbstractXMLReader
                 case 'CretBy':
                     $this->reader->read();
                     $category['created_by'] = trim($this->reader->value);
+
                     break;
 
                 case 'ModBy':
                     $this->reader->read();
                     $category['updated_by'] = trim($this->reader->value);
-                    break;
 
+                    break;
             }
         }
         $this->reader->close();
-
     }
 }

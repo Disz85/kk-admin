@@ -23,7 +23,7 @@ class ImportUsers extends Command
      *
      * @var string
      */
-    protected $description = 'Imports users from XML files';
+    protected $description = 'Import users from XML files';
 
     /**
      * Execute the console command.

@@ -19,8 +19,10 @@ return new class () extends Migration {
             $table->string('slug');
             $table->string('url')->nullable();
             $table->longText('description')->nullable();
+            $table->longText('legacy_description')->nullable();
             $table->foreignId('image_id')->nullable()->constrained('media')
                 ->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('legacy_image_url')->nullable();
             $table->text('where_to_find')->nullable();
             $table->dateTime('approved')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users')
@@ -28,6 +30,7 @@ return new class () extends Migration {
             $table->foreignId('updated_by')->nullable()->constrained('users')
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
+            $table->index('legacy_id');
         });
     }
 

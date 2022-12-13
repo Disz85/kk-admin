@@ -40,5 +40,4 @@ class DropXmlTable extends Command
 
         $this->info("Table $schema->table_name dropped.");
     }
-
 }

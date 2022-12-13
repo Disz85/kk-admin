@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Import;
 
+use App\XMLReaders\SchemaXMLReader;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -12,7 +13,7 @@ class DropXmlTable extends Command
      *
      * @var string
      */
-    protected $signature = 'import:drop-xml-table
+    protected $signature = 'import:cleanup
                             {--path= : The path of the XML file}';
 
     /**
@@ -22,18 +23,10 @@ class DropXmlTable extends Command
      */
     protected $description = 'Drop temporary table created from XML file';
 
-    // Get tablename from filename based on the pattern kremmania-TABLENAME-YYYY-MM-DD.xml
-    private function getTableName($xmlFile)
-    {
-        preg_match('/(?<=kremmania-)(.*?)(?=-\d{4}-\d{2}-\d{2}.xml)/', basename($xmlFile), $match);
-
-        return '_tmp_' . $match[0];
-    }
-
     /**
      * Drop Termporary XML Table
      */
-    public function handle()
+    public function handle(SchemaXMLReader $schemaReader): void
     {
         $path = $this->option('path');
 
@@ -41,8 +34,11 @@ class DropXmlTable extends Command
             return;
         }
 
-        $tableName = $this->getTableName($path);
+        $schema = $schemaReader->read($path);
 
-        DB::unprepared("DROP TABLE IF EXISTS $tableName;");
+        DB::unprepared("DROP TABLE IF EXISTS $schema->table_name;");
+
+        $this->info("Table $schema->table_name dropped.");
     }
+
 }

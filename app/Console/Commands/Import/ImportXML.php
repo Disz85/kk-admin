@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands\Import;
 
+use App\XMLReaders\SchemaXMLReader;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use XMLReader;
 
 class ImportXML extends Command
 {
@@ -23,64 +23,20 @@ class ImportXML extends Command
      */
     protected $description = 'Import XML file into a temporary table';
 
-    // Get tablename from filename based on the pattern kremmania-TABLENAME-YYYY-MM-DD.xml
-    private function getTableName($xmlFile)
+    private function getColumnDefinitions(array $columns): string
     {
-        preg_match('/(?<=kremmania-)(.*?)(?=-\d{4}-\d{2}-\d{2}.xml)/', basename($xmlFile), $match);
-
-        return '_tmp_' . $match[0];
-    }
-
-    // Get all columns from first table node
-    private function getColumns($xmlFile)
-    {
-        $reader = new XMLReader();
-        $reader->open($xmlFile);
-
-        $columns = [];
-        $iteration = 0;
-        while ($reader->read()) {
-            if ($reader->depth === 1) {
-                $iteration++;
-                $rowIdentifier = $reader->name;
-            }
-
-            if (
-                $reader->nodeType === XMLReader::END_ELEMENT
-                && $reader->depth === 2
-                && $iteration === 1
-            ) {
-                $columns[$rowIdentifier][] = $reader->name;
-            }
-        }
-
-        $reader->close();
-
-        return $columns;
-    }
-
-    private function getColumnNames($columns)
-    {
-        return array_values($columns)[0];
-    }
-
-    private function getColumnDefinitions($columns)
-    {
-        $columnDefinitions = array_map(function ($column) {
+        $columnDefinitions = array_map(static function ($column) {
             return "$column LONGTEXT DEFAULT NULL";
-        }, $this->getColumnNames($columns));
+        }, $columns);
 
         return implode(",\n", $columnDefinitions);
     }
 
-    private function createIndexQuery($path)
+    private function createIndexQuery(string $tableName, array $columns): string
     {
-        $columns = $this->getColumns($path);
-        $tableName = $this->getTableName($path);
-
-        $createIndexStatements = array_map(function ($column) use ($tableName) {
+        $createIndexStatements = array_map(static function ($column) use ($tableName) {
             return "CREATE INDEX idx_$column ON $tableName ($column);";
-        }, $this->getColumnNames($columns));
+        }, $columns);
 
         return implode("\n", $createIndexStatements);
     }
@@ -88,7 +44,7 @@ class ImportXML extends Command
     /**
      * Import XML
      */
-    public function handle()
+    public function handle(SchemaXMLReader $schemaReader): void
     {
         $path = $this->option('path');
 
@@ -96,20 +52,22 @@ class ImportXML extends Command
             return;
         }
 
-        $tableName = $this->getTableName($path);
-        $columns = $this->getColumns($path);
-        $rowIdentifier = array_key_first($columns);
-        $columnDefinitions = $this->getColumnDefinitions($columns);
+        $schema = $schemaReader->read($path);
+        $columnDefinitions = $this->getColumnDefinitions($schema->columns);
+
+        $this->info("\nImport $schema->legacy_table_name as $schema->table_name.");
 
         DB::unprepared("
-            DROP TABLE IF EXISTS $tableName;
+            DROP TABLE IF EXISTS $schema->table_name;
 
-            CREATE TABLE $tableName ($columnDefinitions)
+            CREATE TABLE $schema->table_name ($columnDefinitions)
             ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-            LOAD XML LOCAL INFILE '$path' INTO TABLE $tableName ROWS IDENTIFIED BY '<$rowIdentifier>';
+            LOAD XML LOCAL INFILE '$path' INTO TABLE $schema->table_name ROWS IDENTIFIED BY '<$schema->row_identifier>';
 
-            {$this->createIndexQuery($path)}
+            {$this->createIndexQuery($schema->table_name, $schema->columns)}
         ");
+
+        $this->info("Import is finished.");
     }
 }

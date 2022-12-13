@@ -2,12 +2,8 @@
 
 namespace app\Console\Commands\Import;
 
-use App\Enum\SkinConcernEnum;
-use App\Enum\SkinTypeEnum;
-use App\Models\User;
-use App\XMLReaders\UserXMLReader;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class ImportUsers extends Command
 {
@@ -20,7 +16,7 @@ class ImportUsers extends Command
      * @var string
      */
     protected $signature = 'import:users
-                            {--path= : The path of the XML file}';
+                            {--path=* : The path(s) of the XML file(s)}';
 
     /**
      * The console command description.
@@ -30,143 +26,78 @@ class ImportUsers extends Command
     protected $description = 'Imports users from XML files';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
-    public function handle(UserXMLReader $userXMLReader): void
+    public function handle(): void
     {
-        $path = $this->option('path');
-        $type = $userXMLReader->getType($path);
+        $paths = $this->option('path');
 
-        switch($type) {
-            case self::TYPE_ASPNET:
-                $this->importAspNetUsers($userXMLReader, $path);
+        foreach ($paths as $path) {
+            $this->call(ImportXML::class, [ '--path' => $path ]);
+        }
 
-                break;
-            case self::TYPE_USERS:
-                $this->importUsers($userXMLReader, $path);
+        $this->info("\nInsert _tmp_AspNetUsers into new app schema.");
+        $this->importAspNetUsers();
 
-                break;
+        $this->info("\nInsert _tmp_Users into new app schema.");
+        $this->importUsers();
 
-            default:
-                $this->info("\n This XML is wrong, maybe it's not a user file.");
-
-                break;
+        foreach ($paths as $path) {
+            $this->call(DropXmlTable::class, [ '--path' => $path ]);
         }
     }
 
-    /** Import ApsNetUsers */
-    private function importAspNetUsers($userXMLReader, $path)
+    private function importUsers()
     {
-        $progress = $this->output->createProgressBar($userXMLReader->count($path));
-        $progress->start();
-
-        $skipped = 0;
-        $userEmails = [];
-        $wrongEmails = [];
-        $userXMLReader->read($path, function (array $data) use ($progress, &$skipped, &$userEmails, &$wrongEmails) {
-            $email = $this->stripAccents(strtolower(trim($data['Email'])));
-            $email = preg_replace('/\s+/', '', $email);
-
-            if (! in_array($email, $userEmails) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $userEmails[] = $email;
-
-                $user = User::where(['email' => $email])->first() ?? new User();
-
-                $user->legacy_id = trim($data['Id']);
-                $user->username = trim($data['UserName']);
-                $user->email = $email;
-
-                $date = trim($data['CreateDate']);
-
-                $format = 'Y-m-d\TH:i:s';
-                if (str_contains($date, '.')) {
-                    $format = 'Y-m-d\TH:i:s.u';
-                }
-
-                $date = Carbon::createFromFormat($format, $date);
-                $user->created_at = $date->format('Y-m-d H:i:s');
-
-                $user->save();
-            } else {
-                $skipped++;
-            }
-            if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $wrongEmails[] = $email;
-            }
-
-            $progress->advance();
-        });
-
-        $progress->finish();
-
-        $this->info("\n ASP.NET Users importing is finished. Number of skipped records: " . $skipped);
-        $this->info("\n Wrong emails: " . implode(", ", $wrongEmails));
+        DB::unprepared("
+            INSERT INTO users (
+                username,
+                legacy_nickname,
+                slug,
+                birth_year,
+                skin_type,
+                skin_concern
+            )
+            SELECT
+                TRIM(_tmp_Users.NickName),
+                TRIM(_tmp_Users.NickName),
+                TRIM(_tmp_Users.Slug),
+                TRIM(_tmp_Users.BirthYear),
+                LOWER(TRIM(_tmp_Users.SkinTypeText)),
+                LOWER(TRIM(_tmp_Users.SkinConcernText))
+            FROM _tmp_Users
+            ON DUPLICATE KEY UPDATE
+                legacy_nickname = VALUES(legacy_nickname),
+                slug = VALUES(slug),
+                birth_year = VALUES(birth_year),
+                skin_type = VALUES(skin_type),
+                skin_concern = VALUES(skin_concern);
+        ");
     }
 
-    /** Import Users */
-    private function importUsers($userXMLReader, $path)
+    private function importAspNetUsers()
     {
-        $progress = $this->output->createProgressBar($userXMLReader->count($path));
-        $progress->start();
-
-        $userXMLReader->read($path, function (array $data) use ($progress) {
-            $user = User::where(['legacy_nickname' => $data['NickName']])->orWhere(['username' => $data['NickName']])->first() ?? new User();
-
-            if (! $user->legacy_username) {
-                $user->legacy_nickname = $data['NickName'];
-                $user->username = $data['NickName'];
-            }
-
-            $user->slug = array_key_exists('Slug', $data) ? $data['Slug'] : null;
-            $user->birth_year = array_key_exists('BirthYear', $data) ? $data['BirthYear'] : null;
-            $user->skin_type = array_key_exists('SkinTypeID', $data) ? $this->getSkinType($data['SkinTypeID']) : SkinTypeEnum::NORMAL;
-            $user->skin_concern = array_key_exists('SkinConcernID', $data) ? $this->getSkinConcern($data['SkinConcernID']) : SkinConcernEnum::NONE;
-            $user->save();
-
-            $progress->advance();
-        });
-
-        $progress->finish();
-
-        $this->info("\n Users importing is finished.");
-    }
-
-    private function getSkinType($skinTypeId)
-    {
-        return match ($skinTypeId) {
-            '2-1' => SkinTypeEnum::DRY,
-            '2-2' => SkinTypeEnum::NORMAL,
-            '2-3' => SkinTypeEnum::COMBINED,
-            '2-4' => SkinTypeEnum::GREASY,
-        };
-    }
-
-    private function getSkinConcern($skinConcernId)
-    {
-        return match ($skinConcernId) {
-            '3-1' => SkinConcernEnum::ACNE,
-            '3-2' => SkinConcernEnum::REDNESS,
-            '3-3' => SkinConcernEnum::UNEVEN_SKIN,
-            '3-4' => SkinConcernEnum::PIGMENT_SPOTS,
-            '3-5' => SkinConcernEnum::WIDE_PORES,
-            '3-6' => SkinConcernEnum::SKIN_AGING,
-            '3-7' => SkinConcernEnum::DEHYDRATED_SKIN,
-            '3-8' => SkinConcernEnum::HYPERSENSITIVITY,
-        };
-    }
-
-    private function stripAccents($str)
-    {
-        return strtr(utf8_decode($str), utf8_decode('áéíóöőúüű'), 'aeiooouuu');
+        DB::unprepared("
+            INSERT INTO users (
+                legacy_id,
+                legacy_username,
+                username,
+                email,
+                created_at
+            )
+            WITH _grouped_aspnet_users AS (
+                SELECT
+                    _tmp_AspNetUsers.*,
+                    ROW_NUMBER() OVER (PARTITION BY TRIM(Email) ORDER BY CreateDate DESC) AS row_number
+                FROM _tmp_AspNetUsers
+            )
+            SELECT
+                TRIM(Id),
+                TRIM(UserName),
+                TRIM(UserName),
+                TRIM(Email),
+                TRIM(CreateDate)
+            FROM _grouped_aspnet_users WHERE row_number = 1;
+        ");
     }
 }

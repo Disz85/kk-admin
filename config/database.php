@@ -62,6 +62,7 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
                 PDO::MYSQL_ATTR_LOCAL_INFILE => true,
                 PDO::MYSQL_ATTR_LOCAL_INFILE_DIRECTORY => env('MYSQL_ATTR_LOCAL_INFILE_DIRECTORY', '/tmp'),
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
             ]) : [],
         ],
 

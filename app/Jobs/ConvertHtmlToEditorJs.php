@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Helpers\Import\HtmlToEditorJsConverter;
-use App\Models\Brand;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class ConvertHtmlToEditorJs implements ShouldQueue
 {
@@ -37,12 +35,12 @@ class ConvertHtmlToEditorJs implements ShouldQueue
      */
     public function handle(HtmlToEditorJsConverter $converter)
     {
-//        try {
+        try {
             $this->model->description = $converter->convert($this->model->legacy_description, $this->model->getTable());
             $this->model->timestamps = false;
             $this->model->save();
-//        } catch (Exception $exception) {
-//            Log::error($exception->getMessage());
-//        }
+        } catch (Exception $exception) {
+            $this->fail($exception);
+        }
     }
 }

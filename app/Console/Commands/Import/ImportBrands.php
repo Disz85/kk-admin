@@ -2,10 +2,8 @@
 
 namespace App\Console\Commands\Import;
 
-use App\Helpers\ImportImage as ImageHelper;
 use App\Jobs\ConvertHtmlToEditorJs;
 use App\Jobs\ImportImage;
-use App\Models\Article;
 use App\Models\Brand;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -26,14 +24,6 @@ class ImportBrands extends Command
      * @var string
      */
     protected $description = 'Import brands from XML files';
-
-    /**
-     * Create a new command instance.
-     */
-    public function __construct(private ImageHelper $imageHelper)
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.

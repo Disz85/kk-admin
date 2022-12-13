@@ -7,9 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class ImportUsers extends Command
 {
-    public const TYPE_ASPNET = 'AspNetUsers';
-    public const TYPE_USERS = 'Users';
-
     /**
      * The name and signature of the console command.
      *

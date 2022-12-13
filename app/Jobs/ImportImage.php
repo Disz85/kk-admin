@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class ImportImage implements ShouldQueue
 {
@@ -42,7 +41,7 @@ class ImportImage implements ShouldQueue
             default => 'UploadedImages',
         };
 
-//        try {
+        try {
             $legacyImageUrl = $imageHelper->getLegacyImageUrl(
                 $remoteRootFolder,
                 strtolower($this->model->legacy_image_url)
@@ -61,8 +60,8 @@ class ImportImage implements ShouldQueue
             $this->model->image_id = $imageId;
             $this->model->timestamps = false;
             $this->model->save();
-//        } catch (Exception $exception) {
-//            Log::error($exception->getMessage());
-//        }
+        } catch (Exception $exception) {
+            $this->fail($exception);
+        }
     }
 }

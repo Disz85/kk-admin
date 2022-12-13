@@ -88,7 +88,7 @@ class ImportUsers extends Command
             WITH _grouped_aspnet_users AS (
                 SELECT
                     _tmp_AspNetUsers.*,
-                    ROW_NUMBER() OVER (PARTITION BY TRIM(Email) ORDER BY CreateDate DESC) AS row_number
+                    ROW_NUMBER() OVER (PARTITION BY TRIM(Email) ORDER BY CreateDate DESC) AS rn
                 FROM _tmp_AspNetUsers
             )
             SELECT
@@ -97,7 +97,7 @@ class ImportUsers extends Command
                 TRIM(UserName),
                 TRIM(Email),
                 TRIM(CreateDate)
-            FROM _grouped_aspnet_users WHERE row_number = 1;
+            FROM _grouped_aspnet_users WHERE rn = 1;
         ");
     }
 }

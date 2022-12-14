@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use app\Enum\SkinConcernEnum;
-use app\Enum\SkinTypeEnum;
+use App\Enum\SkinConcernEnum;
+use App\Enum\SkinTypeEnum;
 use App\Traits\GeneratesSlug;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -114,5 +114,4 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Media::class, 'image_id');
     }
-
 }

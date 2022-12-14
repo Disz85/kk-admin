@@ -4,6 +4,18 @@ stages:
   - test
   - deploy
 
+variables:
+  MYSQL_DATABASE: kremmania-test
+  MYSQL_USER: kremmania-test
+  MYSQL_PASSWORD: kremmania-test
+  MYSQL_ROOT_PASSWORD: kremmania
+  DB_HOST: kremmania-admin-mariadb-test
+
+default:
+  before_script:
+    - "[ -f .env ] && rm -rf .env"
+    - sh generate-env.sh
+
 composer:
   image: composer:2.4.4
   stage: build
@@ -39,7 +51,6 @@ composer:
     paths:
       - node_modules/
   script:
-    - sh generate-env.sh
     - npm install
     - npm run build
   tags:
@@ -57,7 +68,7 @@ node-production:
 
 phpcsfixer:
   stage: analysis
-  image: composer:2.4.4
+  image: composer:2.4.3
   script:
     - composer dry-format
   allow_failure: true
@@ -86,12 +97,27 @@ phpstan:
     - production@kremmania/km-admin
 
 phpunit:
-  image: php:8.1
+  image: centralmediacsoport/hazipatika-phpunit:0.0.2
+  before_script:
+    # Install & enable Xdebug for code coverage reports
+    - apk add --update linux-headers
+    - apk add --no-cache $PHPIZE_DEPS
+    - pecl install xdebug
+    - docker-php-ext-enable xdebug
   stage: test
+  services:
+    - name: mariadb:10.5
+      alias: kremmania-admin-mariadb-test
+      command: [ "--default-authentication-plugin=mysql_native_password" ]
   script:
-    - php vendor/bin/phpunit --testdox
+     - php artisan config:clear
+     - php artisan test --testdox
   tags:
     - kremmania
+  artifacts:
+    paths:
+      - ./storage/logs # for debugging
+    expire_in: 1 day
   only:
     - test@kremmania/km-admin
     - production@kremmania/km-admin
@@ -104,8 +130,8 @@ vitest:
   tags:
     - kremmania
   only:
-    - test@kremmania/km-frontend
-    - production@kremmania/km-frontend
+    - test@kremmania/km-admin
+    - production@kremmania/km-admin
 
 deploy-test:
   image: centralmediacsoport/hazipatika-ci:1.1
@@ -115,7 +141,6 @@ deploy-test:
     - eval $(ssh-agent -s)
     - echo -n "$SSH_PRIVATE_KEY" | ssh-add -
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - sh generate-env.sh
     - php vendor/bin/dep deploy stage=test
   environment:
     name: test
@@ -134,7 +159,6 @@ deploy-production:
     - eval $(ssh-agent -s)
     - echo -n "$SSH_PRIVATE_KEY" | ssh-add -
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - sh generate-env.sh
     - php vendor/bin/dep deploy stage=production
   environment:
     name: production

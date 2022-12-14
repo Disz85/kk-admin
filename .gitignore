@@ -11,7 +11,6 @@
 /vendor
 .env
 .env.backup
-.env.testing
 .phpunit.result.cache
 .php-cs-fixer.cache
 docker-compose.override.yml

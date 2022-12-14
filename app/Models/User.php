@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use app\Enum\SkinConcernEnum;
-use app\Enum\SkinTypeEnum;
+use App\Enum\SkinConcernEnum;
+use App\Enum\SkinTypeEnum;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -15,6 +16,26 @@ use Spatie\Permission\Traits\HasRoles;
 
 /**
  * Class User
+ *
+ * @OA\Schema(
+ *     @OA\Xml(name="User"),
+ *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time"),
+ *     @OA\Property(property="legacy_nickname", type="string"),
+ *     @OA\Property(property="sso_id", type="string"),
+ *     @OA\Property(property="title", type="string"),
+ *     @OA\Property(property="lastname", type="string"),
+ *     @OA\Property(property="firstname", type="string"),
+ *     @OA\Property(property="email", type="string"),
+ *     @OA\Property(property="slug", type="string"),
+ *     @OA\Property(property="description", type="string"),
+ *     @OA\Property(property="image_id", type="int"),
+ *     @OA\Property(property="birth_year", type="int"),
+ *     @OA\Property(property="skin_type", type="string"),
+ *     @OA\Property(property="skin_concern", type="string"),
+ * );
+ *
  * @package App\Models
  *
  * Fields
@@ -86,4 +107,10 @@ class User extends Authenticatable
         'skin_type' => SkinTypeEnum::class,
         'skin_concern' => SkinConcernEnum::class,
     ];
+
+    public function image(): BelongsTo
+    {
+        return $this->belongsTo(Media::class, 'image_id');
+    }
+
 }

@@ -30,7 +30,7 @@ class ImportUsers extends Command
         $paths = $this->option('path');
 
         foreach ($paths as $path) {
-            $this->call(ImportXML::class, [ '--path' => $path ]);
+            $this->call(ImportXML::class, ['--path' => $path]);
         }
 
         $this->info("\nInsert _tmp_AspNetUsers into new app schema.");
@@ -40,7 +40,7 @@ class ImportUsers extends Command
         $this->importUsers();
 
         foreach ($paths as $path) {
-            $this->call(DropXmlTable::class, [ '--path' => $path ]);
+            $this->call(DropXmlTable::class, ['--path' => $path]);
         }
     }
 

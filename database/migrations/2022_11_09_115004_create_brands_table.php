@@ -15,8 +15,8 @@ return new class () extends Migration {
         Schema::create('brands', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('legacy_id')->nullable();
-            $table->string('title');
-            $table->string('slug');
+            $table->string('title')->unique();
+            $table->string('slug')->unique();
             $table->string('url')->nullable();
             $table->longText('description')->nullable();
             $table->longText('legacy_description')->nullable();
@@ -29,6 +29,8 @@ return new class () extends Migration {
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')
                 ->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('legacy_created_by')->nullable()->index();
+            $table->string('legacy_updated_by')->nullable()->index();
             $table->timestamps();
             $table->index('legacy_id');
         });

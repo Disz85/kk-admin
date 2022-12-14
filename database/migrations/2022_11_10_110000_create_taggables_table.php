@@ -12,10 +12,8 @@ return new class () extends Migration {
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->unsignedBigInteger('taggable_id');
             $table->string('taggable_type');
-            $table->string('type')->nullable();
-            $table->unique([ 'tag_id', 'taggable_id', 'taggable_type', 'type' ], 'unique_tag');
+            $table->unique([ 'tag_id', 'taggable_id', 'taggable_type'], 'unique_tag');
             $table->index([ 'taggable_id', 'taggable_type' ]);
-            $table->index('type');
             $table->index('taggable_id');
             $table->index('taggable_type');
         });

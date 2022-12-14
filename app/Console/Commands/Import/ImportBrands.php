@@ -39,6 +39,7 @@ class ImportBrands extends Command
         $this->importBrands();
         $this->importBrandTags();
         $this->importBrandTagRelations();
+        $this->updateBrandUsers();
         $this->importBrandImages();
         $this->convertHtmlToEditorJs();
 
@@ -60,7 +61,9 @@ class ImportBrands extends Command
                 where_to_find,
                 approved,
                 created_at,
-                updated_at
+                updated_at,
+                legacy_created_by,
+                legacy_updated_by
             )
             SELECT
                 TRIM(_tmp_Brands.Id),
@@ -72,8 +75,19 @@ class ImportBrands extends Command
                 TRIM(_tmp_Brands.WhereToFind),
                 TRIM(_tmp_Brands.ModOn),
                 TRIM(_tmp_Brands.CretOn),
-                TRIM(_tmp_Brands.ModOn)
-            FROM _tmp_Brands;
+                TRIM(_tmp_Brands.ModOn),
+                TRIM(_tmp_Brands.CretBy),
+                TRIM(_tmp_Brands.ModBy)
+            FROM _tmp_Brands
+            ON DUPLICATE KEY UPDATE
+                legacy_id = VALUES(legacy_id),
+                url = VALUES(url),
+                legacy_description = VALUES(legacy_description),
+                legacy_image_url = VALUES(legacy_image_url),
+                where_to_find = VALUES(where_to_find),
+                approved = VALUES(approved),
+                created_at = VALUES(created_at),
+                updated_at = VALUES(updated_at);
         ");
     }
 
@@ -106,7 +120,7 @@ class ImportBrands extends Command
     private function importBrandTagRelations()
     {
         DB::unprepared("
-            INSERT INTO taggables (
+            REPLACE INTO taggables (
                 tag_id,
                 taggable_id,
                 taggable_type
@@ -119,6 +133,21 @@ class ImportBrands extends Command
             INNER JOIN tags ON _tmp_Brands_BrandTags.BrandTagsID = tags.legacy_id
             INNER JOIN brands ON _tmp_Brands_BrandTags.BrandID = brands.legacy_id
             ORDER BY _tmp_Brands_BrandTags.BrandID;
+        ");
+    }
+
+    private function updateBrandUsers()
+    {
+        $this->info("Update foreign key from users to brands.");
+        DB::statement("
+            UPDATE brands as po
+            LEFT JOIN users as u ON po.legacy_created_by = u.username
+            SET po.created_by = u.id;
+        ");
+        DB::statement("
+            UPDATE brands as po
+            LEFT JOIN users as u ON po.legacy_updated_by = u.username
+            SET po.updated_by = u.id;
         ");
     }
 

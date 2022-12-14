@@ -2,11 +2,8 @@
 
 namespace app\Console\Commands\Import;
 
-use App\Models\Product;
-use App\Models\Shelf;
-use App\Models\User;
-use App\XMLReaders\WishListXMLReader;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class ImportWishLists extends Command
 {
@@ -16,8 +13,7 @@ class ImportWishLists extends Command
      * @var string
      */
     protected $signature = 'import:wish-lists
-                            {--path= : The path of the XML file}
-                            {--delete : Deletes the existing records before saving}';
+                            {--path= : The path of the XML file}';
 
     /**
      * The console command description.
@@ -39,49 +35,65 @@ class ImportWishLists extends Command
     /**
      * Execute the console command.
      */
-    public function handle(WishListXMLReader $wishListXMLReader): void
+    public function handle(): void
     {
-        $skipped = 0;
         $path = $this->option('path');
-        $deleteIfExist = $this->option('delete');
 
-        $progress = $this->output->createProgressBar($wishListXMLReader->count($path));
-        $progress->start();
+        $this->call(ImportXml::class, ['--path' => $path]);
 
-        $wishListXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress) {
-            $shelf = Shelf::leftJoin('users', 'users.id', '=', 'shelves.user_id')->where(['legacy_nickname' => $data['NickName']])
-                    ->first() ?? new Shelf();
+        $this->importShelves();
+        $this->importProductShelf();
 
-            if ($shelf->exists) {
-                if (! $deleteIfExist) {
-                    $skipped++;
-                    $progress->advance();
+        $this->info("\nWishlist importing is finished.");
 
-                    return;
-                }
+        $this->call(DropXmlTable::class, ['--path' => $path]);
+    }
 
-                $shelf->delete();
-                $shelf = new Shelf();
-            }
+    private function importShelves()
+    {
+        DB::unprepared("
+            INSERT INTO shelves (
+                title,
+                slug,
+                is_private,
+                user_id,
+                created_at,
+                updated_at
+            )
+            SELECT
+                'Kívánságlista',
+                'kivansaglista',
+                1,
+                users.id,
+                NOW(),
+                NOW()
+            FROM _tmp_Wishlist
+            INNER JOIN users ON users.legacy_nickname = _tmp_Wishlist.NickName
+            ON DUPLICATE KEY UPDATE
+                is_private = VALUES(is_private),
+                created_at = VALUES(created_at),
+                updated_at = VALUES(updated_at);
+        ");
+    }
 
-            $user = User::where(['legacy_nickname' => $data['NickName']])->first();
-
-            if ($user) {
-                $shelf->user_id = $user->id;
-                $shelf->title = 'Kívánságlista';
-                $shelf->is_private = true;
-
-                if ($shelf->save()) {
-                    $product = Product::where(['legacy_id' => $data['CremeId']])->first();
-                    $shelf->products()->sync($product->id, false);
-                }
-            }
-
-            $progress->advance();
-        });
-
-        $progress->finish();
-
-        $this->info("\nImporting is finished. Number of skipped records: " . $skipped);
+    private function importProductShelf()
+    {
+        DB::unprepared("
+            REPLACE INTO product_shelf (
+                product_id,
+                shelf_id,
+                created_at,
+                updated_at
+            )
+            SELECT
+                products.id,
+                shelves.id,
+                NOW(),
+                NOW()
+            FROM _tmp_Wishlist
+            INNER JOIN products ON _tmp_Wishlist.CremeId = products.legacy_id
+            INNER JOIN users ON _tmp_Wishlist.NickName = users.legacy_nickname
+            INNER JOIN shelves ON shelves.user_id = users.id;
+        ");
     }
 }

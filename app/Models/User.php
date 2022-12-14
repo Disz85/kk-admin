@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use App\Enum\SkinConcernEnum;
-use App\Enum\SkinTypeEnum;
+use app\Enum\SkinConcernEnum;
+use app\Enum\SkinTypeEnum;
+use App\Traits\GeneratesSlug;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -62,6 +63,7 @@ use Spatie\Permission\Traits\HasRoles;
  */
 class User extends Authenticatable
 {
+    use GeneratesSlug;
     use HasApiTokens;
     use HasFactory;
     use HasRoles;
@@ -69,7 +71,7 @@ class User extends Authenticatable
 
     protected string $slugFrom = 'username';
 
-    public $rules = [
+    public array $rules = [
         'email' => 'required|email',
         'username' => 'required',
     ];

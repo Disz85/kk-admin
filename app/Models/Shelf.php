@@ -26,7 +26,12 @@ class Shelf extends Model
     use HasFactory;
     use GeneratesSlug;
 
-    protected $slugFrom = 'title';
+    protected string $slugFrom = 'title';
+
+    public array $rules = [
+        'title' => 'required',
+        'user_id' => 'required',
+    ];
 
     public function products(): BelongsToMany
     {

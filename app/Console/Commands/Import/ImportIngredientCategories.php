@@ -65,6 +65,7 @@ class ImportIngredientCategories extends Command
                 $category->legacy_id = $data['id'];
                 $category->name = $data['title'] ?? null;
                 $category->slug = $data['slug'] ?? null;
+                $category->type = Category::TYPE_INGREDIENT;
                 $category->created_at = $data['creton'] ?? null;
                 $category->updated_at = $data['modon'] ?? null;
 

@@ -18,8 +18,6 @@ return new class () extends Migration {
             $table->string('name');
             $table->string('slug');
             $table->longText('description')->nullable();
-            $table->foreignId('category_id')->nullable()->constrained('categories')
-                ->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('ewg_data')->nullable();
             $table->integer('ewg_score')->nullable();
             $table->integer('ewg_score_max')->nullable();

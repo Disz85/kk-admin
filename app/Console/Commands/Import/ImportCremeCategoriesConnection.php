@@ -12,7 +12,8 @@ class ImportCremeCategoriesConnection extends Command
      *
      * @var string
      */
-    protected $signature = 'import:creme-categories-connection';
+    protected $signature = 'import:creme-categories-connection
+                            {--path= : The path of the XML file}';
 
     /**
      * The console command description.
@@ -23,10 +24,15 @@ class ImportCremeCategoriesConnection extends Command
 
     public function handle()
     {
+        $path = $this->option('path');
+        $this->call(ImportXml::class, ['--path' => $path]);
+
         DB::statement("insert into categoryables (category_id, categoryable_id, categoryable_type)
 select categories.id as categoryId, products.id as productId,'App\\\Models\\\Product' from _tmp_Cremes_CremeTags
 inner join categories ON _tmp_Cremes_CremeTags.CremeTagsID = categories.legacy_id
 inner join products ON _tmp_Cremes_CremeTags.CremeID = products.legacy_id
 order by _tmp_Cremes_CremeTags.CremeID;");
+
+        $this->call(DropXmlTable::class, [ '--path' => $path ]);
     }
 }

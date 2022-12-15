@@ -4,11 +4,29 @@ namespace App\Models;
 
 use App\Traits\CategoryHierarchy;
 use App\Traits\GeneratesSlug;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
+/**
+ * Class Category
+ * @package App\Models
+ *
+ * Fields
+ * @property int $id
+ * @property int $legacy_id
+ * @property string $name
+ * @property string $slug
+ * @property string $description
+ * @property int $image_id
+ * @property int parent_id
+ * @property bool $archived
+ * @property string $type
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 class Category extends Model
 {
     use HasFactory;
@@ -19,6 +37,7 @@ class Category extends Model
     public const TYPE_PRODUCT = 'product';
     public const TYPE_SKINTYPE = 'skintype';
     public const TYPE_SKINCONCERN = 'skinconcern';
+    public const TYPE_INGREDIENT = 'ingredient';
 
     protected $table = 'categories';
 
@@ -49,5 +68,10 @@ class Category extends Model
     public function products(): MorphToMany
     {
         return $this->morphedByMany(Product::class, 'categoryable');
+    }
+
+    public function ingredients(): MorphToMany
+    {
+        return $this->morphedByMany(Ingredient::class, 'categoryable');
     }
 }

@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Resources\Admin\UserCollection;
 use App\Http\Resources\Admin\UserResource;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Database\Eloquent\Builder;
 
 class UserController extends Controller
 {

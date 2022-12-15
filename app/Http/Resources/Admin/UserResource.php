@@ -5,7 +5,6 @@ namespace App\Http\Resources\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Admin\MediaResource;
 
 class UserResource extends JsonResource
 {

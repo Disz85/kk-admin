@@ -145,7 +145,6 @@ deploy-test:
   environment:
     name: test
     url: 'https://admin.kremmania.p24.hu/'
-  when: manual
   tags:
     - kremmania
   only:

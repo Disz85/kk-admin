@@ -34,5 +34,4 @@ class UserTest extends TestCase
                 'lastname' => $user->lastname,
             ]);
     }
-
 }

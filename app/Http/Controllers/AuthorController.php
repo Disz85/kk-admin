@@ -7,17 +7,13 @@ use App\Http\Requests\UpdateAuthorRequest;
 use App\Http\Resources\Admin\AuthorCollection;
 use App\Http\Resources\Admin\AuthorResource;
 use App\Models\Author;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Database\Eloquent\Builder;
 
 class AuthorController extends Controller
 {
     /**
-     * @OA\Info(
-     *     version="1.0",
-     *     title="Kremmania"
-     * )
      * List of Authors.
      * @OA\Get(
      *    tags={"Authors"},

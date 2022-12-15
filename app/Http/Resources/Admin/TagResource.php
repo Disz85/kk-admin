@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources\Admin;
 
-use App\Models\Author;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AuthorResource extends JsonResource
+class TagResource extends JsonResource
 {
     /**
      * @param Request $request
@@ -14,15 +14,12 @@ class AuthorResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Author $this */
+        /** @var Tag $this */
         return [
             'id' => $this->id,
-            'title' => $this->title,
             'name' => $this->name,
             'slug' => $this->slug,
-            'email' => $this->email,
             'description' => $this->description,
-            'image' => new MediaResource($this->image),
         ];
     }
 }

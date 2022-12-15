@@ -13,8 +13,6 @@ return new class () extends Migration {
             $table->string('name')->unique();
             $table->string('slug')->unique();
             $table->longText('description')->nullable();
-            $table->foreignId('image_id')->nullable()->constrained('media')
-                ->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
             $table->index('slug', 'slug_index');
             $table->index('legacy_id', 'legacy_id_index');

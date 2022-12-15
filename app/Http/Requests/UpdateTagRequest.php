@@ -3,19 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateTagRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,7 +15,9 @@ class UpdateTagRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required', 'string', Rule::unique('tags', 'name')->ignore($this->tag)],
+            'slug' => ['required', 'string', Rule::unique('tags', 'slug')->ignore($this->tag)],
+            'description' => 'sometimes|string',
         ];
     }
 }

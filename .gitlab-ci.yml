@@ -41,10 +41,7 @@ composer:
   artifacts:
     paths:
       - node_modules/
-      - public/images
-      - public/fonts
-      - public/css
-      - public/js
+      - public/build/
     expire_in: 1 week
   cache:
     key: ${CI_COMMIT_REF_SLUG}-node

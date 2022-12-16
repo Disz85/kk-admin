@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
+use App\Auth\Guards\JWTGuard;
+use App\Models\User;
+use Firebase\JWT\JWT;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,10 +25,25 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
+        JWT::$leeway = config('sso.jwt-leeway');
+
         $this->registerPolicies();
 
-        //
+        Gate::before(function (User $user, $ability) {
+            return $user->hasRole('super-admin') ? true : null;
+        });
+    }
+
+    public function register(): void
+    {
+        Auth::extend('jwt', function ($app, $name, array $config) {
+            return new JWTGuard(
+                Auth::createUserProvider($config['provider']),
+                $app->request->bearerToken() ?? '',
+                config('sso.key')
+            );
+        });
     }
 }

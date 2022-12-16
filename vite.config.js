@@ -30,7 +30,6 @@ const config = {
             emitWarningAsError: true,
             include: [
                 'resources/**/*.scss'
-
             ]
         }),
         react(),
@@ -76,6 +75,9 @@ const prodConfig = {
             }
         }
     },
+    build: {
+        sourcemap: true,
+    }
 }
 
 export default defineConfig(({ command, mode, ssrBuild }) => {

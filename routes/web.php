@@ -13,7 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-Route::get('/', function () {
-    return view('app');
+Route::get('/silent-check-sso', function () {
+    return view('layouts.sso');
 });
+
+Route::get('/{any}', function () {
+    return view('layouts.app');
+})->where('any', '^(?!api|admin).*');

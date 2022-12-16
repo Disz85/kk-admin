@@ -39,7 +39,12 @@
         "prettier/prettier": "error",
         "arrow-body-style": "off",
         "prefer-arrow-callback": "off",
-        "eqeqeq": "error"
-    },
-    "plugins": ["prettier"]
+        "no-shadow": "off",
+        "eqeqeq": "error",
+        "react/function-component-definition": "off",
+        "react/jsx-props-no-spreading": "off",
+        "react/jsx-no-constructed-context-values": "off"
+
+},
+"plugins": ["prettier"]
 }

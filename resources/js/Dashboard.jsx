@@ -1,13 +1,21 @@
 import React from 'react';
+// PAGE
+import Admin from './Framework/Pages/Admin';
+// RESOURCES
+import Resource from './Framework/Resource';
+// ROUTES
+import { logoutRoutes } from './Routes/web';
 
-import style from '../scss/components/cms.module.scss';
-
-function Dashboard() {
+const Dashboard = () => {
     return (
-        <div className={style.placeholder}>
-            <h1 className={style.title}>This is the Krémmánia Admin!</h1>
-        </div>
+        <Admin>
+            <Resource
+                name="logout"
+                routes={logoutRoutes}
+                requiresPermission={false}
+            />
+        </Admin>
     );
-}
+};
 
 export default Dashboard;

@@ -70,6 +70,7 @@ class User extends Authenticatable
     use Notifiable;
 
     protected string $slugFrom = 'username';
+    protected string $guard_name = 'api';
 
     public array $rules = [
         'email' => 'required|email',
@@ -87,6 +88,8 @@ class User extends Authenticatable
         'firstname',
         'email',
         'password',
+        'username',
+        'sso_id',
     ];
 
     /**

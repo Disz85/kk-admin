@@ -40,6 +40,12 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'api' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
+            'hash' => false,
+        ],
     ],
 
     /*
@@ -107,5 +113,43 @@ return [
     */
 
     'password_timeout' => 10800,
+
+    'default_permission' => 'manage-admin',
+
+    'role_guard' => 'api',
+
+    'roles' => [
+        [
+            'name' => 'super-admin',
+        ],
+        [
+            'name' => 'user-manager',
+            'permissions' => ['show-users'],
+        ],
+        [
+            'name' => 'author-manager',
+            'permissions' => ['manage-authors'],
+        ],
+        [
+            'name' => 'category-manager',
+            'permissions' => ['manage-categories'],
+        ],
+        [
+            'name' => 'tag-manager',
+            'permissions' => ['manage-tags'],
+        ],
+        [
+            'name' => 'article-manager',
+            'permissions' => ['manage-articles'],
+        ],
+        [
+            'name' => 'product-manager',
+            'permissions' => ['manage-products'],
+        ],
+        [
+            'name' => 'ingredient-manager',
+            'permissions' => ['manage-ingredients'],
+        ],
+    ],
 
 ];

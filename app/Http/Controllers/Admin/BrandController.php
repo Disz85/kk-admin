@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\StoreCategoryRequest;
-use App\Http\Requests\UpdateCategoryRequest;
-use App\Models\Category;
+use App\Http\Requests\StoreBrandRequest;
+use App\Http\Requests\UpdateBrandRequest;
+use App\Models\Brand;
 
-class CategoryController extends Controller
+class BrandController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,10 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreCategoryRequest  $request
+     * @param  \App\Http\Requests\StoreBrandRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(StoreBrandRequest $request)
     {
         //
     }
@@ -42,10 +42,10 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Category  $categories
+     * @param  \App\Models\Brand  $brands
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $categories)
+    public function show(Brand $brands)
     {
         //
     }
@@ -53,10 +53,10 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Category  $categories
+     * @param  \App\Models\Brand  $brands
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $categories)
+    public function edit(Brand $brands)
     {
         //
     }
@@ -64,11 +64,11 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateCategoryRequest  $request
-     * @param  \App\Models\Category  $categories
+     * @param  \App\Http\Requests\UpdateBrandRequest  $request
+     * @param  \App\Models\Brand  $brands
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCategoryRequest $request, Category $categories)
+    public function update(UpdateBrandRequest $request, Brand $brands)
     {
         //
     }
@@ -76,10 +76,10 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Category  $categories
+     * @param  \App\Models\Brand  $brands
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $categories)
+    public function destroy(Brand $brands)
     {
         //
     }

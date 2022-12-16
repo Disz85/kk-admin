@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\StoreBrandRequest;
-use App\Http\Requests\UpdateBrandRequest;
-use App\Models\Brand;
+use App\Http\Requests\StoreCategoryableRequest;
+use App\Http\Requests\UpdateCategoryableRequest;
+use App\Models\Categoryable;
 
-class BrandController extends Controller
+class CategoryableController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,10 @@ class BrandController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreBrandRequest  $request
+     * @param  \App\Http\Requests\StoreCategoryableRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreBrandRequest $request)
+    public function store(StoreCategoryableRequest $request)
     {
         //
     }
@@ -42,10 +42,10 @@ class BrandController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Brand  $brands
+     * @param  \App\Models\Categoryable  $categoryable
      * @return \Illuminate\Http\Response
      */
-    public function show(Brand $brands)
+    public function show(Categoryable $categoryable)
     {
         //
     }
@@ -53,10 +53,10 @@ class BrandController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Brand  $brands
+     * @param  \App\Models\Categoryable  $categoryable
      * @return \Illuminate\Http\Response
      */
-    public function edit(Brand $brands)
+    public function edit(Categoryable $categoryable)
     {
         //
     }
@@ -64,11 +64,11 @@ class BrandController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateBrandRequest  $request
-     * @param  \App\Models\Brand  $brands
+     * @param  \App\Http\Requests\UpdateCategoryableRequest  $request
+     * @param  \App\Models\Categoryable  $categoryable
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateBrandRequest $request, Brand $brands)
+    public function update(UpdateCategoryableRequest $request, Categoryable $categoryable)
     {
         //
     }
@@ -76,10 +76,10 @@ class BrandController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Brand  $brands
+     * @param  \App\Models\Categoryable  $categoryable
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Brand $brands)
+    public function destroy(Categoryable $categoryable)
     {
         //
     }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\StoreShelfRequest;
-use App\Http\Requests\UpdateShelfRequest;
-use App\Models\Shelf;
+use App\Http\Requests\StoreArticleRequest;
+use App\Http\Requests\UpdateArticleRequest;
+use App\Models\Article;
 
-class ShelfController extends Controller
+class ArticleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,10 @@ class ShelfController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param StoreShelfRequest $request
+     * @param  \App\Http\Requests\StoreArticleRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreShelfRequest $request)
+    public function store(StoreArticleRequest $request)
     {
         //
     }
@@ -42,10 +42,10 @@ class ShelfController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Shelf $shelves
+     * @param  \App\Models\Article  $articles
      * @return \Illuminate\Http\Response
      */
-    public function show(Shelf $shelves)
+    public function show(Article $articles)
     {
         //
     }
@@ -53,10 +53,10 @@ class ShelfController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Shelf $shelves
+     * @param  \App\Models\Article  $articles
      * @return \Illuminate\Http\Response
      */
-    public function edit(Shelf $shelves)
+    public function edit(Article $articles)
     {
         //
     }
@@ -64,11 +64,11 @@ class ShelfController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param UpdateShelfRequest $request
-     * @param Shelf $shelves
+     * @param  \App\Http\Requests\UpdateArticleRequest  $request
+     * @param  \App\Models\Article  $articles
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateShelfRequest $request, Shelf $shelves)
+    public function update(UpdateArticleRequest $request, Article $articles)
     {
         //
     }
@@ -76,10 +76,10 @@ class ShelfController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Shelf $shelves
+     * @param  \App\Models\Article  $articles
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Shelf $shelves)
+    public function destroy(Article $articles)
     {
         //
     }

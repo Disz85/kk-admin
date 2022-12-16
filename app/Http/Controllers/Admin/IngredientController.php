@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\StoreMediaRequest;
-use App\Http\Requests\UpdateMediaRequest;
-use App\Models\Media;
+use App\Http\Requests\StoreIngredientRequest;
+use App\Http\Requests\UpdateIngredientRequest;
+use App\Models\Ingredient;
 
-class MediaController extends Controller
+class IngredientController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,10 @@ class MediaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreMediaRequest  $request
+     * @param  \App\Http\Requests\StoreIngredientRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreMediaRequest $request)
+    public function store(StoreIngredientRequest $request)
     {
         //
     }
@@ -42,10 +42,10 @@ class MediaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Media  $media
+     * @param  \App\Models\Ingredient  $ingredients
      * @return \Illuminate\Http\Response
      */
-    public function show(Media $media)
+    public function show(Ingredient $ingredients)
     {
         //
     }
@@ -53,10 +53,10 @@ class MediaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Media  $media
+     * @param  \App\Models\Ingredient  $ingredients
      * @return \Illuminate\Http\Response
      */
-    public function edit(Media $media)
+    public function edit(Ingredient $ingredients)
     {
         //
     }
@@ -64,11 +64,11 @@ class MediaController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateMediaRequest  $request
-     * @param  \App\Models\Media  $media
+     * @param  \App\Http\Requests\UpdateIngredientRequest  $request
+     * @param  \App\Models\Ingredient  $ingredients
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateMediaRequest $request, Media $media)
+    public function update(UpdateIngredientRequest $request, Ingredient $ingredients)
     {
         //
     }
@@ -76,10 +76,10 @@ class MediaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Media  $media
+     * @param  \App\Models\Ingredient  $ingredients
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Media $media)
+    public function destroy(Ingredient $ingredients)
     {
         //
     }

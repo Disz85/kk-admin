@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
+use App\Models\Category;
 
-class SaleController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,10 +31,10 @@ class SaleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreProductRequest  $request
+     * @param  \App\Http\Requests\StoreCategoryRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProductRequest $request)
+    public function store(StoreCategoryRequest $request)
     {
         //
     }
@@ -41,10 +42,10 @@ class SaleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $shops
+     * @param  \App\Models\Category  $categories
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $shops)
+    public function show(Category $categories)
     {
         //
     }
@@ -52,10 +53,10 @@ class SaleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Product  $shops
+     * @param  \App\Models\Category  $categories
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $shops)
+    public function edit(Category $categories)
     {
         //
     }
@@ -63,11 +64,11 @@ class SaleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateProductRequest  $request
-     * @param  \App\Models\Product  $shops
+     * @param  \App\Http\Requests\UpdateCategoryRequest  $request
+     * @param  \App\Models\Category  $categories
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProductRequest $request, Product $shops)
+    public function update(UpdateCategoryRequest $request, Category $categories)
     {
         //
     }
@@ -75,10 +76,10 @@ class SaleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Product  $shops
+     * @param  \App\Models\Category  $categories
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $shops)
+    public function destroy(Category $categories)
     {
         //
     }

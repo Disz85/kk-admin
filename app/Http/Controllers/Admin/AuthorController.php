@@ -1,30 +1,25 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\StoreTagRequest;
-use App\Http\Requests\UpdateTagRequest;
-use App\Http\Resources\Admin\TagCollection;
-use App\Http\Resources\Admin\TagResource;
-use App\Models\Tag;
+use App\Http\Requests\StoreAuthorRequest;
+use App\Http\Requests\UpdateAuthorRequest;
+use App\Http\Resources\Admin\AuthorCollection;
+use App\Http\Resources\Admin\AuthorResource;
+use App\Models\Author;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Throwable;
 
-/**
- * @resource Tags
- * @package App\Http\Controllers
- */
-class TagController extends Controller
+class AuthorController extends Controller
 {
     /**
-     * List of Tags.
+     * List of Authors.
      * @OA\Get(
-     *    tags={"Tags"},
-     *    path="/admin/tags",
+     *    tags={"Authors"},
+     *    path="/admin/authors",
      *    @OA\Response(
      *      response="200",
-     *      description="Display a listing of tags."
+     *      description="Display a listing of authors."
      *    ),
      *    @OA\MediaType(
      *      mediaType="application/json"
@@ -42,12 +37,12 @@ class TagController extends Controller
      * Display a list of the resource.
      *
      * @param Request $request
-     * @return TagCollection
+     * @return AuthorCollection
      */
-    public function index(Request $request): TagCollection
+    public function index(Request $request): AuthorCollection
     {
-        return new TagCollection(
-            Tag::query()
+        return new AuthorCollection(
+            Author::query()
                 ->when(
                     $request->has('name'),
                     fn (Builder $query) => $query->where('name', 'like', '%' . $request->get('name') . '%')
@@ -58,11 +53,11 @@ class TagController extends Controller
     }
 
     /**
-     * Store a newly created Tag.
+     * Store a newly created Author.
      *
      * @OA\Post (
-     *     tags={"Tags"},
-     *     path="/admin/tags",
+     *     tags={"Authors"},
+     *     path="/admin/authors",
      *     @OA\MediaType(
      *         mediaType="application/json"
      *     ),
@@ -71,11 +66,21 @@ class TagController extends Controller
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"name","slug"},
+     *                 required={"title","name","email","slug"},
+     *                 @OA\Property(
+     *                     property="title",
+     *                     type="string",
+     *                     description="Title.",
+     *                 ),
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
      *                     description="Name.",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="email",
+     *                     type="string",
+     *                     description="Email",
      *                 ),
      *                 @OA\Property(
      *                     property="slug",
@@ -92,7 +97,7 @@ class TagController extends Controller
      *     ),*
      *     @OA\Response(
      *         response=200,
-     *         description="Tag created."
+     *         description="Author created."
      *     ),
      *     @OA\Response(
      *         response=419,
@@ -100,58 +105,58 @@ class TagController extends Controller
      *     ),
      * )
      *
-     * @param StoreTagRequest $request
-     * @return TagResource
+     * @param StoreAuthorRequest $request
+     * @return AuthorResource
      */
-    public function store(StoreTagRequest $request): TagResource
+    public function store(StoreAuthorRequest $request): AuthorResource
     {
-        $tag = new Tag($request->validated());
-        $tag->save();
+        $author = new Author($request->validated());
+        $author->save();
 
-        return new TagResource($tag);
+        return new AuthorResource($author);
     }
 
     /**
-     * Show a selected Tag.
+     * Show a selected Author.
      * @OA\Get(
-     *    tags={"Tags"},
-     *    path="/admin/tags/{tag}",
+     *    tags={"Authors"},
+     *    path="/admin/authors/{author}",
      *    @OA\Response(
      *      response="200",
-     *      description="Display a selected Tag."
+     *      description="Display a listing of authors."
      *    ),
      *    @OA\MediaType(
      *      mediaType="application/json"
      *    ),
      *     @OA\Parameter(
-     *         name="tag",
+     *         name="author",
      *         in="path",
      *         required=true,
-     *         description="Tag ID",
+     *         description="Author ID",
      *         @OA\Schema(
      *             type="integer"
      *         ),
      *     ),
      * )
-     * @param Tag $tag
-     * @return TagResource
+     * @param Author $author
+     * @return AuthorResource
      */
-    public function show(Tag $tag): TagResource
+    public function show(Author $author): AuthorResource
     {
-        return new TagResource($tag);
+        return new AuthorResource($author);
     }
 
     /**
-     * Update Tag.
+     * Update Author.
      *
      * @OA\Put (
-     *     tags={"Tags"},
-     *     path="/admin/tags/{tag}",
+     *     tags={"Authors"},
+     *     path="/admin/authors/{author}",
      *     @OA\MediaType(
      *         mediaType="application/json"
      *     ),
      *    @OA\Parameter(
-     *      name="tag",
+     *      name="author",
      *      in="path",
      *      required=true,
      *      description="integer",
@@ -164,11 +169,21 @@ class TagController extends Controller
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"name","slug"},
+     *                 required={"title","name","email","slug"},
+     *                 @OA\Property(
+     *                     property="title",
+     *                     type="string",
+     *                     description="Title.",
+     *                 ),
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
      *                     description="Name.",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="email",
+     *                     type="string",
+     *                     description="Email",
      *                 ),
      *                 @OA\Property(
      *                     property="slug",
@@ -185,7 +200,7 @@ class TagController extends Controller
      *     ),*
      *     @OA\Response(
      *         response=200,
-     *         description="Tag updated."
+     *         description="Author updated."
      *     ),
      *     @OA\Response(
      *         response=419,
@@ -193,29 +208,29 @@ class TagController extends Controller
      *     ),
      * )
      *
-     * @param UpdateTagRequest $tag
-     * @param Tag $tag
-     * @return TagResource
+     * @param UpdateAuthorRequest $request
+     * @param Author $author
+     * @return AuthorResource
      */
-    public function update(UpdateTagRequest $request, Tag $tag): TagResource
+    public function update(UpdateAuthorRequest $request, Author $author)
     {
-        $tag->fill($request->validated());
-        $tag->save();
+        $author->fill($request->validated());
+        $author->save();
 
-        return new TagResource($tag);
+        return new AuthorResource($author);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @OA\Delete (
-     *     tags={"Tags"},
-     *     path="/admin/tags/{tag}",
+     *     tags={"Authors"},
+     *     path="/admin/authors/{author}",
      *     @OA\MediaType(
      *         mediaType="application/json"
      *     ),
      *    @OA\Parameter(
-     *      name="tag",
+     *      name="author",
      *      in="path",
      *      description="integer",
      *      @OA\Schema(
@@ -230,16 +245,15 @@ class TagController extends Controller
      *     ),*
      *     @OA\Response(
      *         response=200,
-     *         description="Tag deleted."
+     *         description="Author deleted."
      *     ),
      * )
      *
-     * @param Tag $tag
+     * @param Author $author
      * @return void
-     * @throws Throwable
      */
-    public function destroy(Tag $tag): void
+    public function destroy(Author $author)
     {
-        $tag->deleteOrFail();
+        $author->deleteOrFail();
     }
 }

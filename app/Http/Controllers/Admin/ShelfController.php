@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\StoreIngredientRequest;
-use App\Http\Requests\UpdateIngredientRequest;
-use App\Models\Ingredient;
+use App\Http\Requests\StoreShelfRequest;
+use App\Http\Requests\UpdateShelfRequest;
+use App\Models\Shelf;
 
-class IngredientController extends Controller
+class ShelfController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,10 @@ class IngredientController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreIngredientRequest  $request
+     * @param StoreShelfRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreIngredientRequest $request)
+    public function store(StoreShelfRequest $request)
     {
         //
     }
@@ -42,10 +42,10 @@ class IngredientController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Ingredient  $ingredients
+     * @param Shelf $shelves
      * @return \Illuminate\Http\Response
      */
-    public function show(Ingredient $ingredients)
+    public function show(Shelf $shelves)
     {
         //
     }
@@ -53,10 +53,10 @@ class IngredientController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Ingredient  $ingredients
+     * @param Shelf $shelves
      * @return \Illuminate\Http\Response
      */
-    public function edit(Ingredient $ingredients)
+    public function edit(Shelf $shelves)
     {
         //
     }
@@ -64,11 +64,11 @@ class IngredientController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateIngredientRequest  $request
-     * @param  \App\Models\Ingredient  $ingredients
+     * @param UpdateShelfRequest $request
+     * @param Shelf $shelves
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateIngredientRequest $request, Ingredient $ingredients)
+    public function update(UpdateShelfRequest $request, Shelf $shelves)
     {
         //
     }
@@ -76,10 +76,10 @@ class IngredientController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Ingredient  $ingredients
+     * @param Shelf $shelves
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ingredient $ingredients)
+    public function destroy(Shelf $shelves)
     {
         //
     }

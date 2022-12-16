@@ -106,7 +106,7 @@ phpunit:
       command: [ "--default-authentication-plugin=mysql_native_password" ]
   script:
      - php artisan config:clear
-     - php artisan test --testdox
+     - php artisan test --testdox --coverage
   tags:
     - kremmania
   artifacts:

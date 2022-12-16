@@ -78,8 +78,6 @@ phpcsfixer:
 phpstan:
   stage: analysis
   image: composer:2.4.4
-  before_script:
-    - composer require nunomaduro/larastan:2.2 --dev --no-plugins --no-interaction --no-scripts --prefer-dist --ignore-platform-reqs
   script:
     - composer analyze
   cache:

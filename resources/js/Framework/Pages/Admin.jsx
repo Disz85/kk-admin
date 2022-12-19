@@ -28,8 +28,6 @@ const Admin = ({ children }) => {
     const [pageInfo, setPageInfo] = useState({});
     const [resources] = useState(registerResources(children));
 
-    console.log(resources);
-
     return (
         <ApplicationContext.Provider value={setPageInfo}>
             <BrowserRouter>
@@ -39,18 +37,23 @@ const Admin = ({ children }) => {
                         items={listable(permitted(resources, hasPermission))}
                     />
                 </Aside>
+
+                {permitted(resources, hasPermission).map((resource) => (
+                    <p>{resource.name}</p>
+                ))}
+
                 <Main description={pageInfo}>
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        {permitted(resources, hasPermission).map((resource) => (
-                            <ApplicationRoute
-                                key={resource.path}
-                                path={resource.path}
-                                component={resource.component}
-                                resource={resource.name}
-                                service={http}
-                            />
-                        ))}
+                        {/*{permitted(resources, hasPermission).map((resource) => (*/}
+                        {/*    <ApplicationRoute*/}
+                        {/*        key={resource.path}*/}
+                        {/*        path={resource.path}*/}
+                        {/*        component={resource.component}*/}
+                        {/*        resource={resource.name}*/}
+                        {/*        service={http}*/}
+                        {/*    />*/}
+                        {/*))}*/}
                     </Routes>
                 </Main>
             </BrowserRouter>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import NavItem from './NavItem';
 
-import style from '../../../../scss/layouts/navigation/navigation.module.scss';
+import style from '../../../../scss/layouts/navigation.module.scss';
 
 const Navigation = ({ items }) => {
     return (

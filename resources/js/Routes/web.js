@@ -1,4 +1,4 @@
-import Logout from '../Logout/Logout';
+import Logout from '../Pages/Logout/Logout';
 
 export const logoutRoutes = [{ path: '/', component: Logout, listable: true }];
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { NavLink } from 'react-router-dom';
 
-import style from '../../../../scss/layouts/navigation/navItem.module.scss';
+import style from '../../../../scss/layouts/navigation.module.scss';
 
 const NavItem = ({ title, path }) => {
     return (

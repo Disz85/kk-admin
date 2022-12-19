@@ -5,10 +5,13 @@ import Admin from './Framework/Pages/Admin';
 import Resource from './Framework/Resource';
 // ROUTES
 import { logoutRoutes } from './Routes/web';
+// PAGES
+import UserList from './Pages/Users/UserLists';
 
 const Dashboard = () => {
     return (
         <Admin>
+            <Resource name="users" list={UserList}/>
             <Resource
                 name="logout"
                 routes={logoutRoutes}

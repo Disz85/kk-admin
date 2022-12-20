@@ -94,7 +94,11 @@ class ImportUsers extends Command
                 TRIM(UserName),
                 TRIM(Email),
                 TRIM(CreateDate)
-            FROM _grouped_aspnet_users WHERE rn = 1;
+            FROM _grouped_aspnet_users WHERE rn = 1
+            ON DUPLICATE KEY UPDATE
+                legacy_id = VALUES(legacy_id),
+                legacy_username = VALUES(legacy_username),
+                created_at = VALUES(created_at);
         ");
     }
 }

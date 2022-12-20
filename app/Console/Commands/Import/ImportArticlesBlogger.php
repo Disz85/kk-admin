@@ -77,7 +77,11 @@ class ImportArticlesBlogger extends Command
             }
 
             try {
-                $author = Author::where('slug', '=', Str::slug($data['author']))->first();
+                if (str_contains($data['author'], 'wishes')) {
+                    $author = Author::where('slug', 'like', '%wishes%')->orWhere('name', 'like', '%wishes%')->first();
+                } else {
+                    $author = Author::where('slug', '=', Str::slug($data['author']))->first();
+                }
                 if (! $author) {
                     $author = new Author();
                     $author->slug = Str::slug($data['author']);

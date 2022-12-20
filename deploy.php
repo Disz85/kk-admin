@@ -44,10 +44,6 @@ task('upload', function () {
     upload(__DIR__ . "/", '{{release_path}}');
 });
 
-task('artisan:editor', function () {
-    run('{{bin/php}} {{release_path}}/artisan vendor:publish --provider="VanOns\Laraberg\LarabergServiceProvider"');
-});
-
 task('worker-restart', function () {
     run('{{bin/php}} {{release_path}}/artisan queue:restart');
 });
@@ -55,10 +51,8 @@ task('worker-restart', function () {
 task('deploy', [
     'deploy:prepare',
     'upload',
-    'deploy:vendors',
     'artisan:migrate',
     'artisan:storage:link',
-    'artisan:editor',
     'artisan:config:cache',
     'deploy:shared',
     'deploy:symlink',

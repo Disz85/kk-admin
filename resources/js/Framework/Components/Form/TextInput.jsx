@@ -1,4 +1,4 @@
-const Text = ({ onChange, entity, regex = null, ...props }) => {
+const TextInput = ({ onChange, entity, regex = null, ...props }) => {
     const change = (e) =>
         onChange({
             [props.name]: regex
@@ -23,4 +23,4 @@ const Text = ({ onChange, entity, regex = null, ...props }) => {
     );
 };
 
-export default Text;
+export default TextInput;

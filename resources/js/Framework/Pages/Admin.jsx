@@ -45,15 +45,15 @@ const Admin = ({ children }) => {
                 <Main description={pageInfo}>
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        {/*{permitted(resources, hasPermission).map((resource) => (*/}
-                        {/*    <ApplicationRoute*/}
-                        {/*        key={resource.path}*/}
-                        {/*        path={resource.path}*/}
-                        {/*        component={resource.component}*/}
-                        {/*        resource={resource.name}*/}
-                        {/*        service={http}*/}
-                        {/*    />*/}
-                        {/*))}*/}
+                        {permitted(resources, hasPermission).map((resource) => (
+                            <ApplicationRoute
+                                key={resource.path}
+                                path={resource.path}
+                                component={resource.component}
+                                resource={resource.name}
+                                service={http}
+                            />
+                        ))}
                     </Routes>
                 </Main>
             </BrowserRouter>

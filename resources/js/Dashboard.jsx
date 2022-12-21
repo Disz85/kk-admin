@@ -6,16 +6,16 @@ import Resource from './Framework/Resource';
 // ROUTES
 import { logoutRoutes } from './Routes/web';
 // PAGES
-import UserList from './Pages/Users/UserLists';
+import UserList from './Pages/Users/UserList';
 
 const Dashboard = () => {
     return (
         <Admin>
-            <Resource name="users" list={UserList}/>
+            <Resource name="users" list={ UserList }/>
             <Resource
                 name="logout"
-                routes={logoutRoutes}
-                requiresPermission={false}
+                routes={ logoutRoutes }
+                requiresPermission={ false }
             />
         </Admin>
     );

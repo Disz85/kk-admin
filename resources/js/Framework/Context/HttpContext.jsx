@@ -13,7 +13,7 @@ HttpProvider.propTypes = {
     /**
      * Type of http
      */
-    http: PropTypes.shape.isRequired,
+    http: PropTypes.shape({}).isRequired,
     /**
      * Type of children
      */

@@ -1,4 +1,3 @@
-
 export const queryParams = (url, params) => {
     if (Object.keys(params).length) {
         return url;

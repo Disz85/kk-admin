@@ -17,17 +17,19 @@ const root = ReactDOM.createRoot(domContainer);
 
 if (root) {
     root.render(
-        <StrictMode>
+
             <ReactKeycloakProvider
                 authClient={keycloak}
                 initOptions={ssoConfig}
             >
                 <HttpProvider http={ApplicationService}>
                     <AuthProvider>
+                        <StrictMode>
                         <Dashboard />
+                        </StrictMode>
                     </AuthProvider>
                 </HttpProvider>
             </ReactKeycloakProvider>
-        </StrictMode>,
+
     );
 }

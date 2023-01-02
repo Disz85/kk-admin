@@ -3,13 +3,14 @@ import List from '../../Framework/Pages/List/List';
 import Text from '../../Framework/Components/Text';
 
 const UserList = (props) => {
-    return (
+    return 'Users list page';
+    /*return (
         <List {...props}>
             <Text name={ 'id' } />
             <Text name={ 'name' } />
             <Text name={ 'email' } />
         </List>
-    );
+    );*/
 };
 
 export default UserList;

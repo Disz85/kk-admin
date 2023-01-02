@@ -15,7 +15,7 @@ Resource.propTypes = {
     /**
      * Type of routes
      */
-    routes: PropTypes.shape,
+    routes: PropTypes.array,
     /**
      * Type of requiresPermission
      */

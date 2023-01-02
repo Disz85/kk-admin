@@ -16,6 +16,7 @@ import Header from '../Layouts/Header';
 import Main from '../Layouts/Main';
 import Aside from '../Layouts/Aside';
 import Navigation from '../Layouts/Navigation/Navigation';
+import NotFound from '../Pages/NotFound';
 
 import Home from './Home';
 
@@ -38,22 +39,18 @@ const Admin = ({ children }) => {
                     />
                 </Aside>
 
-                {permitted(resources, hasPermission).map((resource) => (
-                    <p>{resource.name}</p>
-                ))}
-
                 <Main description={pageInfo}>
                     <Routes>
-                        <Route path="/" element={<Home />} />
-                        {permitted(resources, hasPermission).map((resource) => (
-                            <ApplicationRoute
-                                key={resource.path}
-                                path={resource.path}
+                        {<Route key="/" path="/" element={<Home />} />}
+                        {permitted(resources, hasPermission).map((resource, index) => (
+                            <Route exact key={resource.path} path={resource.path} element={<ApplicationRoute
                                 component={resource.component}
                                 resource={resource.name}
                                 service={http}
                             />
+                            }/>
                         ))}
+                        {/*<Route key="404" path="*" element={<NotFound />} />*/}
                     </Routes>
                 </Main>
             </BrowserRouter>

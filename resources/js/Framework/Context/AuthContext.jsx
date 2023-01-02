@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
         http.logout().then(() => {
             window.location.replace(
                 keycloak.createLogoutUrl({
-                    redirectUri: process.env.APP_URL,
+                    redirectUri: import.meta.env.APP_URL,
                 }),
             );
         });

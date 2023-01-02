@@ -6,8 +6,13 @@ const UserList = (props) => {
     return (
         <List {...props}>
             <Text name={ 'id' } />
-            <Text name={ 'name' } />
+            <Text name={ 'lastname' } />
+            <Text name={ 'firstname' } />
             <Text name={ 'email' } />
+            <Text name={ 'username' } />
+            <Text name={ 'birth_year' } />
+            <Text name={ 'skin_type' } />
+            <Text name={ 'skin_concern' } />
         </List>
     );
 };

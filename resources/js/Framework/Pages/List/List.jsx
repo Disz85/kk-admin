@@ -48,7 +48,7 @@ const List = ({ resource, service, search: SearchForm = null, children }) => {
                     last: meta.last_page,
                     total: meta.total,
                     entities,
-                });
+                }, setList);
             })
             .finally(() => {
                 setIsLoading(false);

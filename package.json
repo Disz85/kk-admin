@@ -59,11 +59,13 @@
         "@react-keycloak/web": "^3.4.0",
         "axios": "^1.2.1",
         "glob": "^8.0.3",
+        "i18next": "^22.4.6",
         "keycloak-js": "^20.0.1",
         "prop-types": "^15.8.1",
         "qs": "^6.11.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "react-i18next": "^12.1.1",
         "react-router-dom": "^6.4.3"
     }
 }

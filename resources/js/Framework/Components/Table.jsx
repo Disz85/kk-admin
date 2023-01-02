@@ -1,14 +1,17 @@
 import React from 'react';
 import style from '../../../scss/components/table.module.scss';
+import { useTranslation } from "react-i18next";
 
 const Table = ({ fields, entities, data }) => {
+    const { t } = useTranslation();
+
     return (
         <div className={style.tableWrapper}>
             <table className={style.inner}>
                 <thead className={style.header}>
                     <tr className={style.row}>
                         {fields.map(({ name }) => (
-                            <th className={style.title}>{name}</th>
+                            <th key={name} className={style.title}> { t(`${data.resource}.${name}`) } </th>
                         ))}
                     </tr>
                 </thead>

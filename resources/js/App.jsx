@@ -12,6 +12,8 @@ import ssoConfig from './config/ssoConfig';
 
 import Dashboard from './Dashboard';
 
+import './i18n';
+
 const domContainer = document.getElementById('application-root');
 const root = ReactDOM.createRoot(domContainer);
 

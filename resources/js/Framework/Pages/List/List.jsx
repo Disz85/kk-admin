@@ -13,7 +13,7 @@ import Table from '../../Components/Table';
 
 const List = ({ resource, service, search: SearchForm = null, children }) => {
     // CONTEXTS
-    const { setPageInfo } = useContext(ApplicationContext);
+    const setPageInfo = useContext(ApplicationContext);
 
     // STATES
     const [isLoading, setIsLoading] = useState(false);

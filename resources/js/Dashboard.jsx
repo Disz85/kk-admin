@@ -7,11 +7,13 @@ import Resource from './Framework/Resource';
 import { logoutRoutes } from './Routes/web';
 // PAGES
 import UserList from './Pages/Users/UserList';
+import TagList from './Pages/Tags/TagList';
 
 const Dashboard = () => {
     return (
         <Admin>
             <Resource name="users" list={ UserList }/>
+            <Resource name="tags" list={ TagList }/>
             <Resource
                 name="logout"
                 routes={ logoutRoutes }

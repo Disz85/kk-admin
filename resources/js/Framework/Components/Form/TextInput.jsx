@@ -1,3 +1,5 @@
+import Field from "./Field";
+
 const TextInput = ({ onChange, entity, regex = null, ...props }) => {
     const change = (e) =>
         onChange({

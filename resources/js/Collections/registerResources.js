@@ -41,10 +41,10 @@ const resourceToCollection = (
     routes.map(({ path, listable, component }) =>
         resources.push({
             name,
-            component,
-            listable,
             requiresPermission,
             path: `/${name}${path}`,
+            component,
+            listable,
         }),
     );
 };

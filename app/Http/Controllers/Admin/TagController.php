@@ -192,7 +192,7 @@ class TagController extends Controller
      *     ),
      * )
      *
-     * @param UpdateTagRequest $tag
+     * @param UpdateTagRequest $request
      * @param Tag $tag
      * @return TagResource
      */

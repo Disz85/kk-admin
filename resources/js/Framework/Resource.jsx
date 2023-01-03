@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Resource = ({ name, routes = [], requiresPermission = true }) => null;
+const Resource = ({ name, list, form, routes = [], requiresPermission = true }) => null;
 
 export default Resource;
 /* eslint-disable no-unused-vars */

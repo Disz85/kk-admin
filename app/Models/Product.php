@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * Class Product
@@ -54,7 +55,6 @@ class Product extends Model
     protected $fillable = [
         'id',
         'name',
-        'slug',
         'description',
         'price',
         'size',
@@ -75,5 +75,21 @@ class Product extends Model
     public function shelves()
     {
         return $this->morphToMany(Shelf::class, 'shelves')->using('product_shelf');
+    }
+
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'taggable', 'taggables', null, 'tag_id');
+    }
+
+    public function categories(): MorphToMany
+    {
+        return $this->morphToMany(Category::class, 'categoryable')
+            ->using(Categoryable::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

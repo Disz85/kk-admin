@@ -14,7 +14,7 @@ return new class () extends Migration {
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('legacy_id');
+            $table->unsignedBigInteger('legacy_id')->nullable()->index();
             $table->string('legacy_image_url')->nullable();
             $table->longText('legacy_description')->nullable();
             $table->string('legacy_created_by')->nullable()->index();

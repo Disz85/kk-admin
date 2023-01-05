@@ -1,9 +1,10 @@
 import useInterval from "../../Hooks/useInterval";
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 export const MessageContext = React.createContext({ messages : [] });
 
-export const MessageProvider = ({ children }) => {
+const MessageProvider = ({ children }) => {
 
     const [ messages, setMessages ] = useState([]);
 
@@ -22,4 +23,16 @@ export const MessageProvider = ({ children }) => {
             { children }
         </MessageContext.Provider>
     );
+};
+
+export default MessageProvider;
+
+MessageProvider.propTypes = {
+    /**
+     * Type of children
+     */
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node,
+    ]),
 };

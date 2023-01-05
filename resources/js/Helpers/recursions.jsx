@@ -1,4 +1,6 @@
 import React from "react";
+import Iterator from "../Framework/Components/Form/Iterator";
+import defaultValue from "../Framework/Components/Form/DeaultValue"
 
 export const recursiveMap = (children, fn) => {
     return React.Children.map(children, child => {
@@ -53,3 +55,5 @@ export function createNewEntityFromChildren(children) {
 
     return data;
 }
+
+export const childrenOnly = (children) => React.Children.toArray(children).filter(o => !!o);

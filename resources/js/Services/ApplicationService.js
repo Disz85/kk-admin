@@ -30,11 +30,9 @@ const ApplicationService = {
 
     post : (resource, path, payload) => axios.post(`/admin/${resource}/${path}`, payload).then(r => r.data),
 
-    store : (resource, entity) => axios.put(`/admin/${resource}/` + (entity.id ? entity.id : 'new'), entity).then(r => r.data),
+    store : (resource, entity) => entity.id ? axios.put(`/admin/${resource}/` + entity.id, entity).then(r => r.data) : axios.post(`/admin/${resource}`, entity).then(r => r.data),
 
     remove : (resource, id) => axios.delete(`/admin/${resource}/${id}`).then(r => r.data),
-
-
 };
 
 export default ApplicationService;

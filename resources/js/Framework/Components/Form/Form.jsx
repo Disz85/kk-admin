@@ -51,7 +51,6 @@ const Form = ({ service, resource, history, immutable = false, children, classNa
             return;
         }
 
-
         const error = ref.current.querySelector('.m-form__feedback')?.parentNode;
 
         if (error) {
@@ -74,11 +73,11 @@ const Form = ({ service, resource, history, immutable = false, children, classNa
                 }
 
                 update({ entity : result.data, created : !(!!entity.id) });
-                pushMessage({ title : "Sikeres mentés!" });
+                //pushMessage({ title : "Sikeres mentés!" });
             })
             .catch(({ response }) => {
-                pushMessage({ title : "Hoppá, valami hiba történt!", type : "error" });
-                update({ errors : response.data.errors || {}, changed : true });
+                //pushMessage({ title : "Hoppá, valami hiba történt!", type : "error" });
+                update({ errors : (response && response.data.errors) || {}, changed : true });
                 scrollToFirstError();
             })
             .finally( () => update({ loading : false }) );
@@ -104,7 +103,6 @@ const Form = ({ service, resource, history, immutable = false, children, classNa
         setPageInfo({'title' : t(`application.edit`, { resource : t(`${resource}.resource`) })});
 
         if (id) {
-            console.log(resource, id);
             service.find(resource, id)
                 .then(entity => update({ entity: entity.data, loading : false, display : true }))
                 .catch(({ response }) => {
@@ -116,7 +114,6 @@ const Form = ({ service, resource, history, immutable = false, children, classNa
                         update({ lock : response.data, display : true, loading : false });
                     }
                 });
-
         }
 
         if (!id) {

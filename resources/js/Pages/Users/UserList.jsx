@@ -4,7 +4,7 @@ import Text from '../../Framework/Components/Text';
 
 const UserList = (props) => {
     return (
-        <List {...props}>
+        <List {...props} readonly>
             <Text name={ 'id' } />
             <Text name={ 'lastname' } />
             <Text name={ 'firstname' } />

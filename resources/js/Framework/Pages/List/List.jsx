@@ -10,8 +10,10 @@ import { getFields } from '../../../Helpers/getters';
 
 // COMPONENTS
 import Table from '../../Components/Table';
+import Create from '../../Components/Create';
+import Paginator from './Paginator';
 
-const List = ({ resource, service, search: SearchForm = null, children }) => {
+const List = ({ resource, service, search: SearchForm = null, readonly = false, children }) => {
     // CONTEXTS
     const setPageInfo = useContext(ApplicationContext);
 
@@ -74,6 +76,10 @@ const List = ({ resource, service, search: SearchForm = null, children }) => {
                     data={{ resource, service }}
                 />
             )}
+            <div className="col-12 d-flex justify-content-center">
+                <Paginator resource={ resource } pagination={ list }/>
+            </div>
+            {!readonly && (<Create resource={resource} />)}
         </React.Fragment>
     );
 };

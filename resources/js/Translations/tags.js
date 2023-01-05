@@ -3,6 +3,7 @@ export default {
     'resource' : 'Címke',
     'id' : 'ID',
     'name' : 'Név',
+    'slug' : 'Slug',
     'description': 'Leírás',
     'delete' : 'Törlés',
 }

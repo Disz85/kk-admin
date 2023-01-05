@@ -8,10 +8,14 @@
 
 .header {
     @apply p-4;
+    @apply bg-medium-blackberry;
+    @apply text-light-snow;
 }
 
 .row {
     @apply p-4;
+    @apply even:bg-light-mist;
+    @apply hover:shadow-xl;
 }
 
 .title {

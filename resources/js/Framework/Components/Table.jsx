@@ -15,7 +15,7 @@ const Table = ({ fields, entities, data }) => {
                         ))}
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className={style.body}>
                     {entities.map((entity) => (
                         <tr key={entity.id} className={style.row}>
                             {fields.map(({ component: Component, ...rest }) => (

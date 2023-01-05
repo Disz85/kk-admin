@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import style from '../../../scss/layouts/aside.module.scss';
 
 const Aside = ({ children }) => {
-    return <aside>{children}</aside>;
+    return <aside className={style.wrapper}>{children}</aside>;
 };
 
 export default Aside;

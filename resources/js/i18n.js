@@ -9,6 +9,7 @@ const resources = {
     hu: {
         translation: {
             'application'   : application,
+            'logout'        : application,
             'users'         : users,
             'tags'          : tags,
         }

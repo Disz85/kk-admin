@@ -1,0 +1,10 @@
+.wrapper {
+    @apply bg-light-mist;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    height: 100%;
+    width: 25rem;
+}

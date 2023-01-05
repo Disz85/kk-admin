@@ -32,7 +32,7 @@ const Admin = ({ children }) => {
     return (
         <ApplicationContext.Provider value={setPageInfo}>
             <BrowserRouter>
-                <Header>Header</Header>
+                {/* <Header>Header</Header> */}
                 <Aside>
                     <Navigation
                         items={listable(permitted(resources, hasPermission))}

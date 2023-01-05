@@ -23,4 +23,7 @@ export default {
     'passLock'    : 'Átveszem',
 
     'articles'    : 'Cikk hozzáadása',
+
+    'home'        : 'Kezdőlap',
+    'logout'      : 'Kijelentkezés',
 };

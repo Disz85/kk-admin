@@ -4,14 +4,18 @@ import PropTypes from 'prop-types';
 import NavItem from './NavItem';
 
 import style from '../../../../scss/layouts/navigation.module.scss';
+import {useTranslation} from "react-i18next";
 
 const Navigation = ({ items }) => {
+    //Contexts
+    const { t } = useTranslation();
+console.log(t('logout.logout'));
     return (
         <nav className={style.menu}>
             <ul className={style.list}>
-                <NavItem key="home" title="home" path="/" />
+                <NavItem key="home" title={ t('application.home') } path="/" />
                 {items.map(({ name, path }) => (
-                    <NavItem key={name} title={name} path={path} />
+                    <NavItem key={name} title={ t(`${name}.${name}`) } path={path} />
                 ))}
             </ul>
         </nav>

@@ -1,13 +1,19 @@
 .wrapper {
-    @apply m-2;
+    @apply bg-medium-grey;
+
+    margin-left: 25rem;
 }
 
 .header {
-    @apply m-2;
+    @apply p-2;
+    @apply bg-medium-blackberry;
 }
 
 .title {
     @apply m-2;
+    @apply text-light-snow;
+
+    font-size: 1.3rem;
 }
 
 .body {

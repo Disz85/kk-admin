@@ -12,10 +12,12 @@ import { getFields } from '../../../Helpers/getters';
 import Table from '../../Components/Table';
 import Create from '../../Components/Create';
 import Paginator from './Paginator';
+import {useTranslation} from "react-i18next";
 
 const List = ({ resource, service, search: SearchForm = null, readonly = false, children }) => {
     // CONTEXTS
     const setPageInfo = useContext(ApplicationContext);
+    const { t } = useTranslation();
 
     // STATES
     const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +61,7 @@ const List = ({ resource, service, search: SearchForm = null, readonly = false, 
 
     // SIDE EFFECTS
     useEffect(() => {
-        setPageInfo({ title: 'Lista', icon: 'icon' });
+        setPageInfo({ title:  t(`application.list`, { resource : t(`${resource}.resource`) }), icon: 'icon' });
     }, []);
 
     useEffect(() => {

@@ -22,7 +22,7 @@ return new class () extends Migration {
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->boolean('archived')->default(false);
-            $table->string('type')->nullable();
+            $table->string('type');
             $table->index('legacy_id', 'legacy_id_index');
             $table->index('type', 'type_index');
             $table->timestamps();

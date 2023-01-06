@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Import;
 
+use App\Enum\CategoryTypeEnum;
 use App\Helpers\Import\HtmlToEditorJsConverterIngredient;
 use App\Models\Category;
 use App\XMLReaders\IngredientCategoryXMLReader;
@@ -65,7 +66,7 @@ class ImportIngredientCategories extends Command
                 $category->legacy_id = $data['id'];
                 $category->name = $data['title'] ?? null;
                 $category->slug = $data['slug'] ?? null;
-                $category->type = Category::TYPE_INGREDIENT;
+                $category->type = CategoryTypeEnum::Ingredient;
                 $category->created_at = $data['creton'] ?? null;
                 $category->updated_at = $data['modon'] ?? null;
 

@@ -14,34 +14,38 @@ class AuthorTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    public function test_index(): void
+    /** @test */
+    public function it_can_list_authors(): void
     {
         $response = $this->get(route('authors.index'));
-        $response->assertStatus(200);
+        $response->assertOk();
     }
 
-    public function test_create()
+    /** @test */
+    public function it_can_store_a_author()
     {
         $data = AuthorFactory::new()->raw();
         $this->post(route('authors.store'), $data)
-            ->assertStatus(201);
+            ->assertCreated();
         $this->assertDatabaseHas(Author::class, $data);
     }
 
-    public function test_update()
+    /** @test */
+    public function it_can_update_a_author()
     {
         $author = Author::factory()->create();
         $data = AuthorFactory::new()->raw();
         $this->put(route('authors.update', ['author' => $author->id]), $data)
-            ->assertStatus(200);
+            ->assertOk();
         $this->assertDatabaseHas(Author::class, $data);
     }
 
-    public function test_show()
+    /** @test */
+    public function it_can_show_a_author()
     {
         $author = Author::factory()->create();
         $this->get(route('authors.show', ['author' => $author->id]))
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJsonFragment(['email' => $author->email])
             ->assertJsonFragment(['title' => $author->title])
             ->assertJsonFragment(['id' => $author->id])
@@ -49,11 +53,12 @@ class AuthorTest extends TestCase
             ->assertJsonFragment(['name' => $author->name]);
     }
 
-    public function test_destroy()
+    /** @test */
+    public function it_can_remove_a_author()
     {
         $author = Author::factory()->create();
         $this->delete(route('authors.destroy', ['author' => $author->id]))
-            ->assertStatus(200);
+            ->assertOk();
         $this->assertNull(Author::find($author->id));
     }
 }

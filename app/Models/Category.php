@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\CategoryTypeEnum;
 use App\Traits\CategoryHierarchy;
 use App\Traits\GeneratesSlug;
 use Carbon\Carbon;
@@ -12,6 +13,23 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * Class Category
+ *
+ * @OA\Schema(
+ *     @OA\Xml(name="Author"),
+ *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time"),
+ *     @OA\Property(property="legacy_id", type="int"),
+ *     @OA\Property(property="name", type="string"),
+ *     @OA\Property(property="email", type="string"),
+ *     @OA\Property(property="slug", type="string"),
+ *     @OA\Property(property="description", type="string"),
+ *     @OA\Property(property="image_id", type="int"),
+ *     @OA\Property(property="parent_id", type="int"),
+ *     @OA\Property(property="type", type="string"),
+ *     @OA\Property(property="archived", type="bool")
+ * );
+ *
  * @package App\Models
  *
  * Fields
@@ -21,7 +39,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @property string $slug
  * @property string $description
  * @property int $image_id
- * @property int parent_id
+ * @property int $parent_id
  * @property bool $archived
  * @property string $type
  * @property Carbon|null $created_at
@@ -33,12 +51,6 @@ class Category extends Model
     use GeneratesSlug;
     use CategoryHierarchy;
 
-    public const TYPE_ARTICLE = 'article';
-    public const TYPE_PRODUCT = 'product';
-    public const TYPE_SKINTYPE = 'skintype';
-    public const TYPE_SKINCONCERN = 'skinconcern';
-    public const TYPE_INGREDIENT = 'ingredient';
-
     protected $table = 'categories';
 
     protected $slugFrom = 'name';
@@ -49,10 +61,14 @@ class Category extends Model
         'slug',
         'archived',
         'parent_id',
+        'image_id',
+        'type',
+        'description',
     ];
 
     protected $casts = [
         'description' => 'array',
+        'type' => CategoryTypeEnum::class,
     ];
 
     public function image(): BelongsTo
@@ -74,4 +90,5 @@ class Category extends Model
     {
         return $this->morphedByMany(Ingredient::class, 'categoryable');
     }
+
 }

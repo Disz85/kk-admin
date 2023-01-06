@@ -2,13 +2,16 @@
 
 namespace Database\Factories;
 
+use App\Enum\CategoryTypeEnum;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
+ * @extends Factory<Category>
  */
 class CategoryFactory extends Factory
 {
+    protected $model = Category::class;
     /**
      * Define the model's default state.
      *
@@ -17,7 +20,9 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->name,
+            'description' => $this->faker->text,
+            'type' => $this->faker->randomElement(CategoryTypeEnum::toArray()),
         ];
     }
 }

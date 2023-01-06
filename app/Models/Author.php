@@ -43,6 +43,7 @@ class Author extends Model
         'email',
         'slug',
         'description',
+        'image_id',
     ];
 
     public function articles(): BelongsToMany

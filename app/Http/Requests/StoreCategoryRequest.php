@@ -2,20 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Enum\CategoryTypeEnum;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreCategoryRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,7 +18,20 @@ class StoreCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required|string',
+            'description' => 'nullable|string',
+            'image_id' => 'nullable|integer|exists:media,id',
+            'parent_id' => 'nullable|integer|exists:categories,id',
+            'type' => [
+                'required',
+                'string',
+                new Enum(CategoryTypeEnum::class),
+            ],
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Import;
 
+use App\Enum\CategoryTypeEnum;
 use App\Models\Category;
 use App\XMLReaders\CremeCategoryXMLReader;
 use Illuminate\Console\Command;
@@ -70,15 +71,15 @@ class ImportCremeCategories extends Command
                 $category->legacy_id = $data['id'];
                 switch ($baseCategoryId) {
                     case '2':
-                        $category->type = Category::TYPE_SKINTYPE;
+                        $category->type = CategoryTypeEnum::SkinType;
 
                         break;
                     case '3':
-                        $category->type = Category::TYPE_SKINCONCERN;
+                        $category->type = CategoryTypeEnum::SkinConcern;
 
                         break;
                     default:
-                        $category->type = Category::TYPE_PRODUCT;
+                        $category->type = CategoryTypeEnum::Product;
                 }
                 if (! is_null($parentLegacyId)) {
                     $category->parent_id = $parent->id;

@@ -92,6 +92,11 @@ class AuthorController extends Controller
      *                     type="string",
      *                     description="Desciption.",
      *                 ),
+     *                 @OA\Property(
+     *                     property="image_id",
+     *                     type="integer",
+     *                     description="Image ID.",
+     *                 ),
      *             )
      *         )
      *     ),*
@@ -194,6 +199,11 @@ class AuthorController extends Controller
      *                     property="description",
      *                     type="string",
      *                     description="Desciption.",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="image_id",
+     *                     type="integer",
+     *                     description="Image ID.",
      *                 ),
      *             )
      *         )

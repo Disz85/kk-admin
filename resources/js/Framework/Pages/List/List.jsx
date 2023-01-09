@@ -26,6 +26,7 @@ const List = ({ resource, service, search: SearchForm = null, readonly = false, 
     const [marked, setMarked] = useState(null);
     const [fields] = useState(getFields(children));
     const [list, setList] = useState({
+        current: 0,
         last: 0,
         total: 0,
         entities: [],
@@ -41,7 +42,7 @@ const List = ({ resource, service, search: SearchForm = null, readonly = false, 
                 `/${resource}?${stringify(newParams)}`,
             );
 
-            update({ current: 1, params: newParams }, setList);
+            update({ current: 1, params: newParams}, setList);
         }
     });
 
@@ -68,7 +69,6 @@ const List = ({ resource, service, search: SearchForm = null, readonly = false, 
 
     const removeEntity = entity => service.remove(resource, entity.id).then(() => paginate()).then(() => setMarked(null));
 
-
     // SIDE EFFECTS
     useEffect(() => {
         setPageInfo({ title:  t(`application.list`, { resource : t(`${resource}.resource`) }), icon: 'icon' });
@@ -80,6 +80,8 @@ const List = ({ resource, service, search: SearchForm = null, readonly = false, 
 
     return (
         <React.Fragment>
+            { SearchForm && <SearchForm resource={ resource } entity={ list.params } service={ service } onChange={ updateSearch }/> }
+
             {isLoading && <p>Loading...</p>}
             {!isLoading && list.entities.length && (
                 <Table
@@ -89,7 +91,7 @@ const List = ({ resource, service, search: SearchForm = null, readonly = false, 
                     remove={ markEntityForDeletion }
                 />
             )}
-            <div className="col-12 d-flex justify-content-center">
+            <div>
                 <Paginator resource={ resource } pagination={ list }/>
             </div>
             {!readonly && (<Create resource={resource} />)}

@@ -4,6 +4,7 @@ import i18n from "i18next";
 import application from "./Translations/application";
 import users from "./Translations/users";
 import tags from "./Translations/tags";
+import categories from "./Translations/categories";
 
 const resources = {
     hu: {
@@ -12,6 +13,7 @@ const resources = {
             'logout'        : application,
             'users'         : users,
             'tags'          : tags,
+            'categories'    : categories,
         }
     }
 };

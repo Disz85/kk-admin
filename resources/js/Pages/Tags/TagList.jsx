@@ -3,10 +3,11 @@ import List from '../../Framework/Pages/List/List';
 import Text from '../../Framework/Components/Text';
 import Edit from '../../Framework/Components/Edit';
 import Delete from '../../Framework/Components/Delete';
+import TagSearch from "./TagSearch";
 
-const UserList = (props) => {
+const TagList = (props) => {
     return (
-        <List {...props}>
+        <List search={ TagSearch } {...props}>
             <Text name={ 'id' } />
             <Edit name={ 'name' } />
             <Text name={ 'description' } />
@@ -15,4 +16,4 @@ const UserList = (props) => {
     );
 };
 
-export default UserList;
+export default TagList;

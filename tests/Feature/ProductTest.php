@@ -37,7 +37,7 @@ class ProductTest extends TestCase
         foreach ($tags as $tag) {
             $response->assertJsonFragment([
                 'name' => $tag->name,
-                'id' => $category->id,
+                'id' => $tag->id,
             ]);
         }
     }
@@ -64,7 +64,7 @@ class ProductTest extends TestCase
         foreach ($changedTags as $tag) {
             $response->assertJsonFragment([
                 'name' => $tag->name,
-                'id' => $category->id,
+                'id' => $tag->id,
             ]);
         }
     }
@@ -86,7 +86,7 @@ class ProductTest extends TestCase
         foreach ($tags as $tag) {
             $response->assertJsonFragment([
                 'name' => $tag->name,
-                'id' => $category->id,
+                'id' => $tag->id,
             ]);
         }
     }

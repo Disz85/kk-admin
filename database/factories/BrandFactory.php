@@ -20,6 +20,8 @@ class BrandFactory extends Factory
             'title' => $this->faker->company,
             'description' => $this->faker->text(255),
             'url' => $this->faker->url,
+            'where_to_find' => fake()->text(),
+            'created_by' => UserFactory::new(),
         ];
     }
 }

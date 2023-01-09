@@ -86,7 +86,7 @@ uninstall: ## Cleanup project by removing .env, PHP packages, node modules, file
 	rm -rf node_modules
 
 shell: ## Connect to the php container with a bash prompt
-	docker exec -it $(PHP_CONTAINER) bash
+	docker exec -u $(USER_ID):$(GROUP_ID) -it $(PHP_CONTAINER) bash
 
 tinker: ## Run Artisan Tinker
 	docker exec -it $(PHP_CONTAINER) php artisan tinker

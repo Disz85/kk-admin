@@ -65,6 +65,7 @@ class Product extends Model
         'hidden',
         'sponsored',
         'is_18_plus',
+        'created_by',
     ];
 
     public function image(): BelongsTo

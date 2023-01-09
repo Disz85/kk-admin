@@ -8,6 +8,7 @@ use Database\Factories\BrandFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 
+use Illuminate\Support\Arr;
 use Tests\TestCase;
 
 class BrandTest extends TestCase
@@ -40,7 +41,7 @@ class BrandTest extends TestCase
         $this->put(route('brands.update', ['brand' => $brand->id]), $data)
             ->assertOk();
         $data['description'] = json_encode($data['description']);
-        $this->assertDatabaseHas(Brand::class, $data);
+        $this->assertDatabaseHas(Brand::class, Arr::except($data, 'created_by'));
     }
 
     /** @test */

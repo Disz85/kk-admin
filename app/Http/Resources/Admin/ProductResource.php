@@ -28,10 +28,14 @@ class ProductResource extends JsonResource
             'hidden' => $this->hidden,
             'sponsored' => $this->sponsored,
             'is_18_plus' => $this->is_18_plus,
-            'image' => new MediaResource($this->image),
-            'tags' => new TagCollection($this->tags),
-            'categories' => new CategoryCollection($this->categories),
-            'user' => new UserResource($this->user),
+            'image' => new MediaResource($this->whenLoaded('image')),
+            'image_id' => $this->image_id,
+            'tags' => new TagCollection($this->whenLoaded('tags')),
+            'categories' => new CategoryCollection($this->whenLoaded('categories')),
+            'user' => new UserResource($this->whenLoaded('user')),
+            'created_by' => $this->created_by,
+            'brand' => new BrandResource($this->whenLoaded('brand')),
+            'brand_id' => $this->brand_id,
         ];
     }
 }

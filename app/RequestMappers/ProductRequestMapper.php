@@ -25,15 +25,6 @@ class ProductRequestMapper
             'created_by' => data_get($data, 'created_by'),
         ]);
 
-        if (! $product->slug) {
-            $product->generateSlug();
-        }
-
-        $product->save();
-
-        $product->categories()->sync(data_get($data, 'categories'));
-        $product->tags()->sync(data_get($data, 'tags'));
-
         if (isset($data['image_id']) && $data['image_id']) {
             $product->image()->associate(Media::findOrFail($data['image_id']));
         }
@@ -42,6 +33,12 @@ class ProductRequestMapper
         }
 
         $product->save();
+
+        $product->categories()->sync(data_get($data, 'categories'));
+        $product->tags()->sync(data_get($data, 'tags'));
+
+        $product->load('categories')->load('tags');
+        $product->refresh();
 
         return $product;
     }

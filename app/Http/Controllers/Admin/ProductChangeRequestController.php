@@ -2,28 +2,32 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
-use App\Http\Resources\Admin\ProductCollection;
+use App\Http\Requests\StoreProductChangeRequest;
+use App\Http\Requests\UpdateProductChangeRequest;
+use App\Http\Resources\Admin\ProductChangeRequestCollection;
+use App\Http\Resources\Admin\ProductChangeRequestResource;
 use App\Http\Resources\Admin\ProductResource;
+use App\Mail\ProductChangeRequestRejectionMail;
 use App\Models\Product;
-use App\RequestMappers\ProductRequestMapper;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\ProductChangeRequest;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Symfony\Component\HttpFoundation\Response;
 
-class ProductController extends Controller
+class ProductChangeRequestController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
+     * List of Product change request.
      * @OA\Get(
-     *    tags={"Products"},
-     *    path="/admin/products",
+     *    tags={"ProductChangeRequests"},
+     *    path="/admin/product-change-requests",
      *    @OA\Response(
      *      response="200",
-     *      description="Display a listing of tags."
+     *      description="Display a listing of prdouct change requests.",
+     *      @OA\JsonContent()
      *    ),
      *    @OA\MediaType(
      *      mediaType="application/json"
@@ -35,49 +39,80 @@ class ProductController extends Controller
      *      @OA\Schema(
      *          type="integer"
      *      )
-     *    ),
-     *    @OA\Parameter(
-     *      name="name",
-     *      in="query",
-     *      description="Name",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
      *    )
      * )
      *
+     * Display a list of the resource.
+     *
      * @param Request $request
-     * @return ProductCollection
+     * @return ProductChangeRequestCollection
      */
-    public function index(Request $request): ProductCollection
+    public function index(Request $request): ProductChangeRequestCollection
     {
-        return new ProductCollection(
-            Product::query()
-                ->when(
-                    $request->has('name'),
-                    fn (Builder $query) => $query->where('name', 'like', '%' . $request->get('name') . '%')
-                )
-        ->orderByDesc('updated_at')
-        ->paginate($request->get('size', 20))
+        return new ProductChangeRequestCollection(
+            ProductChangeRequest::query()
+                ->orderByDesc('created_at')
+                ->paginate($request->get('size', 20))
         );
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Show a selected Product change request.
+     * @OA\Get(
+     *    tags={"ProductChangeRequests"},
+     *    path="/admin/product-change-requests/{product_change_request}",
+     *    @OA\Response(
+     *      response="200",
+     *      description="Display a selected Product Change Request.",
+     *      @OA\JsonContent()
+     *    ),
+     *    @OA\MediaType(
+     *      mediaType="application/json"
+     *    ),
+     *    @OA\Parameter(
+     *         name="product_change_request",
+     *         in="path",
+     *         required=true,
+     *         description="Product Change Request ID",
+     *         @OA\Schema(
+     *             type="integer"
+     *         ),
+     *    ),
+     *    @OA\Response(
+     *        response=404,
+     *        description="Product change request Not Found.",
+     *        @OA\JsonContent()
+     *    )
+     * )
+     * @param ProductChangeRequest $productChangeRequest
+     * @return ProductChangeRequestResource
+     */
+    public function show(ProductChangeRequest $productChangeRequest): ProductChangeRequestResource
+    {
+        return new ProductChangeRequestResource($productChangeRequest);
+    }
+
+    /**
+     * Store a product change request.
      *
      * @OA\Post (
-     *     tags={"Products"},
-     *     path="/admin/products",
+     *     tags={"ProductChangeRequests"},
+     *     path="/admin/product-change-requests",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"name","active","hidden","sponsored","is_18_plus"},
+     *                 required={"name","active","hidden","sponsored","is_18_plus","created_by"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
      *                     description="name",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="product_id",
+     *                     type="integer",
+     *                     description="product_id",
      *                 ),
      *                 @OA\Property(
      *                     property="canonical_name",
@@ -161,78 +196,133 @@ class ProductController extends Controller
      *                 @OA\Property(
      *                     property="published_at",
      *                     type="datetime",
-     *                  @OA\Schema(
+     *                      @OA\Schema(
      *                      type="string",
      *                      format ="date-time",
-     *                  ),
+     *                      ),
      *                     description="published_at",
      *                 ),
      *             )
      *         )
-     *     ),*
-     *     @OA\Response(
-     *         response=200,
-     *         description="Product created."
      *     ),
      *     @OA\Response(
-     *         response=419,
-     *         description="Error in fields"
+     *         response=201,
+     *         description="Product chanhe request created.",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error in fields",
+     *         @OA\JsonContent()
      *     ),
      * )
      *
-     *
-     * @param  \App\Http\Requests\StoreProductRequest  $request
-     * @return Response
+     * @param StoreProductChangeRequest $request
+     * @return ProductChangeRequestResource
      */
-    public function store(StoreProductRequest $request, Product $product, ProductRequestMapper $productRequestMapper): ProductResource
+    public function store(StoreProductChangeRequest $request): ProductChangeRequestResource
     {
-        return new ProductResource($productRequestMapper->map($product, $request->validated()));
+        /** @var ProductChangeRequest $productChangeRequest */
+        $productChangeRequest = ProductChangeRequest::create([
+            'data' => $request->validated(),
+            'product_id' => $request->product_id ?? null,
+        ]);
+
+        return new ProductChangeRequestResource($productChangeRequest);
     }
 
     /**
-     * Display the specified resource.
+     * Approve a Product change request.
      *
-     * @OA\Get(
-     *    tags={"Products"},
-     *    path="/admin/products/{product}",
-     *    @OA\Response(
-     *      response="200",
-     *      description="Display a selected Product."
+     * @OA\Post (
+     *     tags={"ProductChangeRequests"},
+     *     path="/admin/product-change-requests/{product_change_request}/approve",
+     *     @OA\MediaType(
+     *         mediaType="application/json"
+     *     ),
+     *    @OA\Parameter(
+     *      name="product_change_request",
+     *      in="path",
+     *      required=true,
+     *      description="integer",
+     *      @OA\Schema(
+     *          type="integer"
+     *      )
      *    ),
-     *    @OA\MediaType(
-     *      mediaType="application/json"
-     *    ),
-     *     @OA\Parameter(
-     *         name="product",
-     *         in="path",
-     *         required=true,
-     *         description="product ID",
-     *         @OA\Schema(
-     *             type="integer"
-     *         ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Product change request approved",
+     *         @OA\JsonContent()
      *     ),
      * )
      *
-     * @param Product $product
-     * @return Response
+     * @param ProductChangeRequest $productChangeRequest
+     * @return ProductResource
      */
-    public function show(Product $product): ProductResource
+    public function approve(ProductChangeRequest $productChangeRequest): ProductResource
     {
-        $product->load('tags')->load('categories');
+        DB::beginTransaction();
+        $product = Product::updateOrCreate(['id' => $productChangeRequest->product->id ?? null], $productChangeRequest->data);
+        $product->tags()->sync($productChangeRequest->data['tags'] ?? []);
+        $product->categories()->sync($productChangeRequest->data['categories'] ?? []);
+        $productChangeRequest->delete();
+        $product->refresh()->load('tags')->load('categories');
+        DB::commit();
 
         return new ProductResource($product);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Reject a Product change request.
      *
-     * @OA\Put (
-     *     tags={"Products"},
-     *     path="/admin/products/{product}",
+     * @OA\Post (
+     *     tags={"ProductChangeRequests"},
+     *     path="/admin/product-change-requests/{product_change_request}/reject",
+     *     @OA\MediaType(
+     *         mediaType="application/json"
+     *     ),
      *    @OA\Parameter(
-     *      name="product",
+     *      name="product_change_request",
      *      in="path",
      *      required=true,
+     *      description="integer",
+     *      @OA\Schema(
+     *          type="integer"
+     *      )
+     *    ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Product change request rejected",
+     *         @OA\JsonContent()
+     *     ),
+     * )
+     *
+     * @param ProductChangeRequest $productChangeRequest
+     * @return JsonResponse
+     */
+    public function reject(ProductChangeRequest $productChangeRequest): JsonResponse
+    {
+        $user = User::findOrFail($productChangeRequest->data['created_by']);
+
+        try {
+            Mail::send(new ProductChangeRequestRejectionMail($productChangeRequest, $user));
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Email küldés sikertelen'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        $productChangeRequest->delete();
+
+        return response()->json([], Response::HTTP_OK);
+    }
+
+    /**
+     * Update a product change request.
+     *
+     * @OA\Put (
+     *     tags={"ProductChangeRequests"},
+     *     path="/admin/product-change-requests/{product_change_request}",
+     *    @OA\Parameter(
+     *      name="product_change_request",
+     *      in="path",
      *      description="integer",
      *      @OA\Schema(
      *          type="string"
@@ -243,11 +333,16 @@ class ProductController extends Controller
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"name","active","hidden","sponsored","is_18_plus"},
+     *                 required={"name","active","hidden","sponsored","is_18_plus","created_by"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
      *                     description="name",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="product_id",
+     *                     type="integer",
+     *                     description="product_id",
      *                 ),
      *                 @OA\Property(
      *                     property="canonical_name",
@@ -341,61 +436,28 @@ class ProductController extends Controller
      *         )
      *     ),*
      *     @OA\Response(
-     *         response=200,
-     *         description="Product created."
+     *         response=201,
+     *         description="Product change request created.",
+     *         @OA\JsonContent()
      *     ),
      *     @OA\Response(
-     *         response=419,
-     *         description="Error in fields"
+     *         response=422,
+     *         description="Error in fields",
+     *         @OA\JsonContent()
      *     ),
      * )
      *
-     * @param UpdateProductRequest $request
-     * @param Product $product
-     * @param ProductRequestMapper $productRequestMapper
-     * @return ProductResource
-     */
-    public function update(UpdateProductRequest $request, Product $product, ProductRequestMapper $productRequestMapper): ProductResource
-    {
-        return new ProductResource($productRequestMapper->map($product, $request->validated()));
-    }
-
-    /**
-     * Remove the specified resource from storage.
      *
-     * @OA\Delete (
-     *     tags={"Products"},
-     *     path="/admin/products/{product}",
-     *    @OA\Parameter(
-     *      name="product",
-     *      in="path",
-     *      description="integer",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
-     *    ),
-     *     @OA\RequestBody(
-     *         required=false,
-     *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
-     *         )
-     *     ),*
-     *     @OA\Response(
-     *         response=204,
-     *         description="Product deleted."
-     *     ),
-     * )
-     *
-     * @param Product $product
-     * @return JsonResponse
-     * @throws \Throwable
+     * @param UpdateProductChangeRequest $request
+     * @param ProductChangeRequest $productChangeRequest
+     * @return ProductChangeRequestResource
      */
-    public function destroy(Product $product): JsonResponse
+    public function update(UpdateProductChangeRequest $request, ProductChangeRequest $productChangeRequest): ProductChangeRequestResource
     {
-        $product->tags()->detach();
-        $product->categories()->detach();
-        $product->deleteOrFail();
+        $productChangeRequest->data = $request->validated();
+        $productChangeRequest->product_id = $request->product_id ?? null;
+        $productChangeRequest->save();
 
-        return response()->json([], Response::HTTP_NO_CONTENT);
+        return new ProductChangeRequestResource($productChangeRequest);
     }
 }

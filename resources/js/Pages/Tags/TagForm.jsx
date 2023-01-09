@@ -7,7 +7,6 @@ const TagForm = (props) => (
     <Form {...props}>
         <Panel>
             <TextInput name={ 'name' }/>
-            <TextInput name={ 'slug' }/>
             <TextInput name={ 'description' }/>
         </Panel>
     </Form>

@@ -32,9 +32,7 @@ const Panel = ({ iconClass, title, children, ...props }) => {
 
             </div>
             <div className={ "m-accordion__content" } ref={ content } style={ height }>
-                <div className={ "mt-4" }>
-                    { React.Children.map(children, child => React.cloneElement(child, props)) }
-                </div>
+                { React.Children.map(children, child => React.cloneElement(child, props)) }
             </div>
         </div>
     );

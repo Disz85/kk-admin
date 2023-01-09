@@ -2,8 +2,9 @@ import React from 'react';
 import style from '../../../scss/components/table.module.scss';
 import { useTranslation } from "react-i18next";
 
-const Table = ({ fields, entities, data }) => {
+const Table = ({ fields, entities, data, remove }) => {
     const { t } = useTranslation();
+    const { resource, service } = data;
 
     return (
         <div className={style.tableWrapper}>
@@ -11,7 +12,7 @@ const Table = ({ fields, entities, data }) => {
                 <thead className={style.header}>
                     <tr className={style.row}>
                         {fields.map(({ name }) => (
-                            <th key={name} className={style.title}> { t(`${data.resource}.${name}`) } </th>
+                            <th key={name} className={style.title}> { t(`${resource}.${name}`) } </th>
                         ))}
                     </tr>
                 </thead>
@@ -24,9 +25,10 @@ const Table = ({ fields, entities, data }) => {
                                     key={rest.name + entity.id}
                                 >
                                     <Component
-                                        service={data.service}
-                                        resource={data.resource}
+                                        service={service}
+                                        resource={resource}
                                         entity={entity}
+                                        remove={remove}
                                         {...rest}
                                     />
                                 </td>

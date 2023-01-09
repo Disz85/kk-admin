@@ -45,7 +45,8 @@ module.exports = {
             pine: '#244b26',
             blue: '#5a93b7',
             plum: '#51518e',
-            night: '#292847'
+            night: '#292847',
+            grey: '#666666',
         }
     },
     extend: {},

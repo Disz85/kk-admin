@@ -1,4 +1,5 @@
 import Field from "./Field";
+import style from '../../../../scss/components/form.module.scss';
 
 const TextInput = ({ onChange, entity, regex = null, ...props }) => {
     const change = (e) =>
@@ -9,10 +10,11 @@ const TextInput = ({ onChange, entity, regex = null, ...props }) => {
         });
 
     return (
-        <div>
+        <div className={ style.formGroup }>
             <Field {...props}>
                 {(hasError, attributes) => (
                     <input
+                        className={ style.formTextInput }
                         type={'text'}
                         onChange={change}
                         value={entity[props.name] || ''}

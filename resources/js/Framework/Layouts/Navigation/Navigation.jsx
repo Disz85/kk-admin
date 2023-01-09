@@ -9,7 +9,7 @@ import {useTranslation} from "react-i18next";
 const Navigation = ({ items }) => {
     //Contexts
     const { t } = useTranslation();
-console.log(t('logout.logout'));
+
     return (
         <nav className={style.menu}>
             <ul className={style.list}>

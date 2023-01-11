@@ -1,26 +1,41 @@
-import { default as BaseModal } from "react-modal";
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const ModalStyle = {
-    overlay : {
-        background : "rgba(0, 0, 0, .8)",
-        overflowY : "auto",
-        zIndex : 100000,
-    },
-    content : {
-        textAlign : 'center',
-        margin: "2px auto 0",
-        border: "none",
-        padding: 15,
-        maxWidth : 800,
-        bottom: 'initial',
-    }
-};
+import BaseModal from 'react-modal';
 
 const Modal = ({ isOpen, onRequestClose, children, ...props }) => (
-    <BaseModal ariaHideApp={ false } style={ ModalStyle } isOpen={ isOpen } onRequestClose={ onRequestClose } {...props}>
-        { children }
+    <BaseModal
+        ariaHideApp={false}
+        isOpen={isOpen}
+        onRequestClose={onRequestClose}
+        {...props}
+    >
+        {children}
     </BaseModal>
 );
 
 export default Modal;
+
+Modal.propTypes = {
+    /**
+     * Type of isOpen
+     */
+    isOpen: PropTypes.bool.isRequired,
+    /**
+     * Type of onRequestClose
+     */
+    onRequestClose: PropTypes.func.isRequired,
+    /**
+     * Type of children
+     */
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node,
+    ]).isRequired,
+
+    props: PropTypes.array,
+};
+
+Modal.defaultProps = {
+    props: [],
+};

@@ -41,7 +41,6 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if (keycloak.authenticated) {
-            console.log('running...');
             http.xsrf().then(() => {
                 http.login(keycloak.token)
                     .then(({ data }) => {
@@ -63,7 +62,6 @@ export const AuthProvider = ({ children }) => {
             });
         }
     }, [keycloak.authenticated]);
-
 
     if (authenticating) {
         <div>Loading...</div>;

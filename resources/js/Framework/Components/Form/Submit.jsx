@@ -1,10 +1,9 @@
-import React from "react";
+import React from 'react';
 
-const  Submit = () => {
+const Submit = () => {
     return (
-        <button type={ 'submit' } className={ 'm-button -add' }>
-            <span className={ 'm-button__text' }>Mentés</span>
-            <i className={ "far fa-save d-inline-block" }></i>
+        <button type="submit">
+            <span>Mentés</span>
         </button>
     );
 };

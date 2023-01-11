@@ -1,17 +1,31 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const Label = ({ to, text, icon, children, hidden = false }) => {
-    if (hidden) {
-        return null;
-    }
-
+const Label = ({ to, text, children }) => {
     return (
-        <label className="d-flex m-form__label mb-0" htmlFor={ to }>
-            { icon && <i className={ `a-icon -xs -colorPrimary fal fa-${icon} mr-2`}></i> }
-            { text }
-            { children }
+        <label htmlFor={to}>
+            {text}
+            {children}
         </label>
     );
 };
 
 export default Label;
+
+Label.propTypes = {
+    /**
+     * Type of to
+     */
+    to: PropTypes.string.isRequired,
+    /**
+     * Type of text
+     */
+    text: PropTypes.string.isRequired,
+    /**
+     * Type of resources
+     */
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node,
+    ]).isRequired,
+};

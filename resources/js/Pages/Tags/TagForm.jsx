@@ -1,13 +1,14 @@
-import Form from "../../Framework/Components/Form/Form";
-import Panel from "../../Framework/Components/Panel";
-import TextInput from "../../Framework/Components/Form/TextInput";
-import React from "react";
+import React from 'react';
+
+import Form from '../../Framework/Components/Form/Form';
+import Panel from '../../Framework/Components/Panel';
+import TextInput from '../../Framework/Components/Form/TextInput';
 
 const TagForm = (props) => (
     <Form {...props}>
         <Panel>
-            <TextInput name={ 'name' }/>
-            <TextInput name={ 'description' }/>
+            <TextInput name="name" />
+            <TextInput name="description" />
         </Panel>
     </Form>
 );

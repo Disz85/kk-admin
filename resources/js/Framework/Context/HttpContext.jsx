@@ -13,12 +13,12 @@ HttpProvider.propTypes = {
     /**
      * Type of http
      */
-    http: PropTypes.object,
+    http: PropTypes.object.isRequired,
     /**
      * Type of children
      */
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node,
-    ]),
+    ]).isRequired,
 };

@@ -16,8 +16,8 @@ import Header from '../Layouts/Header';
 import Main from '../Layouts/Main';
 import Aside from '../Layouts/Aside';
 import Navigation from '../Layouts/Navigation/Navigation';
-import NotFound from '../Pages/NotFound';
-
+// PAGES
+import NotFound from './NotFound';
 import Home from './Home';
 
 const Admin = ({ children }) => {
@@ -32,7 +32,7 @@ const Admin = ({ children }) => {
     return (
         <ApplicationContext.Provider value={setPageInfo}>
             <BrowserRouter>
-                {/* <Header>Header</Header> */}
+                <Header>Header</Header>
                 <Aside>
                     <Navigation
                         items={listable(permitted(resources, hasPermission))}
@@ -41,16 +41,22 @@ const Admin = ({ children }) => {
 
                 <Main description={pageInfo}>
                     <Routes>
-                        {<Route key="/" path="/" element={<Home />} />}
-                        {permitted(resources, hasPermission).map((resource, index) => (
-                            <Route exact key={resource.path} path={resource.path} element={<ApplicationRoute
-                                component={resource.component}
-                                resource={resource.name}
-                                service={http}
+                        <Route exact key="/" path="/" element={<Home />} />
+                        {permitted(resources, hasPermission).map((resource) => (
+                            <Route
+                                exact
+                                key={resource.path}
+                                path={resource.path}
+                                element={
+                                    <ApplicationRoute
+                                        component={resource.component}
+                                        resource={resource.name}
+                                        service={http}
+                                    />
+                                }
                             />
-                            }/>
                         ))}
-                        {/*<Route key="404" path="*" element={<NotFound />} />*/}
+                        <Route key="404" path="*" element={<NotFound />} />
                     </Routes>
                 </Main>
             </BrowserRouter>

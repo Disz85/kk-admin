@@ -2,7 +2,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Resource = ({ name, list, form, routes = [], requiresPermission = true }) => null;
+const Resource = ({
+    name,
+    list = undefined,
+    form = undefined,
+    routes = [],
+    requiresPermission = true,
+}) => null;
 
 export default Resource;
 /* eslint-disable no-unused-vars */
@@ -12,6 +18,14 @@ Resource.propTypes = {
      * Type of name
      */
     name: PropTypes.string.isRequired,
+    /**
+     * Type of list
+     */
+    list: PropTypes.func,
+    /**
+     * Type of form
+     */
+    form: PropTypes.func,
     /**
      * Type of routes
      */
@@ -25,4 +39,6 @@ Resource.propTypes = {
 Resource.defaultProps = {
     routes: [],
     requiresPermission: true,
+    form: undefined,
+    list: undefined,
 };

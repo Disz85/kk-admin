@@ -1,4 +1,4 @@
-import TextInput from "./TextInput";
+import TextInput from './TextInput';
 
 export default (element) => {
     if (element.props && element.props.defaultValue != null) {
@@ -8,7 +8,7 @@ export default (element) => {
     switch (element.type) {
         case TextInput:
             return '';
+        default:
+            return '';
     }
-
-    return '';
 };

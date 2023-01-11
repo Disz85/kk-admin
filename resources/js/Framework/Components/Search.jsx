@@ -1,63 +1,100 @@
-import { createNewEntityFromChildren, recursiveMap } from "../../Helpers/recursions";
 import React, { useState, useEffect } from 'react';
-import { Button } from "./Button";
+import PropTypes from 'prop-types';
+// HELPERS
 import { stringify, parse } from 'qs';
-import Panel from "./Panel";
-import classes from 'classnames';
+import {
+    createNewEntityFromChildren,
+    recursiveMap,
+} from '../../Helpers/recursions';
+// COMPONENTS
+import Button from './Buttons/Button';
+import Panel from './Panel';
 
 const Search = ({ entity, onChange, children, ...props }) => {
-    /*** IMMUTABLE STATE ***/
-    const [ fields ] = useState(createNewEntityFromChildren(children));
+    // IMMUTABLE STATE
+    const [fields] = useState(createNewEntityFromChildren(children));
 
-    /*** MUTABLE STATE ***/
-    const [ params, setParams ] = useState({ ...fields, ...parse(window.location.search.replace('?', '')) });
+    // MUTABLE STATE
+    const [params, setParams] = useState({
+        ...fields,
+        ...parse(window.location.search.replace('?', '')),
+    });
 
-    /*** CALLBACKS ***/
-    const update = change => {
-        setParams(params => ({ ...params, ...change }));
+    // CALLBACKS
+    const update = (change) => {
+        setParams((params) => ({ ...params, ...change }));
     };
 
+    // SIDE EFFECTS
     // On params change update the query string
     useEffect(() => {
-        const query = stringify(params, { filter : (prefix, value) => {
+        const query = stringify(params, {
+            filter: (prefix, value) => {
                 if ((value && value.id) || null) {
                     return value.id;
                 }
 
-                if (typeof value === "boolean" && value) {
+                if (typeof value === 'boolean' && value) {
                     return 1;
                 }
 
                 if (!value) {
-                    return;
+                    return null;
                 }
 
                 return value;
-            }});
+            },
+        });
 
-        window.history.replaceState({ at : Date.now() }, '', "?" + query);
+        window.history.replaceState({ at: Date.now() }, '', `?${query}`);
     }, [params]);
 
     // On query params change notify parent
     useEffect(() => {
-        onChange({ ...fields, ...parse(window.location.search.replace('?', '')) });
+        onChange({
+            ...fields,
+            ...parse(window.location.search.replace('?', '')),
+        });
     }, [params]);
 
     return (
-        <Panel title={ "Szűrő" } iconClass={ 'fal fa-filter' }>
-            <form className={ classes(`m-form mx-auto`) }>
-                <div className= {"d-flex flex-column justify-content-between" }>
-                    { recursiveMap(children, child =>
-                        React.cloneElement(child, ({ ...props, errors : {}, entity : params, onChange : update }))
-                    ) }
-                    <div className="row justify-content-end">
-                        <Button className={ '-circle -md' } name={ 'reset' } icon={ 'trash-alt' } click={ () => setParams(fields) } unlabeled/>
-                    </div>
-                </div>
+        <Panel title="Szűrő">
+            <form>
+                {recursiveMap(children, (child) =>
+                    React.cloneElement(child, {
+                        ...props,
+                        errors: {},
+                        entity: params,
+                        onChange: update,
+                    }),
+                )}
+
+                <Button
+                    name="reset"
+                    click={() => setParams(fields)}
+                    unlabeled
+                />
             </form>
         </Panel>
     );
 };
 
-
 export default Search;
+
+Search.propTypes = {
+    /**
+     * Type of entity
+     */
+    entity: PropTypes.object.isRequired,
+    /**
+     * Type of onChange
+     */
+    onChange: PropTypes.func.isRequired,
+    /**
+     * Type of children
+     */
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node,
+    ]).isRequired,
+};

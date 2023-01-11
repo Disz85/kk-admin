@@ -1,4 +1,4 @@
-export const queryParams = (url, params) => {
+const queryParams = (url, params) => {
     if (!Object.keys(params).length) {
         return url;
     }
@@ -10,3 +10,5 @@ export const queryParams = (url, params) => {
         url + (url.indexOf('?') === -1 ? '?' : '&') + searchParams.toString()
     );
 };
+
+export default queryParams;

@@ -54,7 +54,6 @@ const registerResources = (children) => {
     React.Children.forEach(children, (child) =>
         resourceToCollection(resources, child.props),
     );
-    console.log(resources);
     return resources;
 };
 

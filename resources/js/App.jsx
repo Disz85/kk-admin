@@ -19,19 +19,14 @@ const root = ReactDOM.createRoot(domContainer);
 
 if (root) {
     root.render(
-
-            <ReactKeycloakProvider
-                authClient={keycloak}
-                initOptions={ssoConfig}
-            >
-                <HttpProvider http={ApplicationService}>
-                    <AuthProvider>
-                        <StrictMode>
+        <ReactKeycloakProvider authClient={keycloak} initOptions={ssoConfig}>
+            <HttpProvider http={ApplicationService}>
+                <AuthProvider>
+                    <StrictMode>
                         <Dashboard />
-                        </StrictMode>
-                    </AuthProvider>
-                </HttpProvider>
-            </ReactKeycloakProvider>
-
+                    </StrictMode>
+                </AuthProvider>
+            </HttpProvider>
+        </ReactKeycloakProvider>,
     );
 }

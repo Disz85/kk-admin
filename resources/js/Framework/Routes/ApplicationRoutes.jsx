@@ -1,17 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Route } from 'react-router-dom';
-import Resource from "../Resource";
-
 const ApplicationRoute = ({
     component: Component,
     resource,
     service,
     ...rest
-}) => (
-    <Component resource={resource} service={service} />
-);
+}) => <Component resource={resource} service={service} {...rest} />;
 
 export default ApplicationRoute;
 
@@ -24,11 +19,6 @@ ApplicationRoute.propTypes = {
      * Type of resource
      */
     resource: PropTypes.string.isRequired,
-    /*Proptypes.shape({
-              name: PropTypes.string.isRequired,
-              routes: PropTypes.array,
-              requiresPermission: PropTypes.bool,
-          })*/
     /**
      * Type of service
      */
@@ -37,6 +27,6 @@ ApplicationRoute.propTypes = {
         children: PropTypes.oneOfType([
             PropTypes.arrayOf(PropTypes.node),
             PropTypes.node,
-        ])
+        ]),
     }).isRequired,
 };

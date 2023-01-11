@@ -1,59 +1,62 @@
-import React from "react";
-import Iterator from "../Framework/Components/Form/Iterator";
-import defaultValue from "../Framework/Components/Form/DeaultValue"
+import React from 'react';
+import Iterator from '../Framework/Components/Iterator';
+import defaultValue from '../Framework/Components/Form/DeaultValue';
 
 export const recursiveMap = (children, fn) => {
-    return React.Children.map(children, child => {
-        if (!React.isValidElement(child)) {
-            return child;
+    return React.Children.map(children, (child) => {
+        let currentChild = child;
+
+        if (!React.isValidElement(currentChild)) {
+            return currentChild;
         }
 
-        if (child.props.children) {
-            child = React.cloneElement(child, {
-                children: recursiveMap(child.props.children, fn)
+        if (currentChild.props.children) {
+            currentChild = React.cloneElement(child, {
+                children: recursiveMap(child.props.children, fn),
             });
         }
 
-        return fn(child);
+        return fn(currentChild);
     });
-}
+};
 
 export function recursiveEach(children, fn) {
-    return React.Children.map(children, child => {
-        if (!React.isValidElement(child)) {
-            return child;
+    return React.Children.map(children, (child) => {
+        let currentChild = child;
+
+        if (!React.isValidElement(currentChild)) {
+            return currentChild;
         }
 
-        const cont = fn(child);
+        const cont = fn(currentChild);
         if (cont !== false) {
-            if (child.props.children && child.type !== Iterator) {
-                child = React.cloneElement(child, {
-                    children: recursiveEach(child.props.children, fn)
+            if (currentChild.props.children && currentChild.type !== Iterator) {
+                currentChild = React.cloneElement(child, {
+                    children: recursiveEach(child.props.children, fn),
                 });
             }
         }
 
-        return child;
+        return currentChild;
     });
 }
 
 export function createNewEntityFromChildren(children) {
-
     const data = {};
 
-    recursiveEach(children, child => {
-        if ([ Iterator ].indexOf(child.type) !== -1) {
+    recursiveEach(children, (child) => {
+        if ([Iterator].indexOf(child.type) !== -1) {
             return false;
         }
 
         if (!child.props.name) {
-            return;
+            return false;
         }
 
         data[child.props.name] = defaultValue(child);
+
+        return data[child.props.name];
     });
 
     return data;
 }
-
-export const childrenOnly = (children) => React.Children.toArray(children).filter(o => !!o);

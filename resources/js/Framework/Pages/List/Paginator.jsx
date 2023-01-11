@@ -1,54 +1,81 @@
-import { Link } from "react-router-dom";
-import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const getPageNumbers = total => [...Array(Math.ceil(total / 25)).keys()].map( v => v + 1);
+import { Link } from 'react-router-dom';
 
-const filterPageNumbers = (numbers, current, last) => numbers.filter( number =>
-    number === 1 || number === last || (number >= current - 3 && number <= current + 3)
-);
+// COMPONENTS
+import Arrow from '../../Components/Paginator/Arrow';
 
-const mapPageNumbers = (numbers, current, resource) => numbers.map(number => {
-    const item = classNames('m-pagination__item page-item', {'-active': current === number});
-    const link = classNames('m-pagination__link', {'-active': current === number});
+const getPageNumbers = (total) =>
+    [...Array(Math.ceil(total / 25)).keys()].map((v) => v + 1);
 
-    return (
-        <li key={number} className={ item }>
-            <Link className={ link } to={`/${resource}/page/${number}${window.location.search}`}>
-                {number}
-            </Link>
-        </li>
+const filterPageNumbers = (numbers, current, last) =>
+    numbers.filter(
+        (number) =>
+            number === 1 ||
+            number === last ||
+            (number >= current - 3 && number <= current + 3),
     );
-});
 
-const Arrow = ({ resource, to, enabled, direction }) => {
-    const arrow = <i className={ `fal fa-angle-${direction}` }></i>;
-    const classes = classNames('m-pagination__link -arrow', { 'disabled' : !enabled });
-
-    if (enabled) {
-        return <Link className={ classes } to={ `/${resource}/page/${to}${window.location.search}` }>{ arrow }</Link>;
-    }
-
-    return <span className={ classes }>{ arrow }</span>;
-};
+const mapPageNumbers = (numbers, current, resource) =>
+    numbers.map((number) => {
+        return (
+            <li key={number}>
+                <Link
+                    to={`/${resource}/page/${number}${window.location.search}`}
+                >
+                    {number}
+                </Link>
+            </li>
+        );
+    });
 
 const Paginator = ({ pagination, ...props }) => {
     const { total, current, last } = pagination;
     const { resource } = props;
 
-    const items = mapPageNumbers(filterPageNumbers(getPageNumbers(total), current, last), current, resource);
+    const items = mapPageNumbers(
+        filterPageNumbers(getPageNumbers(total), current, last),
+        current,
+        resource,
+    );
 
     return (
-        <ul className="m-pagination pagination mt-3" role="navigation">
-            <li className={ 'm-pagination__item page-item' }>
-                <Arrow direction={ 'left' } to={ current - 1 } enabled={ current > 1 } {...props}/>
+        <ul role="navigation">
+            <li>
+                <Arrow
+                    direction="left"
+                    to={current - 1}
+                    enabled={current > 1}
+                    {...props}
+                />
             </li>
-            { items }
-            <li className="m-pagination__item page-item">
-                <Arrow direction={ 'right' } to={ current + 1 } enabled={ current !== last } {...props}/>
+            {items}
+            <li>
+                <Arrow
+                    direction="right"
+                    to={current + 1}
+                    enabled={current !== last}
+                    {...props}
+                />
             </li>
         </ul>
     );
 };
 
 export default Paginator;
+
+Paginator.propTypes = {
+    /**
+     * Type of resource
+     */
+    resource: PropTypes.string.isRequired,
+    /**
+     * Type of pagination
+     */
+    pagination: PropTypes.shape({
+        total: PropTypes.number.isRequired,
+        current: PropTypes.number.isRequired,
+        last: PropTypes.number.isRequired,
+    }).isRequired,
+};

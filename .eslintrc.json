@@ -43,7 +43,9 @@
         "eqeqeq": "error",
         "react/function-component-definition": "off",
         "react/jsx-props-no-spreading": "off",
-        "react/jsx-no-constructed-context-values": "off"
+        "react/jsx-no-constructed-context-values": "off",
+        "react/forbid-prop-types": "off",
+        "prefer-regex-literals": "off"
 
 },
 "plugins": ["prettier"]

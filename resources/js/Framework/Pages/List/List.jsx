@@ -1,22 +1,30 @@
 import React, { useState, useEffect, useContext } from 'react';
-import useDebounce from '../../../Hooks/useDebounce';
-// CONTEXTS
-import ApplicationContext from '../../Context/ApplicationContext';
+import PropTypes from 'prop-types';
+// TRANSLATION
+import { useTranslation } from 'react-i18next';
 // HELPERS
 import { parse, stringify } from 'qs';
 import _ from 'lodash';
 import { update } from '../../../Helpers/objectOperations';
-import { getFields } from '../../../Helpers/getters';
-
+import getFields from '../../../Helpers/getters';
+// HOOKS
+import useDebounce from '../../../Hooks/useDebounce';
+// CONTEXTS
+import ApplicationContext from '../../Context/ApplicationContext';
 // COMPONENTS
 import Table from '../../Components/Table';
 import Create from '../../Components/Create';
 import Paginator from './Paginator';
-import { useTranslation } from 'react-i18next';
 import Modal from '../../Components/Modal';
-import { Button } from '../../Components/Button';
+import Button from '../../Components/Buttons/Button';
 
-const List = ({ resource, service, search: SearchForm = null, readonly = false, children }) => {
+const List = ({
+    resource,
+    service,
+    search: SearchForm = null,
+    readonly = false,
+    children,
+}) => {
     // CONTEXTS
     const setPageInfo = useContext(ApplicationContext);
     const { t } = useTranslation();
@@ -42,7 +50,7 @@ const List = ({ resource, service, search: SearchForm = null, readonly = false, 
                 `/${resource}?${stringify(newParams)}`,
             );
 
-            update({ current: 1, params: newParams}, setList);
+            update({ current: 1, params: newParams }, setList);
         }
     });
 
@@ -51,27 +59,39 @@ const List = ({ resource, service, search: SearchForm = null, readonly = false, 
         service
             .list(resource, list.current, 25, list.params)
             .then(({ data: entities, meta }) => {
-                update({
-                    current: meta.current_page,
-                    last: meta.last_page,
-                    total: meta.total,
-                    entities,
-                }, setList);
+                update(
+                    {
+                        current: meta.current_page,
+                        last: meta.last_page,
+                        total: meta.total,
+                        entities,
+                    },
+                    setList,
+                );
             })
             .finally(() => {
                 setIsLoading(false);
             });
     };
 
-    //DELETE
-    const markEntityForDeletion = entity => setMarked(entity);
+    // DELETE
+    const markEntityForDeletion = (entity) => setMarked(entity);
     const clearMark = () => setMarked(null);
 
-    const removeEntity = entity => service.remove(resource, entity.id).then(() => paginate()).then(() => setMarked(null));
+    const removeEntity = (entity) =>
+        service
+            .remove(resource, entity.id)
+            .then(() => paginate())
+            .then(() => setMarked(null));
 
     // SIDE EFFECTS
     useEffect(() => {
-        setPageInfo({ title:  t(`application.list`, { resource : t(`${resource}.resource`) }), icon: 'icon' });
+        setPageInfo({
+            title: t(`application.list`, {
+                resource: t(`${resource}.resource`),
+            }),
+            icon: 'icon',
+        });
     }, []);
 
     useEffect(() => {
@@ -79,8 +99,15 @@ const List = ({ resource, service, search: SearchForm = null, readonly = false, 
     }, [list.current, list.params]);
 
     return (
-        <React.Fragment>
-            { SearchForm && <SearchForm resource={ resource } entity={ list.params } service={ service } onChange={ updateSearch }/> }
+        <>
+            {SearchForm && (
+                <SearchForm
+                    resource={resource}
+                    entity={list.params}
+                    service={service}
+                    onChange={updateSearch}
+                />
+            )}
 
             {isLoading && <p>Loading...</p>}
             {!isLoading && list.entities.length && (
@@ -88,22 +115,66 @@ const List = ({ resource, service, search: SearchForm = null, readonly = false, 
                     entities={list.entities}
                     fields={fields}
                     data={{ resource, service }}
-                    remove={ markEntityForDeletion }
+                    remove={markEntityForDeletion}
                 />
             )}
-            <div>
-                <Paginator resource={ resource } pagination={ list }/>
-            </div>
-            {!readonly && (<Create resource={resource} />)}
+            <Paginator resource={resource} pagination={list} />
+            {!readonly && <Create resource={resource} />}
 
-            { !readonly && (
-                <Modal contentLabel="Törlés megerősítése" isOpen={ !!marked } onRequestClose={ clearMark }>
-                    { marked && <p>Biztosan törlöd a következőt: <strong>"{ marked.name || marked.title || marked.search_term }"</strong>?</p> }
-                    <Button name={ 'delete' } className={ 'm-auto' } click={ () => removeEntity(marked) }>Törlés</Button>
+            {!readonly && (
+                <Modal
+                    contentLabel="Törlés megerősítése"
+                    isOpen={!!marked}
+                    onRequestClose={clearMark}
+                >
+                    {marked && (
+                        <p>
+                            Biztosan törlöd a következőt:{' '}
+                            <strong>
+                                {marked.name ||
+                                    marked.title ||
+                                    marked.search_term}
+                            </strong>
+                            ?
+                        </p>
+                    )}
+                    <Button name="delete" click={() => removeEntity(marked)}>
+                        Törlés
+                    </Button>
                 </Modal>
-            ) }
-        </React.Fragment>
+            )}
+        </>
     );
 };
 
 export default List;
+
+List.propTypes = {
+    /**
+     * Type of resource
+     */
+    resource: PropTypes.string.isRequired,
+    /**
+     * Type of service
+     */
+    service: PropTypes.object.isRequired,
+    /**
+     * Type of search
+     */
+    search: PropTypes.func,
+    /**
+     * Type of readonly
+     */
+    readonly: PropTypes.bool.isRequired,
+    /**
+     * Type of children
+     */
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node,
+    ]).isRequired,
+};
+
+List.defaultProps = {
+    search: null,
+};

@@ -1,17 +1,27 @@
-import { Link } from 'react-router-dom';
 import React from 'react';
-import { useTranslation } from "react-i18next";
+import PropTypes from 'prop-types';
+// ROUTES
+import { Link } from 'react-router-dom';
+// TRANSLATION
+import { useTranslation } from 'react-i18next';
 
 const Create = ({ resource }) => {
-    const {t} = useTranslation();
-    return(
-        <Link to={`/${resource}/new`} className={'m-button -add'}>
-                <span className="m-button__text">
-                    {t('application.new', {resource: t(`${resource}.resource`)})}
-                </span>
-            <i className="far fa-plus d-inline-block"></i>
+    const { t } = useTranslation();
+
+    return (
+        <Link to={`/${resource}/new`}>
+            <span>
+                {t('application.new', { resource: t(`${resource}.resource`) })}
+            </span>
         </Link>
     );
 };
 
 export default Create;
+
+Create.propTypes = {
+    /**
+     * Type of resource
+     */
+    resource: PropTypes.string.isRequired,
+};

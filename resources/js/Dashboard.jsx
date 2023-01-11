@@ -14,13 +14,13 @@ import CategoryList from './Pages/Categories/CategoryList';
 const Dashboard = () => {
     return (
         <Admin>
-            <Resource name="users" list={ UserList }/>
-            <Resource name="tags" list={ TagList } form={ TagForm }/>
-            <Resource name="categories" list={ CategoryList }/>
+            <Resource name="users" list={UserList} />
+            <Resource name="tags" list={TagList} form={TagForm} />
+            <Resource name="categories" list={CategoryList} />
             <Resource
                 name="logout"
-                routes={ logoutRoutes }
-                requiresPermission={ false }
+                routes={logoutRoutes}
+                requiresPermission={false}
             />
         </Admin>
     );

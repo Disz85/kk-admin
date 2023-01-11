@@ -1,10 +1,10 @@
 export default {
-    categories : 'Kategóriák',
-    resource : 'Kategória',
+    categories: 'Kategóriák',
+    resource: 'Kategória',
 
-    id : 'ID',
-    name : 'Név',
-    slug : 'Slug',
-    type : 'Típus',
-    description : 'Leírás',
+    id: 'ID',
+    name: 'Név',
+    slug: 'Slug',
+    type: 'Típus',
+    description: 'Leírás',
 };

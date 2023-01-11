@@ -1,9 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const Error = ({ message }) => !message ? null : (
-    <div className={ 'm-form__feedback -invalid' }>
-        <i className="fas fa-exclamation-triangle mr-3"></i>{ message }
-    </div>
-);
+const Error = ({ message }) => (!message ? null : <div>{message}</div>);
 
 export default Error;
+
+Error.propTypes = {
+    /**
+     * Type of message
+     */
+    message: PropTypes.string.isRequired,
+};

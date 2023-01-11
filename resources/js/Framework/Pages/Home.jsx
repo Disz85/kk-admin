@@ -1,6 +1,8 @@
 import React, { useEffect, useContext } from 'react';
-import ApplicationContext from "../Context/ApplicationContext";
-import {useTranslation} from "react-i18next";
+// TRANSLATION
+import { useTranslation } from 'react-i18next';
+// CONTEXTS
+import ApplicationContext from '../Context/ApplicationContext';
 
 const Home = () => {
     // CONTEXTS
@@ -9,7 +11,7 @@ const Home = () => {
 
     // SIDE EFFECTS
     useEffect(() => {
-        setPageInfo({ title:  t(`application.home`), icon: 'icon' });
+        setPageInfo({ title: t(`application.home`), icon: 'icon' });
     }, []);
 
     return <h2>Home</h2>;

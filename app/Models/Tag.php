@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\GeneratesSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Tag extends Model
 {
+    use GeneratesSlug;
     use HasFactory;
 
     protected $fillable = [
         'name',
-        'slug',
         'description',
     ];
 

@@ -90,5 +90,4 @@ class Category extends Model
     {
         return $this->morphedByMany(Ingredient::class, 'categoryable');
     }
-
 }

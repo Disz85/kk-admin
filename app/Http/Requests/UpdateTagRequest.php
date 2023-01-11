@@ -16,8 +16,7 @@ class UpdateTagRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', Rule::unique('tags', 'name')->ignore($this->tag)],
-            'slug' => ['required', 'string', Rule::unique('tags', 'slug')->ignore($this->tag)],
-            'description' => 'sometimes|string',
+            'description' => 'nullable|string',
         ];
     }
 }

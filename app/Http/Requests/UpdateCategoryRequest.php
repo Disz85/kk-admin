@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Enum\CategoryTypeEnum;
-use App\Models\Category;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -11,7 +10,6 @@ use Illuminate\Validation\Rules\Enum;
 
 class UpdateCategoryRequest extends FormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *

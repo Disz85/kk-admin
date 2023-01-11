@@ -8,7 +8,9 @@ use App\Http\Resources\Admin\TagCollection;
 use App\Http\Resources\Admin\TagResource;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -71,25 +73,21 @@ class TagController extends Controller
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"name","slug"},
+     *                 required={"name"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
      *                     description="Name.",
      *                 ),
      *                 @OA\Property(
-     *                     property="slug",
-     *                     type="string",
-     *                     description="Slug.",
-     *                 ),
-     *                 @OA\Property(
      *                     property="description",
      *                     type="string",
+     *                     nullable=true,
      *                     description="Desciption.",
      *                 ),
      *             )
      *         )
-     *     ),*
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Tag created."
@@ -105,7 +103,8 @@ class TagController extends Controller
      */
     public function store(StoreTagRequest $request): TagResource
     {
-        $tag = new Tag($request->validated());
+        $tag = Tag::create($request->validated());
+        $tag->generateSlug();
         $tag->save();
 
         return new TagResource($tag);
@@ -123,7 +122,7 @@ class TagController extends Controller
      *    @OA\MediaType(
      *      mediaType="application/json"
      *    ),
-     *     @OA\Parameter(
+     *    @OA\Parameter(
      *         name="tag",
      *         in="path",
      *         required=true,
@@ -131,7 +130,11 @@ class TagController extends Controller
      *         @OA\Schema(
      *             type="integer"
      *         ),
-     *     ),
+     *    ),
+     *    @OA\Response(
+     *        response=404,
+     *        description="Tag Not Found."
+     *    )
      * )
      * @param Tag $tag
      * @return TagResource
@@ -164,25 +167,21 @@ class TagController extends Controller
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"name","slug"},
+     *                 required={"name"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
      *                     description="Name.",
      *                 ),
      *                 @OA\Property(
-     *                     property="slug",
-     *                     type="string",
-     *                     description="Slug.",
-     *                 ),
-     *                 @OA\Property(
      *                     property="description",
      *                     type="string",
+     *                     nullable=true,
      *                     description="Desciption.",
      *                 ),
      *             )
      *         )
-     *     ),*
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Tag updated."
@@ -222,24 +221,30 @@ class TagController extends Controller
      *          type="string"
      *      )
      *    ),
-     *     @OA\RequestBody(
+     *    @OA\RequestBody(
      *         required=false,
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
      *         )
-     *     ),*
-     *     @OA\Response(
-     *         response=200,
-     *         description="Tag deleted."
-     *     ),
+     *    ),
+     *    @OA\Response(
+     *        response=204,
+     *        description="No Content, Tag deleted."
+     *    ),
+     *    @OA\Response(
+     *        response=404,
+     *        description="Tag Not Found."
+     *    ),
      * )
      *
      * @param Tag $tag
-     * @return void
+     * @return JsonResponse
      * @throws Throwable
      */
-    public function destroy(Tag $tag): void
+    public function destroy(Tag $tag): JsonResponse
     {
         $tag->deleteOrFail();
+
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

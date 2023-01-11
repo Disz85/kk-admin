@@ -57,7 +57,7 @@ class TagTest extends TestCase
     {
         $tag = Tag::factory()->create();
         $this->delete(route('tags.destroy', ['tag' => $tag->id]))
-            ->assertOk();
+            ->assertNoContent();
         $this->assertNull(Tag::find($tag->id));
     }
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 // TRANSLATION
 import { useTranslation } from 'react-i18next';
@@ -9,6 +10,7 @@ import { update } from '../../../Helpers/objectOperations';
 import getFields from '../../../Helpers/getters';
 // HOOKS
 import useDebounce from '../../../Hooks/useDebounce';
+import useUpdateEffect from '../../../Hooks/useUpdateEffect';
 // CONTEXTS
 import ApplicationContext from '../../Context/ApplicationContext';
 // COMPONENTS
@@ -33,8 +35,9 @@ const List = ({
     const [isLoading, setIsLoading] = useState(false);
     const [marked, setMarked] = useState(null);
     const [fields] = useState(getFields(children));
+    const { page = 1 } = useParams();
     const [list, setList] = useState({
-        current: 0,
+        current: Number(page),
         last: 0,
         total: 0,
         entities: [],
@@ -97,6 +100,10 @@ const List = ({
     useEffect(() => {
         paginate();
     }, [list.current, list.params]);
+
+    useUpdateEffect(() => {
+        update({ current: Number(page) }, setList);
+    }, [page]);
 
     return (
         <>

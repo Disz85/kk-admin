@@ -5,6 +5,7 @@ import application from './Translations/application';
 import users from './Translations/users';
 import tags from './Translations/tags';
 import categories from './Translations/categories';
+import authors from './Translations/authors';
 
 const resources = {
     hu: {
@@ -14,6 +15,7 @@ const resources = {
             users,
             tags,
             categories,
+            authors,
         },
     },
 };

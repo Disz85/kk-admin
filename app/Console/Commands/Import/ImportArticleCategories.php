@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Import;
 
+use App\Enum\CategoryTypeEnum;
 use App\Helpers\Import\HtmlToEditorJsConverterMagazine;
 use App\Models\Category;
 use App\XMLReaders\ArticleCategoryXMLReader;
@@ -69,6 +70,7 @@ class ImportArticleCategories extends Command
             try {
                 $article_category->name = $data['name'];
                 $article_category->slug = $data['slug'];
+                $article_category->type = CategoryTypeEnum::Article;
 
                 $article_category->save();
             } catch (\Throwable $e) {

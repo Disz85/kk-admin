@@ -3,15 +3,66 @@
 namespace App\Models;
 
 use App\Traits\GeneratesSlug;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use OpenApi\Annotations as OA;
+
+/**
+ * Ingredient model
+ *
+ * @OA\Schema(
+ *     @OA\Xml(name="Ingredient"),
+ *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="legacy_id", type="int"),
+ *     @OA\Property(property="image_id", type="int"),
+ *     @OA\Property(property="ewg_score", type="int", minimum=0, maximum=10),
+ *     @OA\Property(property="comedogen_index", type="int", minimum=0, maximum=5),
+ *     @OA\Property(property="name", type="string"),
+ *     @OA\Property(property="slug", type="string"),
+ *     @OA\Property(property="ewg_data", type="string"),
+ *     @OA\Property(property="ewg_score_max", type="int", minimum=0, maximum=10),
+ *     @OA\Property(property="description", type="string"),
+ *     @OA\Property(property="is_approved", type="bool"),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time"),
+ * );
+ *
+ * @package App\Models
+ *
+ * Fields
+ * @property int $id
+ * @property int $legacy_id
+ * @property int $image_id
+ * @property int $ewg_score_max
+ * @property int $comedogen_index
+ *
+ * @property string $name
+ * @property string $slug
+ * @property string $ewg_data
+ * @property string $ewg_score
+ * @property string $description
+ *
+ * @property bool $is_approved
+ *
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
+ * @property Media $image
+ * @property Category $categories
+ */
 
 class Ingredient extends Model
 {
     use HasFactory;
     use GeneratesSlug;
+
+    /**
+     * @var string
+     */
+    protected $table = 'ingredients';
 
     /**
      * @var string[]
@@ -22,19 +73,16 @@ class Ingredient extends Model
 
     /**
      * @var string[]
-     *
-     * ewg_data = ['None','Limited','Fair','Good', 'Robust']
-     * ewg_score = 0-10
-     * ewg_score_max = 0-10
      */
     protected $fillable = [
         'name',
-        'slug',
         'image_id',
+        'description',
         'ewg_data',
         'ewg_score',
         'ewg_score_max',
         'comedogen_index',
+        'is_approved',
     ];
 
     /**
@@ -49,6 +97,7 @@ class Ingredient extends Model
         'description' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'is_approved' => 'boolean',
     ];
 
     /**

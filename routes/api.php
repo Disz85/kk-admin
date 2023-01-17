@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ArticleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::middleware(['cache.headers:max_age=' . config('api.max-age')])->group(function () {
+    Route::prefix('/articles')->group(function () {
+        Route::get('get-header-articles', [ArticleController::class, 'getHeaderArticles']);
+    });
 });

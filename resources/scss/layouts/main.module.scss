@@ -1,22 +1,19 @@
 .wrapper {
-    @apply bg-medium-grey;
-
-    min-height: 100vh;
-    margin-left: 25rem;
+    @apply bg-light-cloud/50;
+    @apply min-h-screen mt-24;
 }
 
 .header {
-    @apply p-2;
-    @apply bg-medium-blackberry;
+    @apply p-6;
+    @apply bg-dark-night;
 }
 
 .title {
+    @apply flex gap-4;
     @apply m-2;
-    @apply text-light-snow;
-
-    font-size: 1.3rem;
+    @apply font-primary text-5xl text-light-snow uppercase;
 }
 
 .body {
-    @apply m-2;
+    @apply m-6;
 }

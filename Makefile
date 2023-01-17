@@ -61,6 +61,9 @@ npm-build: ## Run npm run build
 npm-lint-fix: ## Run npm run lint
 	$(NODE) npm run lint-fix
 
+npm-formatter-fix: ## Run prettier fix
+	$(NODE) npx prettier --write ./resources/scss/
+
 npm-test: ## Run npm run test
 	$(NODE) npm run test
 

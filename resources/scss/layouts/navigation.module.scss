@@ -1,20 +1,71 @@
+%link {
+    @apply flex gap-3;
+    @apply py-4 px-8;
+}
+
+%icon {
+    @apply text-light-snow;
+}
+
 .menu {
-    @apply m-2;
+    @apply w-full;
 }
 
 .list {
-    @apply m-2;
+    @apply flex flex-col;
+}
+
+.item {
+    @apply hover:shadow-md;
+    @apply hover:bg-dark-night;
+
+    &:hover {
+        .icon {
+            &Open {
+                @extend %icon;
+            }
+
+            &Closed {
+                @extend %icon;
+            }
+        }
+    }
+}
+
+.icon {
+    &Closed {
+        @apply text-light-snow/75;
+    }
+
+    &Open {
+        @apply text-medium-blackberry;
+    }
 }
 
 // NavItem
-.item {
-    @apply m-2;
-}
 
 .link {
-    @apply m-2;
+    @extend %link;
+    @apply text-medium-blackberry hover:text-light-snow font-nav text-2xl font-medium not-italic uppercase tracking-wide;
+
+    &Active {
+        @extend %link;
+        @apply bg-dark-night;
+        @apply text-light-snow font-nav text-2xl font-medium not-italic uppercase tracking-wide;
+        @apply shadow-md;
+
+        .icon {
+            &Closed {
+                @extend %icon;
+            }
+
+            &Open {
+                @extend %icon;
+            }
+        }
+    }
 }
 
 .text {
-    @apply m-2;
+    @apply block;
 }

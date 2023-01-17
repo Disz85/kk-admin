@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useCycle, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
 // ROUTES
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -28,36 +29,55 @@ const Admin = ({ children }) => {
     // STATES
     const [pageInfo, setPageInfo] = useState({});
     const [resources] = useState(registerResources(children));
+    const [isClosed, toggleOpen] = useCycle(false, true);
+
+    // EVENTS
+    const toggle = () => toggleOpen((status) => !status);
 
     return (
         <ApplicationContext.Provider value={setPageInfo}>
             <BrowserRouter>
-                <Header>Header</Header>
-                <Aside>
+                <Header toggle={toggle} action={isClosed} />
+                <Aside action={isClosed}>
                     <Navigation
+                        action={isClosed}
                         items={listable(permitted(resources, hasPermission))}
                     />
                 </Aside>
-
-                <Main description={pageInfo}>
-                    <Routes>
-                        <Route exact key="/" path="/" element={<Home />} />
-                        {permitted(resources, hasPermission).map((resource) => (
+                <Main description={pageInfo} action={isClosed}>
+                    <AnimatePresence>
+                        <Routes>
                             <Route
                                 exact
-                                key={resource.path}
-                                path={resource.path}
+                                key="/"
+                                path="/"
                                 element={
-                                    <ApplicationRoute
-                                        component={resource.component}
-                                        resource={resource.name}
-                                        service={http}
+                                    <Home
+                                        resources={listable(
+                                            permitted(resources, hasPermission),
+                                        )}
                                     />
                                 }
                             />
-                        ))}
-                        <Route key="404" path="*" element={<NotFound />} />
-                    </Routes>
+                            {permitted(resources, hasPermission).map(
+                                (resource) => (
+                                    <Route
+                                        exact
+                                        key={resource.path}
+                                        path={resource.path}
+                                        element={
+                                            <ApplicationRoute
+                                                component={resource.component}
+                                                resource={resource.name}
+                                                service={http}
+                                            />
+                                        }
+                                    />
+                                ),
+                            )}
+                            <Route key="404" path="*" element={<NotFound />} />
+                        </Routes>
+                    </AnimatePresence>
                 </Main>
             </BrowserRouter>
         </ApplicationContext.Provider>

@@ -1,0 +1,19 @@
+.anchor {
+    @apply block;
+    @apply ml-auto;
+    @apply flex gap-4 items-center;
+}
+
+.icon {
+    @extend %text-color;
+    @apply block;
+}
+
+.text {
+    @extend %text-color;
+    @apply font-button text-2xl uppercase font-medium tracking-wide;
+}
+
+%text-color {
+    @apply text-medium-blackberry;
+}

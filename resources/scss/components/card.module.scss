@@ -1,0 +1,17 @@
+.wrapper {
+    @apply flex flex-col items-center gap-5;
+    @apply p-8;
+    @apply bg-light-snow;
+    @apply drop-shadow-md;
+}
+
+.icon {
+    @apply text-dark-punch text-6xl;
+    @apply w-14 h-14;
+    @apply p-6;
+    @apply rounded-full border-2 border-dark-punch;
+}
+
+.title {
+    @apply text-dark-night font-button text-3xl font-bold;
+}

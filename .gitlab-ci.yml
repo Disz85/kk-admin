@@ -1,153 +1,153 @@
 stages:
-  - build
-  - analysis
-  - test
-  - deploy
+    - build
+    - analysis
+    - test
+    - deploy
 
 variables:
-  MYSQL_DATABASE: kremmania-test
-  MYSQL_USER: kremmania-test
-  MYSQL_PASSWORD: kremmania-test
-  MYSQL_ROOT_PASSWORD: kremmania
-  DB_HOST: kremmania-admin-mariadb-test
+    MYSQL_DATABASE: kremmania-test
+    MYSQL_USER: kremmania-test
+    MYSQL_PASSWORD: kremmania-test
+    MYSQL_ROOT_PASSWORD: kremmania
+    DB_HOST: kremmania-admin-mariadb-test
 
 default:
-  before_script:
-    - "[ -f .env ] && rm -rf .env"
-    - sh generate-env.sh
+    before_script:
+        - '[ -f .env ] && rm -rf .env'
+        - sh generate-env.sh
 
 composer:
-  image: composer:2.4.4
-  stage: build
-  artifacts:
-    paths:
-      - vendor/
-    expire_in: 1 week
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}-composer
-    paths:
-      - vendor/
-  script:
-    - composer install --ignore-platform-reqs
-  tags:
-    - kremmania
-  only:
-    - test@kremmania/km-admin
-    - production@kremmania/km-admin
+    image: composer:2.4.4
+    stage: build
+    artifacts:
+        paths:
+            - vendor/
+        expire_in: 1 week
+    cache:
+        key: ${CI_COMMIT_REF_SLUG}-composer
+        paths:
+            - vendor/
+    script:
+        - composer install --ignore-platform-reqs
+    tags:
+        - kremmania
+    only:
+        - test@kremmania/km-admin
+        - production@kremmania/km-admin
 
 .node:
-  image: node:19
-  stage: build
-  artifacts:
-    paths:
-      - node_modules/
-      - public/build/
-    expire_in: 1 week
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}-node
-    paths:
-      - node_modules/
-  script:
-    - npm install
-    - npm run build
-  tags:
-    - kremmania
+    image: node:19
+    stage: build
+    artifacts:
+        paths:
+            - node_modules/
+            - public/build/
+        expire_in: 1 week
+    cache:
+        key: ${CI_COMMIT_REF_SLUG}-node
+        paths:
+            - node_modules/
+    script:
+        - npm install
+        - npm run build
+    tags:
+        - kremmania
 
 node-test:
-  extends: .node
-  only:
-    - test@kremmania/km-admin
+    extends: .node
+    only:
+        - test@kremmania/km-admin
 
 node-production:
-  extends: .node
-  only:
-    - production@kremmania/km-admin
+    extends: .node
+    only:
+        - production@kremmania/km-admin
 
 phpcsfixer:
-  stage: analysis
-  image: composer:2.4.3
-  script:
-    - composer dry-format
-  allow_failure: true
-  tags:
-    - kremmania
-  only:
-    - test@kremmania/km-admin
-    - production@kremmania/km-admin
+    stage: analysis
+    image: composer:2.4.3
+    script:
+        - composer dry-format
+    allow_failure: true
+    tags:
+        - kremmania
+    only:
+        - test@kremmania/km-admin
+        - production@kremmania/km-admin
 
 phpstan:
-  stage: analysis
-  image: composer:2.4.4
-  script:
-    - composer analyze
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}-larastan
-    paths:
-      - vendor/
-  allow_failure: true
-  tags:
-    - kremmania
-  only:
-    - test@kremmania/km-admin
-    - production@kremmania/km-admin
+    stage: analysis
+    image: composer:2.4.4
+    script:
+        - composer analyze
+    cache:
+        key: ${CI_COMMIT_REF_SLUG}-larastan
+        paths:
+            - vendor/
+    allow_failure: true
+    tags:
+        - kremmania
+    only:
+        - test@kremmania/km-admin
+        - production@kremmania/km-admin
 
 phpunit:
-  image: centralmediacsoport/hazipatika-phpunit:0.0.2
-  before_script:
-    # Install & enable Xdebug for code coverage reports
-    - apk add --update linux-headers
-    - apk add --no-cache $PHPIZE_DEPS
-    - pecl install xdebug
-    - docker-php-ext-enable xdebug
-  stage: test
-  services:
-    - name: mariadb:10.5
-      alias: kremmania-admin-mariadb-test
-      command: [ "--default-authentication-plugin=mysql_native_password" ]
-  script:
-     - php artisan config:clear
-     - php artisan test --testdox --coverage
-  tags:
-    - kremmania
-  artifacts:
-    paths:
-      - ./storage/logs # for debugging
-    expire_in: 1 day
-  only:
-    - test@kremmania/km-admin
-    - production@kremmania/km-admin
+    image: centralmediacsoport/hazipatika-phpunit:0.0.2
+    before_script:
+        # Install & enable Xdebug for code coverage reports
+        - apk add --update linux-headers
+        - apk add --no-cache $PHPIZE_DEPS
+        - pecl install xdebug
+        - docker-php-ext-enable xdebug
+    stage: test
+    services:
+        - name: mariadb:10.5
+          alias: kremmania-admin-mariadb-test
+          command: ['--default-authentication-plugin=mysql_native_password']
+    script:
+        - php artisan config:clear
+        - php artisan test --testdox --coverage
+    tags:
+        - kremmania
+    artifacts:
+        paths:
+            - ./storage/logs # for debugging
+        expire_in: 1 day
+    only:
+        - test@kremmania/km-admin
+        - production@kremmania/km-admin
 
 deploy-test:
-  image: centralmediacsoport/hazipatika-ci:1.1
-  stage: deploy
-  script:
-    - mkdir -p ~/.ssh
-    - eval $(ssh-agent -s)
-    - echo -n "$SSH_PRIVATE_KEY" | ssh-add -
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - php vendor/bin/dep deploy stage=test
-  environment:
-    name: test
-    url: 'https://admin.kremmania.p24.hu/'
-  tags:
-    - kremmania
-  only:
-    - test@kremmania/km-admin
+    image: centralmediacsoport/hazipatika-ci:1.1
+    stage: deploy
+    script:
+        - mkdir -p ~/.ssh
+        - eval $(ssh-agent -s)
+        - echo -n "$SSH_PRIVATE_KEY" | ssh-add -
+        - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+        - php vendor/bin/dep deploy stage=test
+    environment:
+        name: test
+        url: 'https://admin.kremmania.p24.hu/'
+    tags:
+        - kremmania
+    only:
+        - test@kremmania/km-admin
 
 deploy-production:
-  image: centralmediacsoport/hazipatika-ci:1.1
-  stage: deploy
-  script:
-    - mkdir -p ~/.ssh
-    - eval $(ssh-agent -s)
-    - echo -n "$SSH_PRIVATE_KEY" | ssh-add -
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - php vendor/bin/dep deploy stage=production
-  environment:
-    name: production
-    url: 'https://admin.kremmania.hu/'
-  when: manual
-  tags:
-    - kremmania
-  only:
-    - production@kremmania/km-admin
+    image: centralmediacsoport/hazipatika-ci:1.1
+    stage: deploy
+    script:
+        - mkdir -p ~/.ssh
+        - eval $(ssh-agent -s)
+        - echo -n "$SSH_PRIVATE_KEY" | ssh-add -
+        - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+        - php vendor/bin/dep deploy stage=production
+    environment:
+        name: production
+        url: 'https://admin.kremmania.hu/'
+    when: manual
+    tags:
+        - kremmania
+    only:
+        - production@kremmania/km-admin

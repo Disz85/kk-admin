@@ -21,7 +21,6 @@
         "jsx": true
     },
 
-
     "settings": {
         "react": {
             // Tells eslint-plugin-react to automatically detect the version of React to use.
@@ -31,7 +30,7 @@
         "import/resolver": {
             "node": {
                 "paths": ["src"],
-                "extensions": [".js",".jsx"]
+                "extensions": [".js", ".jsx"]
             }
         }
     },
@@ -46,7 +45,6 @@
         "react/jsx-no-constructed-context-values": "off",
         "react/forbid-prop-types": "off",
         "prefer-regex-literals": "off"
-
-},
-"plugins": ["prettier"]
+    },
+    "plugins": ["prettier"]
 }

@@ -8,6 +8,8 @@ import { parse, stringify } from 'qs';
 import _ from 'lodash';
 import { update } from '../../../Helpers/objectOperations';
 import getFields from '../../../Helpers/getters';
+// CONFIG
+import navigationIcons from '../../../config/navigationIcons';
 // HOOKS
 import useDebounce from '../../../Hooks/useDebounce';
 import useUpdateEffect from '../../../Hooks/useUpdateEffect';
@@ -93,7 +95,7 @@ const List = ({
             title: t(`application.list`, {
                 resource: t(`${resource}.resource`),
             }),
-            icon: 'icon',
+            icon: navigationIcons[resource],
         });
     }, []);
 

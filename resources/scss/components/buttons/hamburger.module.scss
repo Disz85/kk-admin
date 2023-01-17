@@ -1,0 +1,83 @@
+%size {
+    @apply w-20 h-20;
+}
+
+%line {
+    @apply fill-none stroke-medium-blackberry stroke-hamburger;
+    @apply origin-center;
+    transition: stroke-dasharray 500ms 200ms, stroke-dashoffset 500ms 200ms,
+        transform 500ms 200ms;
+}
+
+%line-transition {
+    transition: stroke-dasharray 500ms, stroke-dashoffset 500ms, transform 500ms;
+}
+
+.svg {
+    @extend %size;
+    @apply absolute;
+
+    &Close {
+        @extend %size;
+        @apply absolute;
+        @apply scale-0;
+
+        transition: transform 400ms;
+    }
+}
+
+.line {
+    &First {
+        @extend %line;
+    }
+
+    &Second {
+        @extend %line;
+        stroke-dasharray: 40 200;
+        stroke-dashoffset: 0;
+    }
+
+    &Third {
+        @extend %line;
+        stroke-dasharray: 40 179;
+        stroke-dashoffset: 0;
+    }
+
+    &Close {
+        @extend %line;
+        stroke-width: 0.35rem;
+    }
+}
+
+.button {
+    @extend %size;
+
+    &Active {
+        .svgClose {
+            @apply scale-100;
+            transition: transform 400ms 350ms;
+        }
+
+        .line {
+            @extend %line-transition;
+
+            &First {
+                @extend %line-transition;
+                transform: scale(0, 1);
+                transition: transform 500ms 100ms;
+            }
+
+            &Second {
+                @extend %line-transition;
+                stroke-dasharray: 0.5rem 200;
+                stroke-dashoffset: -16.4rem;
+            }
+
+            &Third {
+                @extend %line-transition;
+                stroke-dasharray: 0.5rem 179;
+                stroke-dashoffset: -14.2rem;
+            }
+        }
+    }
+}

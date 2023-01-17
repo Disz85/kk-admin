@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 
 import { useTranslation } from 'react-i18next';
 
-const Button = ({ name, click, unlabeled = false }) => {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+const Button = ({ name = undefined, click, icon = false, ...props }) => {
     const { t } = useTranslation();
 
     return (
-        <button type="button" onClick={click} tabIndex={-1}>
-            {!unlabeled && <span>{t(`application.${name}`) || ''}</span>}
+        <button type="button" onClick={click} tabIndex={-1} {...props}>
+            {icon && <FontAwesomeIcon icon={icon} />}
+            {name && <span>{t(`application.${name}`) || ''}</span>}
         </button>
     );
 };
@@ -19,11 +22,15 @@ Button.propTypes = {
     /**
      * Type of name
      */
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
     /**
      * Type of click
      */
     click: PropTypes.func.isRequired,
+    /**
+     * Type of icon
+     */
+    icon: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
     /**
      * Type of unlabeled
      */
@@ -31,5 +38,7 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
+    name: undefined,
+    icon: false,
     unlabeled: false,
 };

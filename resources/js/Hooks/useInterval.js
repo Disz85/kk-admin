@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 
-export default function (callback, delay) { // from https://stackoverflow.com/a/59274004
+export default function (callback, delay) {
+    // from https://stackoverflow.com/a/59274004
     const intervalRef = useRef(null);
     const callbackRef = useRef(callback);
 
@@ -20,7 +21,10 @@ export default function (callback, delay) { // from https://stackoverflow.com/a/
 
     useEffect(() => {
         if (typeof delay === 'number') {
-            intervalRef.current = window.setInterval(() => callbackRef.current(), delay);
+            intervalRef.current = window.setInterval(
+                () => callbackRef.current(),
+                delay,
+            );
 
             // Clear interval if the components is unmounted or the delay changes:
             return () => window.clearInterval(intervalRef.current);

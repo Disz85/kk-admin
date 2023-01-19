@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateAuthorRequest;
 use App\Http\Resources\Admin\AuthorCollection;
 use App\Http\Resources\Admin\AuthorResource;
 use App\Models\Author;
+use App\RequestMappers\AuthorRequestMapper;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -104,9 +105,11 @@ class AuthorController extends Controller
      * )
      *
      * @param StoreAuthorRequest $request
+     * @param Author $author
+     * @param AuthorRequestMapper $authorRequestMapper
      * @return AuthorResource
      */
-    public function store(StoreAuthorRequest $request): AuthorResource
+    public function store(StoreAuthorRequest $request, Author $author, AuthorRequestMapper $authorRequestMapper): AuthorResource
     {
         $author = Author::create($request->validated());
 
@@ -211,14 +214,12 @@ class AuthorController extends Controller
      *
      * @param UpdateAuthorRequest $request
      * @param Author $author
+     * @param AuthorRequestMapper $authorRequestMapper
      * @return AuthorResource
      */
-    public function update(UpdateAuthorRequest $request, Author $author)
+    public function update(UpdateAuthorRequest $request, Author $author, AuthorRequestMapper $authorRequestMapper)
     {
-        $author->fill($request->validated());
-        $author->save();
-
-        return new AuthorResource($author);
+        return new AuthorResource($authorRequestMapper->map($author, $request->validated()));
     }
 
     /**

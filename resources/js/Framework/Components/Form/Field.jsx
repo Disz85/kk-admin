@@ -7,6 +7,9 @@ import { generate } from 'shortid';
 import Label from './Label';
 import Error from './Error';
 
+//Styles
+import style from '../../../../scss/components/form.module.scss';
+
 const Field = ({
     name,
     resource,
@@ -43,7 +46,7 @@ const Field = ({
 
     return (
         <>
-            {!unlabeled && <Label to={id} text={placeholder} />}
+            {!unlabeled && <Label className={`${style.label} ${hasError ? style.isInvalid : ""}`} to={id} text={placeholder} />}
             {children(hasError, attributes)}
             {errors && <Error message={error} />}
         </>

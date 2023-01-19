@@ -5,6 +5,11 @@ use App\Http\Controllers\Admin\ArticleStatusController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\AuthorController;
 use App\Http\Controllers\Admin\BrandChangeRequestController;
+use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\IngredientController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\IngredientController;
@@ -12,8 +17,6 @@ use App\Http\Controllers\Admin\ProductChangeRequestController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController;
-
-
 use Illuminate\Support\Facades\Route;
 
 Route::resource('authors', AuthorController::class)->except(['create', 'edit']);
@@ -36,6 +39,12 @@ Route::resource('product-change-requests', ProductChangeRequestController::class
 Route::post('brand-change-requests/{brand_change_request}/approve', [BrandChangeRequestController::class, 'approve'])->name('brand-change-requests.approve');
 Route::post('brand-change-requests/{brand_change_request}/reject', [BrandChangeRequestController::class, 'reject'])->name('brand-change-requests.reject');
 Route::resource('brand-change-requests', BrandChangeRequestController::class)->only(['store','show','index','update']);
+
+//Route::resource('media-library', MediaController::class)->only(['upload', 'delete']);
+Route::prefix('/media-library')->group(function () {
+    Route::post('/upload', [MediaController::class, 'upload']);
+    Route::delete('/{media}', [MediaController::class, 'delete']);
+});
 
 Route::prefix('auth')->group(function () {
     Route::get('login', [AuthController::class, 'login']);

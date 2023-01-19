@@ -31,14 +31,9 @@ Button.propTypes = {
      * Type of icon
      */
     icon: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
-    /**
-     * Type of unlabeled
-     */
-    unlabeled: PropTypes.bool,
 };
 
 Button.defaultProps = {
     name: undefined,
     icon: false,
-    unlabeled: false,
 };

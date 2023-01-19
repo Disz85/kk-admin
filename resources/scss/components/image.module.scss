@@ -1,0 +1,10 @@
+.placeholder {
+    @apply block;
+
+    max-inline-size: 100%;
+    margin-inline: auto;
+}
+
+.placeholderTitle {
+    @apply font-bold;
+}

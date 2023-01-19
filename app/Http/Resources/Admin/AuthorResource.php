@@ -22,7 +22,7 @@ class AuthorResource extends JsonResource
             'slug' => $this->slug,
             'email' => $this->email,
             'description' => $this->description,
-            'image' => new MediaResource($this->image),
+            'image' => $this->image,
         ];
     }
 }

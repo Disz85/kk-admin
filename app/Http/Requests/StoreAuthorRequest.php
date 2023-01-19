@@ -18,7 +18,7 @@ class StoreAuthorRequest extends FormRequest
             'email' => 'required|email|unique:authors',
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'image_id' => 'nullable|integer',
+            'image.id' => 'int|exists:media,id',
         ];
     }
 }

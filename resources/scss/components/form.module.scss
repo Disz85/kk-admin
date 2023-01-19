@@ -1,8 +1,8 @@
 .formGroup {
-    @apply mb-4;
+    @apply mb-2;
 }
 
-.formGroup > label {
+.label {
     @apply block;
     @apply text-dark-grey;
 }
@@ -10,9 +10,21 @@
 .formTextInput {
     @apply text-dark-grey;
     @apply w-full;
-    @apply px-3 py-1.5;
+    @apply px-1.5 py-1.5;
     @apply text-base font-normal bg-light-snow;
-    @apply border border-solid border-medium-grey;
-    @apply rounded transition ease-in-out m-0;
+    @apply border border-solid border-dark-grey rounded-none;
+    @apply transition ease-in-out m-0;
     @apply focus:text-dark-grey focus:bg-light-snow focus:border-medium-sky focus:outline-none;
+}
+
+.panel {
+    @apply p-2;
+}
+
+.error {
+    @apply text-dark-brick;
+}
+
+.isInvalid {
+    @apply border-dark-brick text-dark-brick;
 }

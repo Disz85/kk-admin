@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const Panel = ({ title, children, ...props }) => {
     return (
-        <div>
+        <div className={ props.className }>
             <div>{title && <h2>{title}</h2>}</div>
             <div>
                 {React.Children.map(children, (child) =>

@@ -25,13 +25,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * );
  *
  * @property int $id
- * @property string $created_at
- * @property string $updated_at
  * @property string $title
  * @property string $name
- * @property string $email
  * @property string $slug
+ * @property string $email
+ * @property string $image_id
  * @property string $description
+ * @property string $created_at
+ * @property string $updated_at
+ *
+ * @property-read Media|null $image
  *
  */
 
@@ -39,6 +42,10 @@ class Author extends Model
 {
     use GeneratesSlug;
     use HasFactory;
+
+    protected $slugFrom = 'name';
+
+    protected $with = ['image'];
 
     protected $fillable = [
         'title',

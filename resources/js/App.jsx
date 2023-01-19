@@ -22,9 +22,9 @@ if (root) {
         <ReactKeycloakProvider authClient={keycloak} initOptions={ssoConfig}>
             <HttpProvider http={ApplicationService}>
                 <AuthProvider>
-                    <StrictMode>
+                    {/*<StrictMode>*/}
                         <Dashboard />
-                    </StrictMode>
+                    {/*</StrictMode>*/}
                 </AuthProvider>
             </HttpProvider>
         </ReactKeycloakProvider>,

@@ -1,5 +1,6 @@
 import {
     faUser,
+    faUsers,
     faTags,
     faNewspaper,
     faArrowRightFromBracket,
@@ -7,6 +8,7 @@ import {
 
 const navigationIcons = {
     users: faUser,
+    authors: faUsers,
     tags: faTags,
     categories: faNewspaper,
     logout: faArrowRightFromBracket,

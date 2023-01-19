@@ -6,6 +6,22 @@ use App\Utility\Helpers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Media
+ * @package App\Models
+ *
+ * @property int $id
+ * @property string $path
+ * @property string $type
+ * @property string $title
+ * @property int $width
+ * @property int $height
+ * @property int $x
+ * @property int $y
+ *
+ * @property \DateTimeInterface $created_at
+ * @property \DateTimeInterface $updated_at
+ */
 class Media extends Model
 {
     use HasFactory;

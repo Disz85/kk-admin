@@ -8,6 +8,7 @@ export default {
     new: 'Új {{resource}}',
     delete: 'Törlés',
     save: 'Mentés',
+    upload: 'Feltöltés',
 
     phases: 'Új fázis hozzáadása',
     fats: 'Új sütőzsiradék hozzáadása',

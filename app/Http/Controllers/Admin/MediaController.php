@@ -4,84 +4,51 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMediaRequest;
-use App\Http\Requests\UpdateMediaRequest;
+use App\Repositories\MediaRepositoryInterface;
+use App\Http\Resources\Admin\MediaResource;
 use App\Models\Media;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class MediaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    private MediaRepositoryInterface $mediaRepository;
+
+    public function __construct(MediaRepositoryInterface $mediaRepository)
     {
-        //
+        $this->mediaRepository = $mediaRepository;
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param StoreMediaRequest $request
+     * @return MediaResource
      */
-    public function create()
+    public function upload(StoreMediaRequest $request): MediaResource
     {
-        //
+        //$request->validated();
+
+        $file = $request->file('media');
+        $path = implode('/', array_filter(['images', $request->get('resource')]));
+
+        $path = $this->mediaRepository->storeWithPrefix(new File($file->path()), $path);
+
+        $media = new Media(['path' => $path, 'type' => $file->getClientMimeType()]);
+        $media->save();
+
+        return new MediaResource($media);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreMediaRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param Media $media
+     * @return void
+     * @throws Throwable
      */
-    public function store(StoreMediaRequest $request)
+    public function delete(Media $media)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Media  $media
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Media $media)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Media  $media
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Media $media)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateMediaRequest  $request
-     * @param  \App\Models\Media  $media
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateMediaRequest $request, Media $media)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Media  $media
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Media $media)
-    {
-        //
+        DB::transaction(function () use ($media) {
+            $this->mediaRepository->delete($media->path);
+            $media->delete();
+        });
     }
 }

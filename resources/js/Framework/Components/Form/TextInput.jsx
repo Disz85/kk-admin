@@ -19,7 +19,7 @@ const TextInput = ({ onChange, entity, regex = null, ...props }) => {
             <Field {...props}>
                 {(hasError, attributes) => (
                     <input
-                        className={style.formTextInput}
+                        className={`${style.formTextInput} ${hasError ? style.isInvalid : ''}`}
                         type="text"
                         onChange={change}
                         value={entity[props.name] || ''}

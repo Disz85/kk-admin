@@ -62,8 +62,9 @@ const Form = ({
 
     const { entity, errors, loading } = state;
 
-    const update = (change) =>
+    const update = (change) => {
         setState((oldState) => ({ ...oldState, ...change }));
+    };
 
     // MODEL LOCK CALLBACKS
     const passLock = () =>
@@ -85,6 +86,7 @@ const Form = ({
     };
 
     const save = () => {
+        console.log(!state.changed);
         if (immutable || !state.changed || loading) {
             return;
         }
@@ -120,12 +122,14 @@ const Form = ({
         save();
     };
 
-    const onChange = (change) =>
+    const onChange = (change) => {
+        console.log('changed');
         setState(({ entity, ...rest }) => ({
             ...rest,
             entity: { ...entity, ...change },
             changed: true,
         }));
+    };
 
     const onToggle = onChange;
 
@@ -142,13 +146,13 @@ const Form = ({
         if (id) {
             service
                 .find(resource, id)
-                .then((entity) =>
+                .then((data) => {
                     update({
-                        entity: entity.data,
+                        entity: data.data,
                         loading: false,
                         display: true,
-                    }),
-                )
+                    });
+                })
                 .catch(({ response }) => {
                     if (!response) {
                         return;
@@ -172,7 +176,6 @@ const Form = ({
             });
         }
     }, []);
-
     /**
      * Resets state when a new entity has been created
      */
@@ -232,7 +235,6 @@ const Form = ({
         history.push(`/${resource}/${state.entity.id}/show`);
         update({ created: false });
     }
-
     const childrenWithProps = recursiveMap(children, (child) => {
         return React.cloneElement(child, {
             service,
@@ -245,7 +247,6 @@ const Form = ({
     });
 
     // after React.Fragment: <Prompt when={ state.changed } message={ NAVIGATION_MESSAGE }/>
-
     return (
         <>
             {state.lock && (

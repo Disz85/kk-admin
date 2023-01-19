@@ -15,7 +15,7 @@ return new class () extends Migration {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('legacy_id')->nullable();
-            $table->string('legacy_nickname')->nullable();
+            $table->string('legacy_nickname')->nullable()->index();
             $table->string('legacy_username')->nullable();
             $table->string('sso_id')->nullable()->unique();
             $table->string('title', 10)->nullable();
@@ -30,7 +30,6 @@ return new class () extends Migration {
             $table->integer('birth_year')->nullable();
             $table->string('skin_type')->nullable();
             $table->string('skin_concern')->nullable();
-
             $table->timestamps();
         });
     }

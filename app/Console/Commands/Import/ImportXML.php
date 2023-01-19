@@ -14,7 +14,8 @@ class ImportXML extends Command
      * @var string
      */
     protected $signature = 'import:xml
-                            {--path= : The path of the XML file}';
+                            {--path= : The path of the XML file}
+                            {--columns=* : Select specified columns. By default use all columns.}';
 
     /**
      * The console command description.
@@ -53,20 +54,33 @@ class ImportXML extends Command
         }
 
         $schema = $schemaReader->read($path);
-        $columnDefinitions = $this->getColumnDefinitions($schema->columns);
+
+        if ($columns = $this->option('columns')) {
+            $columns = array_filter($schema->columns, fn (string $column) => in_array($column, $columns));
+        } else {
+            $columns = $schema->columns;
+        }
+
+        $columnDefinitions = $this->getColumnDefinitions($columns);
 
         $this->info("\nImport $schema->legacy_table_name as $schema->table_name.");
 
-        DB::unprepared("
-            DROP TABLE IF EXISTS $schema->table_name;
+        $this->info(" Drop $schema->table_name table\n");
+        DB::unprepared("DROP TABLE IF EXISTS $schema->table_name;");
 
+        $this->info(" Create $schema->table_name table\n");
+        DB::unprepared("
             CREATE TABLE $schema->table_name ($columnDefinitions)
             ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-            LOAD XML LOCAL INFILE '$path' INTO TABLE $schema->table_name ROWS IDENTIFIED BY '<$schema->row_identifier>';
-
-            {$this->createIndexQuery($schema->table_name, $schema->columns)}
         ");
+
+        $this->info(" Load XML data into $schema->table_name table\n");
+        DB::unprepared("
+            LOAD XML LOCAL INFILE '$path' INTO TABLE $schema->table_name ROWS IDENTIFIED BY '<$schema->row_identifier>';
+        ");
+
+        $this->info(" Index $schema->table_name table\n");
+        DB::unprepared($this->createIndexQuery($schema->table_name, $schema->columns));
 
         $this->info("Import is finished.");
     }

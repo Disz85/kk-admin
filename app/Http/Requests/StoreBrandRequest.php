@@ -7,16 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 class StoreBrandRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, mixed>
@@ -24,7 +14,12 @@ class StoreBrandRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => 'required|string|max:255|unique:brands',
+            'url' => 'nullable|url|max:255',
+            'description' => 'nullable|string',
+            'image_id' => 'nullable|integer|exists:media,id',
+            'where_to_find' => 'nullable|string',
+            'created_by' => 'nullable|integer|exists:users,id',
         ];
     }
 }

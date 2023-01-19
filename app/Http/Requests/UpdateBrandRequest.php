@@ -7,24 +7,19 @@ use Illuminate\Foundation\Http\FormRequest;
 class UpdateBrandRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            'title' => 'required|string|max:255|unique:brands,title,'.$this->brand->id,
+            'url' => 'nullable|url|max:255',
+            'description' => 'nullable|string',
+            'image_id' => 'nullable|integer|exists:media,id',
+            'where_to_find' => 'nullable|string',
+            'updated_by' => 'nullable|integer|exists:users,id',
         ];
     }
 }

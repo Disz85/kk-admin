@@ -32,13 +32,13 @@ config: ## Setup step #1: Create .env for the admin project
 composer-install: ## Setup step #2: Run composer install
 	docker exec -it $(PHP_CONTAINER) composer install
 
-artisan-key: ## Setup step #3.1: Run composer install
+artisan-key: ## Setup step #3.1: Run artisan key:generate
 	docker exec -it $(PHP_CONTAINER) php artisan key:generate
 
-artisan-migrate: ## Setup step #3.2: Run composer install
+artisan-migrate: ## Setup step #3.2: Run artisan migrate
 	docker exec -it $(PHP_CONTAINER) php artisan migrate
 
-artisan-auth-create: ## Setup step #3.3: Run composer install
+artisan-auth-create: ## Setup step #3.3: Run artisan auth:create-roles-and-permissions
 	docker exec -it $(PHP_CONTAINER) php artisan auth:create-roles-and-permissions
 
 artisan-install: artisan-key artisan-migrate artisan-seed ## Setup step #3: Run initial artisan commands
@@ -111,3 +111,6 @@ format: ## Format PHP with Php-cs-fixer
 
 analyze: ## Check PHP format with Larastan
 	docker exec -it $(PHP_CONTAINER) composer analyze
+
+api-docs: ## Run php artisan l5-swagger:generate
+	docker exec -it $(PHP_CONTAINER) php artisan l5-swagger:generate

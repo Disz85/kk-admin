@@ -1,27 +1,32 @@
 .tableWrapper {
-    @apply p-4;
+    @apply p-14;
+    @apply bg-light-snow;
 }
 
 .inner {
-    @apply p-4;
+    @apply w-full p-4;
 }
 
 .header {
-    @apply p-4;
-    @apply bg-medium-blackberry;
-    @apply text-light-snow;
+    @apply sticky top-24;
+    @apply bg-dark-night;
+    @apply text-light-snow text-left;
+    @apply border-b border-light-mist;
 }
 
 .row {
     @apply p-4;
-    @apply even:bg-light-mist;
-    @apply hover:shadow-xl;
+    @apply even:bg-light-cloud/50;
+    @apply hover:shadow-md shadow-dark-night;
+    @apply border-b border-light-mist;
 }
 
 .title {
-    @apply p-4;
+    @apply px-4 py-6;
+    @apply font-primary text-2xl uppercase font-medium whitespace-nowrap;
 }
 
 .column {
-    @apply p-4;
+    @apply px-4 py-6;
+    @apply font-primary text-2xl font-normal whitespace-nowrap;
 }

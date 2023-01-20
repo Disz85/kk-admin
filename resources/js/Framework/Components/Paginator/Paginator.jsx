@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
+import style from '../../../../scss/components/paginator/paginator.module.scss';
+
 // COMPONENTS
-import Arrow from '../../Components/Paginator/Arrow';
+import Arrow from './Arrow';
+import List from '../List/List';
 
 const getPageNumbers = (total) =>
     [...Array(Math.ceil(total / 25)).keys()].map((v) => v + 1);
@@ -41,25 +44,20 @@ const Paginator = ({ pagination, ...props }) => {
     );
 
     return (
-        <ul role="navigation">
-            <li>
-                <Arrow
-                    direction="left"
-                    to={current - 1}
-                    enabled={current > 1}
-                    {...props}
-                />
+        <List className={style.list} role="navigation">
+            <li className={style.item}>
+                <Arrow to={current - 1} enabled={current > 1} {...props} />
             </li>
             {items}
-            <li>
+            <li className={style.item}>
                 <Arrow
-                    direction="right"
                     to={current + 1}
                     enabled={current !== last}
+                    isRight
                     {...props}
                 />
             </li>
-        </ul>
+        </List>
     );
 };
 

@@ -16,7 +16,7 @@
 }
 
 .item {
-    @apply hover:shadow-md;
+    @apply hover:shadow-md shadow-dark-night;
     @apply hover:bg-dark-night;
 
     &:hover {

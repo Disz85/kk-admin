@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const List = ({ children, ordered = false }) => {
+const List = ({ children, ordered = false, ...props }) => {
     const List = ordered ? 'ol' : 'ul';
-    return <List>{children}</List>;
+    return <List {...props}>{children}</List>;
 };
 
 export default List;

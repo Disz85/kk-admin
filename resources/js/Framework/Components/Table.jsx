@@ -7,7 +7,6 @@ import style from '../../../scss/components/table.module.scss';
 
 const Table = ({ fields, entities, data, remove }) => {
     const { resource, service } = data;
-
     const { t } = useTranslation();
 
     return (

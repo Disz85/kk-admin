@@ -18,7 +18,7 @@ import ApplicationContext from '../../Context/ApplicationContext';
 // COMPONENTS
 import Table from '../../Components/Table';
 import Create from '../../Components/Create';
-import Paginator from './Paginator';
+import Paginator from '../../Components/Paginator/Paginator';
 import Modal from '../../Components/Modal';
 import Button from '../../Components/Buttons/Button';
 

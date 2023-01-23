@@ -5,13 +5,13 @@ import { useTranslation } from 'react-i18next';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const Button = ({ name = undefined, click, icon = false, ...props }) => {
+const Button = ({ name = undefined, click, unlabeled = false, icon = false, ...props }) => {
     const { t } = useTranslation();
 
     return (
         <button type="button" onClick={click} tabIndex={-1} {...props}>
             {icon && <FontAwesomeIcon icon={icon} />}
-            {name && <span>{t(`application.${name}`) || ''}</span>}
+            {!unlabeled && <span>{t(`application.${name}`) || ''}</span>}
         </button>
     );
 };
@@ -31,6 +31,10 @@ Button.propTypes = {
      * Type of icon
      */
     icon: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
+    /**
+     * Type of unlabeled
+     */
+    unlabeled: PropTypes.bool,
 };
 
 Button.defaultProps = {

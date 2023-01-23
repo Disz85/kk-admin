@@ -6,9 +6,14 @@ import {
     createNewEntityFromChildren,
     recursiveMap,
 } from '../../Helpers/recursions';
+
 // COMPONENTS
 import Button from './Buttons/Button';
-import Panel from './Panel';
+
+// STYLE
+import style from '../../../scss/components/search.module.scss';
+import { faFilter, faChevronUp, faChevronDown, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const Search = ({ entity, onChange, children, ...props }) => {
     // IMMUTABLE STATE
@@ -24,6 +29,15 @@ const Search = ({ entity, onChange, children, ...props }) => {
     const update = (change) => {
         setParams((params) => ({ ...params, ...change }));
     };
+
+    // SEARCH
+    const [ activeSearch, setSearch ] = useState(false);
+    const [ height, setHeight ] = useState({ height: 0, overflow: 'hidden' });
+
+    const toggleAccordion = () => setSearch(activeSearch => !activeSearch);
+    useEffect(() => {
+        setHeight(activeSearch ? { height: 0, overflow: 'hidden' } : { height : 100 + '%' , overflow : 'visible'});
+    }, [activeSearch]);
 
     // SIDE EFFECTS
     // On params change update the query string
@@ -58,8 +72,16 @@ const Search = ({ entity, onChange, children, ...props }) => {
     }, [params]);
 
     return (
-        <Panel title="Szűrő">
-            <form>
+        <div className={style.searchWrapper}>
+            <div className={style.searchHeader}>
+                <div className={style.searchTitle}>
+                    <FontAwesomeIcon icon={faFilter} />
+                    <h2>Szűrő</h2>
+                </div>
+                <Button icon={activeSearch ? faChevronDown : faChevronUp} name="search-open" click={toggleAccordion} unlabeled={true}></Button>
+            </div>
+
+            <form className={style.searchForm} style={ height }>
                 {recursiveMap(children, (child) =>
                     React.cloneElement(child, {
                         ...props,
@@ -69,13 +91,17 @@ const Search = ({ entity, onChange, children, ...props }) => {
                     }),
                 )}
 
-                <Button
-                    name="reset"
-                    click={() => setParams(fields)}
-                    unlabeled
-                />
+                <div className={style.searchResetWrapper}>
+                    <Button
+                        className={style.searchReset}
+                        name="reset"
+                        icon={faTrash}
+                        click={() => setParams(fields)}
+                        unlabeled
+                    />
+                </div>
             </form>
-        </Panel>
+        </div>
     );
 };
 

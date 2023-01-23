@@ -1,0 +1,15 @@
+.overlay {
+    @apply fixed bg-dark-night bg-opacity-80 inset-0 overflow-y-auto z-40;
+}
+
+.content {
+    @apply absolute mx-auto mt-1 w-2/4 max-w-3xl bg-light-snow opacity-100 z-50;
+    @apply overflow-auto outline-0 top-32 left-10 right-10 p-10 text-center font-primary text-3xl;
+}
+
+.content > button {
+    @apply bg-dark-night text-light-snow;
+    @apply py-1.5 px-5 mt-5;
+
+    @apply hover:bg-medium-blackberry;
+}

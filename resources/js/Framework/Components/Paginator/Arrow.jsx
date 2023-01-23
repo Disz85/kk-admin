@@ -9,18 +9,18 @@ import {
     faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 
-const Arrow = ({ resource, to, enabled, isRight = false }) => {
+const Arrow = ({ className, resource, to, enabled, isRight = false }) => {
     const icon = isRight ? faChevronRight : faChevronLeft;
 
     if (enabled) {
         return (
-            <Link to={`/${resource}/page/${to}${window.location.search}`}>
+            <Link className={className} to={`/${resource}/page/${to}${window.location.search}`}>
                 <FontAwesomeIcon icon={icon} />
             </Link>
         );
     }
 
-    return <FontAwesomeIcon icon={icon} />;
+    return <div className={className}><FontAwesomeIcon icon={icon} /></div>;
 };
 
 export default Arrow;

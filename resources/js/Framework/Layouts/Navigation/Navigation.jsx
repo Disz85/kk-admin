@@ -18,7 +18,7 @@ const Navigation = ({ items, action }) => {
 
     return (
         <nav className={style.menu}>
-            <ul className={style.list}>
+            <ul className={`${style.list} ${action ? " " + style.listClosed : ""}`}>
                 <NavItem
                     key="home"
                     title={t('application.home')}

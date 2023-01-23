@@ -5,7 +5,7 @@ const Logo = () => {
     return (
         <Link to="/">
             <svg
-                width="198"
+                width="170"
                 height="36"
                 viewBox="0 0 198 36"
                 fill="none"

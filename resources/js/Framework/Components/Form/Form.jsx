@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 // TRANSLATION
 import { useTranslation } from 'react-i18next';
+// CONFIG
+import navigationIcons from '../../../config/navigationIcons';
 // HOOKS
 import useUpdateEffect from '../../../Hooks/useUpdateEffect';
 // CONTEXTS
 import { AuthContext } from '../../Context/AuthContext';
-// import { MessageContext } from '../../Context/MessageContext';
+import { MessageContext } from '../../Context/MessageContext';
 import ApplicationContext from '../../Context/ApplicationContext';
 // HELPERS
 import {
@@ -44,7 +46,7 @@ const Form = ({
     creates = null,
 }) => {
     const setPageInfo = useContext(ApplicationContext);
-    // const { pushMessage } = useContext(MessageContext);
+    const { pushMessage } = useContext(MessageContext);
     const { user } = useContext(AuthContext);
     const { t } = useTranslation();
     const { id } = useParams();
@@ -86,7 +88,6 @@ const Form = ({
     };
 
     const save = () => {
-        console.log(!state.changed);
         if (immutable || !state.changed || loading) {
             return;
         }
@@ -102,10 +103,10 @@ const Form = ({
                 }
 
                 update({ entity: result.data, created: !entity.id });
-                // pushMessage({ title : "Sikeres mentés!" });
+                pushMessage({ title : "Sikeres mentés!" });
             })
             .catch(({ response }) => {
-                // pushMessage({ title : "Hoppá, valami hiba történt!", type : "error" });
+                pushMessage({ title : "Hoppá, valami hiba történt!", type : "error" });
                 update({
                     errors: (response && response.data.errors) || {},
                     changed: true,
@@ -123,7 +124,6 @@ const Form = ({
     };
 
     const onChange = (change) => {
-        console.log('changed');
         setState(({ entity, ...rest }) => ({
             ...rest,
             entity: { ...entity, ...change },
@@ -141,6 +141,7 @@ const Form = ({
             title: t(`application.edit`, {
                 resource: t(`${resource}.resource`),
             }),
+            icon: navigationIcons[resource],
         });
 
         if (id) {

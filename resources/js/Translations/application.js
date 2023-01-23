@@ -9,22 +9,14 @@ export default {
     delete: 'Törlés',
     save: 'Mentés',
     upload: 'Feltöltés',
+    reset: 'Visszaállítás',
 
-    phases: 'Új fázis hozzáadása',
-    fats: 'Új sütőzsiradék hozzáadása',
-    steps: 'További lépés hozzáadása',
-    ingredients: 'Új hozzávaló hozzáadása',
-    aliases: 'Elnevezése hozzáadása',
-    recipes: 'Új recept hozzáadása',
-
-    keywords: 'Seo kulcsszó hozzáadása',
-
-    metrics: 'Új mértékegység hozzáadása',
+    crop: 'Szerkesztés',
+    cut: 'Vágás',
+    cancel: 'Mégse',
 
     back: 'Vissza',
     passLock: 'Átveszem',
-
-    articles: 'Cikk hozzáadása',
 
     home: 'Kezdőlap',
     logout: 'Kijelentkezés',

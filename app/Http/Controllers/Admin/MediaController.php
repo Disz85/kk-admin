@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMediaRequest;
-use App\Repositories\MediaRepositoryInterface;
 use App\Http\Resources\Admin\MediaResource;
 use App\Models\Media;
+use App\Repositories\MediaRepositoryInterface;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\DB;
 use Throwable;

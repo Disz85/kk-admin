@@ -1,6 +1,31 @@
-.submit {
-    @apply bg-medium-blackberry text-light-snow;
-    @apply py-1.5 px-2;
+.create {
+    @apply rounded-full text-light-snow bg-dark-night h-20 uppercase;
+    @apply flex justify-center content-center;
+    @apply fixed bottom-4 right-4;
 
-    @apply hover:bg-dark-night;
+    min-width: 5rem;
+
+    &:hover {
+        @apply px-3;
+
+        .createText {
+            @apply visible opacity-100 w-full mx-3 my-auto text-2xl;
+        }
+    }
+}
+
+.createText {
+    @apply invisible opacity-0 w-0 transition-opacity;
+    @apply whitespace-nowrap;
+}
+
+.createIcon {
+    @apply text-light-snow text-center m-auto text-3xl;
+}
+
+.submit {
+    @apply bg-dark-night text-light-snow text-2xl;
+    @apply py-1.5 px-5 mt-2;
+
+    @apply hover:bg-medium-blackberry;
 }

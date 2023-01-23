@@ -20,6 +20,8 @@ import Navigation from '../Layouts/Navigation/Navigation';
 // PAGES
 import NotFound from './NotFound';
 import Home from './Home';
+import MessageBar from "../Components/MessageBar";
+import MessageProvider from "../Context/MessageContext";
 
 const Admin = ({ children }) => {
     // CONTEXTS
@@ -36,50 +38,53 @@ const Admin = ({ children }) => {
 
     return (
         <ApplicationContext.Provider value={setPageInfo}>
-            <BrowserRouter>
-                <Header toggle={toggle} action={isClosed} />
-                <Aside action={isClosed}>
-                    <Navigation
-                        action={isClosed}
-                        items={listable(permitted(resources, hasPermission))}
-                    />
-                </Aside>
-                <Main description={pageInfo} action={isClosed}>
-                    <AnimatePresence>
-                        <Routes>
-                            <Route
-                                exact
-                                key="/"
-                                path="/"
-                                element={
-                                    <Home
-                                        resources={listable(
-                                            permitted(resources, hasPermission),
-                                        )}
-                                    />
-                                }
-                            />
-                            {permitted(resources, hasPermission).map(
-                                (resource) => (
-                                    <Route
-                                        exact
-                                        key={resource.path}
-                                        path={resource.path}
-                                        element={
-                                            <ApplicationRoute
-                                                component={resource.component}
-                                                resource={resource.name}
-                                                service={http}
-                                            />
-                                        }
-                                    />
-                                ),
-                            )}
-                            <Route key="404" path="*" element={<NotFound />} />
-                        </Routes>
-                    </AnimatePresence>
-                </Main>
-            </BrowserRouter>
+            <MessageProvider>
+                <BrowserRouter>
+                    <Header toggle={toggle} action={isClosed} />
+                    <Aside action={isClosed}>
+                        <Navigation
+                            action={isClosed}
+                            items={listable(permitted(resources, hasPermission))}
+                        />
+                    </Aside>
+                    <Main description={pageInfo} action={isClosed}>
+                        <AnimatePresence>
+                            <Routes>
+                                <Route
+                                    exact
+                                    key="/"
+                                    path="/"
+                                    element={
+                                        <Home
+                                            resources={listable(
+                                                permitted(resources, hasPermission),
+                                            )}
+                                        />
+                                    }
+                                />
+                                {permitted(resources, hasPermission).map(
+                                    (resource) => (
+                                        <Route
+                                            exact
+                                            key={resource.path}
+                                            path={resource.path}
+                                            element={
+                                                <ApplicationRoute
+                                                    component={resource.component}
+                                                    resource={resource.name}
+                                                    service={http}
+                                                />
+                                            }
+                                        />
+                                    ),
+                                )}
+                                <Route key="404" path="*" element={<NotFound />} />
+                            </Routes>
+                        </AnimatePresence>
+                        <MessageBar/>
+                    </Main>
+                </BrowserRouter>
+            </MessageProvider>
         </ApplicationContext.Provider>
     );
 };

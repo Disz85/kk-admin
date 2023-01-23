@@ -2,23 +2,24 @@ import React from 'react';
 
 //Components
 import Form from '../../Framework/Components/Form/Form';
-import Panel from '../../Framework/Components/Panel';
 import TextInput from '../../Framework/Components/Form/TextInput';
 import Image from '../../Framework/Components/Image/Image';
-
-//Styles
-import style from '../../../scss/components/form.module.scss';
+import Panel from "../../Framework/Components/Panel";
 
 const AuthorForm = (props) => {
     return (
         <Form {...props}>
-            <Panel className={style.panel} title="Szerző adatai">
-                <TextInput name="title" />
-                <TextInput name="name" />
-                <TextInput name="email" />
-                <Image name="image" isCropping={false} />
-                <TextInput name="description" />
-            </Panel>
+            <div className="flex basis-8">
+                <Panel>
+                    <TextInput name="title" />
+                    <TextInput name="name" />
+                    <TextInput name="email" />
+                    <TextInput name="description" />
+                </Panel>
+                <Panel>
+                    <Image name="image" isCropping={false} />
+                </Panel>
+            </div>
         </Form>
     );
 };

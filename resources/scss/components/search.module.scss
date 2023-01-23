@@ -1,0 +1,28 @@
+.searchWrapper {
+    @apply p-8 pb-0;
+    @apply bg-light-snow;
+}
+
+.searchHeader {
+    @apply flex justify-between content-center mb-2 text-2xl;
+}
+
+.searchTitle {
+    @apply flex content-center uppercase;
+}
+
+.searchTitle > h2 {
+    @apply ml-2;
+}
+
+.searchForm {
+    @apply font-primary text-dark-night;
+}
+
+.searchResetWrapper {
+    @apply text-right text-2xl;
+}
+
+.searchReset {
+    @apply mr-2;
+}

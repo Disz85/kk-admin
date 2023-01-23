@@ -3,11 +3,16 @@ import PropTypes from 'prop-types';
 
 import BaseModal from 'react-modal';
 
+//STYLE
+import style from '../../../scss/components/modal.module.scss';
+
 const Modal = ({ isOpen, onRequestClose, children, ...props }) => (
     <BaseModal
         ariaHideApp={false}
         isOpen={isOpen}
         onRequestClose={onRequestClose}
+        className={style.content}
+        overlayClassName={style.overlay}
         {...props}
     >
         {children}

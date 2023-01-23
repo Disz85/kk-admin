@@ -5,6 +5,9 @@ import 'cropperjs/dist/cropper.css';
 import Flex from '../../Layouts/Flex';
 import Button from '../../Components/Buttons/Button';
 
+// ICONS
+import { faScissors, faBan } from '@fortawesome/free-solid-svg-icons';
+
 const ImageCropper = ({ media, crop, applyCropping }) => {
     const cropperRef = useRef(null);
 
@@ -30,8 +33,8 @@ const ImageCropper = ({ media, crop, applyCropping }) => {
             />
 
             <Flex classNames="m-picture__btnWrapper" justifyContent="evenly">
-                <Button name="upload" text="Vágás" icon="cut" click={apply} />
-                <Button name="upload" text="Mégse" icon="ban" click={close} />
+                <Button name="cut" text="Vágás" icon={faScissors} click={apply} />
+                <Button name="cancel" text="Mégse" icon={faBan} click={close} />
             </Flex>
         </>
     );

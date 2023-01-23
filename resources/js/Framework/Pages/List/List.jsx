@@ -17,7 +17,7 @@ import useUpdateEffect from '../../../Hooks/useUpdateEffect';
 import ApplicationContext from '../../Context/ApplicationContext';
 // COMPONENTS
 import Table from '../../Components/Table';
-import Create from '../../Components/Create';
+import Create from '../../Components/Buttons/Create';
 import Paginator from '../../Components/Paginator/Paginator';
 import Modal from '../../Components/Modal';
 import Button from '../../Components/Buttons/Button';
@@ -119,7 +119,7 @@ const List = ({
             )}
 
             {isLoading && <p>Loading...</p>}
-            {!isLoading && list.entities.length && (
+            {!isLoading && (
                 <Table
                     entities={list.entities}
                     fields={fields}

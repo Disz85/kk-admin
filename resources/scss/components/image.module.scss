@@ -1,5 +1,5 @@
 .placeholder {
-    @apply block;
+    @apply block text-2xl;
 
     max-inline-size: 100%;
     margin-inline: auto;
@@ -7,4 +7,8 @@
 
 .placeholderTitle {
     @apply font-bold;
+}
+
+.uploadBtn {
+    @apply text-2xl mt-5;
 }

@@ -10,7 +10,6 @@ const TagList = (props) => {
         <List search={TagSearch} {...props}>
             <Text name="id" />
             <Edit name="name" />
-            <Text name="description" />
             <Delete name="delete" list />
         </List>
     );

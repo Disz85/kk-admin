@@ -48,6 +48,10 @@ class AuthorController extends Controller
                     $request->has('name'),
                     fn (Builder $query) => $query->where('name', 'like', '%' . $request->get('name') . '%')
                 )
+                ->when(
+                    $request->has('email'),
+                    fn (Builder $query) => $query->where('email', 'like', '%' . $request->get('email') . '%')
+                )
                 ->orderByDesc('updated_at')
                 ->paginate($request->get('size', 20))
         );

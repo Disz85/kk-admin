@@ -9,8 +9,11 @@ import Button from '../../Components/Buttons/Button';
 import Flex from '../../Layouts/Flex';
 import ImagePlaceholder from './ImagePlaceholder';
 
+// STYLES
+import style from '../../../../scss/components/image.module.scss';
+
 // ICONS
-import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faUpload, faCrop } from '@fortawesome/free-solid-svg-icons';
 
 const ModalStyle = {
     overlay: {
@@ -83,8 +86,6 @@ const Image = ({
         onChange(change);
     }, [media]);
 
-    console.log(path);
-
     return (
         <>
             <input
@@ -120,9 +121,10 @@ const Image = ({
                     {isCropping && (
                         <Button
                             name="crop"
-                            icon="crop"
+                            icon={faCrop}
                             click={toggleCropping}
                             type="button"
+                            unlabeled
                         />
                     )}
                 </div>
@@ -130,11 +132,12 @@ const Image = ({
                 <ImagePlaceholder />
             )}
             <Flex
-                classNames="m-picture__btnWrapper"
+                classNames={style.imageBtnWrapper}
                 justifyContent="center"
                 wraps="wrap"
             >
                 <Button
+                    className={style.uploadBtn}
                     name="upload"
                     text="Képfeltöltés"
                     icon={faUpload}
@@ -143,6 +146,7 @@ const Image = ({
                 />
                 {isDetachable && (
                     <Button
+                        className={style.resetBtn}
                         name="reset"
                         text="Alaphelyzet"
                         click={detachImage}

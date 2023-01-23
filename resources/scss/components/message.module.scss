@@ -1,0 +1,7 @@
+.wrapper {
+    @apply fixed top-5 left-2/4 -translate-x-2/4 mx-auto text-center w-100;
+}
+
+.message {
+    @apply relative block bg-medium-blackberry px-2 py-1.5 mt-3 mr-3 text-2xl text-light-snow;
+}

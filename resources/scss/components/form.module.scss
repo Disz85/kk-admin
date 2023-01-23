@@ -1,5 +1,5 @@
 .formGroup {
-    @apply mb-2;
+    @apply mb-2 text-2xl;
 }
 
 .label {
@@ -11,7 +11,7 @@
     @apply text-dark-grey;
     @apply w-full;
     @apply px-1.5 py-1.5;
-    @apply text-base font-normal bg-light-snow;
+    @apply font-normal bg-light-cloud/50;
     @apply border border-solid border-dark-grey rounded-none;
     @apply transition ease-in-out m-0;
     @apply focus:text-dark-grey focus:bg-light-snow focus:border-medium-sky focus:outline-none;

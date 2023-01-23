@@ -23,8 +23,8 @@ const filterPageNumbers = (numbers, current, last) =>
 const mapPageNumbers = (numbers, current, resource) =>
     numbers.map((number) => {
         return (
-            <li key={number}>
-                <Link
+            <li className={style.item} key={number}>
+                <Link className={style.link}
                     to={`/${resource}/page/${number}${window.location.search}`}
                 >
                     {number}
@@ -46,11 +46,12 @@ const Paginator = ({ pagination, ...props }) => {
     return (
         <List className={style.list} role="navigation">
             <li className={style.item}>
-                <Arrow to={current - 1} enabled={current > 1} {...props} />
+                <Arrow className={style.link} to={current - 1} enabled={current > 1} {...props} />
             </li>
             {items}
             <li className={style.item}>
                 <Arrow
+                    className={style.link}
                     to={current + 1}
                     enabled={current !== last}
                     isRight

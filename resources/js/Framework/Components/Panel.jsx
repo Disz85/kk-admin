@@ -1,13 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const Panel = ({ title, children, ...props }) => {
+// STYLES
+import style from "../../../scss/components/panel.module.scss";
+
+const Panel = ({ title, icon, children, ...props }) => {
     return (
-        <div className={ props.className }>
-            <div>{title && <h2>{title}</h2>}</div>
-            <div>
+        <div className={style.panelWrapper}>
+            <div className={style.panelHeader}>
+                {icon && <FontAwesomeIcon icon={icon} />}
+                {title && <h2>{title}</h2>}
+            </div>
+            <div className={style.panelBody}>
                 {React.Children.map(children, (child) =>
-                    React.cloneElement(child, props),
+                    React.cloneElement(child),
                 )}
             </div>
         </div>
@@ -20,7 +27,11 @@ Panel.propTypes = {
     /**
      * entity of title
      */
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    /**
+     * entity of icon
+     */
+    icon: PropTypes.string,
     /**
      * Type of children
      */

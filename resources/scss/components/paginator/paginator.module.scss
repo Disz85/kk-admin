@@ -1,7 +1,14 @@
 .list {
-    @apply flex;
+    @apply isolate flex justify-center -space-x-px shadow-sm;
+    @apply py-2;
 }
 
 .item {
-    @apply p-2;
+    @apply relative inline-flex items-center border border-light-grey bg-light-snow font-primary text-2xl;
+    @apply hover:bg-dark-night hover:text-light-snow;
+    @apply focus:z-20;
+}
+
+.link {
+    @apply px-4 py-2;
 }

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Events\AuthorDeletingEvent;
+use App\Traits\GeneratesSlug;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -35,6 +37,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Author extends Model
 {
+    use GeneratesSlug;
     use HasFactory;
 
     protected $fillable = [
@@ -44,6 +47,10 @@ class Author extends Model
         'slug',
         'description',
         'image_id',
+    ];
+
+    protected $dispatchesEvents = [
+        'deleting' => AuthorDeletingEvent::class,
     ];
 
     public function articles(): BelongsToMany

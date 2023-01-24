@@ -58,7 +58,7 @@ class AuthorTest extends TestCase
     {
         $author = Author::factory()->create();
         $this->delete(route('authors.destroy', ['author' => $author->id]))
-            ->assertOk();
+            ->assertNoContent();
         $this->assertNull(Author::find($author->id));
     }
 }

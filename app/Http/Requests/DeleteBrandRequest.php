@@ -30,5 +30,4 @@ class DeleteBrandRequest extends FormRequest
             'brand' => $this->brand,
         ]);
     }
-
 }

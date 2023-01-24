@@ -9,6 +9,7 @@ use App\Http\Resources\Admin\AuthorResource;
 use App\Models\Author;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthorController extends Controller
 {
@@ -19,10 +20,8 @@ class AuthorController extends Controller
      *    path="/admin/authors",
      *    @OA\Response(
      *      response="200",
-     *      description="Display a listing of authors."
-     *    ),
-     *    @OA\MediaType(
-     *      mediaType="application/json"
+     *      description="Display a listing of authors.",
+     *      @OA\JsonContent()
      *    ),
      *    @OA\Parameter(
      *      name="page",
@@ -58,20 +57,12 @@ class AuthorController extends Controller
      * @OA\Post (
      *     tags={"Authors"},
      *     path="/admin/authors",
-     *     @OA\MediaType(
-     *         mediaType="application/json"
-     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"title","name","email","slug"},
-     *                 @OA\Property(
-     *                     property="title",
-     *                     type="string",
-     *                     description="Title.",
-     *                 ),
+     *                 required={"name","email"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
@@ -83,9 +74,9 @@ class AuthorController extends Controller
      *                     description="Email",
      *                 ),
      *                 @OA\Property(
-     *                     property="slug",
+     *                     property="title",
      *                     type="string",
-     *                     description="Slug.",
+     *                     description="Title.",
      *                 ),
      *                 @OA\Property(
      *                     property="description",
@@ -101,12 +92,13 @@ class AuthorController extends Controller
      *         )
      *     ),*
      *     @OA\Response(
-     *         response=200,
-     *         description="Author created."
+     *         response=201,
+     *         description="Author created.",
+     *         @OA\JsonContent()
      *     ),
      *     @OA\Response(
-     *         response=419,
-     *         description="Error in fields"
+     *         response=422,
+     *         description="Field validation error"
      *     ),
      * )
      *
@@ -115,8 +107,7 @@ class AuthorController extends Controller
      */
     public function store(StoreAuthorRequest $request): AuthorResource
     {
-        $author = new Author($request->validated());
-        $author->save();
+        $author = Author::create($request->validated());
 
         return new AuthorResource($author);
     }
@@ -128,20 +119,23 @@ class AuthorController extends Controller
      *    path="/admin/authors/{author}",
      *    @OA\Response(
      *      response="200",
-     *      description="Display a listing of authors."
+     *      description="Show a selected author.",
+     *      @OA\JsonContent()
      *    ),
-     *    @OA\MediaType(
-     *      mediaType="application/json"
+     *    @OA\Response(
+     *      response="404",
+     *      description="Author not found.",
+     *      @OA\JsonContent()
      *    ),
-     *     @OA\Parameter(
-     *         name="author",
-     *         in="path",
-     *         required=true,
-     *         description="Author ID",
-     *         @OA\Schema(
-     *             type="integer"
-     *         ),
-     *     ),
+     *    @OA\Parameter(
+     *        name="author",
+     *        in="path",
+     *        required=true,
+     *        description="Author ID",
+     *        @OA\Schema(
+     *            type="integer"
+     *        ),
+     *    ),
      * )
      * @param Author $author
      * @return AuthorResource
@@ -174,12 +168,7 @@ class AuthorController extends Controller
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"title","name","email","slug"},
-     *                 @OA\Property(
-     *                     property="title",
-     *                     type="string",
-     *                     description="Title.",
-     *                 ),
+     *                 required={"name","email"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
@@ -191,9 +180,9 @@ class AuthorController extends Controller
      *                     description="Email",
      *                 ),
      *                 @OA\Property(
-     *                     property="slug",
+     *                     property="title",
      *                     type="string",
-     *                     description="Slug.",
+     *                     description="Title.",
      *                 ),
      *                 @OA\Property(
      *                     property="description",
@@ -210,11 +199,12 @@ class AuthorController extends Controller
      *     ),*
      *     @OA\Response(
      *         response=200,
-     *         description="Author updated."
+     *         description="Author updated",
+     *         @OA\JsonContent()
      *     ),
      *     @OA\Response(
-     *         response=419,
-     *         description="Error in fields"
+     *         response=422,
+     *         description="Field validation error"
      *     ),
      * )
      *
@@ -254,9 +244,14 @@ class AuthorController extends Controller
      *         )
      *     ),*
      *     @OA\Response(
-     *         response=200,
-     *         description="Author deleted."
+     *         response=204,
+     *         description="Author deleted",
+     *         @OA\JsonContent()
      *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Author not found"
+     *     )
      * )
      *
      * @param Author $author
@@ -265,5 +260,7 @@ class AuthorController extends Controller
     public function destroy(Author $author)
     {
         $author->deleteOrFail();
+
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

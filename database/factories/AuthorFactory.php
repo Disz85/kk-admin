@@ -22,7 +22,6 @@ class AuthorFactory extends Factory
         return [
             'title' => $this->faker->title,
             'name' => $this->faker->name,
-            'slug' => $this->faker->slug,
             'email' => $this->faker->email,
         ];
     }

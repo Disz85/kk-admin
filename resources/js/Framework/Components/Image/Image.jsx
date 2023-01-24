@@ -1,19 +1,21 @@
 import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import Modal from 'react-modal';
+
+// ICONS
+import { faUpload, faCrop } from '@fortawesome/free-solid-svg-icons';
+
 import MediaService from '../../../Services/MediaService';
 import useUpdateEffect from '../../../Hooks/useUpdateEffect';
 import ImageCropper from './ImageCropper';
 import { cropParams, sanitizeCropValues } from '../../../Helpers/imageCropper';
 import Error from '../Form/Error';
-import Button from '../../Components/Buttons/Button';
+import Button from '../Buttons/Button';
 import Flex from '../../Layouts/Flex';
 import ImagePlaceholder from './ImagePlaceholder';
 
 // STYLES
 import style from '../../../../scss/components/image.module.scss';
-
-// ICONS
-import { faUpload, faCrop } from '@fortawesome/free-solid-svg-icons';
 
 const ModalStyle = {
     overlay: {
@@ -159,6 +161,43 @@ const Image = ({
             )}
         </>
     );
+};
+
+Image.propTypes = {
+    /**
+     * Type of name
+     */
+    name: PropTypes.string.isRequired,
+    /**
+     * Type of entity
+     */
+    resource: PropTypes.object.isRequired,
+    /**
+     * Entity
+     */
+    entity: PropTypes.object.isRequired,
+    /**
+     * Type of onChange
+     */
+    onChange: PropTypes.func.isRequired,
+    /**
+     * Type of errors
+     */
+    errors: PropTypes.array,
+    /**
+     * Type of isCropping
+     */
+    isCropping: PropTypes.bool,
+    /**
+     * Type of isDetachable
+     */
+    isDetachable: PropTypes.bool,
+};
+
+Image.defaultProps = {
+    errors: [],
+    isCropping: false,
+    isDetachable: false,
 };
 
 export default Image;

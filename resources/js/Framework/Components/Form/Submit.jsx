@@ -5,7 +5,7 @@ import style from '../../../../scss/components/buttons/button.module.scss';
 
 const Submit = () => {
     return (
-        <button className={ style.submit } type="submit">
+        <button className={style.submit} type="submit">
             <span>Mentés</span>
         </button>
     );

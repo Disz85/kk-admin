@@ -1,6 +1,7 @@
-import useInterval from '../../Hooks/useInterval';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+
+import useInterval from '../../Hooks/useInterval';
 
 export const MessageContext = React.createContext({ messages: [] });
 
@@ -38,4 +39,8 @@ MessageProvider.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node,
     ]),
+};
+
+MessageProvider.defaultProps = {
+    children: null,
 };

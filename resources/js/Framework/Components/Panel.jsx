@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+// ICONS
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // STYLES
-import style from "../../../scss/components/panel.module.scss";
+import style from '../../../scss/components/panel.module.scss';
 
-const Panel = ({ title, icon, children, ...props }) => {
+const Panel = ({ title, icon, children }) => {
     return (
         <div className={style.panelWrapper}>
             <div className={style.panelHeader}>
@@ -39,4 +41,9 @@ Panel.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node,
     ]).isRequired,
+};
+
+Panel.defaultProps = {
+    title: false,
+    icon: null,
 };

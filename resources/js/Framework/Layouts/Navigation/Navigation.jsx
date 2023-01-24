@@ -15,10 +15,15 @@ import style from '../../../../scss/layouts/navigation.module.scss';
 const Navigation = ({ items, action }) => {
     // Contexts
     const { t } = useTranslation();
+    const ANR = ' ';
 
     return (
         <nav className={style.menu}>
-            <ul className={`${style.list} ${action ? " " + style.listClosed : ""}`}>
+            <ul
+                className={`${style.list} ${
+                    action ? ANR + style.listClosed : ''
+                }`}
+            >
                 <NavItem
                     key="home"
                     title={t('application.home')}

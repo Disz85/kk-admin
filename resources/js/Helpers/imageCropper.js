@@ -1,4 +1,15 @@
-import React from 'react';
+export const queryParams = (url, params) => {
+    if (Object.keys(params).length === 0) {
+        return url;
+    }
+
+    const searchParams = new URLSearchParams();
+    Object.keys(params).forEach((key) => searchParams.append(key, params[key]));
+
+    return (
+        url + (url.indexOf('?') === -1 ? '?' : '&') + searchParams.toString()
+    );
+};
 
 export const cropParams = (url, { width, height, x, y }) => {
     let params = {};
@@ -17,16 +28,3 @@ export const sanitizeCropValues = ({ width, height, x, y }) => ({
     x: sanitizeCropValue(x),
     y: sanitizeCropValue(y),
 });
-
-export const queryParams = (url, params) => {
-    if (Object.keys(params).length === 0) {
-        return url;
-    }
-
-    const searchParams = new URLSearchParams();
-    Object.keys(params).forEach((key) => searchParams.append(key, params[key]));
-
-    return (
-        url + (url.indexOf('?') === -1 ? '?' : '&') + searchParams.toString()
-    );
-};

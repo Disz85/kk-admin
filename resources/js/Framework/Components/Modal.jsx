@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import BaseModal from 'react-modal';
 
-//STYLE
+// STYLE
 import style from '../../../scss/components/modal.module.scss';
 
 const Modal = ({ isOpen, onRequestClose, children, ...props }) => (

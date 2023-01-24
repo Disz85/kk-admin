@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const Label = ({ className, to, text, children }) => {
     return (
-        <label className={ className } htmlFor={to}>
+        <label className={className} htmlFor={to}>
             {text}
             {children}
         </label>
@@ -13,6 +13,10 @@ const Label = ({ className, to, text, children }) => {
 export default Label;
 
 Label.propTypes = {
+    /**
+     * Type of className
+     */
+    className: PropTypes.string.isRequired,
     /**
      * Type of to
      */

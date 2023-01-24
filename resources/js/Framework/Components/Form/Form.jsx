@@ -103,10 +103,13 @@ const Form = ({
                 }
 
                 update({ entity: result.data, created: !entity.id });
-                pushMessage({ title : "Sikeres mentés!" });
+                pushMessage({ title: 'Sikeres mentés!' });
             })
             .catch(({ response }) => {
-                pushMessage({ title : "Hoppá, valami hiba történt!", type : "error" });
+                pushMessage({
+                    title: 'Hoppá, valami hiba történt!',
+                    type: 'error',
+                });
                 update({
                     errors: (response && response.data.errors) || {},
                     changed: true,

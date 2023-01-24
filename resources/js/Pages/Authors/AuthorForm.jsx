@@ -1,10 +1,10 @@
 import React from 'react';
 
-//Components
+// Components
 import Form from '../../Framework/Components/Form/Form';
 import TextInput from '../../Framework/Components/Form/TextInput';
 import Image from '../../Framework/Components/Image/Image';
-import Panel from "../../Framework/Components/Panel";
+import Panel from '../../Framework/Components/Panel';
 
 const AuthorForm = (props) => {
     return (

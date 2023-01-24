@@ -1,4 +1,4 @@
-import React, { StrictMode } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { ReactKeycloakProvider } from '@react-keycloak/web';
@@ -22,9 +22,7 @@ if (root) {
         <ReactKeycloakProvider authClient={keycloak} initOptions={ssoConfig}>
             <HttpProvider http={ApplicationService}>
                 <AuthProvider>
-                    {/*<StrictMode>*/}
-                        <Dashboard />
-                    {/*</StrictMode>*/}
+                    <Dashboard />
                 </AuthProvider>
             </HttpProvider>
         </ReactKeycloakProvider>,

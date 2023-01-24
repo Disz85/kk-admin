@@ -20,8 +20,8 @@ import Navigation from '../Layouts/Navigation/Navigation';
 // PAGES
 import NotFound from './NotFound';
 import Home from './Home';
-import MessageBar from "../Components/MessageBar";
-import MessageProvider from "../Context/MessageContext";
+import MessageBar from '../Components/MessageBar';
+import MessageProvider from '../Context/MessageContext';
 
 const Admin = ({ children }) => {
     // CONTEXTS
@@ -44,7 +44,9 @@ const Admin = ({ children }) => {
                     <Aside action={isClosed}>
                         <Navigation
                             action={isClosed}
-                            items={listable(permitted(resources, hasPermission))}
+                            items={listable(
+                                permitted(resources, hasPermission),
+                            )}
                         />
                     </Aside>
                     <Main description={pageInfo} action={isClosed}>
@@ -57,7 +59,10 @@ const Admin = ({ children }) => {
                                     element={
                                         <Home
                                             resources={listable(
-                                                permitted(resources, hasPermission),
+                                                permitted(
+                                                    resources,
+                                                    hasPermission,
+                                                ),
                                             )}
                                         />
                                     }
@@ -70,7 +75,9 @@ const Admin = ({ children }) => {
                                             path={resource.path}
                                             element={
                                                 <ApplicationRoute
-                                                    component={resource.component}
+                                                    component={
+                                                        resource.component
+                                                    }
                                                     resource={resource.name}
                                                     service={http}
                                                 />
@@ -78,10 +85,14 @@ const Admin = ({ children }) => {
                                         />
                                     ),
                                 )}
-                                <Route key="404" path="*" element={<NotFound />} />
+                                <Route
+                                    key="404"
+                                    path="*"
+                                    element={<NotFound />}
+                                />
                             </Routes>
                         </AnimatePresence>
-                        <MessageBar/>
+                        <MessageBar />
                     </Main>
                 </BrowserRouter>
             </MessageProvider>

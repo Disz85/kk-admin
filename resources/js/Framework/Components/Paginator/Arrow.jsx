@@ -14,18 +14,29 @@ const Arrow = ({ className, resource, to, enabled, isRight = false }) => {
 
     if (enabled) {
         return (
-            <Link className={className} to={`/${resource}/page/${to}${window.location.search}`}>
+            <Link
+                className={className}
+                to={`/${resource}/page/${to}${window.location.search}`}
+            >
                 <FontAwesomeIcon icon={icon} />
             </Link>
         );
     }
 
-    return <div className={className}><FontAwesomeIcon icon={icon} /></div>;
+    return (
+        <div className={className}>
+            <FontAwesomeIcon icon={icon} />
+        </div>
+    );
 };
 
 export default Arrow;
 
 Arrow.propTypes = {
+    /**
+     * Type of resource
+     */
+    className: PropTypes.string.isRequired,
     /**
      * Type of resource
      */

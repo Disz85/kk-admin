@@ -18,14 +18,14 @@ const config = {
             ],
             refresh: true,
         }),
-        //eslint({
-        //    failOnError: true,
-        //    exclude:[
-        //        '**/node_modules/**',
-        //        'vite.config.js',
-        //        'vitest.config.js'
-        //    ]
-        //}),
+        eslint({
+            failOnError: true,
+            exclude:[
+                '**/node_modules/**',
+                'vite.config.js',
+                'vitest.config.js'
+            ]
+        }),
         stylelint({
             emitWarningAsError: true,
             include: [

@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+
+// ICONS
+import {
+    faFilter,
+    faChevronUp,
+    faChevronDown,
+    faTrash,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 // HELPERS
 import { stringify, parse } from 'qs';
 import {
@@ -12,8 +22,6 @@ import Button from './Buttons/Button';
 
 // STYLE
 import style from '../../../scss/components/search.module.scss';
-import { faFilter, faChevronUp, faChevronDown, faTrash } from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const Search = ({ entity, onChange, children, ...props }) => {
     // IMMUTABLE STATE
@@ -31,12 +39,16 @@ const Search = ({ entity, onChange, children, ...props }) => {
     };
 
     // SEARCH
-    const [ activeSearch, setSearch ] = useState(false);
-    const [ height, setHeight ] = useState({ height: 0, overflow: 'hidden' });
+    const [activeSearch, setSearch] = useState(false);
+    const [height, setHeight] = useState({ height: 0, overflow: 'hidden' });
 
-    const toggleAccordion = () => setSearch(activeSearch => !activeSearch);
+    const toggleAccordion = () => setSearch((activeSearch) => !activeSearch);
     useEffect(() => {
-        setHeight(activeSearch ? { height: 0, overflow: 'hidden' } : { height : 100 + '%' , overflow : 'visible'});
+        setHeight(
+            activeSearch
+                ? { height: 0, overflow: 'hidden' }
+                : { height: '100%', overflow: 'visible' },
+        );
     }, [activeSearch]);
 
     // SIDE EFFECTS
@@ -78,10 +90,15 @@ const Search = ({ entity, onChange, children, ...props }) => {
                     <FontAwesomeIcon icon={faFilter} />
                     <h2>Szűrő</h2>
                 </div>
-                <Button icon={activeSearch ? faChevronDown : faChevronUp} name="search-open" click={toggleAccordion} unlabeled={true}></Button>
+                <Button
+                    icon={activeSearch ? faChevronDown : faChevronUp}
+                    name="search-open"
+                    click={toggleAccordion}
+                    unlabeled
+                />
             </div>
 
-            <form className={style.searchForm} style={ height }>
+            <form className={style.searchForm} style={height}>
                 {recursiveMap(children, (child) =>
                     React.cloneElement(child, {
                         ...props,

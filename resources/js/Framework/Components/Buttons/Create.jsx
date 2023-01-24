@@ -5,10 +5,12 @@ import { Link } from 'react-router-dom';
 // TRANSLATION
 import { useTranslation } from 'react-i18next';
 
-//STYLE
-import style from '../../../../scss/components/buttons/button.module.scss';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+// ICONS
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
+// STYLE
+import style from '../../../../scss/components/buttons/button.module.scss';
 
 const Create = ({ resource }) => {
     const { t } = useTranslation();

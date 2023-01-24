@@ -3,27 +3,59 @@
 namespace App\Models;
 
 use App\Traits\GeneratesSlug;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
+/**
+ * Class Article
+ *
+ * @OA\Schema(
+ *     @OA\Xml(name="Article"),
+ *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="title", type="string"),
+ *     @OA\Property(property="slug", type="string"),
+ *     @OA\Property(property="lead", type="string"),
+ *     @OA\Property(property="body", type="string"),
+ *     @OA\Property(property="image_id", type="int"),
+ *     @OA\Property(property="active", type="bool"),
+ *     @OA\Property(property="hidden", type="bool"),
+ *     @OA\Property(property="sponsored", type="bool"),
+ *     @OA\Property(property="is_18_plus", type="bool"),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time"),
+ *     @OA\Property(property="published_at", type="string", format="date-time")
+ * );
+ *
+ * @package App\Models
+ *
+ * Fields
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string $lead
+ * @property string $body
+ * @property int $image_id
+ * @property bool $active
+ * @property bool $hidden
+ * @property bool $sponsored
+ * @property bool $is_18_plus
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $published_at
+ */
 class Article extends Model
 {
     use GeneratesSlug;
     use HasFactory;
 
-    protected $with = [
-        'categories',
-        'tags',
-    ];
-
     protected string $slugFrom = 'title';
 
     protected $casts = [
         'body' => 'array',
-        'slug_frozen' => 'boolean',
         'active' => 'boolean',
         'hidden' => 'boolean',
         'sponsored' => 'boolean',
@@ -31,37 +63,19 @@ class Article extends Model
     ];
 
     protected $fillable = [
-        'id',
         'title',
-        'slug',
         'lead',
         'body',
         'image_id',
-        'category_id',
         'active',
         'hidden',
         'sponsored',
         'is_18_plus',
     ];
 
-//    public function author(): BelongsTo
-//    {
-//        return $this->belongsTo(Author::class);
-//    }
-//
-//    public function user(): BelongsTo
-//    {
-//        return $this->belongsTo(User::class);
-//    }
-
     public function image(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'image_id');
-    }
-
-    public static function getTagClassName(): string
-    {
-        return Tag::class;
     }
 
     public function tags(): MorphToMany
@@ -82,15 +96,7 @@ class Article extends Model
 
     protected function prependSlugWithArticleType(): self
     {
-        if ($this->faq) {
-            $categoryType = 'kerdesek_es_valaszok';
-        } elseif ($this->vitamin_wise || $this->mineral_wise || $this->micronutrient_wise) {
-            $categoryType = 'vitamin_kisokos';
-        } else {
-            $categoryType = 'cikkek';
-        }
-
-        $this->slug = $categoryType . '/' . $this->slug;
+        $this->slug = 'cikkek/' . $this->slug;
 
         return $this;
     }

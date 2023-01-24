@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\ArticleController;
+use App\Http\Controllers\Admin\ArticleStatusController;
 use App\Http\Controllers\Admin\AuthorController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController;
@@ -22,6 +24,8 @@ Route::resource('products', ProductController::class)->except(['create', 'edit']
 Route::get('ingredients/get-ewg-data-types', [IngredientController::class, 'getEwgDataTypes']);
 Route::get('ingredients/get-categories', [IngredientController::class, 'getCategories']);
 Route::resource('ingredients', IngredientController::class)->except(['create', 'edit']);
+Route::patch('articles/{article}/status', ArticleStatusController::class);
+Route::resource('articles', ArticleController::class)->except(['create', 'edit']);
 
 Route::prefix('auth')->group(function () {
     Route::get('login', [AuthController::class, 'login']);

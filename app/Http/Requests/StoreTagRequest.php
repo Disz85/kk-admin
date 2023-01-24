@@ -18,11 +18,8 @@ class StoreTagRequest extends FormRequest
         return [
             'name' => 'required|string|unique:tags',
             'description' => 'nullable|string',
+            'is_highlighted' => 'required|boolean',
         ];
     }
 
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
-    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\DeleteTagRequest;
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
 use App\Http\Resources\Admin\TagCollection;
@@ -10,6 +11,7 @@ use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -28,13 +30,11 @@ class TagController extends Controller
      *      response="200",
      *      description="Display a listing of tags."
      *    ),
-     *    @OA\MediaType(
-     *      mediaType="application/json"
-     *    ),
      *    @OA\Parameter(
      *      name="page",
      *      in="query",
      *      description="Page number",
+     *      @OA\JsonContent(),
      *      @OA\Schema(
      *          type="integer"
      *      )
@@ -65,9 +65,6 @@ class TagController extends Controller
      * @OA\Post (
      *     tags={"Tags"},
      *     path="/admin/tags",
-     *     @OA\MediaType(
-     *         mediaType="application/json"
-     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -85,16 +82,23 @@ class TagController extends Controller
      *                     nullable=true,
      *                     description="Desciption.",
      *                 ),
+     *                 @OA\Property(
+     *                     property="is_highlighted",
+     *                     type="integer",
+     *                     description="1|0",
+     *                     example="0",
+     *                 ),
      *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Tag created."
+     *         description="Tag created.",
+     *         @OA\JsonContent(),
      *     ),
      *     @OA\Response(
-     *         response=419,
-     *         description="Error in fields"
+     *         response=422,
+     *         description="Error in fields."
      *     ),
      * )
      *
@@ -115,13 +119,6 @@ class TagController extends Controller
      * @OA\Get(
      *    tags={"Tags"},
      *    path="/admin/tags/{tag}",
-     *    @OA\Response(
-     *      response="200",
-     *      description="Display a selected Tag."
-     *    ),
-     *    @OA\MediaType(
-     *      mediaType="application/json"
-     *    ),
      *    @OA\Parameter(
      *         name="tag",
      *         in="path",
@@ -132,8 +129,13 @@ class TagController extends Controller
      *         ),
      *    ),
      *    @OA\Response(
+     *      response="200",
+     *      description="Display a selected Tag.",
+     *      @OA\JsonContent(),
+     *    ),
+     *    @OA\Response(
      *        response=404,
-     *        description="Tag Not Found."
+     *        description="Tag Not Found.",
      *    )
      * )
      * @param Tag $tag
@@ -150,9 +152,6 @@ class TagController extends Controller
      * @OA\Put (
      *     tags={"Tags"},
      *     path="/admin/tags/{tag}",
-     *     @OA\MediaType(
-     *         mediaType="application/json"
-     *     ),
      *    @OA\Parameter(
      *      name="tag",
      *      in="path",
@@ -179,16 +178,23 @@ class TagController extends Controller
      *                     nullable=true,
      *                     description="Desciption.",
      *                 ),
+     *                 @OA\Property(
+     *                     property="is_highlighted",
+     *                     type="integer",
+     *                     description="1|0",
+     *                     example="0",
+     *                 ),
      *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Tag updated."
+     *         description="Tag updated.",
+     *         @OA\JsonContent(),
      *     ),
      *     @OA\Response(
-     *         response=419,
-     *         description="Error in fields"
+     *         response=422,
+     *         description="Error in fields."
      *     ),
      * )
      *
@@ -210,9 +216,6 @@ class TagController extends Controller
      * @OA\Delete (
      *     tags={"Tags"},
      *     path="/admin/tags/{tag}",
-     *     @OA\MediaType(
-     *         mediaType="application/json"
-     *     ),
      *    @OA\Parameter(
      *      name="tag",
      *      in="path",
@@ -222,26 +225,29 @@ class TagController extends Controller
      *      )
      *    ),
      *    @OA\RequestBody(
-     *         required=false,
-     *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
-     *         )
+     *      required=false,
      *    ),
      *    @OA\Response(
-     *        response=204,
-     *        description="No Content, Tag deleted."
+     *      response=204,
+     *      description="Tag deleted.",
+     *      @OA\JsonContent(),
      *    ),
      *    @OA\Response(
-     *        response=404,
-     *        description="Tag Not Found."
+     *      response=404,
+     *      description="Tag not found."
+     *    ),
+     *    @OA\Response(
+     *      response=422,
+     *      description="Tag cannot be deleted due to existence of related resources."
      *    ),
      * )
      *
+     * @param DeleteTagRequest $request
      * @param Tag $tag
      * @return JsonResponse
      * @throws Throwable
      */
-    public function destroy(Tag $tag): JsonResponse
+    public function destroy(DeleteTagRequest $request, Tag $tag): JsonResponse
     {
         $tag->deleteOrFail();
 

@@ -13,6 +13,7 @@ return new class () extends Migration {
             $table->string('name')->unique();
             $table->string('slug')->unique();
             $table->longText('description')->nullable();
+            $table->boolean('is_highlighted')->default(false);
             $table->timestamps();
             $table->index('slug', 'slug_index');
             $table->index('legacy_id', 'legacy_id_index');

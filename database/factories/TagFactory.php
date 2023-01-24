@@ -22,6 +22,7 @@ class TagFactory extends Factory
         return [
             'name' => fake()->unique()->name(),
             'description' => fake()->paragraph(),
+            'is_highlighted' => fake()->boolean(),
         ];
     }
 }

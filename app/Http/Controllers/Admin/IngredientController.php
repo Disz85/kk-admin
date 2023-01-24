@@ -11,8 +11,9 @@ use App\Models\Ingredient;
 use App\Repositories\CategoryRepository;
 use App\RequestMappers\IngredientRequestMapper;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use OpenApi\Annotations as OA;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class IngredientController extends Controller
@@ -310,19 +311,21 @@ class IngredientController extends Controller
      *         )
      *     ),*
      *     @OA\Response(
-     *         response=200,
+     *         response=204,
      *         description="Ingredient deleted."
      *     ),
      * )
      *
      * @param Ingredient $ingredient
-     * @return void
+     * @return JsonResponse
      * @throws Throwable
      */
-    public function destroy(Ingredient $ingredient): void
+    public function destroy(Ingredient $ingredient): JsonResponse
     {
         $ingredient->categories()->detach();
         $ingredient->deleteOrFail();
+
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 
     /**

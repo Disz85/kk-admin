@@ -3,9 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enum\IngredientEwgDataEnum;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rules\Enum;
 
 class StoreIngredientRequest extends FormRequest
@@ -20,8 +18,8 @@ class StoreIngredientRequest extends FormRequest
         return [
             'name' => 'required|string|unique:ingredients',
             'ewg_data' => ['nullable', 'string', new Enum(IngredientEwgDataEnum::class)],
-            'ewg_score' => 'nullable|integer|between:1,10',
-            'ewg_score_max' => ['nullable', 'integer', 'between:1,10', function ($attribute, $value, $fail) {
+            'ewg_score' => 'nullable|integer|between:0,10',
+            'ewg_score_max' => ['nullable', 'integer', 'between:0,10', function ($attribute, $value, $fail) {
                 if ($value < $this->ewg_score) {
                     $fail('Ewg_score_max must be bigger than ewg_score.');
                 }
@@ -52,14 +50,5 @@ class StoreIngredientRequest extends FormRequest
     private function toBoolean($boolable = false): bool
     {
         return filter_var($boolable, FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
-    }
-
-    /**
-     * @param Validator $validator
-     * @return void
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }

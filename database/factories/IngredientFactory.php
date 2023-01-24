@@ -25,7 +25,7 @@ class IngredientFactory extends Factory
         return [
             'name' => fake()->unique()->name(),
             'ewg_data' => fake()->randomElement(IngredientEwgDataEnum::cases())->value,
-            'ewg_score' => fake()->randomNumber(1),
+            'ewg_score' => fake()->numberBetween(0, 10),
             'ewg_score_max' => function ($values) {
                 return fake()->numberBetween($values['ewg_score'], 10);
             },

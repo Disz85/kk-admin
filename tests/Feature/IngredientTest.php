@@ -81,7 +81,7 @@ class IngredientTest extends TestCase
     {
         $ingredient = Ingredient::factory()->create();
         $this->delete(route('ingredients.destroy', ['ingredient' => $ingredient->id]))
-            ->assertOk();
+            ->assertNoContent();
         $this->assertNull(Ingredient::find($ingredient->id));
     }
 

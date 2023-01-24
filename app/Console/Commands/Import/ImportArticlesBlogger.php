@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\Import;
 
-use App\Helpers\Import\HtmlToEditorJsConverterBlogger;
 use App\Helpers\Import\TimestampToDateConverter;
 use App\Helpers\ImportImage;
 use App\Models\Article;
@@ -49,7 +48,7 @@ class ImportArticlesBlogger extends Command
      *
      * @return int
      */
-    public function handle(ArticleBloggerXMLReader $articleXMLReader, HtmlToEditorJsConverterBlogger $converter, TimestampToDateConverter $timeconverter)
+    public function handle(ArticleBloggerXMLReader $articleXMLReader, TimestampToDateConverter $timeconverter)
     {
         $skipped = 0;
         $path = $this->option('path');
@@ -59,7 +58,7 @@ class ImportArticlesBlogger extends Command
         $progress = $this->output->createProgressBar($count);
         $progress->start();
 
-        $articleXMLReader->read($path, function (array $data) use ($converter, $deleteIfExist, &$skipped, $progress, $timeconverter, &$i) {
+        $articleXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress, $timeconverter, &$i) {
             if (! isset($data['is_article']) || empty($data['content'])) {
                 return;
             }
@@ -92,12 +91,10 @@ class ImportArticlesBlogger extends Command
                 $article->legacy_id = $data['id'];
                 $article->title = $data['title'];
                 if (isset($data['slug'])) {
-                    $article->slug = $data['slug'];
-                } else {
-                    $article->slug = Str::slug($data['title']);
+                    $article->legacy_slug = $data['slug'];
                 }
 
-                $article->body = $converter->convert($data['content'], 'article');
+                $article->body = $data['content'];
 
                 $article->published_at = Carbon::createFromTimeString($data['published'])->toDateTimeString();
                 $article->created_at = Carbon::createFromTimeString($data['updated'])->toDateTimeString();

@@ -2,14 +2,13 @@
 
 namespace App\Console\Commands\Import;
 
-use App\Helpers\Import\HtmlToEditorJsConverterMagazine;
 use App\Helpers\Import\TimestampToDateConverter;
 use App\Helpers\ImportImage;
 use App\Models\Article;
+use App\Models\Author;
 use App\Models\Category;
 use App\Models\Media;
 use App\Models\Tag;
-
 use App\Models\User;
 use App\XMLReaders\ArticleXMLReader;
 use Illuminate\Console\Command;
@@ -49,7 +48,7 @@ class ImportArticles extends Command
      *
      * @return int
      */
-    public function handle(ArticleXMLReader $articleXMLReader, HtmlToEditorJsConverterMagazine $converter, TimestampToDateConverter $timeconverter)
+    public function handle(ArticleXMLReader $articleXMLReader, TimestampToDateConverter $timeconverter)
     {
         $skipped = 0;
         $path = $this->option('path');
@@ -58,7 +57,7 @@ class ImportArticles extends Command
         $progress = $this->output->createProgressBar($articleXMLReader->count($path));
         $progress->start();
 
-        $articleXMLReader->read($path, function (array $data) use ($converter, $deleteIfExist, &$skipped, $progress, $timeconverter) {
+        $articleXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress, $timeconverter) {
             $article = Article::where('legacy_id', '=', $data['id'])->first() ?? new Article();
 
             if ($article->exists) {
@@ -89,9 +88,9 @@ class ImportArticles extends Command
                 $article->title = $data['_aioseop_title'] ?? $data['title'];
                 $article->title .= ! $data['active'] ? ' [DRAFT]' : '';
 
-                $article->slug = $data['slug'];
+                $article->legacy_slug = $data['slug'];
                 $article->lead = $data['_aioseop_description'] ?? $data['lead'] ?? null;
-                $article->body = $body ? $converter->convert($body, 'article') : null;
+                $article->body = $body ?? null;
 
                 $article->published_at = $data['active'] ? $data['created_at'] : null;
                 $article->created_at = $data['created_at'];
@@ -102,7 +101,12 @@ class ImportArticles extends Command
 
                 $data['authors'] = array_filter($data['authors']);
                 if ($data['authors']) {
-                    $authors = User::whereIn('slug', $data['authors'])->get();
+                    $authors = Author::whereIn('name', $data['authors'])->orWhere('slug', $data['authors'])->first();
+
+                    if ($authors === null) {
+                        $authors = User::whereIn('slug', $data['authors'])->first();
+                    }
+
                     $article->authors()->sync($authors);
                 }
 

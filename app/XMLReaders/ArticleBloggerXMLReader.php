@@ -3,6 +3,8 @@
 namespace App\XMLReaders;
 
 use App\XMLReaders\Abstracts\AbstractXMLReader;
+use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use XMLReader;
 
 class ArticleBloggerXMLReader extends AbstractXMLReader
@@ -48,6 +50,10 @@ class ArticleBloggerXMLReader extends AbstractXMLReader
                     }
 
                     break;
+                case 'app:draft':
+                    $article['draft'] = true;
+
+                    break;
                 case 'published':
                 case 'updated':
                 case 'title':
@@ -67,11 +73,15 @@ class ArticleBloggerXMLReader extends AbstractXMLReader
 
                     break;
                 case 'link':
-                    if ($this->reader->getAttribute('rel') == 'replies') {
+                    if ($this->reader->getAttribute('rel') == 'replies' && $this->reader->getAttribute('type') == 'text/html') {
                         $article['url'] = str_replace('#comment-form', '', $this->reader->getAttribute('href'));
                         preg_match('/http:\/\/blog\.kremmania\.hu\/([0-9]+)\/([0-9]+)\/(.*)\.html/', $article['url'], $matches);
                         if (isset($matches[3])) {
-                            $article['slug'] = $matches[3];
+                            $article['slug'] = Carbon::createFromTimeString($article['published'])->format('Y/m/').$matches[3];
+                            if (Arr::exists($article, 'draft')) {
+                                $article['title'] .= ' [DRAFT]';
+                                $article['slug'] .= '-draft';
+                            }
                         }
                     }
 

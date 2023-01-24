@@ -80,6 +80,17 @@ class ImportArticleCategories extends Command
             }
         });
 
+        $newsCategory = Category::where('slug', 'LIKE', 'hirek')->first();
+        if ($newsCategory === null) {
+            $newsCategory = new Category();
+            $newsCategory->name = 'Hírek';
+            $newsCategory->slug = 'hirek';
+            $newsCategory->archived = 0;
+            $newsCategory->type = 'article';
+
+            $newsCategory->save();
+        }
+
         $progress->finish();
         $this->info("\nImporting is finished. Number of skipped records: " . $skipped);
 

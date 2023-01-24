@@ -16,6 +16,7 @@ return new class () extends Migration {
             $table->id();
             $table->unsignedBigInteger('legacy_id')->nullable();
             $table->string('title');
+            $table->string('legacy_slug')->nullable();
             $table->string('slug');
             $table->text('lead')->nullable();
             $table->longText('body')->nullable();

@@ -94,20 +94,6 @@ class Article extends Model
         return $this->belongsToMany(Author::class);
     }
 
-    protected function prependSlugWithArticleType(): self
-    {
-        $this->slug = 'cikkek/' . $this->slug;
-
-        return $this;
-    }
-
-    protected function prependSlugWithCategorySlug(): self
-    {
-        $this->slug = $this->category?->slug . '/' . $this->slug;
-
-        return $this;
-    }
-
     public function rebuildSlug(): void
     {
         if ($this->slug_frozen) {
@@ -117,8 +103,6 @@ class Article extends Model
         } else {
             $this->generateSlug();
         }
-
-        $this->prependSlugWithArticleType()->prependSlugWithCategorySlug();
 
         $this->slug = $this->makeSlugUnique($this->slug);
     }

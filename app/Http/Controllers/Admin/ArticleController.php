@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Http\Resources\Admin\ArticleCollection;
@@ -54,7 +55,6 @@ class ArticleController extends Controller
      *    )
      * )
      *
-     * @paran Request $request
      * @param Request $request
      * @return ArticleCollection
      */
@@ -63,7 +63,8 @@ class ArticleController extends Controller
         return new ArticleCollection(
             QueryBuilder::for(Article::class)
             ->allowedFilters('title')
-            ->orderByDesc('updated_at')
+            ->defaultSort('-updated_at')
+            ->allowedSorts('published_at', 'created_at', 'updated_at')
             ->paginate($request->get('per_page', 20))
             ->appends($request->query())
         );

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\UserCollection;
 use App\Http\Resources\Admin\UserResource;
 use App\Models\User;

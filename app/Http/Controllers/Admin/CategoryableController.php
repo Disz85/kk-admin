@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryableRequest;
 use App\Http\Requests\UpdateCategoryableRequest;
 use App\Models\Categoryable;

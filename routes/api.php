@@ -20,7 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware(['cache.headers:max_age=' . config('api.max-age')])->group(function () {
-    Route::prefix('/articles')->group(function () {
-        Route::get('get-header-articles', [ArticleController::class, 'getHeaderArticles']);
-    });
+    Route::resource('articles', ArticleController::class)->only(['index', 'show']);
 });

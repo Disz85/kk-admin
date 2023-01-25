@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enum\IngredientEwgDataEnum;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreIngredientRequest;
 use App\Http\Requests\UpdateIngredientRequest;
 use App\Http\Resources\Admin\IngredientCollection;

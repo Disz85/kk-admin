@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBrandChangeRequest;
 use App\Http\Requests\UpdateBrandChangeRequest;
 use App\Http\Resources\Admin\BrandChangeRequestCollection;

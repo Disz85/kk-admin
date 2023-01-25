@@ -4,17 +4,15 @@
 
 .label {
     @apply block;
-    @apply text-dark-grey;
+    @apply text-black text-2xl font-medium;
 }
 
 .formTextInput {
-    @apply text-dark-grey;
-    @apply w-full;
-    @apply px-1.5 py-1.5;
-    @apply font-normal bg-light-cloud/50;
-    @apply border border-solid border-dark-grey rounded-none;
+    @apply w-full p-2.5;
+    @apply text-black font-normal bg-light-grey;
+    @apply border border-solid border-2 border-medium-grey rounded-lg;
     @apply transition ease-in-out m-0;
-    @apply focus:text-dark-grey focus:bg-light-snow focus:border-medium-sky focus:outline-none;
+    @apply focus:text-dark-grey focus:bg-light-snow focus:border-medium-sky focus:outline-none focus:border-medium-sky focus:border-2;
 }
 
 .panel {
@@ -22,9 +20,9 @@
 }
 
 .error {
-    @apply text-dark-brick;
+    @apply text-red;
 }
 
 .isInvalid {
-    @apply border-dark-brick text-dark-brick;
+    @apply border-dark-brick text-red;
 }

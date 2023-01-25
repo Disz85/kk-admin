@@ -115,9 +115,7 @@ class AuthorController extends Controller
      */
     public function store(StoreAuthorRequest $request, Author $author, AuthorRequestMapper $authorRequestMapper): AuthorResource
     {
-        $author = Author::create($request->validated());
-
-        return new AuthorResource($author);
+        return new AuthorResource($authorRequestMapper->map($author, $request->validated()));
     }
 
     /**

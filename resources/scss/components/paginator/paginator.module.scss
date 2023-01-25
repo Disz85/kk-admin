@@ -11,4 +11,8 @@
 
 .link {
     @apply px-4 py-2;
+
+    &Active {
+        @apply bg-dark-night text-light-snow px-4 py-2;
+    }
 }

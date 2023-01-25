@@ -21,7 +21,7 @@ module.exports = {
                 sea: '#94caec',
                 purple: '#bbbbee',
                 storm: '#8b94b7',
-                grey: '#f8f9fa',
+                grey: '#F9FAFB',
             },
             medium: {
                 linen: '#bebaae',
@@ -34,7 +34,7 @@ module.exports = {
                 sky: '#80b5d7',
                 levander: '#7676aa',
                 blackberry: '#595f77',
-                grey: '#f0f0f0',
+                grey: '#E5E7EB',
             },
             dark: {
                 autumn: '#ad9e7c',
@@ -47,8 +47,12 @@ module.exports = {
                 blue: '#5a93b7',
                 plum: '#51518e',
                 night: '#292847',
-                grey: '#666666',
+                grey: '#6B7280',
             },
+            green: '#0E9F6E',
+            red: '#F05252',
+            grey: '#D1D5DB',
+            black: '#000000',
         },
         fontFamily: {
             primary: ['Maven Pro', 'sans-serif'],

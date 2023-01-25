@@ -9,6 +9,7 @@ export default {
     delete: 'Törlés',
     save: 'Mentés',
     upload: 'Feltöltés',
+    'image-upload': 'Képfeltöltés',
     reset: 'Visszaállítás',
 
     crop: 'Szerkesztés',

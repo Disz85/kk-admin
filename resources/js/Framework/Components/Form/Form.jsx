@@ -107,9 +107,10 @@ const Form = ({
             })
             .catch(({ response }) => {
                 pushMessage({
-                    title: 'Hoppá, valami hiba történt!',
+                    title: 'A szerkesztés meghiúsult!',
                     type: 'error',
                 });
+
                 update({
                     errors: (response && response.data.errors) || {},
                     changed: true,

@@ -25,7 +25,7 @@
 
 .submit {
     @apply bg-dark-night text-light-snow text-2xl;
-    @apply py-1.5 px-5 mt-2;
+    @apply py-2.5 px-5 mt-5 rounded-lg;
 
     @apply hover:bg-medium-blackberry;
 }

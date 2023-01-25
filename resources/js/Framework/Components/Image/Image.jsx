@@ -140,7 +140,7 @@ const Image = ({
             >
                 <Button
                     className={style.uploadBtn}
-                    name="upload"
+                    name="image-upload"
                     text="Képfeltöltés"
                     icon={faUpload}
                     click={pickImage}

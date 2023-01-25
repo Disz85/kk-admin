@@ -8,15 +8,11 @@ use App\Http\Controllers\Admin\BrandChangeRequestController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\IngredientController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\IngredientController;
 use App\Http\Controllers\Admin\ProductChangeRequestController;
 use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\TagController;
-use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::resource('authors', AuthorController::class)->except(['create', 'edit']);

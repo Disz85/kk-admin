@@ -25,7 +25,9 @@ const mapPageNumbers = (numbers, current, resource) =>
         return (
             <li className={style.item} key={number}>
                 <Link
-                    className={style.link}
+                    className={`${
+                        current === number ? style.linkActive : style.link
+                    }`}
                     to={`/${resource}/page/${number}${window.location.search}`}
                 >
                     {number}

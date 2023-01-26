@@ -5,5 +5,6 @@ export default {
     name: 'Név',
     slug: 'Slug',
     description: 'Leírás',
+    is_highlighted: 'Kiemelt',
     delete: 'Törlés',
 };

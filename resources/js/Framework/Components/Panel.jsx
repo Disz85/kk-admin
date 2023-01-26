@@ -7,9 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // STYLES
 import style from '../../../scss/components/panel.module.scss';
 
-const Panel = ({ title, icon, children }) => {
+const Panel = ({ title, icon, className, children }) => {
     return (
-        <div className={style.panelWrapper}>
+        <div className={`${style.panelWrapper} ${className}`}>
             <div className={style.panelHeader}>
                 {icon && <FontAwesomeIcon icon={icon} />}
                 {title && <h2>{title}</h2>}
@@ -27,13 +27,17 @@ export default Panel;
 
 Panel.propTypes = {
     /**
-     * entity of title
+     * Type of title
      */
     title: PropTypes.string,
     /**
-     * entity of icon
+     * Type of icon
      */
     icon: PropTypes.string,
+    /**
+     * Type of className
+     */
+    className: PropTypes.string,
     /**
      * Type of children
      */
@@ -46,4 +50,5 @@ Panel.propTypes = {
 Panel.defaultProps = {
     title: false,
     icon: null,
+    className: '',
 };

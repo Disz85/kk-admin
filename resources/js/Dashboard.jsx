@@ -9,17 +9,18 @@ import { logoutRoutes } from './Routes/web';
 import UserList from './Pages/Users/UserList';
 import TagList from './Pages/Tags/TagList';
 import TagForm from './Pages/Tags/TagForm';
-import CategoryList from './Pages/Categories/CategoryList';
 import AuthorList from './Pages/Authors/AuthorList';
 import AuthorForm from './Pages/Authors/AuthorForm';
+import BrandList from './Pages/Brands/BrandList';
+import BrandForm from './Pages/Brands/BrandForm';
 
 const Dashboard = () => {
     return (
         <Admin>
             <Resource name="users" list={UserList} />
             <Resource name="authors" list={AuthorList} form={AuthorForm} />
+            <Resource name="brands" list={BrandList} form={BrandForm} />
             <Resource name="tags" list={TagList} form={TagForm} />
-            <Resource name="categories" list={CategoryList} />
             <Resource
                 name="logout"
                 routes={logoutRoutes}

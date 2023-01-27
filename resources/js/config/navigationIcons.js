@@ -3,6 +3,7 @@ import {
     faUsers,
     faTags,
     faNewspaper,
+    faBriefcase,
     faArrowRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -11,6 +12,7 @@ const navigationIcons = {
     authors: faUsers,
     tags: faTags,
     categories: faNewspaper,
+    brands: faBriefcase,
     logout: faArrowRightFromBracket,
 };
 

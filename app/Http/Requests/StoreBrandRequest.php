@@ -17,8 +17,9 @@ class StoreBrandRequest extends FormRequest
             'title' => 'required|string|max:255|unique:brands',
             'url' => 'nullable|url|max:255',
             'description' => 'nullable|string',
-            'image_id' => 'nullable|integer|exists:media,id',
+            'image.id' => 'int|exists:media,id',
             'where_to_find' => 'nullable|string',
+            'approved' => 'sometimes|boolean',
             'created_by' => 'nullable|integer|exists:users,id',
         ];
     }

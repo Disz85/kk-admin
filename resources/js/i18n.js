@@ -6,6 +6,7 @@ import users from './Translations/users';
 import tags from './Translations/tags';
 import categories from './Translations/categories';
 import authors from './Translations/authors';
+import brands from './Translations/brands';
 
 const resources = {
     hu: {
@@ -16,6 +17,7 @@ const resources = {
             tags,
             categories,
             authors,
+            brands,
         },
     },
 };

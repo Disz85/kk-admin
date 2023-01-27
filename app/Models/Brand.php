@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\BooleanDatetime;
 use App\Interfaces\HasDependencies;
 use App\Traits\GeneratesSlug;
 use Carbon\Carbon;
@@ -20,27 +21,31 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @property int $legacy_id
  * @property string $title
  * @property string $slug
+ * @property string $url
  * @property string $description
+ * @property string $where_to_find
  * @property int $image_id
- * @property int $parent_id
+ * @property boolean $approved
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
+ * @property-read Media|null $image
  */
 class Brand extends Model implements HasDependencies
 {
     use GeneratesSlug;
     use HasFactory;
 
+    protected $slugFrom = 'title';
 
     protected $with = [
+        'image',
         'tags',
     ];
 
-    protected $slugFrom = 'title';
-
     protected $casts = [
         'description' => 'array',
-        'approved' => 'datetime',
+        'approved' => BooleanDatetime::class,
     ];
 
     protected $fillable = [

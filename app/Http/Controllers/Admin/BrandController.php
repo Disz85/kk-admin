@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateBrandRequest;
 use App\Http\Resources\Admin\BrandCollection;
 use App\Http\Resources\Admin\BrandResource;
 use App\Models\Brand;
+use App\RequestMappers\BrandRequestMapper;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -60,16 +61,6 @@ class BrandController extends Controller
                 ->orderByDesc('updated_at')
                 ->paginate($request->get('size', 20))
         );
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -128,16 +119,14 @@ class BrandController extends Controller
      *     ),
      * )
      *
-     * @param  \App\Http\Requests\StoreBrandRequest  $request
+     * @param StoreBrandRequest $request
+     * @param Brand $brand
+     * @param BrandRequestMapper $brandRequestMapper
      * @return BrandResource
      */
-    public function store(StoreBrandRequest $request): BrandResource
+    public function store(StoreBrandRequest $request, Brand $brand, BrandRequestMapper $brandRequestMapper): BrandResource
     {
-        $brand = Brand::create($request->validated());
-        $brand->generateSlug();
-        $brand->save();
-
-        return new BrandResource($brand);
+        return new BrandResource($brandRequestMapper->map($brand, $request->validated()));
     }
 
     /**
@@ -166,17 +155,6 @@ class BrandController extends Controller
     public function show(Brand $brand): BrandResource
     {
         return new BrandResource($brand);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Brand $brands
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Brand $brands)
-    {
-        //
     }
 
     /**
@@ -226,6 +204,12 @@ class BrandController extends Controller
      *                     description="Where to find",
      *                 ),
      *                 @OA\Property(
+     *                     property="approved",
+     *                     type="integer",
+     *                     description="1|0",
+     *                     example="0",
+     *                 ),
+     *                 @OA\Property(
      *                     property="updated_by",
      *                     type="integer",
      *                     description="Update user ID",
@@ -246,13 +230,12 @@ class BrandController extends Controller
      *
      * @param UpdateBrandRequest $request
      * @param Brand $brand
+     * @param BrandRequestMapper $brandRequestMapper
      * @return BrandResource
      */
-    public function update(UpdateBrandRequest $request, Brand $brand): BrandResource
+    public function update(UpdateBrandRequest $request, Brand $brand, BrandRequestMapper $brandRequestMapper): BrandResource
     {
-        $brand->fill($request->validated())->save();
-
-        return new BrandResource($brand);
+        return new BrandResource($brandRequestMapper->map($brand, $request->validated()));
     }
 
     /**

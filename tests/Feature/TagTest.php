@@ -17,7 +17,7 @@ class TagTest extends TestCase
     /** @test */
     public function it_can_list_tags(): void
     {
-        $this->get(route('tags.index'))
+        $this->get(route('admin.tags.index'))
             ->assertOk();
     }
 
@@ -25,7 +25,7 @@ class TagTest extends TestCase
     public function it_can_store_a_tag(): void
     {
         $data = TagFactory::new()->raw();
-        $this->post(route('tags.store'), $data)
+        $this->post(route('admin.tags.store'), $data)
             ->assertCreated();
         $this->assertDatabaseHas(Tag::class, $data);
     }
@@ -35,7 +35,7 @@ class TagTest extends TestCase
     {
         $tag = Tag::factory()->create();
         $data = TagFactory::new()->raw();
-        $this->put(route('tags.update', ['tag' => $tag->id]), $data)
+        $this->put(route('admin.tags.update', ['tag' => $tag->id]), $data)
             ->assertOk();
         $this->assertDatabaseHas(Tag::class, $data);
     }
@@ -44,7 +44,7 @@ class TagTest extends TestCase
     public function it_can_show_a_tag(): void
     {
         $tag = Tag::factory()->create();
-        $this->get(route('tags.show', ['tag' => $tag->id]))
+        $this->get(route('admin.tags.show', ['tag' => $tag->id]))
             ->assertOk()
             ->assertJsonFragment(['id' => $tag->id])
             ->assertJsonFragment(['slug' => $tag->slug])
@@ -56,7 +56,7 @@ class TagTest extends TestCase
     public function it_can_remove_a_tag(): void
     {
         $tag = Tag::factory()->create();
-        $this->delete(route('tags.destroy', ['tag' => $tag->id]))
+        $this->delete(route('admin.tags.destroy', ['tag' => $tag->id]))
             ->assertNoContent();
         $this->assertNull(Tag::find($tag->id));
     }

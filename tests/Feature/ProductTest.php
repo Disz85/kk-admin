@@ -17,7 +17,7 @@ class ProductTest extends TestCase
     /** @test */
     public function it_can_list_products(): void
     {
-        $response = $this->get(route('products.index'));
+        $response = $this->get(route('admin.products.index'));
         $response->assertOk();
     }
 
@@ -25,7 +25,7 @@ class ProductTest extends TestCase
     public function it_can_create_a_product(): void
     {
         list($product, $tags, $categories) = $this->makeDummyRequestData();
-        $response = $this->post(route('products.store'), $product);
+        $response = $this->post(route('admin.products.store'), $product);
         $response->assertCreated();
         $this->assertDatabaseHas(Product::class, Arr::only($product, ['name','price']));
         foreach ($categories as $category) {
@@ -49,7 +49,7 @@ class ProductTest extends TestCase
         list($changedProduct, $changedTags, $changedCategories) = $this->makeDummyRequestData();
 
         $response = $this->put(
-            route('products.update', ['product' => $product->id]),
+            route('admin.products.update', ['product' => $product->id]),
             $changedProduct
         );
 
@@ -73,7 +73,7 @@ class ProductTest extends TestCase
     public function it_can_show_a_product()
     {
         list($product, $tags, $categories) = $this->createAProductWithTagsAndCategories();
-        $response = $this->get(route('products.show', ['product' => $product->id]));
+        $response = $this->get(route('admin.products.show', ['product' => $product->id]));
         $response->assertOk()
             ->assertJsonFragment(['id' => $product->id])
             ->assertJsonFragment(['name' => $product->name]);
@@ -95,7 +95,7 @@ class ProductTest extends TestCase
     public function it_can_remove_a_product(): void
     {
         $product = Product::factory()->create();
-        $this->delete(route('products.destroy', ['product' => $product->id]))
+        $this->delete(route('admin.products.destroy', ['product' => $product->id]))
             ->assertNoContent();
         $this->assertNull(Product::find($product->id));
     }

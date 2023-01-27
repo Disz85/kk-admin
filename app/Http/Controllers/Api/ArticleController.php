@@ -56,9 +56,16 @@ class ArticleController extends Controller
     {
         return new ArticleCollection(
             QueryBuilder::for(Article::class)
+                ->where('active', '=', 1)
+                ->where('hidden', '=', 0)
                 ->allowedFilters('title')
                 ->defaultSort('-published_at')
-                ->allowedSorts('published_at', 'created_at', 'updated_at')
+                ->allowedSorts([
+                    'published_at',
+                    'created_at',
+                    'updated_at',
+                    'title',
+                ])
                 ->paginate($request->get('per_page', 20))
                 ->appends($request->query())
         );

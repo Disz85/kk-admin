@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\GeneratesSlug;
+use App\Traits\HasUuid;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -51,6 +52,7 @@ class Article extends Model
 {
     use GeneratesSlug;
     use HasFactory;
+    use HasUuid;
 
     protected string $slugFrom = 'title';
 

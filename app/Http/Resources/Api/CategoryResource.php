@@ -16,13 +16,14 @@ class CategoryResource extends JsonResource
     {
         /** @var Category $this */
         return [
-            'id' => $this->id,
+            'uuid' => $this->uuid,
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
             'parent_id' => $this->parent_id,
             'type' => $this->type,
             'image' => new MediaResource($this->image),
+            'children' => self::collection($this->whenLoaded('children')),
         ];
     }
 }

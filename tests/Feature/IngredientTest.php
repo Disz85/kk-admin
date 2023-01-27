@@ -19,7 +19,7 @@ class IngredientTest extends TestCase
     /** @test */
     public function it_can_list_ingredients(): void
     {
-        $response = $this->get(route('ingredients.index'));
+        $response = $this->get(route('admin.ingredients.index'));
         $response->assertOk();
     }
 
@@ -28,7 +28,7 @@ class IngredientTest extends TestCase
     {
         list($ingredient, $categories) = $this->makeDummyRequestData();
 
-        $response = $this->post(route('ingredients.store'), $ingredient)
+        $response = $this->post(route('admin.ingredients.store'), $ingredient)
             ->assertCreated();
         $this->assertDatabaseHas(Ingredient::class, Arr::only($ingredient, ['name', 'is_approved']));
 
@@ -46,7 +46,7 @@ class IngredientTest extends TestCase
         list($ingredient, $categories) = $this->createIngredientWithRelations();
         list($changedIngredient, $changedCategories) = $this->makeDummyRequestData();
 
-        $response = $this->put(route('ingredients.update', ['ingredient' => $ingredient->id]), $changedIngredient)
+        $response = $this->put(route('admin.ingredients.update', ['ingredient' => $ingredient->id]), $changedIngredient)
             ->assertOk();
 
         $this->assertDatabaseHas(Ingredient::class, Arr::only($changedIngredient, ['name', 'is_approved']));
@@ -63,7 +63,7 @@ class IngredientTest extends TestCase
     public function it_can_show_an_ingredient()
     {
         list($ingredient, $categories) = $this->createIngredientWithRelations();
-        $response = $this->get(route('ingredients.show', ['ingredient' => $ingredient->id]))
+        $response = $this->get(route('admin.ingredients.show', ['ingredient' => $ingredient->id]))
             ->assertOk()
             ->assertJsonFragment(['id' => $ingredient->id])
             ->assertJsonFragment(['name' => $ingredient->name]);
@@ -80,7 +80,7 @@ class IngredientTest extends TestCase
     public function it_can_remove_an_ingredient()
     {
         $ingredient = Ingredient::factory()->create();
-        $this->delete(route('ingredients.destroy', ['ingredient' => $ingredient->id]))
+        $this->delete(route('admin.ingredients.destroy', ['ingredient' => $ingredient->id]))
             ->assertNoContent();
         $this->assertNull(Ingredient::find($ingredient->id));
     }

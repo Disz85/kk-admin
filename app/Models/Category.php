@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enum\CategoryTypeEnum;
 use App\Traits\CategoryHierarchy;
 use App\Traits\GeneratesSlug;
+use App\Traits\HasUuid;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,26 +16,23 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * Class Category
  *
  * @OA\Schema(
- *     @OA\Xml(name="Author"),
+ *     @OA\Xml(name="Category"),
  *     @OA\Property(property="id", type="int"),
- *     @OA\Property(property="created_at", type="string", format="date-time"),
- *     @OA\Property(property="updated_at", type="string", format="date-time"),
- *     @OA\Property(property="legacy_id", type="int"),
  *     @OA\Property(property="name", type="string"),
- *     @OA\Property(property="email", type="string"),
  *     @OA\Property(property="slug", type="string"),
  *     @OA\Property(property="description", type="string"),
  *     @OA\Property(property="image_id", type="int"),
  *     @OA\Property(property="parent_id", type="int"),
- *     @OA\Property(property="type", type="string"),
  *     @OA\Property(property="archived", type="bool")
+ *     @OA\Property(property="type", type="string"),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time"),
  * );
  *
  * @package App\Models
  *
  * Fields
  * @property int $id
- * @property int $legacy_id
  * @property string $name
  * @property string $slug
  * @property string $description
@@ -48,6 +46,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 class Category extends Model
 {
     use HasFactory;
+    use HasUuid;
     use GeneratesSlug;
     use CategoryHierarchy;
 
@@ -56,7 +55,6 @@ class Category extends Model
     protected $slugFrom = 'name';
 
     protected $fillable = [
-        'id',
         'name',
         'slug',
         'archived',

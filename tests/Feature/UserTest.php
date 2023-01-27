@@ -14,7 +14,7 @@ class UserTest extends TestCase
     public function it_can_show_users()
     {
         $user = User::factory()->create();
-        $response = $this->get(route('users.index'));
+        $response = $this->get(route('admin.users.index'));
         $response->assertOk()
             ->assertJsonFragment([
             'email' => $user->email,
@@ -28,7 +28,7 @@ class UserTest extends TestCase
     public function it_can_show_a_user()
     {
         $user = User::factory()->create();
-        $this->get(route('users.show', ['user' => $user->id]))
+        $this->get(route('admin.users.show', ['user' => $user->id]))
             ->assertOk()
             ->assertJsonFragment([
                 'email' => $user->email,

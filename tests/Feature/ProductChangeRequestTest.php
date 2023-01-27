@@ -18,7 +18,7 @@ class ProductChangeRequestTest extends TestCase
     public function it_can_store_a_new_product_change_request()
     {
         list($product, $tags, $categories, $user) = $this->makeDummyRequestData();
-        $response = $this->post(route('product-change-requests.store'), $product);
+        $response = $this->post(route('admin.product-change-requests.store'), $product);
         $response->assertCreated();
         $response->assertJsonFragment([
             'data' => $product,
@@ -29,7 +29,7 @@ class ProductChangeRequestTest extends TestCase
     public function it_can_approve_a_product_change_request()
     {
         $productChangeRequest = ProductChangeRequest::factory()->create();
-        $response = $this->post(route('product-change-requests.approve', ['product_change_request' => $productChangeRequest->id]));
+        $response = $this->post(route('admin.product-change-requests.approve', ['product_change_request' => $productChangeRequest->id]));
         $response->assertCreated();
         $response->assertJsonFragment([
             'name' => $productChangeRequest->data['name'],
@@ -48,7 +48,7 @@ class ProductChangeRequestTest extends TestCase
     public function it_can_reject_a_product_change_request()
     {
         $productChangeRequest = ProductChangeRequest::factory()->create();
-        $response = $this->post(route('product-change-requests.reject', ['product_change_request' => $productChangeRequest->id]));
+        $response = $this->post(route('admin.product-change-requests.reject', ['product_change_request' => $productChangeRequest->id]));
         $response->assertOk();
         $this->assertNull(ProductChangeRequest::find($productChangeRequest->id));
     }
@@ -58,7 +58,7 @@ class ProductChangeRequestTest extends TestCase
     {
         $product = ProductChangeRequest::factory()->create();
         list($productChanged, $tags, $categories, $user) = $this->makeDummyRequestData();
-        $response = $this->put(route('product-change-requests.update', ['product_change_request' => $product->id]), $productChanged);
+        $response = $this->put(route('admin.product-change-requests.update', ['product_change_request' => $product->id]), $productChanged);
         $response->assertOk();
         $response->assertJsonFragment([
             'name' => $productChanged['name'],
@@ -77,7 +77,7 @@ class ProductChangeRequestTest extends TestCase
     public function it_can_show_a_product_change_request()
     {
         $product = ProductChangeRequest::factory()->create();
-        $response = $this->get(route('product-change-requests.show', ['product_change_request' => $product->id]));
+        $response = $this->get(route('admin.product-change-requests.show', ['product_change_request' => $product->id]));
         $response->assertOk();
         $response->assertJsonFragment([
             'name' => $product->data['name'],
@@ -96,7 +96,7 @@ class ProductChangeRequestTest extends TestCase
     public function it_can_show_the_product_change_request_list()
     {
         $products = ProductChangeRequest::factory()->count(3)->create();
-        $response = $this->get(route('product-change-requests.index'));
+        $response = $this->get(route('admin.product-change-requests.index'));
         $response->assertOk();
         foreach ($products as $product) {
             $response->assertJsonFragment([

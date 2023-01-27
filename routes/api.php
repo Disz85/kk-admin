@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ArticleController;
@@ -20,5 +21,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware(['cache.headers:max_age=' . config('api.max-age')])->group(function () {
-    Route::resource('articles', ArticleController::class)->only(['index', 'show']);
+    Route::get('/articles', [ ArticleController::class, 'index' ])
+        ->name('articles.index');
+    Route::get('/articles/{article:uuid}', [ ArticleController::class, 'show' ])
+        ->name('articles.show');
+
+    Route::get('/categories', [ CategoryController::class, 'index' ])
+        ->name('categories.index');
+    Route::get('/categories/{category:uuid}', [ CategoryController::class, 'show' ])
+        ->name('categories.show');
 });

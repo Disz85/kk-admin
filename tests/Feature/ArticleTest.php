@@ -21,7 +21,7 @@ class ArticleTest extends TestCase
     /** @test */
     public function it_can_list_articles(): void
     {
-        $this->getJson(route('articles.index'))
+        $this->getJson(route('admin.articles.index'))
             ->assertOk();
     }
 
@@ -35,7 +35,7 @@ class ArticleTest extends TestCase
             'categories' => $categories,
         ] = $this->makeDummyRequestData();
 
-        $response = $this->postJson(route('articles.store'), $article);
+        $response = $this->postJson(route('admin.articles.store'), $article);
 
         $response->assertCreated();
 
@@ -70,7 +70,7 @@ class ArticleTest extends TestCase
         ] = $this->makeDummyRequestData();
 
         $response = $this->putJson(
-            route('articles.update', ['article' => $article->id]),
+            route('admin.articles.update', ['article' => $article->id]),
             $updatedArticle
         );
 
@@ -99,7 +99,7 @@ class ArticleTest extends TestCase
     {
         $article = $this->createArticleWithRelations();
 
-        $response = $this->getJson(route('articles.show', ['article' => $article->id]));
+        $response = $this->getJson(route('admin.articles.show', ['article' => $article->id]));
 
         $response->assertOk();
 
@@ -123,7 +123,7 @@ class ArticleTest extends TestCase
     public function it_can_remove_an_article(): void
     {
         $article = Article::factory()->create();
-        $this->deleteJson(route('articles.destroy', ['article' => $article->id]))
+        $this->deleteJson(route('admin.articles.destroy', ['article' => $article->id]))
             ->assertNoContent();
         $this->assertNull(Article::find($article->id));
     }

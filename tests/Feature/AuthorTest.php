@@ -17,7 +17,7 @@ class AuthorTest extends TestCase
     /** @test */
     public function it_can_list_authors(): void
     {
-        $response = $this->get(route('authors.index'));
+        $response = $this->get(route('admin.authors.index'));
         $response->assertOk();
     }
 
@@ -25,7 +25,7 @@ class AuthorTest extends TestCase
     public function it_can_store_a_author()
     {
         $data = AuthorFactory::new()->raw();
-        $this->post(route('authors.store'), $data)
+        $this->post(route('admin.authors.store'), $data)
             ->assertCreated();
         $this->assertDatabaseHas(Author::class, $data);
     }
@@ -35,7 +35,7 @@ class AuthorTest extends TestCase
     {
         $author = Author::factory()->create();
         $data = AuthorFactory::new()->raw();
-        $this->put(route('authors.update', ['author' => $author->id]), $data)
+        $this->put(route('admin.authors.update', ['author' => $author->id]), $data)
             ->assertOk();
         $this->assertDatabaseHas(Author::class, $data);
     }
@@ -44,7 +44,7 @@ class AuthorTest extends TestCase
     public function it_can_show_a_author()
     {
         $author = Author::factory()->create();
-        $this->get(route('authors.show', ['author' => $author->id]))
+        $this->get(route('admin.authors.show', ['author' => $author->id]))
             ->assertOk()
             ->assertJsonFragment(['email' => $author->email])
             ->assertJsonFragment(['title' => $author->title])
@@ -57,7 +57,7 @@ class AuthorTest extends TestCase
     public function it_can_remove_a_author()
     {
         $author = Author::factory()->create();
-        $this->delete(route('authors.destroy', ['author' => $author->id]))
+        $this->delete(route('admin.authors.destroy', ['author' => $author->id]))
             ->assertNoContent();
         $this->assertNull(Author::find($author->id));
     }

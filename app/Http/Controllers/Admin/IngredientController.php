@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enum\IngredientEwgDataEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DeleteIngredientRequest;
 use App\Http\Requests\StoreIngredientRequest;
 use App\Http\Requests\UpdateIngredientRequest;
 use App\Http\Resources\Admin\IngredientCollection;
@@ -15,7 +16,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
 
 class IngredientController extends Controller
 {
@@ -130,8 +130,8 @@ class IngredientController extends Controller
      *                 ),
      *                 @OA\Property(
      *                     property="is_approved",
-     *                     type="bool",
-     *                     description="Is approved.",
+     *                     type="integer",
+     *                     description="1|0",
      *                 ),
      *             )
      *         )
@@ -141,7 +141,7 @@ class IngredientController extends Controller
      *         description="Ingredient created."
      *     ),
      *     @OA\Response(
-     *         response=419,
+     *         response=422,
      *         description="Error in fields."
      *     ),
      * )
@@ -184,6 +184,8 @@ class IngredientController extends Controller
      */
     public function show(Ingredient $ingredient): IngredientResource
     {
+        $ingredient->load('categories')->load('products');
+
         return new IngredientResource($ingredient);
     }
 
@@ -262,8 +264,8 @@ class IngredientController extends Controller
      *                 ),
      *                 @OA\Property(
      *                     property="is_approved",
-     *                     type="bool",
-     *                     description="Is approved.",
+     *                     type="integer",
+     *                     description="1|0",
      *                 ),
      *             )
      *         )
@@ -273,8 +275,8 @@ class IngredientController extends Controller
      *         description="Integer updated."
      *     ),
      *     @OA\Response(
-     *         response=419,
-     *         description="Error in fields"
+     *         response=422,
+     *         description="Error in fields."
      *     ),
      * )
      *
@@ -311,19 +313,28 @@ class IngredientController extends Controller
      *             mediaType="application/x-www-form-urlencoded",
      *         )
      *     ),*
-     *     @OA\Response(
-     *         response=204,
-     *         description="Ingredient deleted."
-     *     ),
+     *    @OA\Response(
+     *      response=204,
+     *      description="Ingredient deleted.",
+     *      @OA\JsonContent(),
+     *    ),
+     *    @OA\Response(
+     *      response=404,
+     *      description="Ingredient not found."
+     *    ),
+     *    @OA\Response(
+     *      response=422,
+     *      description="Ingredient cannot be deleted due to existence of related resources."
+     *    ),
      * )
      *
+     * @param DeleteIngredientRequest $request
      * @param Ingredient $ingredient
      * @return JsonResponse
-     * @throws Throwable
+     * @throws \Throwable
      */
-    public function destroy(Ingredient $ingredient): JsonResponse
+    public function destroy(DeleteIngredientRequest $request, Ingredient $ingredient): JsonResponse
     {
-        $ingredient->categories()->detach();
         $ingredient->deleteOrFail();
 
         return response()->json([], Response::HTTP_NO_CONTENT);

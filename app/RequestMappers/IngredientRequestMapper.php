@@ -32,7 +32,8 @@ class IngredientRequestMapper
             $ingredient->image()->associate(Media::findOrFail($data['image_id']));
         }
 
-        $ingredient->save();
+        $ingredient->load('categories')->load('products');
+        $ingredient->refresh();
 
         return $ingredient;
     }

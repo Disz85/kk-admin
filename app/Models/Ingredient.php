@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Interfaces\HasDependencies;
 use App\Traits\GeneratesSlug;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use OpenApi\Annotations as OA;
 
@@ -26,6 +28,7 @@ use OpenApi\Annotations as OA;
  *     @OA\Property(property="ewg_score_max", type="int", minimum=0, maximum=10),
  *     @OA\Property(property="description", type="string"),
  *     @OA\Property(property="is_approved", type="bool"),
+ *     @OA\Property(property="categories", type="int"),
  *     @OA\Property(property="created_at", type="string", format="date-time"),
  *     @OA\Property(property="updated_at", type="string", format="date-time"),
  * );
@@ -52,9 +55,10 @@ use OpenApi\Annotations as OA;
  *
  * @property Media $image
  * @property Category $categories
+ * @property Product $products
  */
 
-class Ingredient extends Model
+class Ingredient extends Model implements HasDependencies
 {
     use HasFactory;
     use GeneratesSlug;
@@ -115,5 +119,21 @@ class Ingredient extends Model
     {
         return $this->morphToMany(Category::class, 'categoryable')
             ->using(Categoryable::class);
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'product_ingredient');
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDependencies(): bool
+    {
+        return $this->products()->exists();
     }
 }

@@ -36,8 +36,9 @@ class ProductRequestMapper
 
         $product->categories()->sync(data_get($data, 'categories'));
         $product->tags()->sync(data_get($data, 'tags'));
+        $product->ingredients()->sync(data_get($data, 'ingredients'));
 
-        $product->load('categories')->load('tags');
+        $product->load('categories')->load('tags')->load('ingredients');
         $product->refresh();
 
         return $product;

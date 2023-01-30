@@ -27,7 +27,8 @@ class IngredientResource extends JsonResource
             'comedogen_index' => $this->comedogen_index,
             'is_approved' => $this->is_approved,
             'image' => new MediaResource($this->image),
-            'categories' => new CategoryCollection($this->categories()->get()),
+            'products' => new ProductCollection($this->whenLoaded('products')),
+            'categories' => new CategoryCollection($this->whenLoaded('categories')),
         ];
     }
 }

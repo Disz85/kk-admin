@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Events\AuthorDeletingEvent;
 use App\Listeners\AuthorDeleting;
 use App\Models\Article;
+use App\Models\Ingredient;
 use App\Observers\ArticleObserver;
+use App\Observers\IngredientObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -33,6 +35,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $observers = [
         Article::class => [ ArticleObserver::class ],
+        Ingredient::class => [ IngredientObserver::class ],
     ];
 
     /**

@@ -58,8 +58,8 @@ class ProductController extends Controller
                     $request->has('name'),
                     fn (Builder $query) => $query->where('name', 'like', '%' . $request->get('name') . '%')
                 )
-        ->orderByDesc('updated_at')
-        ->paginate($request->get('size', 20))
+                ->orderByDesc('updated_at')
+                ->paginate($request->get('size', 20))
         );
     }
 
@@ -159,6 +159,16 @@ class ProductController extends Controller
      *                     type="integer",
      *                     description="tag 2 id",
      *                 ),
+     *                 @OA\Property (
+     *                     property="ingredients[0]",
+     *                     type="integer",
+     *                     description="ingredient 1 id",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="ingredients[1]",
+     *                     type="integer",
+     *                     description="ingredient 2 id",
+     *                 ),
      *                 @OA\Property(
      *                     property="published_at",
      *                     type="datetime",
@@ -176,7 +186,7 @@ class ProductController extends Controller
      *         description="Product created."
      *     ),
      *     @OA\Response(
-     *         response=419,
+     *         response=422,
      *         description="Error in fields"
      *     ),
      * )
@@ -219,7 +229,7 @@ class ProductController extends Controller
      */
     public function show(Product $product): ProductResource
     {
-        $product->load('tags')->load('categories');
+        $product->load('tags')->load('categories')->load('ingredients');
 
         return new ProductResource($product);
     }
@@ -329,6 +339,16 @@ class ProductController extends Controller
      *                     type="integer",
      *                     description="tag 2 id",
      *                 ),
+     *                 @OA\Property (
+     *                     property="ingredients[0]",
+     *                     type="integer",
+     *                     description="ingredient 1 id",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="ingredients[1]",
+     *                     type="integer",
+     *                     description="ingredient 2 id",
+     *                 ),
      *                 @OA\Property(
      *                     property="published_at",
      *                     type="datetime",
@@ -346,7 +366,7 @@ class ProductController extends Controller
      *         description="Product created."
      *     ),
      *     @OA\Response(
-     *         response=419,
+     *         response=422,
      *         description="Error in fields"
      *     ),
      * )
@@ -393,6 +413,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product): JsonResponse
     {
+        $product->ingredients()->detach();
         $product->tags()->detach();
         $product->categories()->detach();
         $product->deleteOrFail();

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use App\Models\Ingredient;
 use App\Models\Product;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -33,6 +34,11 @@ class ProductFactory extends Factory
         ];
     }
 
+    /**
+     * @param Tag|Collection|null $tags
+     * @param int $count
+     * @return $this
+     */
     public function withTags(Tag|Collection $tags = null, int $count = 1): self
     {
         return $this->hasAttached(
@@ -40,10 +46,27 @@ class ProductFactory extends Factory
         );
     }
 
+    /**
+     * @param Category|Collection|null $categories
+     * @param int $count
+     * @return $this
+     */
     public function withCategories(Category|Collection $categories = null, int $count = 1): self
     {
         return $this->hasAttached(
             $categories ?? CategoryFactory::new()->count($count)
+        );
+    }
+
+    /**
+     * @param Ingredient|Collection|null $ingredients
+     * @param int $count
+     * @return $this
+     */
+    public function withIngredients(Ingredient|Collection $ingredients = null, int $count = 1): self
+    {
+        return $this->hasAttached(
+            $ingredients ?? IngredientFactory::new()->count($count)
         );
     }
 }

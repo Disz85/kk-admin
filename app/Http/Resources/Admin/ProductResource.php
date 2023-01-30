@@ -32,6 +32,7 @@ class ProductResource extends JsonResource
             'image_id' => $this->image_id,
             'tags' => new TagCollection($this->whenLoaded('tags')),
             'categories' => new CategoryCollection($this->whenLoaded('categories')),
+            'ingredients' => new IngredientCollection($this->whenLoaded('ingredients')),
             'user' => new UserResource($this->whenLoaded('user')),
             'created_by' => $this->created_by,
             'brand' => new BrandResource($this->whenLoaded('brand')),

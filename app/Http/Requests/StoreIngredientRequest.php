@@ -11,7 +11,7 @@ class StoreIngredientRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return string[]
+     * @return array
      */
     public function rules(): array
     {
@@ -31,24 +31,5 @@ class StoreIngredientRequest extends FormRequest
             'categories' => 'required|array|min:1',
             'categories.*' => 'required|exists:categories,id',
         ];
-    }
-
-    /**
-     * @return void
-     */
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'is_approved' => $this->toBoolean($this->get('is_approved', false)),
-        ]);
-    }
-
-    /**
-     * @param $boolable
-     * @return bool
-     */
-    private function toBoolean($boolable = false): bool
-    {
-        return filter_var($boolable, FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
     }
 }

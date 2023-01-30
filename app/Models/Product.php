@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
@@ -68,34 +69,60 @@ class Product extends Model
         'created_by',
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function image(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'image_id');
     }
 
-    public function shelves()
+    /**
+     * @return MorphToMany
+     */
+    public function shelves(): MorphToMany
     {
         return $this->morphToMany(Shelf::class, 'shelves')->using('product_shelf');
     }
 
+    /**
+     * @return MorphToMany
+     */
     public function tags(): MorphToMany
     {
         return $this->morphToMany(Tag::class, 'taggable', 'taggables', null, 'tag_id');
     }
 
+    /**
+     * @return MorphToMany
+     */
     public function categories(): MorphToMany
     {
         return $this->morphToMany(Category::class, 'categoryable')
             ->using(Categoryable::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class, 'brand_id');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function ingredients(): BelongsToMany
+    {
+        return $this->belongsToMany(Ingredient::class, 'product_ingredient');
     }
 }

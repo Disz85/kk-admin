@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Category;
+use App\Models\Ingredient;
 use App\Models\Product;
 use App\Models\Tag;
 use Database\Factories\ProductFactory;
@@ -24,7 +25,7 @@ class ProductTest extends TestCase
     /** @test */
     public function it_can_create_a_product(): void
     {
-        list($product, $tags, $categories) = $this->makeDummyRequestData();
+        list($product, $tags, $categories, $ingredients) = $this->makeDummyRequestData();
         $response = $this->post(route('admin.products.store'), $product);
         $response->assertCreated();
         $this->assertDatabaseHas(Product::class, Arr::only($product, ['name','price']));
@@ -40,13 +41,19 @@ class ProductTest extends TestCase
                 'id' => $tag->id,
             ]);
         }
+        foreach ($ingredients as $ingredient) {
+            $response->assertJsonFragment([
+                'name' => $ingredient->name,
+                'id' => $ingredient->id,
+            ]);
+        }
     }
 
     /** @test */
     public function it_can_update_a_product(): void
     {
-        list($product, $tags, $categories) = $this->createAProductWithTagsAndCategories();
-        list($changedProduct, $changedTags, $changedCategories) = $this->makeDummyRequestData();
+        list($product, $tags, $categories, $ingredients) = $this->createAProductWithRelations();
+        list($changedProduct, $changedTags, $changedCategories, $changedIngredients) = $this->makeDummyRequestData();
 
         $response = $this->put(
             route('admin.products.update', ['product' => $product->id]),
@@ -67,12 +74,18 @@ class ProductTest extends TestCase
                 'id' => $tag->id,
             ]);
         }
+        foreach ($changedIngredients as $ingredient) {
+            $response->assertJsonFragment([
+                'name' => $ingredient->name,
+                'id' => $ingredient->id,
+            ]);
+        }
     }
 
     /** @test */
     public function it_can_show_a_product()
     {
-        list($product, $tags, $categories) = $this->createAProductWithTagsAndCategories();
+        list($product, $tags, $categories, $ingredients) = $this->createAProductWithRelations();
         $response = $this->get(route('admin.products.show', ['product' => $product->id]));
         $response->assertOk()
             ->assertJsonFragment(['id' => $product->id])
@@ -87,6 +100,12 @@ class ProductTest extends TestCase
             $response->assertJsonFragment([
                 'name' => $tag->name,
                 'id' => $tag->id,
+            ]);
+        }
+        foreach ($ingredients as $ingredient) {
+            $response->assertJsonFragment([
+                'name' => $ingredient->name,
+                'id' => $ingredient->id,
             ]);
         }
     }
@@ -104,22 +123,26 @@ class ProductTest extends TestCase
     {
         $categories = Category::factory()->count(3)->create();
         $tags = Tag::factory()->count(2)->create();
+        $ingredients = Ingredient::factory()->count(2)->create();
         $product = ProductFactory::new()->raw();
         $product['categories'] = (array_column($categories->toArray(), 'id'));
         $product['tags'] = (array_column($tags->toArray(), 'id'));
+        $product['ingredients'] = (array_column($ingredients->toArray(), 'id'));
 
-        return [$product,$tags, $categories];
+        return [$product,$tags, $categories, $ingredients];
     }
 
-    private function createAProductWithTagsAndCategories(): array
+    private function createAProductWithRelations(): array
     {
         $categories = Category::factory()->count(3)->create();
         $tags = Tag::factory()->count(2)->create();
+        $ingredients = Ingredient::factory()->count(2)->create();
         $product = Product::factory()
             ->withTags($tags)
             ->withCategories($categories)
+            ->withIngredients($ingredients)
             ->create();
 
-        return [$product,$tags, $categories];
+        return [$product,$tags, $categories, $ingredients];
     }
 }

@@ -34,13 +34,13 @@ class ArticleApiTest extends TestCase
             ->select('uuid')
             ->where('active', '=', 1)
             ->where('hidden', '=', 0)
-            ->orderByDesc('updated_at')
+            ->orderByDesc('title')
             ->limit(3)
             ->pluck('uuid')
             ->toArray();
 
         $articleResponse = $this->getJson(route('api.articles.index', [
-            'sort' => '-updated_at',
+            'sort' => '-title',
             'page' => 1,
             'per_page' => 3,
         ]));

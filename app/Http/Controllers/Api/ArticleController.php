@@ -14,38 +14,38 @@ class ArticleController extends Controller
     /**
      * Display a listing of articles.
      *
-     * @OA\Get(
+     * @OA\Get (
      *    tags={"Articles"},
      *    path="/api/articles",
-     *    @OA\Parameter(
+     *    @OA\Parameter (
      *        name="page",
      *        in="query",
      *        description="Page number",
      *        @OA\Schema(type="integer"),
-     *        allowEmptyValue="true"
+     *        allowEmptyValue="true",
      *    ),
-     *    @OA\Parameter(
+     *    @OA\Parameter (
      *        name="per_page",
      *        in="query",
      *        description="Page size",
      *        @OA\Schema(type="integer"),
-     *        allowEmptyValue="true"
+     *        allowEmptyValue="true",
      *    ),
-     *    @OA\Parameter(
+     *    @OA\Parameter (
      *        name="filter[title]",
      *        in="query",
      *        description="Title",
-     *        @OA\Schema(type="string")
+     *        @OA\Schema(type="string"),
      *    ),
-     *    @OA\Response(
+     *    @OA\Response (
      *        response=200,
      *        description="Display a listing of articles.",
-     *        @OA\JsonContent(ref="#/components/schemas/Article")
+     *        @OA\JsonContent(ref="#/components/schemas/Article"),
      *    ),
-     *    @OA\Response(
+     *    @OA\Response (
      *        response=404,
      *        description="No articles",
-     *        @OA\JsonContent()
+     *        @OA\JsonContent(),
      *    )
      * )
      *
@@ -74,25 +74,25 @@ class ArticleController extends Controller
     /**
      * Display the specified article.
      *
-     * @OA\Get(
+     * @OA\Get (
      *     tags={"Articles"},
-     *     path="/admin/articles/{article}",
-     *     @OA\Parameter(
+     *     path="/api/articles/{article}",
+     *     @OA\Parameter (
      *         name="article",
      *         in="path",
      *         required=true,
      *         description="Article ID",
      *         @OA\Schema(type="integer"),
      *     ),
-     *    @OA\Response(
+     *    @OA\Response (
      *        response=200,
      *        description="Display a selected Article.",
-     *        @OA\JsonContent(ref="#/components/schemas/Article")
+     *        @OA\JsonContent(ref="#/components/schemas/Article"),
      *    ),
-     *    @OA\Response(
+     *    @OA\Response (
      *        response=404,
      *        description="Article not found.",
-     *        @OA\JsonContent(ref="#/components/schemas/Article")
+     *        @OA\JsonContent(ref="#/components/schemas/Article"),
      *    )
      * )
      *

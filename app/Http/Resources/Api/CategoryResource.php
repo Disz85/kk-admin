@@ -22,7 +22,6 @@ class CategoryResource extends JsonResource
             'description' => $this->description,
             'parent_id' => $this->parent_id,
             'type' => $this->type,
-            'image' => new MediaResource($this->image),
             'children' => self::collection($this->whenLoaded('children')),
         ];
     }

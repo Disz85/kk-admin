@@ -25,10 +25,10 @@ class ArticleResource extends JsonResource
             'hidden' => $this->hidden,
             'sponsored' => $this->sponsored,
             'is_18_plus' => $this->is_18_plus,
-            'image' => new MediaResource($this->image),
-            'authors' => new AuthorCollection($this->authors),
-            'tags' => new TagCollection($this->tags),
-            'categories' => new CategoryCollection($this->categories),
+            'image' => new MediaResource($this->whenLoaded('image')),
+            'authors' => new AuthorCollection($this->whenLoaded('authors')),
+            'tags' => new TagCollection($this->whenLoaded('tags')),
+            'categories' => new CategoryCollection($this->whenLoaded('categories')),
         ];
     }
 }

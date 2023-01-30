@@ -9,7 +9,6 @@ use App\Traits\HasUuid;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
@@ -21,7 +20,6 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  *     @OA\Property(property="name", type="string"),
  *     @OA\Property(property="slug", type="string"),
  *     @OA\Property(property="description", type="string"),
- *     @OA\Property(property="image_id", type="int"),
  *     @OA\Property(property="parent_id", type="int"),
  *     @OA\Property(property="archived", type="bool")
  *     @OA\Property(property="type", type="string"),
@@ -36,7 +34,6 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @property string $name
  * @property string $slug
  * @property string $description
- * @property int $image_id
  * @property int $parent_id
  * @property bool $archived
  * @property string $type
@@ -59,7 +56,6 @@ class Category extends Model
         'slug',
         'archived',
         'parent_id',
-        'image_id',
         'type',
         'description',
     ];
@@ -68,11 +64,6 @@ class Category extends Model
         'description' => 'array',
         'type' => CategoryTypeEnum::class,
     ];
-
-    public function image(): BelongsTo
-    {
-        return $this->belongsTo(Media::class, 'image_id');
-    }
 
     public function articles(): MorphToMany
     {

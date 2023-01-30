@@ -19,8 +19,6 @@ return new class () extends Migration {
             $table->string('name');
             $table->string('slug');
             $table->longText('description')->nullable();
-            $table->foreignId('image_id')->nullable()->constrained('media')
-                ->cascadeOnUpdate()->cascadeOnDelete();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->boolean('archived')->default(false);
             $table->string('type');

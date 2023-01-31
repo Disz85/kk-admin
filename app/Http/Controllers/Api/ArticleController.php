@@ -15,7 +15,7 @@ class ArticleController extends Controller
      * Display a listing of articles.
      *
      * @OA\Get (
-     *    tags={"Articles"},
+     *    tags={"Articles API"},
      *    path="/api/articles",
      *    @OA\Parameter (
      *        name="page",
@@ -75,14 +75,14 @@ class ArticleController extends Controller
      * Display the specified article.
      *
      * @OA\Get (
-     *     tags={"Articles"},
+     *     tags={"Articles API"},
      *     path="/api/articles/{article}",
      *     @OA\Parameter (
      *         name="article",
      *         in="path",
      *         required=true,
-     *         description="Article ID",
-     *         @OA\Schema(type="integer"),
+     *         description="Article UUID",
+     *         @OA\Schema(type="string"),
      *     ),
      *    @OA\Response (
      *        response=200,

@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  *     @OA\Property(property="slug", type="string"),
  *     @OA\Property(property="description", type="string"),
  *     @OA\Property(property="parent_id", type="int"),
- *     @OA\Property(property="archived", type="bool")
+ *     @OA\Property(property="archived", type="bool"),
  *     @OA\Property(property="type", type="string"),
  *     @OA\Property(property="created_at", type="string", format="date-time"),
  *     @OA\Property(property="updated_at", type="string", format="date-time"),

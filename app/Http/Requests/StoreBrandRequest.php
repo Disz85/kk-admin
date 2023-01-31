@@ -16,7 +16,7 @@ class StoreBrandRequest extends FormRequest
         return [
             'title' => 'required|string|max:255|unique:brands',
             'url' => 'nullable|url|max:255',
-            'description' => 'nullable|string',
+            'description' => 'nullable|array',
             'image.id' => 'int|exists:media,id',
             'where_to_find' => 'nullable|string',
             'approved' => 'sometimes|boolean',

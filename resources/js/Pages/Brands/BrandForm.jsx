@@ -7,6 +7,7 @@ import Image from '../../Framework/Components/Image/Image';
 import Panel from '../../Framework/Components/Panel';
 import Flex from '../../Framework/Layouts/Flex';
 import Toggle from '../../Framework/Components/Form/Toggle';
+import BlockStyledEditor from '../../Framework/Components/Form/BlockStyledEditor';
 
 const BrandForm = (props) => {
     return (
@@ -16,11 +17,11 @@ const BrandForm = (props) => {
                     <TextInput name="title" />
                     <TextInput name="url" />
                     <TextInput name="where_to_find" />
-                    <TextInput name="description" />
+                    <Image name="image" isCropping={false} />
                     <Toggle name="approved" />
                 </Panel>
                 <Panel>
-                    <Image name="image" isCropping={false} />
+                    <BlockStyledEditor name="description" fullFeatureSet />
                 </Panel>
             </Flex>
         </Form>

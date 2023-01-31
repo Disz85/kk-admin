@@ -7,6 +7,7 @@ import tags from './Translations/tags';
 import categories from './Translations/categories';
 import authors from './Translations/authors';
 import brands from './Translations/brands';
+import editor from './Translations/editor';
 
 const resources = {
     hu: {
@@ -18,6 +19,7 @@ const resources = {
             categories,
             authors,
             brands,
+            editor,
         },
     },
 };

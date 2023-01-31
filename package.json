@@ -54,6 +54,13 @@
         "vitest": "^0.25.1"
     },
     "dependencies": {
+        "@editorjs/editorjs": "^2.26.4",
+        "@editorjs/header": "^2.7.0",
+        "@editorjs/list": "^1.8.0",
+        "@editorjs/quote": "^2.5.0",
+        "@editorjs/raw": "^2.4.0",
+        "@editorjs/table": "^2.2.0",
+        "@editorjs/underline": "^1.1.0",
         "@fortawesome/fontawesome-svg-core": "^6.2.1",
         "@fortawesome/free-regular-svg-icons": "^6.2.1",
         "@fortawesome/free-solid-svg-icons": "^6.2.1",

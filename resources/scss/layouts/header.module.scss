@@ -1,5 +1,5 @@
 .header {
-    @apply fixed top-0;
+    @apply fixed top-0 z-10;
     @apply w-full h-24 pr-8 pl-4 py-4;
     @apply bg-light-snow;
     @apply drop-shadow-md shadow-dark-night;

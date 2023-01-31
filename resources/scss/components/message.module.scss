@@ -1,5 +1,5 @@
 .wrapper {
-    @apply fixed top-5 left-2/4 -translate-x-2/4 mx-auto text-center w-100;
+    @apply fixed top-5 left-2/4 -translate-x-2/4 mx-auto text-center w-100 z-20;
 }
 
 .message {

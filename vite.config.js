@@ -7,9 +7,6 @@ import path from "path";
 import crypto from "crypto";
 
 const config = {
-    server: {
-        host: '0.0.0.0',
-    },
     plugins: [
         laravel({
             input: [
@@ -59,6 +56,12 @@ const config = {
     },
 };
 
+const devConfig = {
+    server: {
+        host: '0.0.0.0',
+    },
+}
+
 const prodConfig = {
     css: {
         modules: {
@@ -82,7 +85,7 @@ const prodConfig = {
 
 export default defineConfig(({ command, mode, ssrBuild }) => {
     if (mode === 'development') {
-        return config;
+        return {...config, ...devConfig};
     }
 
     if (mode === 'production') {

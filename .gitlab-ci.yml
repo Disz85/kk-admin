@@ -57,11 +57,17 @@ node-test:
     extends: .node
     only:
         - test@kremmania/km-admin
+    environment:
+        name: test
+        url: 'https://admin.kremmania.p24.hu/'
 
 node-production:
     extends: .node
     only:
         - production@kremmania/km-admin
+    environment:
+        name: production
+        url: 'https://admin.kremmania.hu/'
 
 phpcsfixer:
     stage: analysis

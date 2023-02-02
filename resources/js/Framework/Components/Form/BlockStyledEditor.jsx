@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import Header from '@editorjs/header';
 import List from '@editorjs/list';
 import Underline from '@editorjs/underline';
+import Quote from '@editorjs/quote';
 import translation from '../../../Translations/editor';
 import Image from './EditorTools/Image';
 import Label from './Label';
@@ -57,6 +58,13 @@ const BlockStyledEditor = ({
         };
 
         const extraTools = {
+            quote: {
+                class: Quote,
+                config: {
+                    quotePlaceholder: t('editor.Quote'),
+                    captionPlaceholder: t('editor.Author'),
+                },
+            },
             image: {
                 class: Image,
                 config: { resource },

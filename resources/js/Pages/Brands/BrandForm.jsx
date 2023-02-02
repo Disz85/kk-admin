@@ -12,7 +12,7 @@ import BlockStyledEditor from '../../Framework/Components/Form/BlockStyledEditor
 const BrandForm = (props) => {
     return (
         <Form {...props}>
-            <Flex classNames="flex basis-8">
+            <Flex>
                 <Panel>
                     <TextInput name="title" />
                     <TextInput name="url" />

@@ -10,7 +10,7 @@ import Flex from '../../Framework/Layouts/Flex';
 const AuthorForm = (props) => {
     return (
         <Form {...props}>
-            <Flex classNames="flex basis-8">
+            <Flex>
                 <Panel>
                     <TextInput name="title" />
                     <TextInput name="name" />

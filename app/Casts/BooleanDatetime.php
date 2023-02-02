@@ -17,11 +17,11 @@ class BooleanDatetime implements CastsAttributes
      * @param  string  $key
      * @param  mixed  $value
      * @param  array  $attributes
-     * @return boolean
+     * @return bool
      */
     public function get($model, $key, $value, $attributes)
     {
-        return ($value !== NULL);
+        return ($value !== null);
     }
 
     /**
@@ -35,6 +35,6 @@ class BooleanDatetime implements CastsAttributes
      */
     public function set($model, $key, $value, $attributes)
     {
-        return $value ? ($attributes[$key] ?? now()) : NULL;
+        return $value ? ($attributes[$key] ?? now()) : null;
     }
 }

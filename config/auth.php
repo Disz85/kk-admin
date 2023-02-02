@@ -150,6 +150,10 @@ return [
             'name' => 'ingredient-manager',
             'permissions' => ['manage-ingredients'],
         ],
+        [
+            'name' => 'brand-manager',
+            'permissions' => ['manage-brands'],
+        ]
     ],
 
 ];

@@ -10,6 +10,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+// TRANSLATIONS
+import { useTranslation } from 'react-i18next';
+
 // HELPERS
 import { stringify, parse } from 'qs';
 import {
@@ -24,6 +27,8 @@ import Button from './Buttons/Button';
 import style from '../../../scss/components/search.module.scss';
 
 const Search = ({ entity, onChange, children, ...props }) => {
+    const { t } = useTranslation();
+
     // IMMUTABLE STATE
     const [fields] = useState(createNewEntityFromChildren(children));
 
@@ -88,7 +93,7 @@ const Search = ({ entity, onChange, children, ...props }) => {
             <div className={style.searchHeader}>
                 <div className={style.searchTitle}>
                     <FontAwesomeIcon icon={faFilter} />
-                    <h2>Szűrő</h2>
+                    <h2>{t('application.filter')}</h2>
                 </div>
                 <Button
                     icon={activeSearch ? faChevronDown : faChevronUp}

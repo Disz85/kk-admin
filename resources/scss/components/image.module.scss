@@ -1,3 +1,10 @@
+.imageWrapper {
+    @apply w-full p-2.5;
+    @apply text-black font-normal bg-light-grey;
+    @apply border border-solid border-2 border-medium-grey rounded-lg;
+    @apply transition ease-in-out m-0;
+}
+
 .placeholder {
     @apply block text-2xl;
 
@@ -6,9 +13,29 @@
 }
 
 .placeholderTitle {
-    @apply font-bold;
+    @apply font-bold text-2xl;
 }
 
-.uploadBtn {
+.imageBtnWrapper {
+    @apply items-baseline;
+}
+
+.uploadBtn,
+.resetBtn {
     @apply text-2xl mt-5;
+}
+
+.resetBtn {
+    @apply ml-6;
+}
+
+.cropModal {
+    @apply absolute mx-auto mt-1 max-w-4xl bg-light-snow opacity-100 z-50;
+    @apply overflow-auto outline-0 top-32 left-10 right-10 p-2 text-center font-primary text-3xl;
+}
+
+.cropModalOverlay {
+    @apply fixed inset-0 overflow-y-auto z-20;
+
+    background: rgba(0 0 0 / 80%);
 }

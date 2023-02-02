@@ -25,7 +25,7 @@ class BrandResource extends JsonResource
             'slug' => $this->slug,
             'url' => $this->url,
             'description' => $this->description,
-            'image' => $this->image,
+            'image' => new MediaResource($this->image),
             'where_to_find' => $this->where_to_find,
             'approved' => $this->approved,
             'created_by' => $this->created_by,

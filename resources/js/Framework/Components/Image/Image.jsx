@@ -3,34 +3,26 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 
 // ICONS
-import { faUpload, faCrop } from '@fortawesome/free-solid-svg-icons';
+import { faUpload, faCrop, faTrash } from '@fortawesome/free-solid-svg-icons';
+
+// TRANSLATIONS
+import { useTranslation } from 'react-i18next';
 
 import MediaService from '../../../Services/MediaService';
 import useUpdateEffect from '../../../Hooks/useUpdateEffect';
+
+// COMPONENTS
 import ImageCropper from './ImageCropper';
 import { cropParams, sanitizeCropValues } from '../../../Helpers/imageCropper';
 import Error from '../Form/Error';
 import Button from '../Buttons/Button';
 import Flex from '../../Layouts/Flex';
 import ImagePlaceholder from './ImagePlaceholder';
+import Label from '../Form/Label';
 
 // STYLES
 import style from '../../../../scss/components/image.module.scss';
-
-const ModalStyle = {
-    overlay: {
-        background: 'rgba(0, 0, 0, .8)',
-        overflowY: 'auto',
-        zIndex: 100000,
-    },
-    content: {
-        margin: '0 auto',
-        border: 'none',
-        padding: 10,
-        maxWidth: 800,
-        bottom: 'initial',
-    },
-};
+import form from '../../../../scss/components/form.module.scss';
 
 const Image = ({
     name,
@@ -42,6 +34,8 @@ const Image = ({
     isDetachable = false,
 }) => {
     const input = useRef(null);
+
+    const { t } = useTranslation();
 
     const [media, setMedia] = useState(entity[name]);
     const [cropping, setCropping] = useState(false);
@@ -89,77 +83,80 @@ const Image = ({
     }, [media]);
 
     return (
-        <>
-            <input
-                type="file"
-                name={name}
-                ref={input}
-                onChange={upload}
-                style={{ display: 'none' }}
-                accept={'image/*'}
-            />
-            {media ? (
-                <div className="m-picture">
-                    <img
-                        className="m-picture__coverImage"
-                        src={cropParams(
-                            `${import.meta.env.VITE_IMAGE_URL}/${path}`,
-                            crop,
-                        )}
-                        alt=""
-                    />
-                    <Modal
-                        isOpen={cropping}
-                        onRequestClose={toggleCropping}
-                        style={ModalStyle}
-                        ariaHideApp={false}
-                    >
-                        <ImageCropper
-                            media={media}
-                            crop={crop}
-                            applyCropping={applyCropping}
-                        />
-                    </Modal>
-                    {isCropping && (
-                        <Button
-                            name="crop"
-                            icon={faCrop}
-                            click={toggleCropping}
-                            type="button"
-                            unlabeled
-                        />
-                    )}
-                </div>
-            ) : (
-                <ImagePlaceholder />
-            )}
-            <Flex
-                classNames={style.imageBtnWrapper}
-                justifyContent="center"
-                wraps="wrap"
-            >
-                <Button
-                    className={style.uploadBtn}
-                    name="image-upload"
-                    text="Képfeltöltés"
-                    icon={faUpload}
-                    click={pickImage}
-                    type="button"
+        <div className={form.formGroup}>
+            <Label className={form.label} to="image-wrapper">
+                {t('application.image')}
+            </Label>
+            <div id="image-wrapper" className={style.imageWrapper}>
+                <input
+                    type="file"
+                    name={name}
+                    ref={input}
+                    onChange={upload}
+                    style={{ display: 'none' }}
+                    accept={'image/*'}
                 />
-                {isDetachable && (
+                {media ? (
+                    <div className={style.image}>
+                        <img
+                            className={style.coverImage}
+                            src={cropParams(
+                                `${import.meta.env.VITE_IMAGE_URL}/${path}`,
+                                crop,
+                            )}
+                            alt=""
+                        />
+                        <Modal
+                            isOpen={cropping}
+                            onRequestClose={toggleCropping}
+                            className={style.cropModal}
+                            overlayClassName={style.cropModalOverlay}
+                            ariaHideApp={false}
+                        >
+                            <ImageCropper
+                                media={media}
+                                crop={crop}
+                                applyCropping={applyCropping}
+                            />
+                        </Modal>
+                        {isCropping && (
+                            <Button
+                                name="crop"
+                                icon={faCrop}
+                                click={toggleCropping}
+                                type="button"
+                                unlabeled
+                            />
+                        )}
+                    </div>
+                ) : (
+                    <ImagePlaceholder />
+                )}
+                <Flex classNames={style.imageBtnWrapper}>
                     <Button
-                        className={style.resetBtn}
-                        name="reset"
-                        text="Alaphelyzet"
-                        click={detachImage}
+                        classNames={style.uploadBtn}
+                        name="image-upload"
+                        text={t('application.imageUpload')}
+                        icon={faUpload}
+                        click={pickImage}
                         type="button"
                     />
+                    {isDetachable && (
+                        <Button
+                            classNames={style.resetBtn}
+                            name="reset"
+                            text={t('application.reset')}
+                            icon={faTrash}
+                            click={detachImage}
+                            type="button"
+                        />
+                    )}
+                </Flex>
+                {Object.hasOwnProperty.call(errors, `${name}.id`) && (
+                    <Error message={errors[`${name}.id`][0]} />
                 )}
-            </Flex>
-            {Object.hasOwnProperty.call(errors, `${name}.id`) && (
-                <Error message={errors[`${name}.id`][0]} />
-            )}
-        </>
+            </div>
+        </div>
     );
 };
 

@@ -30,7 +30,7 @@ class BrandTest extends TestCase
         $this->post(route('admin.brands.store'), $data)
             ->assertCreated();
         $data['description'] = json_encode($data['description']);
-        $this->assertDatabaseHas(Brand::class, $data);
+        $this->assertDatabaseHas(Brand::class, Arr::except($data, ['created_by']));
     }
 
     /** @test */

@@ -5,17 +5,26 @@ import { useTranslation } from 'react-i18next';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+// STYLES
+import style from '../../../../scss/components/buttons/button.module.scss';
+
 const Button = ({
     name = undefined,
     click,
     unlabeled = false,
     icon = false,
+    classNames,
     ...props
 }) => {
     const { t } = useTranslation();
 
     return (
-        <button type="button" onClick={click} tabIndex={-1} {...props}>
+        <button
+            className={`${style.button} ${classNames}`}
+            type="button"
+            onClick={click}
+            {...props}
+        >
             {icon && <FontAwesomeIcon icon={icon} />}
             {!unlabeled && <span>{t(`application.${name}`) || ''}</span>}
         </button>
@@ -29,6 +38,10 @@ Button.propTypes = {
      * Type of name
      */
     name: PropTypes.string,
+    /**
+     * Type of classNames
+     */
+    classNames: PropTypes.string,
     /**
      * Type of click
      */
@@ -47,4 +60,5 @@ Button.defaultProps = {
     name: undefined,
     icon: false,
     unlabeled: false,
+    classNames: '',
 };

@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @property string $description
  * @property string $where_to_find
  * @property int $image_id
- * @property boolean $approved
+ * @property bool $approved
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -52,7 +52,6 @@ class Brand extends Model implements HasDependencies
         'id',
         'legacy_id',
         'title',
-        'slug',
         'url',
         'description',
         'image_id',

@@ -51,7 +51,6 @@ class Author extends Model
         'title',
         'name',
         'email',
-        'slug',
         'description',
         'image_id',
     ];

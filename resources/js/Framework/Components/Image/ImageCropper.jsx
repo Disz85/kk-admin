@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { Cropper } from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 
+// TRANSLATIONS
+import { useTranslation } from 'react-i18next';
+
 // ICONS
 import { faScissors, faBan } from '@fortawesome/free-solid-svg-icons';
 
@@ -11,6 +14,7 @@ import Flex from '../../Layouts/Flex';
 import Button from '../Buttons/Button';
 
 const ImageCropper = ({ media, crop, applyCropping }) => {
+    const { t } = useTranslation();
     const cropperRef = useRef(null);
 
     const [cropData, setCropData] = useState(crop);
@@ -34,14 +38,19 @@ const ImageCropper = ({ media, crop, applyCropping }) => {
                 crop={onCrop}
             />
 
-            <Flex classNames="m-picture__btnWrapper" justifyContent="evenly">
+            <Flex>
                 <Button
                     name="cut"
-                    text="Vágás"
+                    text={t('application.cut')}
                     icon={faScissors}
                     click={apply}
                 />
-                <Button name="cancel" text="Mégse" icon={faBan} click={close} />
+                <Button
+                    name="cancel"
+                    text={t('application.cancel')}
+                    icon={faBan}
+                    click={close}
+                />
             </Flex>
         </>
     );

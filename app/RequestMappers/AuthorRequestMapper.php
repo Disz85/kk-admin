@@ -17,12 +17,6 @@ class AuthorRequestMapper
             'description' => data_get($data, 'description'),
         ]);
 
-        if (! $author->slug) {
-            $author->generateSlug();
-        }
-
-        $author->save();
-
         if (array_key_exists('image', $data) && array_key_exists('id', $data['image']) && $data['image']['id'] !== null) {
             $author->image()->associate(Media::findOrFail($data['image']['id']));
         }

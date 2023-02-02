@@ -9,8 +9,12 @@ export default {
     delete: 'Törlés',
     save: 'Mentés',
     upload: 'Feltöltés',
+    filter: 'Szűrő',
+
     'image-upload': 'Képfeltöltés',
     reset: 'Visszaállítás',
+    image: 'Kép',
+    noImage: 'Még nem töltöttél fel képet!',
 
     crop: 'Szerkesztés',
     cut: 'Vágás',

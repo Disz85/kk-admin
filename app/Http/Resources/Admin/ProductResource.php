@@ -5,7 +5,9 @@ namespace App\Http\Resources\Admin;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
+/**
+ * @mixin Product
+ */
 class ProductResource extends JsonResource
 {
     /**
@@ -14,7 +16,6 @@ class ProductResource extends JsonResource
      */
     public function toArray($request)
     {
-        /** @var Product $this */
         return [
             'id' => $this->id,
             'name' => $this->name,

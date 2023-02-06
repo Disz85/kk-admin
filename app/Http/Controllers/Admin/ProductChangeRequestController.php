@@ -9,6 +9,7 @@ use App\Http\Resources\Admin\ProductChangeRequestCollection;
 use App\Http\Resources\Admin\ProductChangeRequestResource;
 use App\Http\Resources\Admin\ProductResource;
 use App\Mail\ProductChangeRequestRejectionMail;
+use App\Models\Ingredient;
 use App\Models\Product;
 use App\Models\ProductChangeRequest;
 use App\Models\User;
@@ -194,6 +195,26 @@ class ProductChangeRequestController extends Controller
      *                     type="integer",
      *                     description="tag 2 id",
      *                 ),
+     *                 @OA\Property (
+     *                     property="ingredients[0]",
+     *                     type="integer",
+     *                     description="ingredient 1 id",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="ingredients[1]",
+     *                     type="integer",
+     *                     description="ingredient 2 id",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="ingredients_new[0]",
+     *                     type="integer",
+     *                     description="new ingredient 1",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="ingredients_new[1]",
+     *                     type="integer",
+     *                     description="new ingredient 2",
+     *                 ),
      *                 @OA\Property(
      *                     property="published_at",
      *                     type="datetime",
@@ -264,10 +285,19 @@ class ProductChangeRequestController extends Controller
     {
         DB::beginTransaction();
         $product = Product::updateOrCreate(['id' => $productChangeRequest->product->id ?? null], $productChangeRequest->data);
+        foreach ($productChangeRequest->data['ingredients_new'] as $newIngredientName) {
+            $newIngredientIds[] = Ingredient::create(['name' => $newIngredientName])->id;
+        }
+        $product->ingredients()->sync(
+            array_merge(
+                $newIngredientIds ?? [],
+                $productChangeRequest->data['ingredients'] ?? []
+            )
+        );
         $product->tags()->sync($productChangeRequest->data['tags'] ?? []);
         $product->categories()->sync($productChangeRequest->data['categories'] ?? []);
         $productChangeRequest->delete();
-        $product->refresh()->load('tags')->load('categories');
+        $product->refresh()->load(['tags','categories','ingredients']);
         DB::commit();
 
         return new ProductResource($product);
@@ -423,6 +453,26 @@ class ProductChangeRequestController extends Controller
      *                     property="tags[1]",
      *                     type="integer",
      *                     description="tag 2 id",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="ingredients[0]",
+     *                     type="integer",
+     *                     description="ingredient 1 id",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="ingredients[1]",
+     *                     type="integer",
+     *                     description="ingredient 2 id",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="ingredients_new[0]",
+     *                     type="integer",
+     *                     description="new ingredient 1 name",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="ingredients_new[1]",
+     *                     type="integer",
+     *                     description="new ingredient 2 name",
      *                 ),
      *                 @OA\Property(
      *                     property="published_at",

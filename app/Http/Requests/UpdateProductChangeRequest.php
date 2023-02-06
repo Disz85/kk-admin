@@ -14,6 +14,8 @@ class UpdateProductChangeRequest extends FormRequest
     public function rules()
     {
         $rules = (new StoreProductRequest())->rules();
+        $rules['ingredients_new'] = 'nullable|array';
+        $rules['ingredients_new.*'] = 'string|unique:ingredients,name';
         $rules[ 'name' ] = 'required|string|max:255|unique:products,name,'.$this->input('product_id');
         $rules[ 'product_id' ] = 'nullable|integer|exists:products,id';
         $rules[ 'created_by' ] = 'required|integer|exists:users,id';

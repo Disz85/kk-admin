@@ -9,7 +9,10 @@ class ProductChangeRequest extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['data'];
+    protected $fillable = [
+        'data',
+        'product_id',
+    ];
 
     protected $casts = [
         'data' => 'array',

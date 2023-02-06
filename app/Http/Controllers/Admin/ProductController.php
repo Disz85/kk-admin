@@ -229,7 +229,7 @@ class ProductController extends Controller
      */
     public function show(Product $product): ProductResource
     {
-        $product->load('tags')->load('categories')->load('ingredients');
+        $product->load(['tags','categories','ingredients']);
 
         return new ProductResource($product);
     }

@@ -6,13 +6,10 @@ use App\Enum\CategoryTypeEnum;
 use App\Models\Category;
 use Database\Factories\CategoryFactory;
 use Database\Factories\IngredientFactory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class IngredientSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     public const COUNT = 10;
 
     /**

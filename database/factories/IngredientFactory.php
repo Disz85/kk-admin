@@ -23,7 +23,7 @@ class IngredientFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->name(),
+            'name' => fake()->unique()->words(2, true),
             'ewg_data' => fake()->randomElement(IngredientEwgDataEnum::cases())->value,
             'ewg_score' => fake()->numberBetween(0, 10),
             'ewg_score_max' => function ($values) {

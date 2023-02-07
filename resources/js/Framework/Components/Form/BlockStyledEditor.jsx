@@ -11,8 +11,10 @@ import Header from '@editorjs/header';
 import List from '@editorjs/list';
 import Underline from '@editorjs/underline';
 import Quote from '@editorjs/quote';
+import FramedText from './EditorTools/FramedText';
 import translation from '../../../Translations/editor';
 import Image from './EditorTools/Image';
+import Gallery from './EditorTools/Gallery';
 import Label from './Label';
 import Error from './Error';
 
@@ -58,6 +60,7 @@ const BlockStyledEditor = ({
         };
 
         const extraTools = {
+            framed: FramedText,
             quote: {
                 class: Quote,
                 config: {
@@ -67,6 +70,10 @@ const BlockStyledEditor = ({
             },
             image: {
                 class: Image,
+                config: { resource },
+            },
+            gallery: {
+                class: Gallery,
                 config: { resource },
             },
         };

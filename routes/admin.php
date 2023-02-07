@@ -36,10 +36,11 @@ Route::post('brand-change-requests/{brand_change_request}/approve', [BrandChange
 Route::post('brand-change-requests/{brand_change_request}/reject', [BrandChangeRequestController::class, 'reject'])->name('brand-change-requests.reject');
 Route::resource('brand-change-requests', BrandChangeRequestController::class)->only(['store','show','index','update']);
 
-//Route::resource('media-library', MediaController::class)->only(['upload', 'delete']);
 Route::prefix('/media-library')->group(function () {
     Route::post('/upload', [MediaController::class, 'upload']);
+    Route::post('/upload-multiple', [MediaController::class, 'uploadMultiple']);
     Route::delete('/{media}', [MediaController::class, 'delete']);
+    Route::post('/delete-multiple', [MediaController::class, 'deleteMultiple']);
 });
 
 Route::prefix('auth')->group(function () {

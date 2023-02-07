@@ -21,7 +21,6 @@ export default {
                 converter: {
                     'Convert to': 'Átalakítás',
                 },
-                bold: 'Félkövér',
             },
             popover: {
                 Filter: 'Szűrő',
@@ -33,6 +32,7 @@ export default {
             List: 'Lista',
             Image: 'Kép',
             Quote: 'Idézet',
+            Gallery: 'Galéria',
         },
         tools: {
             list: {
@@ -56,6 +56,7 @@ export default {
         blockTunes: {
             delete: {
                 Delete: 'Törlés',
+                'Click to delete': 'Kattints a törléshez',
             },
             moveUp: {
                 'Move up': 'Fel',
@@ -64,5 +65,12 @@ export default {
                 'Move down': 'Le',
             },
         },
+    },
+    gallery: {
+        title: 'Galéria címe',
+        description: 'Leírás',
+        imageUpload: 'Kép(ek) feltöltése',
+        delete: 'Törlés',
+        deleteAll: 'Összes törlése',
     },
 };

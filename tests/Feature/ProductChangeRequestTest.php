@@ -41,6 +41,7 @@ class ProductChangeRequestTest extends TestCase
             'created_by' => $productChangeRequest->data['created_by'],
             'id' => $productChangeRequest->data['categories'][0],
             'id' => $productChangeRequest->data['tags'][0],
+            'id' => $productChangeRequest->data['ingredients'][0],
         ]);
     }
 

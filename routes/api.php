@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\ArticleController;
+use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\ArticleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +31,10 @@ Route::middleware(['cache.headers:max_age=' . config('api.max-age')])->group(fun
         ->name('categories.index');
     Route::get('/categories/{category:uuid}', [ CategoryController::class, 'show' ])
         ->name('categories.show');
+
+    Route::get('/brands/{brand:uuid}', [ BrandController::class, 'show' ])
+        ->name('brands.show');
+    Route::get('/brands', [ BrandController::class, 'index' ])
+        ->name('brands.index');
+
 });

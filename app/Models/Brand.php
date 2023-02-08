@@ -14,10 +14,27 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * Class Brand
+ *
+ * @OA\Schema(
+ *     @OA\Xml(name="Brand"),
+ *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="uuid", type="string"),
+ *     @OA\Property(property="title", type="string"),
+ *     @OA\Property(property="slug", type="string"),
+ *     @OA\Property(property="url", type="string"),
+ *     @OA\Property(property="description", type="string"),
+ *     @OA\Property(property="where_to_find", type="string"),
+ *     @OA\Property(property="approved", type="bool"),
+ *     @OA\Property(property="image_id", type="int"),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time"),
+ * );
+ *
  * @package App\Models
  *
  * Fields
  * @property int $id
+ * @property string $uuid
  * @property int $legacy_id
  * @property string $title
  * @property string $slug
@@ -64,6 +81,16 @@ class Brand extends Model implements HasDependencies
     public function image(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'image_id');
+    }
+
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
     public function products(): HasMany

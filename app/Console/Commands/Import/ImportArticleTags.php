@@ -56,7 +56,8 @@ class ImportArticleTags extends Command
         $progress->start();
 
         $articleTagXMLReader->read($path, function (array $data) use ($converter, $deleteIfExist, &$skipped, $progress, $timeconverter) {
-            $tag = Tag::where('slug', '=', $data['slug'])
+            $tag = Tag::query()
+                ->where('slug', 'LIKE', $data['slug'] . '%')
                 ->first() ?? new Tag();
 
             if ($tag->exists) {

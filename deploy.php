@@ -48,6 +48,10 @@ task('worker-restart', function () {
     run('{{bin/php}} {{release_path}}/artisan queue:restart');
 });
 
+task('l5swagger-generate', function () {
+    run('{{bin/php}} {{release_path}}/artisan l5-swagger:generate');
+})->select('stage=test');
+
 task('deploy', [
     'deploy:prepare',
     'upload',
@@ -55,6 +59,7 @@ task('deploy', [
     'artisan:storage:link',
     'artisan:config:cache',
     'deploy:shared',
+    'l5swagger-generate',
     'deploy:symlink',
     'worker-restart',
     'deploy:unlock',

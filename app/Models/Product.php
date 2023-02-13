@@ -9,64 +9,106 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use OpenApi\Annotations as OA;
 
 /**
  * Class Product
+ *
+ * @OA\Schema(
+ *     @OA\Xml(name="Product"),
+ *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="name", type="string"),
+ *     @OA\Property(property="canonical_name", type="string"),
+ *     @OA\Property(property="slug", type="string"),
+ *     @OA\Property(property="price", type="string"),
+ *     @OA\Property(property="size", type="string"),
+ *     @OA\Property(property="where_to_find", type="string"),
+ *     @OA\Property(property="description", type="string"),
+ *     @OA\Property(property="is_active", type="bool"),
+ *     @OA\Property(property="is_sponsored", type="bool"),
+ *     @OA\Property(property="is_18_plus", type="bool"),
+ *     @OA\Property(property="image_id", type="int"),
+ *     @OA\Property(property="tags", type="int"),
+ *     @OA\Property(property="categories", type="int"),
+ *     @OA\Property(property="brand_id", type="int"),
+ *     @OA\Property(property="ingredients", type="int"),
+ *     @OA\Property(property="ingredients_by", type="int"),
+ *     @OA\Property(property="created_by", type="int"),
+ *     @OA\Property(property="updated_by", type="int"),
+ *     @OA\Property(property="published_at", type="string", format="date-time"),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time"),
+ * );
+ *
  * @package App\Models
  *
  * Fields
  * @property int $id
- * @property int $legacy_id
- * @property string $legacy_image_url
- * @property string $legacy_description
  * @property string $name
- * @property string $canonical_name
+ * @property string|null $canonical_name
  * @property string $slug
- * @property int $image_id
- * @property string $price
- * @property string $size
- * @property string $where_to_find
- * @property string $description
- * @property int $brand_id
- * @property bool $active
- * @property bool $hidden
- * @property bool $sponsored
+ * @property string|null $price
+ * @property string|null $size
+ * @property string|null $where_to_find
+ * @property string|null $description
+ * @property bool $is_active
+ * @property bool $is_sponsored
  * @property bool $is_18_plus
  * @property Carbon|null $created_at
- * @property int $created_by
  * @property Carbon|null $updated_at
- * @property int $updated_by
  * @property Carbon|null $published_at
+ *
+ * @property Media|null $image_id
+ * @property Tag $tags
+ * @property Category $categories
+ * @property Brand $brand_id
+ * @property Ingredient $ingredients
+ * @property User|null $created_by
+ * @property User|null $updated_by
+ * @property User|null $ingredients_by
  */
 class Product extends Model
 {
     use GeneratesSlug;
     use HasFactory;
 
+    /**
+     * @var string
+     */
     protected string $slugFrom = 'name';
 
+    /**
+     * @var string[]
+     */
+    protected $with = ['image'];
+
+    /**
+     * @var string[]
+     */
     protected $casts = [
         'description' => 'array',
-        'active' => 'boolean',
-        'hidden' => 'boolean',
-        'sponsored' => 'boolean',
-        'is_18_plus' => 'boolean',
     ];
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'id',
         'name',
+        'canonical_name',
         'description',
         'price',
         'size',
         'where_to_find',
         'image_id',
         'brand_id',
-        'active',
-        'hidden',
-        'sponsored',
+        'is_active',
+        'is_sponsored',
         'is_18_plus',
         'created_by',
+        'updated_by',
+        'ingredients_by',
+        'published_at',
     ];
 
     /**

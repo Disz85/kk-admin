@@ -6,6 +6,9 @@ use App\Models\Author;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Author
+ */
 class AuthorResource extends JsonResource
 {
     /**
@@ -14,7 +17,6 @@ class AuthorResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Author $this */
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -23,6 +25,7 @@ class AuthorResource extends JsonResource
             'email' => $this->email,
             'description' => $this->description,
             'image' => new MediaResource($this->image),
+            'articles' => ArticleResource::collection($this->whenLoaded('articles')),
         ];
     }
 }

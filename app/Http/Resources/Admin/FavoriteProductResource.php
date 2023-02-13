@@ -6,6 +6,9 @@ use App\Models\FavoriteProduct;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin FavoriteProduct
+ */
 class FavoriteProductResource extends JsonResource
 {
     /**
@@ -16,7 +19,6 @@ class FavoriteProductResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /* @var FavoriteProduct $this */
         return [
             'id' => $this->id,
             'name' => $this->name,

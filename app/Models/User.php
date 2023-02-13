@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
+use OpenApi\Annotations as OA;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -21,9 +21,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @OA\Schema(
  *     @OA\Xml(name="User"),
  *     @OA\Property(property="id", type="int"),
- *     @OA\Property(property="created_at", type="string", format="date-time"),
- *     @OA\Property(property="updated_at", type="string", format="date-time"),
- *     @OA\Property(property="legacy_nickname", type="string"),
  *     @OA\Property(property="sso_id", type="string"),
  *     @OA\Property(property="title", type="string"),
  *     @OA\Property(property="lastname", type="string"),
@@ -31,35 +28,37 @@ use Spatie\Permission\Traits\HasRoles;
  *     @OA\Property(property="email", type="string"),
  *     @OA\Property(property="slug", type="string"),
  *     @OA\Property(property="description", type="string"),
- *     @OA\Property(property="image_id", type="int"),
  *     @OA\Property(property="birth_year", type="int"),
  *     @OA\Property(property="skin_type", type="string"),
  *     @OA\Property(property="skin_concern", type="string"),
+ *     @OA\Property(property="image_id", type="int"),
+ *     @OA\Property(property="roles", type="string"),
+ *     @OA\Property(property="shelves", type="int"),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time"),
  * );
  *
  * @package App\Models
  *
  * Fields
  * @property int $id
- * @property string $legacy_nickname
- * @property string $sso_id
- * @property string $title
- * @property string $lastname
- * @property string $firstname
+ * @property string|null $sso_id
+ * @property string|null $title
+ * @property string|null $lastname
+ * @property string|null $firstname
  * @property string $username
- * @property string $email
- * @property string $slug
- * @property string $description
- * @property int $image_id
- * @property int $birth_year
- * @property string $skin_type
- * @property string $skin_concern
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property string|null $email
+ * @property string|null $slug
+ * @property string|null $description
+ * @property int|null $birth_year
+ * @property string|null $skin_type
+ * @property string|null $skin_concern
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  *
- * @property Media|null $image
+ * @property Media|null $image_id
  * @property Role[] $roles
- * @property Collection<Shelf> $shelves
+ * @property Shelf|null $shelves
  */
 class User extends Authenticatable
 {
@@ -72,6 +71,14 @@ class User extends Authenticatable
     protected string $slugFrom = 'username';
     protected string $guard_name = 'api';
 
+    /**
+     * @var string[]
+     */
+    protected $with = ['image'];
+
+    /**
+     * @var array|string[]
+     */
     public array $rules = [
         'email' => 'required|email',
         'username' => 'required',
@@ -80,7 +87,7 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $fillable = [
         'title',
@@ -95,7 +102,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $hidden = [
         'password',
@@ -105,7 +112,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be cast.
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
@@ -113,6 +120,9 @@ class User extends Authenticatable
         'skin_concern' => SkinConcernEnum::class,
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function image(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'image_id');

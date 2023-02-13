@@ -2,12 +2,18 @@
 
 namespace App\Http\Resources\Api;
 
+use App\Http\Resources\Admin\MediaResource;
+use App\Http\Resources\Admin\ProductResource;
+use App\Http\Resources\Admin\TagResource;
 use App\Models\Brand;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use JsonSerializable;
 
+/**
+ * @mixin Brand
+ */
 class BrandResource extends JsonResource
 {
     /**
@@ -18,17 +24,18 @@ class BrandResource extends JsonResource
      */
     public function toArray($request): array|Arrayable|JsonSerializable
     {
-        /* @var Brand $this */
         return [
             'uuid' => $this->uuid,
             'title' => $this->title,
             'slug' => $this->slug,
             'url' => $this->url,
             'description' => $this->description,
-            'image' => new MediaResource($this->whenLoaded('image')),
             'where_to_find' => $this->where_to_find,
-            'createdBy' => new UserResource($this->whenLoaded('createdBy')),
-            'updatedBy' => new UserResource($this->whenLoaded('updatedBy')),
+            'image' => new MediaResource($this->image),
+            'products' => ProductResource::collection($this->whenLoaded('products')),
+            'tags' => TagResource::collection($this->whenLoaded('tags')),
+            'created_by' => new UserResource($this->whenLoaded('created_by')),
+            'updated_by' => new UserResource($this->whenLoaded('updated_by')),
         ];
     }
 }

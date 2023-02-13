@@ -3,6 +3,7 @@
 namespace app\Console\Commands\Import;
 
 use App\Jobs\ConvertHtmlToEditorJs;
+use App\Jobs\ImportImage;
 use App\Models\Product;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -59,13 +60,14 @@ class ImportCremes extends Command
                 `size`,
                 `where_to_find`,
                 `brand_id`,
-                `active`,
-                `sponsored`,
+                `is_active`,
+                `is_sponsored`,
                 `created_at`,
                 `legacy_created_by`,
                 `updated_at`,
                 `legacy_updated_by`,
-                `published_at`
+                `published_at`,
+                `legacy_ingredients_by`
             )
             SELECT
                 TRIM(_tmp_Cremes.Id),
@@ -84,7 +86,8 @@ class ImportCremes extends Command
                 TRIM(_tmp_Cremes.CretBy),
                 TRIM(_tmp_Cremes.ModOn),
                 TRIM(_tmp_Cremes.ModBy),
-                TRIM(_tmp_Cremes.ModOn)
+                TRIM(_tmp_Cremes.ModOn),
+                TRIM(_tmp_Cremes.INCICretBy)
             FROM _tmp_Cremes INNER JOIN brands ON brands.legacy_id = _tmp_Cremes.BrandID
             ON DUPLICATE KEY UPDATE
                 legacy_id = VALUES(legacy_id),
@@ -95,19 +98,20 @@ class ImportCremes extends Command
                 size = VALUES(size),
                 where_to_find = VALUES(where_to_find),
                 brand_id = VALUES(brand_id),
-                active = VALUES(active),
-                sponsored = VALUES(sponsored),
+                is_active = VALUES(is_active),
+                is_sponsored = VALUES(is_sponsored),
                 created_at = VALUES(created_at),
                 legacy_created_by = VALUES(legacy_created_by),
                 updated_at = VALUES(updated_at),
                 legacy_updated_by = VALUES(legacy_updated_by),
-                published_at = VALUES(published_at);
+                published_at = VALUES(published_at),
+                legacy_ingredients_by = VALUES(legacy_ingredients_by);
         ");
     }
 
     private function updateProductUsers()
     {
-        $this->info("Update created_by, updated_by from users to products.");
+        $this->info("Update created_by, updated_by, ingredients_by from users to products.");
         DB::statement("
             UPDATE products as po
             LEFT JOIN users as u ON po.legacy_created_by = u.username
@@ -118,6 +122,11 @@ class ImportCremes extends Command
             LEFT JOIN users as u ON po.legacy_updated_by = u.username
             SET po.updated_by = u.id;
         ");
+        DB::statement("
+            UPDATE products as po
+            LEFT JOIN users as u ON po.legacy_ingredients_by = u.username
+            SET po.ingredients_by = u.id;
+        ");
     }
 
     private function importCremeImages()
@@ -126,7 +135,7 @@ class ImportCremes extends Command
             ->whereNull('image_id')
             ->whereRaw('LEFT(legacy_image_url, 5) <> "https"')
             ->eachById(function ($product) {
-                \App\Jobs\ImportImage::dispatch($product)->onQueue('image');
+                ImportImage::dispatch($product)->onQueue('image');
             });
     }
 

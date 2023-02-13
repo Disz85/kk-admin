@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class () extends Migration {
@@ -14,6 +15,7 @@ return new class () extends Migration {
     {
         Schema::create('product_offers', function (Blueprint $table) {
             $table->id();
+            $table->uuid()->default(DB::raw('UUID()'));
             $table->unsignedBigInteger('legacy_id')->nullable();
             $table->string('name');
             $table->string('slug');
@@ -24,7 +26,7 @@ return new class () extends Migration {
             $table->string('place')->nullable();
             $table->string('shipping_payment')->nullable();
             $table->boolean('is_sold')->default(0);
-            $table->boolean('is_approved')->default(0);
+            $table->dateTime('approved_at')->nullable();
             $table->unsignedBigInteger('legacy_product_id')->nullable();
             $table->foreignId('product_id')->nullable()->constrained('products')
                 ->cascadeOnUpdate()->cascadeOnDelete();

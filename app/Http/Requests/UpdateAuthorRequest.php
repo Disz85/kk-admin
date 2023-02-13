@@ -18,7 +18,7 @@ class UpdateAuthorRequest extends FormRequest
             'email' => 'required|email|max:255|unique:authors,email,'.$this->author->id,
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'image.id' => 'int|exists:media,id',
+            'image_id' => 'nullable|integer|exists:media,id',
         ];
     }
 }

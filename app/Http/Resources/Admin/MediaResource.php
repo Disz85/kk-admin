@@ -6,6 +6,9 @@ use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Media
+ */
 class MediaResource extends JsonResource
 {
     /**
@@ -16,7 +19,6 @@ class MediaResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var $this Media */
         return [
             'id' => $this->id,
             'path' => $this->path,

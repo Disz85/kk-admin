@@ -97,6 +97,9 @@ class ImportArticlesBlogger extends Command
                 $article->body = $data['content'];
 
                 $article->published_at = Carbon::createFromTimeString($data['published'])->toDateTimeString();
+                if ($article->published_at) {
+                    $article->is_active = true;
+                }
                 $article->created_at = Carbon::createFromTimeString($data['updated'])->toDateTimeString();
                 $article->updated_at = Carbon::createFromTimeString($data['updated'])->toDateTimeString();
 

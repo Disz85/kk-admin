@@ -2,8 +2,14 @@
 
 namespace App\Http\Resources\Api;
 
+use App\Http\Resources\Admin\AuthorResource;
+use App\Http\Resources\Admin\CategoryResource;
+use App\Http\Resources\Admin\MediaResource;
+use App\Http\Resources\Admin\TagResource;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use JsonSerializable;
 
 class ArticleResource extends JsonResource
 {
@@ -11,9 +17,9 @@ class ArticleResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param  Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request)
+    public function toArray($request): array|Arrayable|JsonSerializable
     {
         return [
             'uuid' => $this->uuid,
@@ -21,14 +27,14 @@ class ArticleResource extends JsonResource
             'slug' => $this->slug,
             'lead' => $this->lead,
             'body' => $this->body,
-            'active' => $this->active,
-            'hidden' => $this->hidden,
-            'sponsored' => $this->sponsored,
+            'is_active' => $this->is_active,
+            'is_sponsored' => $this->is_sponsored,
             'is_18_plus' => $this->is_18_plus,
-            'image' => new MediaResource($this->whenLoaded('image')),
-            'authors' => new AuthorCollection($this->whenLoaded('authors')),
-            'tags' => new TagCollection($this->whenLoaded('tags')),
-            'categories' => new CategoryCollection($this->whenLoaded('categories')),
+            'published_at' => $this->published_at,
+            'image' => new MediaResource($this->image),
+            'authors' => AuthorResource::collection($this->whenLoaded('authors')),
+            'tags' => TagResource::collection($this->whenLoaded('tags')),
+            'categories' => CategoryResource::collection($this->whenLoaded('categories')),
         ];
     }
 }

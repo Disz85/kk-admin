@@ -6,6 +6,9 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Category
+ */
 class CategoryResource extends JsonResource
 {
     /**
@@ -14,7 +17,6 @@ class CategoryResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Category $this */
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -22,7 +24,10 @@ class CategoryResource extends JsonResource
             'description' => $this->description,
             'parent_id' => $this->parent_id,
             'type' => $this->type,
-            'image' => new MediaResource($this->image),
+            'is_archived' => $this->is_archived,
+            'products' => ProductResource::collection($this->whenLoaded('products')),
+            'articles' => ArticleResource::collection($this->whenLoaded('articles')),
+            'ingredients' => IngredientResource::collection($this->whenLoaded('ingredients')),
         ];
     }
 }

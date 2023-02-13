@@ -6,6 +6,9 @@ use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Article
+ */
 class ArticleResource extends JsonResource
 {
     /**
@@ -14,21 +17,22 @@ class ArticleResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Article $this */
         return [
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
             'lead' => $this->lead,
             'body' => $this->body,
-            'active' => $this->active,
-            'hidden' => $this->hidden,
-            'sponsored' => $this->sponsored,
+            'is_active' => $this->is_active,
+            'is_sponsored' => $this->is_sponsored,
             'is_18_plus' => $this->is_18_plus,
+            'published_at' => $this->published_at,
             'image' => new MediaResource($this->image),
-            'authors' => new AuthorCollection($this->authors),
-            'tags' => new TagCollection($this->tags),
-            'categories' => new CategoryCollection($this->categories),
+            'authors' => AuthorResource::collection($this->whenLoaded('authors')),
+            'tags' => TagResource::collection($this->whenLoaded('tags')),
+            'categories' => CategoryResource::collection($this->whenLoaded('categories')),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

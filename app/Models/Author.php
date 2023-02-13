@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use App\Events\AuthorDeletingEvent;
+use App\Interfaces\HasDependencies;
 use App\Traits\GeneratesSlug;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use OpenApi\Annotations as OA;
 
 /**
  * Author model
@@ -15,38 +17,48 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @OA\Schema(
  *     @OA\Xml(name="Author"),
  *     @OA\Property(property="id", type="int"),
- *     @OA\Property(property="created_at", type="string", format="date-time"),
- *     @OA\Property(property="updated_at", type="string", format="date-time"),
  *     @OA\Property(property="title", type="string"),
  *     @OA\Property(property="name", type="string"),
  *     @OA\Property(property="email", type="string"),
  *     @OA\Property(property="slug", type="string"),
- *     @OA\Property(property="description", type="string")
+ *     @OA\Property(property="description", type="string"),
+ *     @OA\Property(property="image_id", type="int"),
+ *     @OA\Property(property="articles", type="int"),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time"),
  * );
  *
  * @property int $id
- * @property string $title
+ * @property string|null $title
  * @property string $name
  * @property string $slug
- * @property string $email
- * @property string $image_id
- * @property string $description
- * @property string $created_at
- * @property string $updated_at
+ * @property string|null $email
+ * @property string|null $description
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  *
- * @property-read Media|null $image
- *
+ * @property Media|null $image_id
+ * @property Article|null $articles
  */
 
-class Author extends Model
+class Author extends Model implements HasDependencies
 {
     use GeneratesSlug;
     use HasFactory;
 
+    /**
+     * @var string
+     */
     protected $slugFrom = 'name';
 
+    /**
+     * @var string[]
+     */
     protected $with = ['image'];
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'title',
         'name',
@@ -55,17 +67,27 @@ class Author extends Model
         'image_id',
     ];
 
-    protected $dispatchesEvents = [
-        'deleting' => AuthorDeletingEvent::class,
-    ];
-
+    /**
+     * @return BelongsToMany
+     */
     public function articles(): BelongsToMany
     {
         return $this->belongsToMany(Article::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function image(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'image_id');
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDependencies(): bool
+    {
+        return $this->articles()->exists();
     }
 }

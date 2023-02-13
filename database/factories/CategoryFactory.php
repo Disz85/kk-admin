@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enum\CategoryTypeEnum;
 use App\Models\Category;
+use Database\Helpers\BlockStyleEditorFakeContentBuilder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,9 +22,30 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
-            'description' => $this->faker->text,
-            'type' => $this->faker->randomElement(CategoryTypeEnum::toArray()),
+            'name' => fake()->name,
+            'description' => $this->fakeArrayContent(),
+            'type' => fake()->randomElement(CategoryTypeEnum::toArray()),
+            'is_archived' => fake()->boolean,
         ];
+    }
+
+    private function fakeArrayContent(): array
+    {
+        $builder = app()->make(BlockStyleEditorFakeContentBuilder::class);
+
+        $paragraphsCount = $this->faker->numberBetween(3, 6);
+
+        $builder = $builder
+            ->addHeader()
+            ->addParagraph()
+            ->addParagraph()
+            ->addQuote()
+            ->addList();
+
+        foreach (range(1, $paragraphsCount) as $iter) {
+            $builder->addParagraph();
+        }
+
+        return $builder->build();
     }
 }

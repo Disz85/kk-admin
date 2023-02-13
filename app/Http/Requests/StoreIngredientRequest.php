@@ -26,10 +26,10 @@ class StoreIngredientRequest extends FormRequest
             }],
             'comedogen_index' => 'nullable|integer|between:0,5',
             'description' => 'nullable|array',
-            'image_id' => 'nullable|exists:media,id',
-            'is_approved' => 'required|boolean',
-            'categories' => 'required|array|min:1',
-            'categories.*' => 'required|exists:categories,id',
+            'image_id' => 'nullable|integer|exists:media,id',
+            'published_at' => 'nullable|date|date_format:Y-m-d H:i:s',
+            'created_by' => 'nullable|integer|exists:users,id',
+            'categories' => 'required|array|min:1|exists:categories,id',
         ];
     }
 }

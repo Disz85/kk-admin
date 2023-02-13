@@ -7,6 +7,7 @@ use App\Http\Resources\Admin\ArticleResource;
 use App\Http\Resources\Api\ArticleCollection;
 use App\Models\Article;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ArticleController extends Controller
@@ -56,8 +57,7 @@ class ArticleController extends Controller
     {
         return new ArticleCollection(
             QueryBuilder::for(Article::class)
-                ->where('active', '=', 1)
-                ->where('hidden', '=', 0)
+                ->where('is_active', '=', 1)
                 ->allowedFilters('title')
                 ->defaultSort('-published_at')
                 ->allowedSorts([
@@ -92,7 +92,7 @@ class ArticleController extends Controller
      *    @OA\Response (
      *        response=404,
      *        description="Article not found.",
-     *        @OA\JsonContent(ref="#/components/schemas/Article"),
+     *        @OA\JsonContent(),
      *    )
      * )
      *

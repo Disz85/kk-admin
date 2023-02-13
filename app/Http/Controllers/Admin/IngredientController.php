@@ -15,36 +15,38 @@ use App\RequestMappers\IngredientRequestMapper;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class IngredientController extends Controller
 {
     /**
      * @OA\Get(
-     *     tags={"Ingredients"},
-     *     path="/admin/ingredients",
-     *     @OA\Response(
-     *          response=200,
-     *          description="Display a listing of ingredients."
-     *     ),
-     *     @OA\MediaType(
-     *          mediaType="application/json"
-     *     ),
-     *     @OA\Parameter(
-     *          name="page",
-     *          in="query",
-     *          description="Page number",
-     *          @OA\Schema(
-     *              type="integer"
-     *          )
-     *     ),
+     *    tags={"Ingredients"},
+     *    path="/admin/ingredients",
+     *    @OA\Parameter(
+     *        name="page",
+     *        in="query",
+     *        description="Page number",
+     *        @OA\Schema(type="integer"),
+     *        allowEmptyValue="true",
+     *    ),
      *    @OA\Parameter(
      *      name="name",
      *      in="query",
-     *      description="Name",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
+     *      description="Filter by name",
+     *      @OA\Schema(type="string"),
+     *    ),
+     *    @OA\Response(
+     *        response=200,
+     *        description="Display a listing of ingredients.",
+     *        @OA\JsonContent(ref="#/components/schemas/Ingredient"),
+     *    ),
+     *    @OA\Response(
+     *        response=404,
+     *        description="No ingredients.",
+     *        @OA\JsonContent(),
      *    )
      * )
      *
@@ -73,9 +75,9 @@ class IngredientController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
+     *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"name","is_approved"},
+     *                 required={"name"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
@@ -129,20 +131,30 @@ class IngredientController extends Controller
      *                     description="Image ID.",
      *                 ),
      *                 @OA\Property(
-     *                     property="is_approved",
+     *                     property="published_at",
+     *                     type="datetime",
+     *                  @OA\Schema(
+     *                      type="string",
+     *                      format="date-time",
+     *                  ),
+     *                     description="Format: Y-m-d H:i:s",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="created_by",
      *                     type="integer",
-     *                     description="1|0",
+     *                     description="created_by",
      *                 ),
      *             )
      *         )
      *     ),
      *     @OA\Response(
-     *         response=200,
-     *         description="Ingredient created."
+     *         response=201,
+     *         description="Ingredient created.",
+     *         @OA\JsonContent(ref="#/components/schemas/Ingredient")
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Error in fields."
+     *         description="Error in fields.",
      *     ),
      * )
      *
@@ -162,29 +174,30 @@ class IngredientController extends Controller
      * @OA\Get(
      *    tags={"Ingredients"},
      *    path="/admin/ingredients/{ingredient}",
-     *    @OA\Response(
-     *      response=200,
-     *      description="Display a listing of ingredient."
-     *    ),
-     *    @OA\MediaType(
-     *      mediaType="application/json"
-     *    ),
      *     @OA\Parameter(
      *         name="ingredient",
      *         in="path",
      *         required=true,
      *         description="Ingredient ID",
-     *         @OA\Schema(
-     *             type="integer"
-     *         ),
+     *         @OA\Schema(type="integer"),
      *     ),
+     *    @OA\Response(
+     *        response=200,
+     *        description="Display a selected Ingredient.",
+     *        @OA\JsonContent(ref="#/components/schemas/Ingredient"),
+     *    ),
+     *    @OA\Response(
+     *        response=404,
+     *        description="Ingredient not found.",
+     *        @OA\JsonContent(),
+     *    )
      * )
      * @param Ingredient $ingredient
      * @return IngredientResource
      */
     public function show(Ingredient $ingredient): IngredientResource
     {
-        $ingredient->load('categories')->load('products');
+        $ingredient->load('categories');
 
         return new IngredientResource($ingredient);
     }
@@ -200,16 +213,14 @@ class IngredientController extends Controller
      *      in="path",
      *      required=true,
      *      description="Ingredient ID",
-     *      @OA\Schema(
-     *          type="integer"
-     *      )
+     *      @OA\Schema(type="integer"),
      *    ),
      *    @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"name","is_approved"},
+     *                 required={"name"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
@@ -263,20 +274,30 @@ class IngredientController extends Controller
      *                     description="Image ID.",
      *                 ),
      *                 @OA\Property(
-     *                     property="is_approved",
+     *                     property="published_at",
+     *                     type="datetime",
+     *                  @OA\Schema(
+     *                      type="string",
+     *                      format="date-time",
+     *                  ),
+     *                     description="Format: Y-m-d H:i:s",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="created_by",
      *                     type="integer",
-     *                     description="1|0",
+     *                     description="created_by",
      *                 ),
      *             )
      *         )
      *     ),
      *     @OA\Response(
-     *         response=200,
-     *         description="Integer updated."
+     *         response=201,
+     *         description="Ingredient updated.",
+     *         @OA\JsonContent(ref="#/components/schemas/Ingredient"),
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Error in fields."
+     *         description="Error in fields.",
      *     ),
      * )
      *
@@ -296,23 +317,16 @@ class IngredientController extends Controller
      * @OA\Delete (
      *     tags={"Ingredients"},
      *     path="/admin/ingredients/{ingredient}",
-     *     @OA\MediaType(
-     *         mediaType="application/json"
+     *     @OA\RequestBody(
+     *         required=false,
+     *         @OA\MediaType(mediaType="application/x-www-form-urlencoded"),
      *     ),
      *    @OA\Parameter(
      *      name="ingredient",
      *      in="path",
      *      description="Ingredient ID",
-     *      @OA\Schema(
-     *          type="integer"
-     *      )
+     *      @OA\Schema(type="integer"),
      *    ),
-     *     @OA\RequestBody(
-     *         required=false,
-     *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
-     *         )
-     *     ),*
      *    @OA\Response(
      *      response=204,
      *      description="Ingredient deleted.",
@@ -320,18 +334,19 @@ class IngredientController extends Controller
      *    ),
      *    @OA\Response(
      *      response=404,
-     *      description="Ingredient not found."
+     *      description="Ingredient not found.",
+     *      @OA\JsonContent(),
      *    ),
      *    @OA\Response(
      *      response=422,
-     *      description="Ingredient cannot be deleted due to existence of related resources."
+     *      description="Ingredient cannot be deleted due to existence of related resources.",
      *    ),
      * )
      *
      * @param DeleteIngredientRequest $request
      * @param Ingredient $ingredient
      * @return JsonResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function destroy(DeleteIngredientRequest $request, Ingredient $ingredient): JsonResponse
     {
@@ -344,12 +359,10 @@ class IngredientController extends Controller
      * @OA\Get(
      *    tags={"Ingredients"},
      *    path="/admin/ingredients/get-ewg-data-types",
-     *    @OA\MediaType(
-     *      mediaType="application/json"
-     *    ),
+     *    @OA\MediaType(mediaType="application/json"),
      *    @OA\Response(
      *      response=200,
-     *      description="Display a listing of ingredient ewg_data types."
+     *      description="Display a listing of ingredient ewg_data types.",
      *    ),
      * )
      *
@@ -364,12 +377,10 @@ class IngredientController extends Controller
      * @OA\Get(
      *    tags={"Ingredients"},
      *    path="/admin/ingredients/get-categories",
-     *    @OA\MediaType(
-     *      mediaType="application/json"
-     *    ),
+     *    @OA\MediaType(mediaType="application/json"),
      *    @OA\Response(
      *      response=200,
-     *      description="Display a listing of ingredient categories."
+     *      description="Display a listing of ingredient categories.",
      *    ),
      * )
      *

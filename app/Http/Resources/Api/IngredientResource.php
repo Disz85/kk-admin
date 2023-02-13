@@ -9,6 +9,9 @@ use App\Models\Ingredient;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Ingredient
+ */
 class IngredientResource extends JsonResource
 {
     /**
@@ -17,7 +20,6 @@ class IngredientResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Ingredient $this */
         return [
             'uuid' => $this->uuid,
             'name' => $this->name,

@@ -16,7 +16,7 @@ class UpdateIngredientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|unique:ingredients',
+            'name' => 'required|string|max:255|unique:ingredients,name,'.$this->ingredient->id,
             'ewg_data' => ['nullable', 'string', new Enum(IngredientEwgDataEnum::class)],
             'ewg_score' => 'nullable|integer|between:0,10',
             'ewg_score_max' => ['nullable', 'integer', 'between:0,10', function ($attribute, $value, $fail) {
@@ -26,10 +26,10 @@ class UpdateIngredientRequest extends FormRequest
             }],
             'comedogen_index' => 'nullable|integer|between:0,5',
             'description' => 'nullable|array',
-            'image_id' => 'nullable|exists:media,id',
-            'is_approved' => 'required|boolean',
-            'categories' => 'required|array|min:1',
-            'categories.*' => 'required|exists:categories,id',
+            'image_id' => 'nullable|integer|exists:media,id',
+            'published_at' => 'nullable|date|date_format:Y-m-d H:i:s',
+            'created_by' => 'nullable|integer|exists:users,id',
+            'categories' => 'required|array|min:1|exists:categories,id',
         ];
     }
 }

@@ -14,6 +14,7 @@ return new class () extends Migration {
     {
         Schema::create('media', function (Blueprint $table) {
             $table->id();
+            $table->uuid()->default(DB::raw('UUID()'));
             $table->unsignedBigInteger('legacy_id')->nullable();
             $table->string('legacy_url', 2000)->nullable();
             $table->text('path');

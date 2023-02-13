@@ -8,6 +8,7 @@ use App\Http\Resources\Api\IngredientCollection;
 use App\Models\Category;
 use App\Models\Ingredient;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class IngredientController extends Controller
@@ -45,7 +46,7 @@ class IngredientController extends Controller
      *    ),
      *    @OA\Response(
      *        response=404,
-     *        description="No ingredients",
+     *        description="No ingredients.",
      *        @OA\JsonContent()
      *    )
      * )

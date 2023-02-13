@@ -6,15 +6,17 @@ use App\Models\ProductChangeRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin ProductChangeRequest
+ */
 class ProductChangeRequestResource extends JsonResource
 {
     /**
      * @param Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
-        /** @var ProductChangeRequest $this */
         return [
             'id' => $this->id,
             'data' => $this->data,

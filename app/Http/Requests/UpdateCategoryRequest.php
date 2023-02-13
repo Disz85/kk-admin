@@ -17,13 +17,10 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'description' => 'nullable|string',
+            'description' => 'nullable|array',
             'parent_id' => 'nullable|integer|exists:categories,id',
-            'type' => [
-                'required',
-                'string',
-                new Enum(CategoryTypeEnum::class),
-            ],
+            'is_archived' => 'sometimes|boolean',
+            'type' => ['required', 'string', new Enum(CategoryTypeEnum::class)],
         ];
     }
 }

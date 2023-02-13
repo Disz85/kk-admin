@@ -76,7 +76,7 @@ class ArticleTest extends TestCase
 
         $response->assertOk();
 
-        $this->assertDatabaseHas(Article::class, Arr::only($updatedArticle, ['id', 'title','active']));
+        $this->assertDatabaseHas(Article::class, Arr::only($updatedArticle, ['id', 'title','is_active']));
 
         $updatedAuthors->every(fn ($author) => $response->assertJsonFragment([
             'name' => $author->name,

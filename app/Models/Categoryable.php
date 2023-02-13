@@ -9,12 +9,18 @@ class Categoryable extends MorphPivot
 {
     use HasFactory;
 
+    /**
+     * @var string
+     */
     protected $table = 'categoryables';
 
     public $timestamps = false;
     public $incrementing = true;
 
-    protected static function boot()
+    /**
+     * @return void
+     */
+    protected static function boot(): void
     {
         parent::boot();
 

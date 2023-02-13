@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use JsonSerializable;
 
+/**
+ * @mixin Brand
+ */
 class BrandResource extends JsonResource
 {
     /**
@@ -18,18 +21,20 @@ class BrandResource extends JsonResource
      */
     public function toArray($request): array|Arrayable|JsonSerializable
     {
-        /* @var Brand $this */
         return [
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
             'url' => $this->url,
             'description' => $this->description,
-            'image' => new MediaResource($this->image),
             'where_to_find' => $this->where_to_find,
-            'approved' => $this->approved,
+            'image' => new MediaResource($this->image),
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
+            'products' => ProductResource::collection($this->whenLoaded('products')),
+            'tags' => TagResource::collection($this->whenLoaded('tags')),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

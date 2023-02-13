@@ -9,6 +9,7 @@ use App\Http\Resources\Admin\CategoryResource;
 use App\Http\Resources\Api\CategoryCollection;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -25,29 +26,29 @@ class CategoryController extends Controller
      *        in="query",
      *        description="Page number",
      *        @OA\Schema(type="integer"),
-     *        allowEmptyValue="true"
+     *        allowEmptyValue="true",
      *    ),
      *    @OA\Parameter(
      *        name="per_page",
      *        in="query",
      *        description="Page size",
      *        @OA\Schema(type="integer"),
-     *        allowEmptyValue="true"
+     *        allowEmptyValue="true",
      *    ),
      *    @OA\Parameter(
-     *        name="filter[title]",
+     *        name="filter[name]",
      *        in="query",
      *        description="Title",
      *        @OA\Schema(type="string")
      *    ),
      *    @OA\Response(
      *        response=200,
-     *        description="Display a listing of articles.",
+     *        description="Display a listing of categories.",
      *        @OA\JsonContent(ref="#/components/schemas/Category")
      *    ),
      *    @OA\Response(
      *        response=404,
-     *        description="No articles",
+     *        description="No categories.",
      *        @OA\JsonContent()
      *    )
      * )
@@ -86,21 +87,21 @@ class CategoryController extends Controller
      *     tags={"Categories"},
      *     path="/api/categories/{category}",
      *     @OA\Parameter(
-     *         name="article",
+     *         name="category",
      *         in="path",
      *         required=true,
      *         description="Category UUID",
-     *         @OA\Schema(type="integer"),
+     *         @OA\Schema(type="string"),
      *     ),
      *    @OA\Response(
      *        response=200,
      *        description="Display a selected Category.",
-     *        @OA\JsonContent(ref="#/components/schemas/Category")
+     *        @OA\JsonContent(ref="#/components/schemas/Category"),
      *    ),
      *    @OA\Response(
      *        response=404,
      *        description="Category not found.",
-     *        @OA\JsonContent(ref="#/components/schemas/Category")
+     *        @OA\JsonContent(),
      *    )
      * )
      *

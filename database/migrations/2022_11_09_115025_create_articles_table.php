@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class () extends Migration {
@@ -14,7 +15,7 @@ return new class () extends Migration {
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
-            $table->uuid();
+            $table->uuid()->default(DB::raw('UUID()'));
             $table->unsignedBigInteger('legacy_id')->nullable();
             $table->string('title');
             $table->string('legacy_slug')->nullable();
@@ -23,9 +24,8 @@ return new class () extends Migration {
             $table->longText('body')->nullable();
             $table->foreignId('image_id')->nullable()->constrained('media')
                 ->cascadeOnUpdate()->cascadeOnDelete();
-            $table->boolean('active')->default(false);
-            $table->boolean('hidden')->default(false);
-            $table->boolean('sponsored')->default(false);
+            $table->boolean('is_active')->default(false);
+            $table->boolean('is_sponsored')->default(false);
             $table->boolean('is_18_plus')->default(false);
             $table->timestamps();
             $table->dateTime('published_at')->nullable();

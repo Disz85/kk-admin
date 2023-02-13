@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController
 {
+    /**
+     * @param Request $request
+     * @return UserResource
+     */
     public function login(Request $request): UserResource
     {
         if ($user = Auth::user()) {
@@ -45,6 +49,9 @@ class AuthController
         return new UserResource($user);
     }
 
+    /**
+     * @return void
+     */
     public function logout(): void
     {
         if (Auth::check()) {

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Category;
+use App\Models\Ingredient;
 use App\Models\ProductChangeRequest;
 use App\Models\Tag;
 use App\Models\User;
@@ -17,7 +18,7 @@ class ProductChangeRequestTest extends TestCase
     /** @test */
     public function it_can_store_a_new_product_change_request()
     {
-        list($product, $tags, $categories, $user) = $this->makeDummyRequestData();
+        list($product, $tags, $categories, $user, $ingredients) = $this->makeDummyRequestData();
         $response = $this->post(route('admin.product-change-requests.store'), $product);
         $response->assertCreated();
         $response->assertJsonFragment([
@@ -25,18 +26,16 @@ class ProductChangeRequestTest extends TestCase
         ]);
     }
 
-    /** @test */
     public function it_can_approve_a_product_change_request()
     {
         $productChangeRequest = ProductChangeRequest::factory()->create();
         $response = $this->post(route('admin.product-change-requests.approve', ['product_change_request' => $productChangeRequest->id]));
+
         $response->assertCreated();
         $response->assertJsonFragment([
             'name' => $productChangeRequest->data['name'],
             'where_to_find' => $productChangeRequest->data['where_to_find'],
-            'active' => $productChangeRequest->data['active'],
-            'hidden' => $productChangeRequest->data['hidden'],
-            'sponsored' => $productChangeRequest->data['sponsored'],
+            'is_sponsored' => $productChangeRequest->data['is_sponsored'],
             'description' => $productChangeRequest->data['description'],
             'created_by' => $productChangeRequest->data['created_by'],
             'id' => $productChangeRequest->data['categories'][0],
@@ -61,12 +60,11 @@ class ProductChangeRequestTest extends TestCase
         list($productChanged, $tags, $categories, $user) = $this->makeDummyRequestData();
         $response = $this->put(route('admin.product-change-requests.update', ['product_change_request' => $product->id]), $productChanged);
         $response->assertOk();
+
         $response->assertJsonFragment([
             'name' => $productChanged['name'],
             'where_to_find' => $productChanged['where_to_find'],
-            'active' => $productChanged['active'],
-            'hidden' => $productChanged['hidden'],
-            'sponsored' => $productChanged['sponsored'],
+            'is_sponsored' => $productChanged['is_sponsored'],
             'description' => $productChanged['description'],
             'created_by' => $productChanged['created_by'],
             'tags' => $productChanged['tags'],
@@ -83,9 +81,7 @@ class ProductChangeRequestTest extends TestCase
         $response->assertJsonFragment([
             'name' => $product->data['name'],
             'where_to_find' => $product->data['where_to_find'],
-            'active' => $product->data['active'],
-            'hidden' => $product->data['hidden'],
-            'sponsored' => $product->data['sponsored'],
+            'is_sponsored' => $product->data['is_sponsored'],
             'description' => $product->data['description'],
             'created_by' => $product->data['created_by'],
             'categories' => $product->data['categories'],
@@ -112,11 +108,13 @@ class ProductChangeRequestTest extends TestCase
         $categories = Category::factory()->count(3)->create();
         $tags = Tag::factory()->count(2)->create();
         $product = ProductFactory::new()->raw();
+        $ingredients = Ingredient::factory()->count(2)->create();
         $user = User::factory()->create();
         $product['categories'] = (array_column($categories->toArray(), 'id'));
+        $product['ingredients'] = (array_column($ingredients->toArray(), 'id'));
         $product['tags'] = (array_column($tags->toArray(), 'id'));
         $product['created_by'] = $user->id;
 
-        return [$product,$tags, $categories, $user];
+        return [$product, $tags, $categories, $user, $ingredients];
     }
 }

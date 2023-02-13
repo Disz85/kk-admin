@@ -11,8 +11,9 @@ use App\Models\Article;
 use App\RequestMappers\ArticleRequestMapper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 use Spatie\QueryBuilder\QueryBuilder;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class ArticleController extends Controller
@@ -63,7 +64,7 @@ class ArticleController extends Controller
         return new ArticleCollection(
             QueryBuilder::for(Article::class)
             ->allowedFilters('title')
-            ->defaultSort('-updated_at')
+            ->defaultSort('-published_at')
             ->allowedSorts('published_at', 'created_at', 'updated_at')
             ->paginate($request->get('per_page', 20))
             ->appends($request->query())
@@ -81,7 +82,7 @@ class ArticleController extends Controller
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"title"},
+     *                 required={"title", "body"},
      *                 @OA\Property (
      *                     property="title",
      *                     type="string",
@@ -98,19 +99,169 @@ class ArticleController extends Controller
      *                     description="Body"
      *                 ),
      *                 @OA\Property (
-     *                     property="active",
+     *                     property="is_active",
      *                     type="integer",
      *                     description="Is active? 1|0",
      *                     example="0"
      *                 ),
      *                 @OA\Property (
-     *                     property="hidden",
+     *                     property="is_sponsored",
      *                     type="integer",
-     *                     description="Is hidden? 1|0",
+     *                     description="Is sponsored? 1|0",
      *                     example="0"
      *                 ),
      *                 @OA\Property (
-     *                     property="sponsored",
+     *                     property="is_18_plus",
+     *                     type="integer",
+     *                     description="Is 18 plus content? 1|0",
+     *                     example="0"
+     *                 ),
+     *                 @OA\Property (
+     *                     property="image_id",
+     *                     type="integer",
+     *                     description="image id"
+     *                 ),
+     *                 @OA\Property (
+     *                     property="authors[0]",
+     *                     type="integer",
+     *                     description="Author #1 id"
+     *                 ),
+     *                 @OA\Property (
+     *                     property="authors[1]",
+     *                     type="integer",
+     *                     description="Author #2 id"
+     *                 ),
+     *                 @OA\Property (
+     *                     property="categories[0]",
+     *                     type="integer",
+     *                     description="Category #1 id"
+     *                 ),
+     *                 @OA\Property (
+     *                     property="categories[1]",
+     *                     type="integer",
+     *                     description="Category #2 id"
+     *                 ),
+     *                 @OA\Property (
+     *                     property="tags[0]",
+     *                     type="integer",
+     *                     description="Tag #1 id"
+     *                 ),
+     *                 @OA\Property (
+     *                     property="tags[1]",
+     *                     type="integer",
+     *                     description="Tag #2 id"
+     *                 ),
+     *                 @OA\Property (
+     *                     property="published_at",
+     *                     type="datetime",
+     *                     @OA\Schema(
+     *                         type="string",
+     *                         format="date-time",
+     *                     ),
+     *                     description="Format: Y-m-d H:i:s",
+     *                 ),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Article created.",
+     *         @OA\JsonContent(ref="#/components/schemas/Article")
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error in fields.",
+     *     )
+     * )
+     *
+     *
+     * @param StoreArticleRequest $request
+     * @param Article $article
+     * @param ArticleRequestMapper $articleRequestMapper
+     * @return ArticleResource
+     */
+    public function store(StoreArticleRequest $request, Article $article, ArticleRequestMapper $articleRequestMapper): ArticleResource
+    {
+        return new ArticleResource($articleRequestMapper->map($article, $request->validated()));
+    }
+
+    /**
+     * Display the specified article.
+     *
+     * @OA\Get(
+     *     tags={"Articles"},
+     *     path="/admin/articles/{article}",
+     *     @OA\Parameter(
+     *         name="article",
+     *         in="path",
+     *         required=true,
+     *         description="Article ID",
+     *         @OA\Schema(type="integer"),
+     *     ),
+     *    @OA\Response(
+     *        response=200,
+     *        description="Display a selected Article.",
+     *        @OA\JsonContent(ref="#/components/schemas/Article")
+     *    ),
+     *    @OA\Response(
+     *        response=404,
+     *        description="Article not found.",
+     *        @OA\JsonContent()
+     *    )
+     * )
+     *
+     * @param Article $article
+     * @return ArticleResource
+     */
+    public function show(Article $article): ArticleResource
+    {
+        $article->load(['authors', 'tags', 'categories']);
+
+        return new ArticleResource($article);
+    }
+
+    /**
+     * Update the specified article.
+     *
+     * @OA\Put (
+     *     tags={"Articles"},
+     *     path="/admin/articles/{article}",
+     *     @OA\Parameter(
+     *         name="article",
+     *         in="path",
+     *         required=true,
+     *         description="Article ID",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 required={"title", "body"},
+     *                 @OA\Property (
+     *                     property="title",
+     *                     type="string",
+     *                     description="Title"
+     *                 ),
+     *                 @OA\Property (
+     *                     property="lead",
+     *                     type="string",
+     *                     description="Lead"
+     *                 ),
+     *                 @OA\Property (
+     *                     property="body",
+     *                     type="string",
+     *                     description="Body"
+     *                 ),
+     *                 @OA\Property (
+     *                     property="is_active",
+     *                     type="integer",
+     *                     description="Is active? 1|0",
+     *                     example="0"
+     *                 ),
+     *                 @OA\Property (
+     *                     property="is_sponsored",
      *                     type="integer",
      *                     description="Is sponsored? 1|0",
      *                     example="0"
@@ -163,179 +314,19 @@ class ArticleController extends Controller
      *                         type="string",
      *                         format ="date-time",
      *                     ),
-     *                     description="Published at"
+     *                     description="Format: Y-m-d H:i:s",
      *                 ),
      *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="Article created.",
-     *         @OA\JsonContent(ref="#/components/schemas/Article")
+     *         description="Product updated.",
+     *         @OA\JsonContent(ref="#/components/schemas/Article"),
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Error in fields",
-     *         @OA\JsonContent()
-     *     )
-     * )
-     *
-     *
-     * @param StoreArticleRequest $request
-     * @param Article $article
-     * @param ArticleRequestMapper $articleRequestMapper
-     * @return ArticleResource
-     */
-    public function store(StoreArticleRequest $request, Article $article, ArticleRequestMapper $articleRequestMapper): ArticleResource
-    {
-        return new ArticleResource($articleRequestMapper->map($article, $request->validated()));
-    }
-
-    /**
-     * Display the specified article.
-     *
-     * @OA\Get(
-     *     tags={"Articles"},
-     *     path="/admin/articles/{article}",
-     *     @OA\Parameter(
-     *         name="article",
-     *         in="path",
-     *         required=true,
-     *         description="Article ID",
-     *         @OA\Schema(type="integer"),
-     *     ),
-     *    @OA\Response(
-     *        response=200,
-     *        description="Display a selected Article.",
-     *        @OA\JsonContent(ref="#/components/schemas/Article")
-     *    ),
-     *    @OA\Response(
-     *        response=404,
-     *        description="Article not found.",
-     *        @OA\JsonContent(ref="#/components/schemas/Article")
-     *    )
-     * )
-     *
-     * @param Article $article
-     * @return ArticleResource
-     */
-    public function show(Article $article): ArticleResource
-    {
-        return new ArticleResource($article);
-    }
-
-    /**
-     * Update the specified article.
-     *
-     * @OA\Put (
-     *     tags={"Articles"},
-     *     path="/admin/articles/{article}",
-     *     @OA\Parameter(
-     *         name="article",
-     *         in="path",
-     *         required=true,
-     *         description="Article ID",
-     *         @OA\Schema(type="string")
-     *     ),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
-     *             @OA\Schema(
-     *                 required={"title"},
-     *                 @OA\Property (
-     *                     property="title",
-     *                     type="string",
-     *                     description="Title"
-     *                 ),
-     *                 @OA\Property (
-     *                     property="lead",
-     *                     type="string",
-     *                     description="Lead"
-     *                 ),
-     *                 @OA\Property (
-     *                     property="body",
-     *                     type="string",
-     *                     description="Body"
-     *                 ),
-     *                 @OA\Property (
-     *                     property="active",
-     *                     type="integer",
-     *                     description="Is active? 1|0",
-     *                     example="0"
-     *                 ),
-     *                 @OA\Property (
-     *                     property="hidden",
-     *                     type="integer",
-     *                     description="Is hidden? 1|0",
-     *                     example="0"
-     *                 ),
-     *                 @OA\Property (
-     *                     property="sponsored",
-     *                     type="integer",
-     *                     description="Is sponsored? 1|0",
-     *                     example="0"
-     *                 ),
-     *                 @OA\Property (
-     *                     property="is_18_plus",
-     *                     type="integer",
-     *                     description="Is 18 plus content? 1|0",
-     *                     example="0"
-     *                 ),
-     *                 @OA\Property (
-     *                     property="image_id",
-     *                     type="integer",
-     *                     description="image id"
-     *                 ),
-     *                 @OA\Property (
-     *                     property="authors[0]",
-     *                     type="integer",
-     *                     description="Author #1 id"
-     *                 ),
-     *                 @OA\Property (
-     *                     property="authors[1]",
-     *                     type="integer",
-     *                     description="Author #2 id"
-     *                 ),
-     *                 @OA\Property (
-     *                     property="categories[0]",
-     *                     type="integer",
-     *                     description="Category #1 id"
-     *                 ),
-     *                 @OA\Property (
-     *                     property="categories[1]",
-     *                     type="integer",
-     *                     description="Category #2 id"
-     *                 ),
-     *                 @OA\Property (
-     *                     property="tags[0]",
-     *                     type="integer",
-     *                     description="Tag #1 id"
-     *                 ),
-     *                 @OA\Property (
-     *                     property="tags[1]",
-     *                     type="integer",
-     *                     description="Tag #2 id"
-     *                 ),
-     *                 @OA\Property (
-     *                     property="published_at",
-     *                     type="datetime",
-     *                     @OA\Schema(
-     *                         type="string",
-     *                         format ="date-time"
-     *                     ),
-     *                     description="published_at"
-     *                 ),
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Product updated."
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Error in fields"
+     *         description="Error in fields."
      *     )
      * )
      *
@@ -355,6 +346,10 @@ class ArticleController extends Controller
      * @OA\Delete (
      *     tags={"Articles"},
      *     path="/admin/articles/{article}",
+     *     @OA\RequestBody(
+     *         required=false,
+     *         @OA\MediaType(mediaType="application/x-www-form-urlencoded")
+     *     ),
      *     @OA\Parameter(
      *         name="article",
      *         in="path",
@@ -367,7 +362,8 @@ class ArticleController extends Controller
      *    ),
      *    @OA\Response(
      *        response=404,
-     *        description="Article not found."
+     *        description="Article not found.",
+     *        @OA\JsonContent()
      *    )
      * )
      *

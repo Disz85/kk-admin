@@ -17,31 +17,29 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductChangeRequestController extends Controller
 {
     /**
      * List of Product change request.
+     *
      * @OA\Get(
      *    tags={"ProductChangeRequests"},
      *    path="/admin/product-change-requests",
-     *    @OA\Response(
-     *      response="200",
-     *      description="Display a listing of prdouct change requests.",
-     *      @OA\JsonContent()
-     *    ),
-     *    @OA\MediaType(
-     *      mediaType="application/json"
-     *    ),
+     *    @OA\MediaType(mediaType="application/json"),
      *    @OA\Parameter(
      *      name="page",
      *      in="query",
      *      description="Page number",
-     *      @OA\Schema(
-     *          type="integer"
-     *      )
-     *    )
+     *      @OA\Schema(type="integer"),
+     *    ),
+     *    @OA\Response(
+     *      response=200,
+     *      description="Display a listing of prdouct change requests.",
+     *      @OA\JsonContent(ref="#/components/schemas/ProductChangeRequest"),
+     *    ),
      * )
      *
      * Display a list of the resource.
@@ -63,27 +61,22 @@ class ProductChangeRequestController extends Controller
      * @OA\Get(
      *    tags={"ProductChangeRequests"},
      *    path="/admin/product-change-requests/{product_change_request}",
-     *    @OA\Response(
-     *      response="200",
-     *      description="Display a selected Product Change Request.",
-     *      @OA\JsonContent()
-     *    ),
-     *    @OA\MediaType(
-     *      mediaType="application/json"
-     *    ),
      *    @OA\Parameter(
-     *         name="product_change_request",
-     *         in="path",
-     *         required=true,
-     *         description="Product Change Request ID",
-     *         @OA\Schema(
-     *             type="integer"
-     *         ),
+     *      name="product_change_request",
+     *      in="path",
+     *      required=true,
+     *      description="Product Change Request ID",
+     *      @OA\Schema(type="integer"),
      *    ),
      *    @OA\Response(
-     *        response=404,
-     *        description="Product change request Not Found.",
-     *        @OA\JsonContent()
+     *      response=200,
+     *      description="Display a selected Product Change Request.",
+     *      @OA\JsonContent(ref="#/components/schemas/ProductChangeRequest"),
+     *    ),
+     *    @OA\Response(
+     *      response=404,
+     *      description="Product change request not found.",
+     *      @OA\JsonContent(),
      *    )
      * )
      * @param ProductChangeRequest $productChangeRequest
@@ -103,9 +96,9 @@ class ProductChangeRequestController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
+     *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"name","active","hidden","sponsored","is_18_plus","created_by"},
+     *                 required={"name","product_id", "image_id", "is_active", "is_sponsored","is_18_plus","created_by", "brand_id", "price"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
@@ -130,6 +123,7 @@ class ProductChangeRequestController extends Controller
      *                     property="price",
      *                     type="integer",
      *                     description="price",
+     *                     example="1",
      *                 ),
      *                 @OA\Property(
      *                     property="size",
@@ -142,19 +136,13 @@ class ProductChangeRequestController extends Controller
      *                     description="brand_id",
      *                 ),
      *                 @OA\Property(
-     *                     property="active",
-     *                     type="integer",
-     *                     description="1|0",
-     *                     example="1",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="hidden",
+     *                     property="is_active",
      *                     type="integer",
      *                     description="1|0",
      *                     example="0",
      *                 ),
      *                 @OA\Property(
-     *                     property="sponsored",
+     *                     property="is_sponsored",
      *                     type="integer",
      *                     description="1|0",
      *                     example="0",
@@ -174,6 +162,11 @@ class ProductChangeRequestController extends Controller
      *                     property="image_id",
      *                     type="integer",
      *                     description="image id",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="ingredients_by",
+     *                     type="integer",
+     *                     description="ingredients_by",
      *                 ),
      *                 @OA\Property (
      *                     property="categories[0]",
@@ -219,23 +212,23 @@ class ProductChangeRequestController extends Controller
      *                     property="published_at",
      *                     type="datetime",
      *                      @OA\Schema(
-     *                      type="string",
-     *                      format ="date-time",
+     *                          type="string",
+     *                          format ="date-time",
      *                      ),
-     *                     description="published_at",
+     *                     description="Format: Y-m-d H:i:s",
      *                 ),
      *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="Product chanhe request created.",
-     *         @OA\JsonContent()
+     *         description="Product change request created.",
+     *         @OA\JsonContent(ref="#/components/schemas/ProductChangeRequest"),
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Error in fields",
-     *         @OA\JsonContent()
+     *         description="Error in fields.",
+     *         @OA\JsonContent(),
      *     ),
      * )
      *
@@ -244,7 +237,6 @@ class ProductChangeRequestController extends Controller
      */
     public function store(StoreProductChangeRequest $request): ProductChangeRequestResource
     {
-        /** @var ProductChangeRequest $productChangeRequest */
         $productChangeRequest = ProductChangeRequest::create([
             'data' => $request->validated(),
             'product_id' => $request->product_id ?? null,
@@ -259,17 +251,13 @@ class ProductChangeRequestController extends Controller
      * @OA\Post (
      *     tags={"ProductChangeRequests"},
      *     path="/admin/product-change-requests/{product_change_request}/approve",
-     *     @OA\MediaType(
-     *         mediaType="application/json"
-     *     ),
+     *     @OA\MediaType(mediaType="application/json"),
      *    @OA\Parameter(
      *      name="product_change_request",
      *      in="path",
      *      required=true,
      *      description="integer",
-     *      @OA\Schema(
-     *          type="integer"
-     *      )
+     *      @OA\Schema(type="integer"),
      *    ),
      *     @OA\Response(
      *         response=200,
@@ -283,24 +271,25 @@ class ProductChangeRequestController extends Controller
      */
     public function approve(ProductChangeRequest $productChangeRequest): ProductResource
     {
-        DB::beginTransaction();
-        $product = Product::updateOrCreate(['id' => $productChangeRequest->product->id ?? null], $productChangeRequest->data);
-        foreach ($productChangeRequest->data['ingredients_new'] as $newIngredientName) {
-            $newIngredientIds[] = Ingredient::create(['name' => $newIngredientName])->id;
-        }
-        $product->ingredients()->sync(
-            array_merge(
-                $newIngredientIds ?? [],
-                $productChangeRequest->data['ingredients'] ?? []
-            )
-        );
-        $product->tags()->sync($productChangeRequest->data['tags'] ?? []);
-        $product->categories()->sync($productChangeRequest->data['categories'] ?? []);
-        $productChangeRequest->delete();
-        $product->refresh()->load(['tags','categories','ingredients']);
-        DB::commit();
+        $product = DB::transaction(function () use ($productChangeRequest) {
+            $product = Product::updateOrCreate(['id' => $productChangeRequest->product->id ?? null], $productChangeRequest->data);
+            foreach ($productChangeRequest->data['ingredients_new'] ?? [] as $newIngredientName) {
+                $newIngredientIds[] = Ingredient::create(['name' => $newIngredientName])->id;
+            }
+            $product->ingredients()->sync(
+                array_merge(
+                    $newIngredientIds ?? [],
+                    $productChangeRequest->data['ingredients'] ?? []
+                )
+            );
+            $product->tags()->sync($productChangeRequest->data['tags'] ?? []);
+            $product->categories()->sync($productChangeRequest->data['categories'] ?? []);
+            $productChangeRequest->delete();
 
-        return new ProductResource($product);
+            return $product->refresh();
+        });
+
+        return new ProductResource($product->loadMissing(['tags', 'categories', 'ingredients']));
     }
 
     /**
@@ -309,17 +298,13 @@ class ProductChangeRequestController extends Controller
      * @OA\Post (
      *     tags={"ProductChangeRequests"},
      *     path="/admin/product-change-requests/{product_change_request}/reject",
-     *     @OA\MediaType(
-     *         mediaType="application/json"
-     *     ),
+     *     @OA\MediaType(mediaType="application/json"),
      *    @OA\Parameter(
      *      name="product_change_request",
      *      in="path",
      *      required=true,
      *      description="integer",
-     *      @OA\Schema(
-     *          type="integer"
-     *      )
+     *      @OA\Schema(type="integer"),
      *    ),
      *     @OA\Response(
      *         response=200,
@@ -349,22 +334,20 @@ class ProductChangeRequestController extends Controller
      * Update a product change request.
      *
      * @OA\Put (
-     *     tags={"ProductChangeRequests"},
-     *     path="/admin/product-change-requests/{product_change_request}",
+     *    tags={"ProductChangeRequests"},
+     *    path="/admin/product-change-requests/{product_change_request}",
      *    @OA\Parameter(
      *      name="product_change_request",
      *      in="path",
      *      description="integer",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
+     *      @OA\Schema(type="string"),
      *    ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"name","active","hidden","sponsored","is_18_plus","created_by"},
+     *                 required={"name","product_id", "image_id", "is_active", "is_sponsored","is_18_plus","created_by", "brand_id", "price"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
@@ -389,6 +372,7 @@ class ProductChangeRequestController extends Controller
      *                     property="price",
      *                     type="integer",
      *                     description="price",
+     *                     example="1",
      *                 ),
      *                 @OA\Property(
      *                     property="size",
@@ -401,19 +385,13 @@ class ProductChangeRequestController extends Controller
      *                     description="brand_id",
      *                 ),
      *                 @OA\Property(
-     *                     property="active",
-     *                     type="integer",
-     *                     description="1|0",
-     *                     example="1",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="hidden",
+     *                     property="is_active",
      *                     type="integer",
      *                     description="1|0",
      *                     example="0",
      *                 ),
      *                 @OA\Property(
-     *                     property="sponsored",
+     *                     property="is_sponsored",
      *                     type="integer",
      *                     description="1|0",
      *                     example="0",
@@ -433,6 +411,11 @@ class ProductChangeRequestController extends Controller
      *                     property="image_id",
      *                     type="integer",
      *                     description="image id",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="ingredients_by",
+     *                     type="integer",
+     *                     description="ingredients_by",
      *                 ),
      *                 @OA\Property (
      *                     property="categories[0]",
@@ -481,23 +464,22 @@ class ProductChangeRequestController extends Controller
      *                      type="string",
      *                      format ="date-time",
      *                  ),
-     *                     description="published_at",
+     *                     description="Format: Y-m-d H:i:s",
      *                 ),
      *             )
      *         )
-     *     ),*
+     *     ),
      *     @OA\Response(
      *         response=201,
      *         description="Product change request created.",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(ref="#/components/schemas/ProductChangeRequest"),
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Error in fields",
-     *         @OA\JsonContent()
+     *         description="Error in fields.",
+     *         @OA\JsonContent(),
      *     ),
      * )
-     *
      *
      * @param UpdateProductChangeRequest $request
      * @param ProductChangeRequest $productChangeRequest

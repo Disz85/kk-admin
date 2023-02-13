@@ -95,7 +95,7 @@ class ImportArticles extends Command
                 $article->published_at = $data['active'] ? $data['created_at'] : null;
                 $article->created_at = $data['created_at'];
 
-                $article->active = $data['active'];
+                $article->is_active = $data['active'];
 
                 $article->save();
 

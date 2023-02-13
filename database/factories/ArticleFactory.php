@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Author;
 use App\Models\Category;
 use App\Models\Tag;
+use Database\Helpers\BlockStyleEditorFakeContentBuilder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;
 
@@ -26,11 +27,11 @@ class ArticleFactory extends Factory
         return [
             'title' => fake()->unique()->sentence(3),
             'lead' => fake()->sentence(4),
-            'body' => fake()->paragraph(),
-            'active' => fake()->boolean(),
-            'hidden' => fake()->boolean(),
-            'sponsored' => fake()->boolean(),
+            'body' => $this->fakeArrayContent(),
+            'is_active' => fake()->boolean(),
+            'is_sponsored' => fake()->boolean(),
             'is_18_plus' => fake()->boolean(),
+            'image_id' => MediaFactory::new(),
         ];
     }
 
@@ -53,5 +54,25 @@ class ArticleFactory extends Factory
         return $this->hasAttached(
             $categories ?? CategoryFactory::new()->count($count)
         );
+    }
+
+    private function fakeArrayContent(): array
+    {
+        $builder = app()->make(BlockStyleEditorFakeContentBuilder::class);
+
+        $paragraphsCount = $this->faker->numberBetween(3, 6);
+
+        $builder = $builder
+            ->addHeader()
+            ->addParagraph()
+            ->addParagraph()
+            ->addQuote()
+            ->addList();
+
+        foreach (range(1, $paragraphsCount) as $iter) {
+            $builder->addParagraph();
+        }
+
+        return $builder->build();
     }
 }

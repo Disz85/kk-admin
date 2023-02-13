@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Enum\CategoryTypeEnum;
 use App\Models\Category;
-use Database\Factories\CategoryFactory;
-use Database\Factories\IngredientFactory;
+use App\Models\Ingredient;
 use Illuminate\Database\Seeder;
 
 class IngredientSeeder extends Seeder
@@ -19,17 +17,11 @@ class IngredientSeeder extends Seeder
      */
     public function run()
     {
-        $categories = Category::where('type', CategoryTypeEnum::Ingredient->value)->first();
-
-        if ($categories === null) {
-            $categories = CategoryFactory::new()->create([
-                'type' => CategoryTypeEnum::Ingredient->value,
-            ]);
-        }
+        $categories = Category::factory()->count(15)->create();
 
         foreach (range(1, self::COUNT) as $iter) {
-            IngredientFactory::new()
-                ->withCategories($categories)
+            Ingredient::factory()
+                ->withCategories($categories->random(rand(1, 5)))
                 ->create();
         }
     }

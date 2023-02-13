@@ -59,7 +59,6 @@ class ImportBrands extends Command
                 legacy_description,
                 legacy_image_url,
                 where_to_find,
-                approved,
                 created_at,
                 updated_at,
                 legacy_created_by,
@@ -73,7 +72,6 @@ class ImportBrands extends Command
                 TRIM(_tmp_Brands.Description),
                 TRIM(_tmp_Brands.PictureURL),
                 TRIM(_tmp_Brands.WhereToFind),
-                TRIM(_tmp_Brands.ModOn),
                 TRIM(_tmp_Brands.CretOn),
                 TRIM(_tmp_Brands.ModOn),
                 TRIM(_tmp_Brands.CretBy),
@@ -85,7 +83,6 @@ class ImportBrands extends Command
                 legacy_description = VALUES(legacy_description),
                 legacy_image_url = VALUES(legacy_image_url),
                 where_to_find = VALUES(where_to_find),
-                approved = VALUES(approved),
                 created_at = VALUES(created_at),
                 updated_at = VALUES(updated_at);
         ");

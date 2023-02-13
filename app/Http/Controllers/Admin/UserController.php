@@ -8,6 +8,7 @@ use App\Http\Resources\Admin\UserResource;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
 
 class UserController extends Controller
 {
@@ -16,28 +17,28 @@ class UserController extends Controller
      * @OA\Get(
      *    tags={"Users"},
      *    path="/admin/users",
-     *    @OA\Response(
-     *      response="200",
-     *      description="Display a list of users."
-     *    ),
-     *    @OA\MediaType(
-     *      mediaType="application/json"
-     *    ),
      *    @OA\Parameter(
      *      name="page",
      *      in="query",
      *      description="Page number",
-     *      @OA\Schema(
-     *          type="integer"
-     *      )
+     *      @OA\Schema(type="integer"),
+     *      allowEmptyValue="true",
      *    ),
      *    @OA\Parameter(
      *      name="name",
      *      in="query",
-     *      description="name",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
+     *      description="Filter by name",
+     *      @OA\Schema(type="string"),
+     *    ),
+     *    @OA\Response(
+     *        response=200,
+     *        description="Display a listing of users.",
+     *        @OA\JsonContent(ref="#/components/schemas/User"),
+     *    ),
+     *    @OA\Response(
+     *        response=404,
+     *        description="No users.",
+     *        @OA\JsonContent(),
      *    )
      * )
      *
@@ -64,26 +65,23 @@ class UserController extends Controller
      * @OA\Get(
      *    tags={"Users"},
      *    path="/admin/users/{user}",
-     *    @OA\Response(
-     *      response="200",
-     *      description="Display a selected user."
+     *    @OA\Parameter(
+     *        name="user",
+     *        in="path",
+     *        required=true,
+     *        description="User ID",
+     *        @OA\Schema(type="integer"),
      *    ),
      *    @OA\Response(
-     *      response="404",
-     *      description="User not found."
+     *        response=200,
+     *        description="Display a selected User.",
+     *        @OA\JsonContent(ref="#/components/schemas/User"),
      *    ),
-     *    @OA\MediaType(
-     *      mediaType="application/json"
-     *    ),
-     *     @OA\Parameter(
-     *         name="user",
-     *         in="path",
-     *         required=true,
-     *         description="User ID",
-     *         @OA\Schema(
-     *             type="integer"
-     *         ),
-     *     ),
+     *    @OA\Response(
+     *        response=404,
+     *        description="User not found.",
+     *        @OA\JsonContent(),
+     *    )
      * )
      * @param User $user
      * @return UserResource

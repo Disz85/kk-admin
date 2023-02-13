@@ -9,11 +9,12 @@ class ArticleObserver
     /**
      * Handle the Article "deleting" event.
      *
-     * @param  \App\Models\Article  $article
+     * @param Article $article
      * @return void
      */
     public function deleting(Article $article)
     {
+        $article->image()->delete();
         $article->authors()->detach();
         $article->tags()->detach();
         $article->categories()->detach();

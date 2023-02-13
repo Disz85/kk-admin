@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Ingredient;
 use App\Models\Product;
 use App\Models\Tag;
+use Database\Helpers\BlockStyleEditorFakeContentBuilder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;
 
@@ -22,15 +23,18 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->unique()->words(2, true),
-            'description' => fake()->paragraph(),
-            'active' => fake()->boolean(),
-            'hidden' => fake()->boolean(),
-            'sponsored' => fake()->boolean(),
+            'name' => fake()->unique()->name(),
+            'description' => $this->fakeArrayContent(),
+            'is_sponsored' => fake()->boolean(),
             'is_18_plus' => fake()->boolean(),
-            'price' => fake()->randomNumber(),
-            'size' => fake()->randomNumber(),
+            'is_active' => fake()->boolean(),
+            'price' => fake()->word(),
+            'size' => fake()->text(),
             'where_to_find' => fake()->text(),
+            'brand_id' => BrandFactory::new(),
+            'image_id' => MediaFactory::new(),
+            'ingredients_by' => UserFactory::new(),
+            'created_by' => UserFactory::new(),
         ];
     }
 
@@ -68,5 +72,25 @@ class ProductFactory extends Factory
         return $this->hasAttached(
             $ingredients ?? IngredientFactory::new()->count($count)
         );
+    }
+
+    private function fakeArrayContent(): array
+    {
+        $builder = app()->make(BlockStyleEditorFakeContentBuilder::class);
+
+        $paragraphsCount = $this->faker->numberBetween(3, 6);
+
+        $builder = $builder
+            ->addHeader()
+            ->addParagraph()
+            ->addParagraph()
+            ->addQuote()
+            ->addList();
+
+        foreach (range(1, $paragraphsCount) as $iter) {
+            $builder->addParagraph();
+        }
+
+        return $builder->build();
     }
 }

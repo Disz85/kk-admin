@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class () extends Migration {
@@ -14,6 +15,7 @@ return new class () extends Migration {
     {
         Schema::create('favorite_products', function (Blueprint $table) {
             $table->id();
+            $table->uuid()->default(DB::raw('UUID()'));
             $table->string('name');
             $table->foreignId('product1_id')->constrained('products')
                 ->cascadeOnUpdate()->cascadeOnDelete();

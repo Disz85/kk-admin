@@ -16,7 +16,7 @@ class StoreTagRequest extends FormRequest
         return [
             'name' => 'required|string|unique:tags',
             'description' => 'nullable|string',
-            'is_highlighted' => 'boolean',
+            'is_highlighted' => 'sometimes|boolean',
         ];
     }
 }

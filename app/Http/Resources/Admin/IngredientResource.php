@@ -6,6 +6,9 @@ use App\Models\Ingredient;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Ingredient
+ */
 class IngredientResource extends JsonResource
 {
     /**
@@ -14,10 +17,8 @@ class IngredientResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Ingredient $this */
         return [
             'id' => $this->id,
-            'legacy_id' => $this->legacy_id,
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
@@ -25,10 +26,11 @@ class IngredientResource extends JsonResource
             'ewg_score' => $this->ewg_score,
             'ewg_score_max' => $this->ewg_score_max,
             'comedogen_index' => $this->comedogen_index,
-            'is_approved' => $this->is_approved,
+            'published_at' => $this->published_at,
+            'created_by' => $this->created_by,
             'image' => new MediaResource($this->image),
-            'products' => new ProductCollection($this->whenLoaded('products')),
-            'categories' => new CategoryCollection($this->whenLoaded('categories')),
+            'products' => ProductResource::collection($this->whenLoaded('products')),
+            'categories' => CategoryResource::collection($this->whenLoaded('categories')),
         ];
     }
 }

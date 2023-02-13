@@ -2,19 +2,21 @@
 
 namespace App\Http\Resources\Admin;
 
-use App\Models\ProductChangeRequest;
+use App\Models\BrandChangeRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin BrandChangeRequest
+ */
 class BrandChangeRequestResource extends JsonResource
 {
     /**
      * @param Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
-        /** @var ProductChangeRequest $this */
         return [
             'id' => $this->id,
             'data' => $this->data,

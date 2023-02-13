@@ -14,6 +14,7 @@ class IngredientObserver
      */
     public function deleting(Ingredient $ingredient)
     {
+        $ingredient->image()->delete();
         $ingredient->categories()->detach();
     }
 }

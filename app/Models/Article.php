@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Str;
+use OpenApi\Annotations as OA;
 
 /**
  * Class Article
@@ -21,11 +23,13 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  *     @OA\Property(property="slug", type="string"),
  *     @OA\Property(property="lead", type="string"),
  *     @OA\Property(property="body", type="string"),
- *     @OA\Property(property="image_id", type="int"),
- *     @OA\Property(property="active", type="bool"),
- *     @OA\Property(property="hidden", type="bool"),
- *     @OA\Property(property="sponsored", type="bool"),
+ *     @OA\Property(property="is_active", type="bool"),
+ *     @OA\Property(property="is_sponsored", type="bool"),
  *     @OA\Property(property="is_18_plus", type="bool"),
+ *     @OA\Property(property="image_id", type="int"),
+ *     @OA\Property(property="tags", type="int"),
+ *     @OA\Property(property="categories", type="int"),
+ *     @OA\Property(property="authors", type="int"),
  *     @OA\Property(property="created_at", type="string", format="date-time"),
  *     @OA\Property(property="updated_at", type="string", format="date-time"),
  *     @OA\Property(property="published_at", type="string", format="date-time")
@@ -37,16 +41,21 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @property int $id
  * @property string $title
  * @property string $slug
- * @property string $lead
- * @property string $body
- * @property int $image_id
- * @property bool $active
- * @property bool $hidden
- * @property bool $sponsored
+ * @property string|null $lead
+ * @property string|null $body
+ * @property bool $is_active
+ * @property bool $is_sponsored
  * @property bool $is_18_plus
+ *
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $published_at
+ *
+ * @property Media|null $image_id
+ * @property Tag|null $tags
+ * @property Category|null $categories
+ * @property Author $authors
+ *
  */
 class Article extends Model
 {
@@ -54,48 +63,75 @@ class Article extends Model
     use HasFactory;
     use HasUuid;
 
+    /**
+     * @var string
+     */
     protected string $slugFrom = 'title';
 
+    /**
+     * @var string[]
+     */
+    protected $with = ['image'];
+
+    /**
+     * @var string[]
+     */
     protected $casts = [
         'body' => 'array',
-        'active' => 'boolean',
-        'hidden' => 'boolean',
-        'sponsored' => 'boolean',
+        'is_active' => 'boolean',
+        'is_sponsored' => 'boolean',
         'is_18_plus' => 'boolean',
     ];
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'title',
         'lead',
         'body',
         'image_id',
-        'active',
-        'hidden',
-        'sponsored',
+        'is_active',
+        'is_sponsored',
         'is_18_plus',
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function image(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'image_id');
     }
 
+    /**
+     * @return MorphToMany
+     */
     public function tags(): MorphToMany
     {
         return $this->morphToMany(Tag::class, 'taggable', 'taggables', null, 'tag_id');
     }
 
+    /**
+     * @return MorphToMany
+     */
     public function categories(): MorphToMany
     {
         return $this->morphToMany(Category::class, 'categoryable')
             ->using(Categoryable::class);
     }
 
+    /**
+     * @return BelongsToMany
+     */
     public function authors(): BelongsToMany
     {
         return $this->belongsToMany(Author::class);
     }
 
+    /**
+     * @return void
+     */
     public function rebuildSlug(): void
     {
         if ($this->slug_frozen) {

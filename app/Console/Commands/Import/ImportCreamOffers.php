@@ -66,8 +66,8 @@ class ImportCreamOffers extends Command
         $this->info("Stage 1/4: import data from ".self::TMP_TABLE." to ".self::PRODUCT_OFFERS_TABLE."..");
         DB::statement("
             INSERT INTO ".self::PRODUCT_OFFERS_TABLE."
-            (legacy_id, name, legacy_description, price, used, place, shipping_payment,bought_at, created_at, is_sold, is_approved, slug, legacy_image_url, legacy_product_id, legacy_created_by, legacy_bought_by)
-            SELECT tpo.Id, tpo.Title, tpo.Description, tpo.Price, tpo.Used, tpo.Place, tpo.ShippingPayment, tpo.BoughtOn, tpo.CretOn, tpo.IsSold, IF(tpo.IsPending=0, 1, 0), tpo.Slug, tpo.PictureURL, tpo.CreamId, tpo.CretBy, tpo.BoughtBy
+            (legacy_id, name, legacy_description, price, used, place, shipping_payment,bought_at, created_at, is_sold, approved_at, slug, legacy_image_url, legacy_product_id, legacy_created_by, legacy_bought_by)
+            SELECT tpo.Id, tpo.Title, tpo.Description, tpo.Price, tpo.Used, tpo.Place, tpo.ShippingPayment, tpo.BoughtOn, tpo.CretOn, tpo.IsSold, IF(tpo.IsPending=0, tpo.BoughtOn, null), tpo.Slug, tpo.PictureURL, tpo.CreamId, tpo.CretBy, tpo.BoughtBy
             FROM ".self::TMP_TABLE." as tpo
             ORDER BY tpo.Id ASC;
         ");

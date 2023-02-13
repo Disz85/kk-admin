@@ -3,32 +3,40 @@
 namespace App\RequestMappers;
 
 use App\Models\Article;
+use App\Models\Media;
+use Illuminate\Support\Arr;
 
 class ArticleRequestMapper
 {
+    /**
+     * @param Article $article
+     * @param array $data
+     * @return Article
+     */
     public function map(Article $article, array $data): Article
     {
-        $authors = data_get($data, 'authors');
-        $tags = data_get($data, 'tags', []);
-        $categories = data_get($data, 'categories', []);
-
         $article->fill([
             'title' => data_get($data, 'title'),
             'lead' => data_get($data, 'lead'),
             'body' => data_get($data, 'body'),
-            'active' => data_get($data, 'active'),
-            'hidden' => data_get($data, 'hidden'),
-            'sponsored' => data_get($data, 'sponsored'),
+            'is_sponsored' => data_get($data, 'is_sponsored'),
             'is_18_plus' => data_get($data, 'is_18_plus'),
-            'image_id' => data_get($data, 'image_id'),
+            'is_active' => data_get($data, 'is_active'),
+            'published_at' => data_get($data, 'published_at'),
         ]);
+
+        if (data_get($data, 'image_id')) {
+            $article->image()->associate(Media::findOrFail($data['image_id']));
+        }
 
         $article->save();
 
-        $article->authors()->sync($authors);
-        $article->tags()->sync($tags);
-        $article->categories()->sync($categories);
+        $article->authors()->sync(data_get($data, 'authors'));
+        $article->tags()->sync(data_get($data, 'tags'));
+        $article->categories()->sync(data_get($data, 'categories'));
 
-        return $article->refresh();
+        $article->refresh();
+
+        return $article->load(['authors', 'tags', 'categories']);
     }
 }

@@ -28,7 +28,7 @@ class ProductTest extends TestCase
         list($product, $tags, $categories, $ingredients) = $this->makeDummyRequestData();
         $response = $this->post(route('admin.products.store'), $product);
         $response->assertCreated();
-        $this->assertDatabaseHas(Product::class, Arr::only($product, ['name','price']));
+        $this->assertDatabaseHas(Product::class, Arr::only($product, ['name','price','brand_id']));
         foreach ($categories as $category) {
             $response->assertJsonFragment([
                 'name' => $category->name,

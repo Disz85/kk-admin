@@ -7,6 +7,7 @@ use App\Http\Resources\Api\BrandResource;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use OpenApi\Annotations as OA;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class BrandController extends BaseController

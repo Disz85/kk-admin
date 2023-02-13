@@ -57,7 +57,7 @@ class CategoryTest extends TestCase
     {
         $category = Category::factory()->create();
         $this->delete(route('admin.categories.destroy', ['category' => $category->id]))
-            ->assertOk();
+            ->assertNoContent();
         $this->assertNull(Category::find($category->id));
     }
 }

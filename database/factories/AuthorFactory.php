@@ -6,7 +6,7 @@ use App\Models\Author;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Author>
+ * @extends Factory<Author>
  */
 class AuthorFactory extends Factory
 {
@@ -20,9 +20,10 @@ class AuthorFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->title,
-            'name' => $this->faker->name,
-            'email' => $this->faker->email,
+            'title' => fake()->title,
+            'name' => fake()->name,
+            'email' => fake()->email,
+            'image_id' => MediaFactory::new(),
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DeleteAuthorRequest;
 use App\Http\Requests\StoreAuthorRequest;
 use App\Http\Requests\UpdateAuthorRequest;
 use App\Http\Resources\Admin\AuthorCollection;
@@ -11,7 +12,10 @@ use App\Models\Author;
 use App\RequestMappers\AuthorRequestMapper;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class AuthorController extends Controller
 {
@@ -20,19 +24,24 @@ class AuthorController extends Controller
      * @OA\Get(
      *    tags={"Authors"},
      *    path="/admin/authors",
-     *    @OA\Response(
-     *      response="200",
-     *      description="Display a listing of authors.",
-     *      @OA\JsonContent()
-     *    ),
      *    @OA\Parameter(
      *      name="page",
      *      in="query",
      *      description="Page number",
-     *      @OA\Schema(
-     *          type="integer"
-     *      )
-     *    )
+     *      @OA\Schema(type="integer"),
+     *      allowEmptyValue="true",
+     *    ),
+     *    @OA\Parameter(
+     *      name="name",
+     *      in="query",
+     *      description="Filter by name",
+     *      @OA\Schema(type="string"),
+     *    ),
+     *    @OA\Response(
+     *      response=200,
+     *      description="Display a listing of authors.",
+     *      @OA\JsonContent(),
+     *    ),
      * )
      *
      * Display a list of the resource.
@@ -66,7 +75,7 @@ class AuthorController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
+     *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 required={"name","email"},
      *                 @OA\Property(
@@ -96,15 +105,15 @@ class AuthorController extends Controller
      *                 ),
      *             )
      *         )
-     *     ),*
+     *     ),
      *     @OA\Response(
      *         response=201,
      *         description="Author created.",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(ref="#/components/schemas/Author")
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Field validation error"
+     *         description="Error in fields.",
      *     ),
      * )
      *
@@ -123,24 +132,22 @@ class AuthorController extends Controller
      * @OA\Get(
      *    tags={"Authors"},
      *    path="/admin/authors/{author}",
-     *    @OA\Response(
-     *      response="200",
-     *      description="Show a selected author.",
-     *      @OA\JsonContent()
-     *    ),
-     *    @OA\Response(
-     *      response="404",
-     *      description="Author not found.",
-     *      @OA\JsonContent()
-     *    ),
      *    @OA\Parameter(
      *        name="author",
      *        in="path",
      *        required=true,
      *        description="Author ID",
-     *        @OA\Schema(
-     *            type="integer"
-     *        ),
+     *        @OA\Schema(type="integer"),
+     *    ),
+     *    @OA\Response(
+     *      response=200,
+     *      description="Show a selected author.",
+     *      @OA\JsonContent(ref="#/components/schemas/Author"),
+     *    ),
+     *    @OA\Response(
+     *      response=404,
+     *      description="Author not found.",
+     *      @OA\JsonContent(),
      *    ),
      * )
      * @param Author $author
@@ -158,16 +165,14 @@ class AuthorController extends Controller
      *     tags={"Authors"},
      *     path="/admin/authors/{author}",
      *     @OA\MediaType(
-     *         mediaType="application/json"
+     *         mediaType="application/json",
      *     ),
      *    @OA\Parameter(
      *      name="author",
      *      in="path",
      *      required=true,
      *      description="integer",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
+     *      @OA\Schema(type="string"),
      *    ),
      *     @OA\RequestBody(
      *         required=true,
@@ -204,13 +209,13 @@ class AuthorController extends Controller
      *         )
      *     ),*
      *     @OA\Response(
-     *         response=200,
-     *         description="Author updated",
-     *         @OA\JsonContent()
+     *         response=201,
+     *         description="Author updated.",
+     *         @OA\JsonContent(ref="#/components/schemas/Author")
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Field validation error"
+     *         description="Field validation error.",
      *     ),
      * )
      *
@@ -230,38 +235,37 @@ class AuthorController extends Controller
      * @OA\Delete (
      *     tags={"Authors"},
      *     path="/admin/authors/{author}",
-     *     @OA\MediaType(
-     *         mediaType="application/json"
+     *     @OA\Parameter(
+     *       name="author",
+     *       in="path",
+     *       description="integer",
+     *       @OA\Schema(type="string"),
      *     ),
-     *    @OA\Parameter(
-     *      name="author",
-     *      in="path",
-     *      description="integer",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
-     *    ),
      *     @OA\RequestBody(
-     *         required=false,
-     *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
-     *         )
-     *     ),*
-     *     @OA\Response(
-     *         response=204,
-     *         description="Author deleted",
-     *         @OA\JsonContent()
+     *       required=false,
+     *       @OA\MediaType(mediaType="application/x-www-form-urlencoded")
      *     ),
      *     @OA\Response(
-     *         response=404,
-     *         description="Author not found"
-     *     )
+     *       response=204,
+     *       description="Author deleted",
+     *       @OA\JsonContent(),
+     *     ),
+     *     @OA\Response(
+     *       response=404,
+     *       description="Author not found",
+     *     ),
+     *    @OA\Response(
+     *       response=422,
+     *       description="Author cannot be deleted due to existence of related resources.",
+     *    ),
      * )
      *
+     * @param DeleteAuthorRequest $request
      * @param Author $author
-     * @return void
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function destroy(Author $author)
+    public function destroy(DeleteAuthorRequest $request, Author $author): JsonResponse
     {
         $author->deleteOrFail();
 

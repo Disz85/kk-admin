@@ -5,6 +5,7 @@ namespace App\Console\Commands\Import;
 use App\Helpers\Import\HtmlToEditorJsConverterIngredient;
 use App\Models\Ingredient;
 use App\XMLReaders\IngredientXMLReader;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class ImportIngredient extends Command
@@ -66,6 +67,7 @@ class ImportIngredient extends Command
                 if (key_exists("description", $data)) {
                     $ingredient->description = $converterIngredient->convert($data["description"], "article") ?? null;
                 }
+                //"Noneú" --> ez így kell, így van az XML-ben
                 if (key_exists("ewgdata", $data) && ($data["ewgdata"] === "Noneú" || $data["ewgdata"] === "n")) {
                     $data["ewgdata"] = "None";
                 }
@@ -78,7 +80,7 @@ class ImportIngredient extends Command
                 $ingredient->ewg_score_max = $data["ewgscoremax"] ?? null;
                 $ingredient->created_at = $data["creton"] ?? null;
                 $ingredient->updated_at = $data["modon"] ?? null;
-                $ingredient->is_approved = $data["isapproved"] ?? null;
+                $ingredient->published_at = $data["isapproved"] ? Carbon::now() : null;
                 $ingredient->comedogen_index = $data["comedogenicindex"] ?? null;
 
                 $ingredient->save();

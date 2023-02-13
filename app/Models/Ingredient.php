@@ -19,17 +19,18 @@ use OpenApi\Annotations as OA;
  * @OA\Schema(
  *     @OA\Xml(name="Ingredient"),
  *     @OA\Property(property="id", type="int"),
- *     @OA\Property(property="legacy_id", type="int"),
- *     @OA\Property(property="image_id", type="int"),
- *     @OA\Property(property="ewg_score", type="int", minimum=0, maximum=10),
- *     @OA\Property(property="comedogen_index", type="int", minimum=0, maximum=5),
  *     @OA\Property(property="name", type="string"),
  *     @OA\Property(property="slug", type="string"),
  *     @OA\Property(property="ewg_data", type="string"),
+ *     @OA\Property(property="ewg_score", type="int", minimum=0, maximum=10),
  *     @OA\Property(property="ewg_score_max", type="int", minimum=0, maximum=10),
+ *     @OA\Property(property="comedogen_index", type="int", minimum=0, maximum=5),
  *     @OA\Property(property="description", type="string"),
- *     @OA\Property(property="is_approved", type="bool"),
+ *     @OA\Property(property="image_id", type="int"),
  *     @OA\Property(property="categories", type="int"),
+ *     @OA\Property(property="products", type="int"),
+ *     @OA\Property(property="created_by", type="int"),
+ *     @OA\Property(property="published_at", type="string", format="date-time"),
  *     @OA\Property(property="created_at", type="string", format="date-time"),
  *     @OA\Property(property="updated_at", type="string", format="date-time"),
  * );
@@ -38,25 +39,21 @@ use OpenApi\Annotations as OA;
  *
  * Fields
  * @property int $id
- * @property int $legacy_id
- * @property int $image_id
- * @property int $ewg_score_max
- * @property int $comedogen_index
- *
  * @property string $name
  * @property string $slug
- * @property string $ewg_data
- * @property string $ewg_score
- * @property string $description
- *
- * @property bool $is_approved
- *
+ * @property string|null $ewg_data
+ * @property int|null $ewg_score
+ * @property int|null $ewg_score_max
+ * @property int|null $comedogen_index
+ * @property string|null $description
+ * @property Carbon|null $published_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @property Media $image
- * @property Category $categories
- * @property Product $products
+ * @property Media|null $image_id
+ * @property Category|null $categories
+ * @property Product|null $products
+ * @property User|null $created_by
  */
 
 class Ingredient extends Model implements HasDependencies
@@ -73,13 +70,6 @@ class Ingredient extends Model implements HasDependencies
     /**
      * @var string[]
      */
-    protected $with = [
-        'categories',
-    ];
-
-    /**
-     * @var string[]
-     */
     protected $fillable = [
         'name',
         'image_id',
@@ -88,7 +78,8 @@ class Ingredient extends Model implements HasDependencies
         'ewg_score',
         'ewg_score_max',
         'comedogen_index',
-        'is_approved',
+        'published_at',
+        'created_by',
     ];
 
     /**
@@ -101,9 +92,6 @@ class Ingredient extends Model implements HasDependencies
      */
     protected $casts = [
         'description' => 'array',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'is_approved' => 'boolean',
     ];
 
     /**
@@ -137,5 +125,13 @@ class Ingredient extends Model implements HasDependencies
     public function hasDependencies(): bool
     {
         return $this->products()->exists();
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

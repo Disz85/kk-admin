@@ -13,6 +13,7 @@ use App\RequestMappers\BrandRequestMapper;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -24,26 +25,28 @@ class BrandController extends Controller
      * @OA\Get(
      *    tags={"Brands"},
      *    path="/admin/brands",
-     *    @OA\Response(
-     *      response="200",
-     *      description="Display a listing of brands.",
-     *      @OA\JsonContent()
-     *    ),
      *    @OA\Parameter(
-     *      name="page",
-     *      in="query",
-     *      description="Page number",
-     *      @OA\Schema(
-     *          type="integer"
-     *      )
+     *       name="page",
+     *       in="query",
+     *       description="Page number",
+     *       @OA\Schema(type="integer"),
+     *       allowEmptyValue="true",
      *    ),
      *    @OA\Parameter(
      *      name="title",
      *      in="query",
      *      description="Filter by title",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
+     *      @OA\Schema(type="string"),
+     *    ),
+     *    @OA\Response(
+     *        response=200,
+     *        description="Display a listing of brands.",
+     *        @OA\JsonContent(ref="#/components/schemas/Brand"),
+     *    ),
+     *    @OA\Response(
+     *        response=404,
+     *        description="No brands.",
+     *        @OA\JsonContent(),
      *    )
      * )
      *
@@ -72,23 +75,23 @@ class BrandController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
+     *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"title"},
+     *                 required={"title", "image_id"},
      *                 @OA\Property(
      *                     property="title",
      *                     type="string",
      *                     description="Title",
      *                 ),
      *                 @OA\Property(
-     *                     property="url",
-     *                     type="string",
-     *                     description="URL of the brand",
-     *                 ),
-     *                 @OA\Property(
      *                     property="description",
      *                     type="string",
      *                     description="Description of the brand",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="url",
+     *                     type="string",
+     *                     description="URL of the brand",
      *                 ),
      *                 @OA\Property(
      *                     property="image_id",
@@ -103,7 +106,7 @@ class BrandController extends Controller
      *                 @OA\Property(
      *                     property="created_by",
      *                     type="integer",
-     *                     description="Create user ID",
+     *                     description="User ID",
      *                 ),
      *             )
      *         )
@@ -111,11 +114,11 @@ class BrandController extends Controller
      *     @OA\Response(
      *         response=201,
      *         description="Brand created.",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(ref="#/components/schemas/Brand")
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Input validation errors."
+     *         description="Error in fields."
      *     ),
      * )
      *
@@ -134,26 +137,31 @@ class BrandController extends Controller
      * @OA\Get(
      *    tags={"Brands"},
      *    path="/admin/brands/{brand}",
+     *     @OA\Parameter(
+     *         name="brand",
+     *         in="path",
+     *         required=true,
+     *         description="Brand ID",
+     *         @OA\Schema(type="integer"),
+     *     ),
      *    @OA\Response(
-     *      response="200",
-     *      description="Display a listing of brand.",
- *          @OA\JsonContent()
+     *        response=200,
+     *        description="Display a selected Brand.",
+     *        @OA\JsonContent(ref="#/components/schemas/Brand"),
      *    ),
-     *    @OA\Parameter(
-     *        name="brand",
-     *        in="path",
-     *        required=true,
-     *        description="Brand ID",
-     *        @OA\Schema(
-     *            type="integer"
-     *        ),
-     *    ),
+     *    @OA\Response(
+     *        response=404,
+     *        description="Ingredient not found.",
+     *        @OA\JsonContent(),
+     *    )
      * )
      * @param Brand $brand
      * @return BrandResource
      */
     public function show(Brand $brand): BrandResource
     {
+        $brand->load(['tags']);
+
         return new BrandResource($brand);
     }
 
@@ -168,16 +176,14 @@ class BrandController extends Controller
      *      in="path",
      *      required=true,
      *      description="integer",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
+     *      @OA\Schema(type="string"),
      *    ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"title"},
+     *                 required={"title", "image_id"},
      *                 @OA\Property(
      *                     property="title",
      *                     type="string",
@@ -204,12 +210,6 @@ class BrandController extends Controller
      *                     description="Where to find",
      *                 ),
      *                 @OA\Property(
-     *                     property="approved",
-     *                     type="integer",
-     *                     description="1|0",
-     *                     example="0",
-     *                 ),
-     *                 @OA\Property(
      *                     property="updated_by",
      *                     type="integer",
      *                     description="Update user ID",
@@ -218,13 +218,13 @@ class BrandController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=200,
+     *         response=201,
      *         description="Brand updated.",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(ref="#/components/schemas/Brand")
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Input validation errors."
+     *         description="Error in fields.",
      *     ),
      * )
      *
@@ -244,30 +244,30 @@ class BrandController extends Controller
      * @OA\Delete (
      *     tags={"Brands"},
      *     path="/admin/brands/{brand}",
+     *     @OA\RequestBody(
+     *         required=false,
+     *         @OA\MediaType(mediaType="application/x-www-form-urlencoded"),
+     *     ),
      *    @OA\Parameter(
      *      name="brand",
      *      in="path",
-     *      description="integer",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
+     *      description="Brand ID",
+     *      @OA\Schema(type="integer"),
      *    ),
-     *     @OA\RequestBody(
-     *         required=false,
-     *     ),
-     *     @OA\Response(
-     *         response=204,
-     *         description="Brand deleted.",
-     *         @OA\JsonContent(),
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Brand not found."
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Brand cannot be deleted due to existence of related resources."
-     *     ),
+     *    @OA\Response(
+     *      response=204,
+     *      description="Brand deleted.",
+     *      @OA\JsonContent(),
+     *    ),
+     *    @OA\Response(
+     *      response=404,
+     *      description="Brand not found.",
+     *      @OA\JsonContent(),
+     *    ),
+     *    @OA\Response(
+     *      response=422,
+     *      description="Brand cannot be deleted due to existence of related resources.",
+     *    ),
      * )
      *
      * @param DeleteBrandRequest $request
@@ -277,7 +277,6 @@ class BrandController extends Controller
      */
     public function destroy(DeleteBrandRequest $request, Brand $brand): JsonResponse
     {
-        $brand->image()->delete();
         $brand->deleteOrFail();
 
         return response()->json([], Response::HTTP_NO_CONTENT);

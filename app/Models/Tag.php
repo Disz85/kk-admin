@@ -16,11 +16,13 @@ use OpenApi\Annotations as OA;
  * @OA\Schema(
  *     @OA\Xml(name="Tag"),
  *     @OA\Property(property="id", type="int"),
- *     @OA\Property(property="legacy_id", type="int"),
  *     @OA\Property(property="name", type="string"),
  *     @OA\Property(property="slug", type="string"),
  *     @OA\Property(property="description", type="string"),
  *     @OA\Property(property="is_highlighted", type="bool"),
+ *     @OA\Property(property="articles", type="object"),
+ *     @OA\Property(property="brands", type="object"),
+ *     @OA\Property(property="products", type="object"),
  *     @OA\Property(property="created_at", type="string", format="date-time"),
  *     @OA\Property(property="updated_at", type="string", format="date-time"),
  * );
@@ -31,17 +33,28 @@ use OpenApi\Annotations as OA;
  * @property int $id
  * @property string $name
  * @property string $slug
- * @property string $description
+ * @property string|null $description
  * @property bool $is_highlighted
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  *
- * @property Carbon $created_at
- * @property Carbon $updated_at
+ * @property Article $articles
+ * @property Brand $brands
+ * @property Product $products
  */
 class Tag extends Model implements HasDependencies
 {
     use GeneratesSlug;
     use HasFactory;
 
+    /**
+     * @var string
+     */
+    protected $slugFrom = 'name';
+
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'name',
         'description',
@@ -49,18 +62,27 @@ class Tag extends Model implements HasDependencies
     ];
 
     /**
-     * @var string
+     * @return MorphToMany
      */
-    protected $slugFrom = 'name';
-
     public function articles(): MorphToMany
     {
         return $this->morphedByMany(Article::class, 'taggable');
     }
 
+    /**
+     * @return MorphToMany
+     */
     public function products(): MorphToMany
     {
         return $this->morphedByMany(Product::class, 'taggable');
+    }
+
+    /**
+     * @return MorphToMany
+     */
+    public function brands(): MorphToMany
+    {
+        return $this->morphedByMany(Brand::class, 'taggable');
     }
 
     /**
@@ -68,6 +90,8 @@ class Tag extends Model implements HasDependencies
      */
     public function hasDependencies(): bool
     {
-        return $this->products()->exists();
+        return $this->products()->exists()
+            || $this->articles()->exists()
+            || $this->brands()->exists();
     }
 }

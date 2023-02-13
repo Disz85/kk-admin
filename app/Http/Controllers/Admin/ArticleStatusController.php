@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\ArticleResource;
 use App\Models\Article;
+use OpenApi\Annotations as OA;
 
 class ArticleStatusController extends Controller
 {
@@ -22,12 +23,13 @@ class ArticleStatusController extends Controller
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Response(
-     *         response=200,
-     *         description="Article status updated."
+     *         response=201,
+     *         description="Article status updated.",
+     *         @OA\JsonContent()
      *     ),
      *     @OA\Response(
-     *         response=419,
-     *         description="Error in fields"
+     *         response=422,
+     *         description="Error in fields."
      *     )
      * )
      *

@@ -6,7 +6,7 @@ use Database\Helpers\BlockStyleEditorFakeContentBuilder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Brand>
+ * @extends Factory<Brand>
  */
 class BrandFactory extends Factory
 {
@@ -18,15 +18,16 @@ class BrandFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->company,
-            'description' => fn () => $this->fakeDescription(),
-            'url' => $this->faker->url,
+            'title' => fake()->company,
+            'description' => $this->fakeArrayContent(),
+            'url' => fake()->url,
             'where_to_find' => fake()->text(),
             'created_by' => UserFactory::new(),
+            'image_id' => MediaFactory::new(),
         ];
     }
 
-    private function fakeDescription(): array
+    private function fakeArrayContent(): array
     {
         $builder = app()->make(BlockStyleEditorFakeContentBuilder::class);
 

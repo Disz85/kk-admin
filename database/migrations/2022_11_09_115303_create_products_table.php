@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class () extends Migration {
@@ -14,6 +15,7 @@ return new class () extends Migration {
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->uuid()->default(DB::raw('UUID()'));
             $table->unsignedBigInteger('legacy_id')->nullable()->index();
             $table->string('legacy_image_url')->nullable();
             $table->longText('legacy_description')->nullable();
@@ -30,15 +32,17 @@ return new class () extends Migration {
             $table->longText('description')->nullable();
             $table->foreignId('brand_id')->nullable()->constrained('brands')
                 ->cascadeOnUpdate()->cascadeOnDelete();
-            $table->boolean('active')->default(false);
-            $table->boolean('hidden')->default(false);
-            $table->boolean('sponsored')->default(false);
+            $table->boolean('is_sponsored')->default(false);
             $table->boolean('is_18_plus')->default(false);
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
             $table->foreignId('created_by')->nullable()->constrained('users')
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')
                 ->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('ingredients_by')->nullable()->constrained('users')
+                ->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('legacy_ingredients_by')->nullable()->index();
             $table->dateTime('published_at')->nullable();
             $table->index('legacy_id', 'legacy_id_index');
             $table->index('description', 'description_index');

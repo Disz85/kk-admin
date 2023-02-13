@@ -31,9 +31,10 @@ class IngredientFactory extends Factory
                 return fake()->numberBetween($values['ewg_score'], 10);
             },
             'comedogen_index' => fake()->numberBetween(0, 5),
-            'description' => fn () => $this->fakeDescription(),
-            'is_approved' => fake()->boolean(),
-            'image_id' => null,
+            'description' => $this->fakeArrayContent(),
+            'published_at' => fake()->date('Y-m-d H:i:s'),
+            'image_id' => MediaFactory::new(),
+            'created_by' => UserFactory::new(),
         ];
     }
 
@@ -49,7 +50,7 @@ class IngredientFactory extends Factory
         );
     }
 
-    private function fakeDescription(): array
+    private function fakeArrayContent(): array
     {
         $builder = app()->make(BlockStyleEditorFakeContentBuilder::class);
 

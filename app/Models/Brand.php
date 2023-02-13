@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Casts\BooleanDatetime;
 use App\Interfaces\HasDependencies;
 use App\Traits\GeneratesSlug;
 use Carbon\Carbon;
@@ -11,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use OpenApi\Annotations as OA;
 
 /**
  * Class Brand
@@ -24,8 +24,11 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  *     @OA\Property(property="url", type="string"),
  *     @OA\Property(property="description", type="string"),
  *     @OA\Property(property="where_to_find", type="string"),
- *     @OA\Property(property="approved", type="bool"),
+ *     @OA\Property(property="created_by", type="int"),
+ *     @OA\Property(property="updated_by", type="int"),
  *     @OA\Property(property="image_id", type="int"),
+ *     @OA\Property(property="products", type="int"),
+ *     @OA\Property(property="tags", type="int"),
  *     @OA\Property(property="created_at", type="string", format="date-time"),
  *     @OA\Property(property="updated_at", type="string", format="date-time"),
  * );
@@ -38,36 +41,45 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @property int $legacy_id
  * @property string $title
  * @property string $slug
- * @property string $url
- * @property string $description
- * @property string $where_to_find
- * @property int $image_id
- * @property bool $approved
+ * @property string|null $url
+ * @property string|null $description
+ * @property string|null $where_to_find
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @property-read Media|null $image
+ * @property User|null $created_by
+ * @property User|null $updated_by
+ * @property Media|null $image_id
+ * @property Product|null $products
+ * @property Tag|null $tags
  */
 class Brand extends Model implements HasDependencies
 {
     use GeneratesSlug;
     use HasFactory;
 
+    /**
+     * @var string[]
+     */
+    protected $with = ['image'];
+
+    /**
+     * @var string
+     */
     protected $slugFrom = 'title';
 
-    protected $with = [
-        'image',
-        'tags',
-    ];
-
+    /**
+     * @var string[]
+     */
     protected $casts = [
         'description' => 'array',
-        'approved' => BooleanDatetime::class,
     ];
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'id',
-        'legacy_id',
         'title',
         'url',
         'description',
@@ -75,19 +87,27 @@ class Brand extends Model implements HasDependencies
         'where_to_find',
         'created_by',
         'updated_by',
-        'approved',
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function image(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'image_id');
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function updatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by');
@@ -98,11 +118,17 @@ class Brand extends Model implements HasDependencies
         return $this->hasMany(Product::class);
     }
 
+    /**
+     * @return MorphToMany
+     */
     public function tags(): MorphToMany
     {
         return $this->morphToMany(Tag::class, 'taggable', 'taggables', null, 'tag_id');
     }
 
+    /**
+     * @return bool
+     */
     public function hasDependencies(): bool
     {
         return $this->products()->exists();

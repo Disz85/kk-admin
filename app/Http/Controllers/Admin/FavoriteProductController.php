@@ -11,6 +11,7 @@ use App\Models\FavoriteProduct;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -28,7 +29,7 @@ class FavoriteProductController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
+     *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 required={"name","product1_id","product2_id","product3_id"},
      *                 @OA\Property(
@@ -67,11 +68,11 @@ class FavoriteProductController extends Controller
      *     @OA\Response(
      *         response=201,
      *         description="Favorite products group created.",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(ref="#/components/schemas/FavoriteProduct"),
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Error in fields",
+     *         description="Error in fields.",
      *         @OA\JsonContent()
      *     ),
      * )
@@ -96,16 +97,14 @@ class FavoriteProductController extends Controller
      *    @OA\Response(
      *      response="200",
      *      description="Display a favorite products group.",
-     *          @OA\JsonContent()
+     *      @OA\JsonContent(ref="#/components/schemas/FavoriteProduct"),
      *    ),
      *    @OA\Parameter(
      *        name="favorite_product",
      *        in="path",
      *        required=true,
      *        description="Favorite Product ID",
-     *        @OA\Schema(
-     *            type="integer"
-     *        ),
+     *        @OA\Schema(type="integer"),
      *    ),
      * )
      * @param FavoriteProduct $favoriteProduct
@@ -127,9 +126,7 @@ class FavoriteProductController extends Controller
      *      in="path",
      *      required=true,
      *      description="integer",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
+     *      @OA\Schema(type="string"),
      *    ),
      *     @OA\RequestBody(
      *         required=true,
@@ -173,7 +170,7 @@ class FavoriteProductController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="Favorite products group updated.",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(ref="#/components/schemas/FavoriteProduct"),
      *     ),
      *     @OA\Response(
      *         response=422,
@@ -209,17 +206,13 @@ class FavoriteProductController extends Controller
      *      name="page",
      *      in="query",
      *      description="Page number",
-     *      @OA\Schema(
-     *          type="integer"
-     *      )
+     *      @OA\Schema(type="integer")
      *    ),
      *    @OA\Parameter(
      *      name="name",
      *      in="query",
      *      description="Filter by name",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
+     *      @OA\Schema(type="string")
      *    )
      * )
      *
@@ -249,9 +242,7 @@ class FavoriteProductController extends Controller
      *      name="favorite_product",
      *      in="path",
      *      description="integer",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
+     *      @OA\Schema(type="string")
      *    ),
      *     @OA\RequestBody(
      *         required=false,

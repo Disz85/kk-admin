@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
+use Throwable;
 
 class ProductController extends Controller
 {
@@ -22,28 +24,28 @@ class ProductController extends Controller
      * @OA\Get(
      *    tags={"Products"},
      *    path="/admin/products",
-     *    @OA\Response(
-     *      response="200",
-     *      description="Display a listing of tags."
-     *    ),
-     *    @OA\MediaType(
-     *      mediaType="application/json"
-     *    ),
      *    @OA\Parameter(
-     *      name="page",
-     *      in="query",
-     *      description="Page number",
-     *      @OA\Schema(
-     *          type="integer"
-     *      )
+     *        name="page",
+     *        in="query",
+     *        description="Page number",
+     *        @OA\Schema(type="integer"),
+     *        allowEmptyValue="true",
      *    ),
      *    @OA\Parameter(
      *      name="name",
      *      in="query",
-     *      description="Name",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
+     *      description="Filter by name",
+     *      @OA\Schema(type="string"),
+     *    ),
+     *    @OA\Response(
+     *        response=200,
+     *        description="Display a listing of products.",
+     *        @OA\JsonContent(ref="#/components/schemas/Product"),
+     *    ),
+     *    @OA\Response(
+     *        response=404,
+     *        description="No products.",
+     *        @OA\JsonContent(),
      *    )
      * )
      *
@@ -58,7 +60,7 @@ class ProductController extends Controller
                     $request->has('name'),
                     fn (Builder $query) => $query->where('name', 'like', '%' . $request->get('name') . '%')
                 )
-                ->orderByDesc('updated_at')
+                ->orderByDesc('published_at')
                 ->paginate($request->get('size', 20))
         );
     }
@@ -72,9 +74,9 @@ class ProductController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
+     *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"name","active","hidden","sponsored","is_18_plus"},
+     *                 required={"name", "image_id", "is_active", "is_sponsored", "is_18_plus", "brand_id", "price"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
@@ -92,8 +94,9 @@ class ProductController extends Controller
      *                 ),
      *                 @OA\Property(
      *                     property="price",
-     *                     type="integer",
+     *                     type="string",
      *                     description="price",
+     *                     example="1",
      *                 ),
      *                 @OA\Property(
      *                     property="size",
@@ -106,28 +109,24 @@ class ProductController extends Controller
      *                     description="brand_id",
      *                 ),
      *                 @OA\Property(
-     *                     property="active",
+     *                     property="is_active",
      *                     type="integer",
      *                     description="1|0",
-     *                     example="1",
      *                 ),
      *                 @OA\Property(
-     *                     property="hidden",
+     *                     property="is_sponsored",
      *                     type="integer",
      *                     description="1|0",
-     *                     example="0",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="sponsored",
-     *                     type="integer",
-     *                     description="1|0",
-     *                     example="0",
      *                 ),
      *                 @OA\Property(
      *                     property="is_18_plus",
      *                     type="integer",
      *                     description="1|0",
-     *                     example="0",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="ingredients_by",
+     *                     type="integer",
+     *                     description="ingredients_by",
      *                 ),
      *                 @OA\Property(
      *                     property="created_by",
@@ -176,24 +175,26 @@ class ProductController extends Controller
      *                      type="string",
      *                      format ="date-time",
      *                  ),
-     *                     description="published_at",
+     *                     description="Format: Y-m-d H:i:s",
      *                 ),
-     *             )
-     *         )
-     *     ),*
+     *             ),
+     *         ),
+     *     ),
      *     @OA\Response(
-     *         response=200,
-     *         description="Product created."
+     *         response=201,
+     *         description="Product created.",
+     *         @OA\JsonContent(ref="#/components/schemas/Product")
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Error in fields"
+     *         description="Error in fields."
      *     ),
      * )
      *
-     *
-     * @param  \App\Http\Requests\StoreProductRequest  $request
-     * @return Response
+     * @param StoreProductRequest $request
+     * @param Product $product
+     * @param ProductRequestMapper $productRequestMapper
+     * @return ProductResource
      */
     public function store(StoreProductRequest $request, Product $product, ProductRequestMapper $productRequestMapper): ProductResource
     {
@@ -206,26 +207,32 @@ class ProductController extends Controller
      * @OA\Get(
      *    tags={"Products"},
      *    path="/admin/products/{product}",
-     *    @OA\Response(
-     *      response="200",
-     *      description="Display a selected Product."
-     *    ),
      *    @OA\MediaType(
      *      mediaType="application/json"
      *    ),
-     *     @OA\Parameter(
-     *         name="product",
-     *         in="path",
-     *         required=true,
-     *         description="product ID",
-     *         @OA\Schema(
-     *             type="integer"
-     *         ),
-     *     ),
+     *    @OA\Parameter(
+     *        name="product",
+     *        in="path",
+     *        required=true,
+     *        description="product ID",
+     *        @OA\Schema(
+     *            type="integer"
+     *        ),
+     *    ),
+     *    @OA\Response(
+     *      response=200,
+     *      description="Display a selected Product.",
+     *      @OA\JsonContent(ref="#/components/schemas/Product")
+     *    ),
+     *    @OA\Response(
+     *        response=404,
+     *        description="Article not found.",
+     *        @OA\JsonContent()
+     *    ),
      * )
      *
      * @param Product $product
-     * @return Response
+     * @return ProductResource
      */
     public function show(Product $product): ProductResource
     {
@@ -245,16 +252,14 @@ class ProductController extends Controller
      *      in="path",
      *      required=true,
      *      description="integer",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
+     *      @OA\Schema(type="string"),
      *    ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"name","active","hidden","sponsored","is_18_plus"},
+     *                 required={"name", "image_id", "is_active", "is_sponsored", "is_18_plus", "brand_id", "price"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
@@ -272,8 +277,9 @@ class ProductController extends Controller
      *                 ),
      *                 @OA\Property(
      *                     property="price",
-     *                     type="integer",
+     *                     type="string",
      *                     description="price",
+     *                     example="1",
      *                 ),
      *                 @OA\Property(
      *                     property="size",
@@ -286,33 +292,29 @@ class ProductController extends Controller
      *                     description="brand_id",
      *                 ),
      *                 @OA\Property(
-     *                     property="active",
+     *                     property="is_active",
      *                     type="integer",
      *                     description="1|0",
-     *                     example="1",
      *                 ),
      *                 @OA\Property(
-     *                     property="hidden",
+     *                     property="is_sponsored",
      *                     type="integer",
      *                     description="1|0",
-     *                     example="0",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="sponsored",
-     *                     type="integer",
-     *                     description="1|0",
-     *                     example="0",
      *                 ),
      *                 @OA\Property(
      *                     property="is_18_plus",
      *                     type="integer",
      *                     description="1|0",
-     *                     example="0",
      *                 ),
      *                 @OA\Property(
-     *                     property="created_by",
+     *                     property="ingredients_by",
      *                     type="integer",
-     *                     description="created_by",
+     *                     description="ingredients_by",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="updated_by",
+     *                     type="integer",
+     *                     description="updated_by",
      *                 ),
      *                 @OA\Property (
      *                     property="image_id",
@@ -356,18 +358,19 @@ class ProductController extends Controller
      *                      type="string",
      *                      format ="date-time",
      *                  ),
-     *                     description="published_at",
+     *                     description="Format: Y-m-d H:i:s",
      *                 ),
-     *             )
-     *         )
-     *     ),*
+     *             ),
+     *         ),
+     *     ),
      *     @OA\Response(
-     *         response=200,
-     *         description="Product created."
+     *         response=201,
+     *         description="Product updated.",
+     *         @OA\JsonContent(ref="#/components/schemas/Product")
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Error in fields"
+     *         description="Error in fields."
      *     ),
      * )
      *
@@ -386,36 +389,35 @@ class ProductController extends Controller
      *
      * @OA\Delete (
      *     tags={"Products"},
-     *     path="/admin/products/{product}",
+     *     path="/admin/product/{product}",
+     *     @OA\RequestBody(
+     *         required=false,
+     *         @OA\MediaType(mediaType="application/x-www-form-urlencoded"),
+     *     ),
      *    @OA\Parameter(
      *      name="product",
      *      in="path",
-     *      description="integer",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
+     *      description="Product ID",
+     *      @OA\Schema(type="integer"),
      *    ),
-     *     @OA\RequestBody(
-     *         required=false,
-     *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
-     *         )
-     *     ),*
-     *     @OA\Response(
-     *         response=204,
-     *         description="Product deleted."
-     *     ),
+     *    @OA\Response(
+     *      response=204,
+     *      description="Product deleted.",
+     *      @OA\JsonContent(),
+     *    ),
+     *    @OA\Response(
+     *      response=404,
+     *      description="Product not found.",
+     *      @OA\JsonContent(),
+     *    )
      * )
      *
      * @param Product $product
      * @return JsonResponse
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function destroy(Product $product): JsonResponse
     {
-        $product->ingredients()->detach();
-        $product->tags()->detach();
-        $product->categories()->detach();
         $product->deleteOrFail();
 
         return response()->json([], Response::HTTP_NO_CONTENT);

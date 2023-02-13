@@ -13,6 +13,16 @@ class ProductOffer extends Model
     use GeneratesSlug;
 
     /**
+     * @var string
+     */
+    protected string $slugFrom = 'name';
+
+    /**
+     * @var string[]
+     */
+    protected $with = ['image'];
+
+    /**
      * @var string[]
      */
     protected $fillable = [
@@ -26,22 +36,14 @@ class ProductOffer extends Model
         'place',
         'shipping_payment',
         'is_sold',
-        'is_approved',
+        'approved_at',
     ];
-
-    /**
-     * @var string
-     */
-    protected string $slugFrom = 'name';
 
     /**
      * @var string[]
      */
     protected $casts = [
         'description' => 'array',
-        'bought_at' => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
     ];
 
     /**

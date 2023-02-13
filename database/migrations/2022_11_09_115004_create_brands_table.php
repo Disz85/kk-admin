@@ -26,7 +26,6 @@ return new class () extends Migration {
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('legacy_image_url')->nullable();
             $table->text('where_to_find')->nullable();
-            $table->dateTime('approved')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users')
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')

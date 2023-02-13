@@ -9,39 +9,44 @@ use App\Http\Requests\UpdateTagRequest;
 use App\Http\Resources\Admin\TagCollection;
 use App\Http\Resources\Admin\TagResource;
 use App\Models\Tag;
+use App\RequestMappers\TagRequestMapper;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-/**
- * @resource Tags
- * @package App\Http\Controllers
- */
 class TagController extends Controller
 {
     /**
-     * List of Tags.
      * @OA\Get(
      *    tags={"Tags"},
      *    path="/admin/tags",
-     *    @OA\Response(
-     *      response="200",
-     *      description="Display a listing of tags."
-     *    ),
      *    @OA\Parameter(
      *      name="page",
      *      in="query",
      *      description="Page number",
+     *      @OA\Schema(type="integer"),
+     *      allowEmptyValue="true",
+     *    ),
+     *    @OA\Parameter(
+     *      name="name",
+     *      in="query",
+     *      description="Filter by name",
+     *      @OA\Schema(type="string"),
+     *    ),
+     *    @OA\Response(
+     *      response=200,
+     *      description="Display a listing of tags.",
+     *      @OA\JsonContent(ref="#/components/schemas/Tag"),
+     *    ),
+     *    @OA\Response(
+     *      response=404,
+     *      description="No tags.",
      *      @OA\JsonContent(),
-     *      @OA\Schema(
-     *          type="integer"
-     *      )
      *    )
      * )
-     *
-     * Display a list of the resource.
      *
      * @param Request $request
      * @return TagCollection
@@ -65,102 +70,6 @@ class TagController extends Controller
      * @OA\Post (
      *     tags={"Tags"},
      *     path="/admin/tags",
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 required={"name"},
-     *                 @OA\Property(
-     *                     property="name",
-     *                     type="string",
-     *                     description="Name.",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="description",
-     *                     type="string",
-     *                     nullable=true,
-     *                     description="Desciption.",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="is_highlighted",
-     *                     type="integer",
-     *                     description="1|0",
-     *                     example="0",
-     *                 ),
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Tag created.",
-     *         @OA\JsonContent(),
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Error in fields."
-     *     ),
-     * )
-     *
-     * @param StoreTagRequest $request
-     * @return TagResource
-     */
-    public function store(StoreTagRequest $request): TagResource
-    {
-        $tag = Tag::create($request->validated());
-        $tag->generateSlug();
-        $tag->save();
-
-        return new TagResource($tag);
-    }
-
-    /**
-     * Show a selected Tag.
-     * @OA\Get(
-     *    tags={"Tags"},
-     *    path="/admin/tags/{tag}",
-     *    @OA\Parameter(
-     *         name="tag",
-     *         in="path",
-     *         required=true,
-     *         description="Tag ID",
-     *         @OA\Schema(
-     *             type="integer"
-     *         ),
-     *    ),
-     *    @OA\Response(
-     *      response="200",
-     *      description="Display a selected Tag.",
-     *      @OA\JsonContent(),
-     *    ),
-     *    @OA\Response(
-     *        response=404,
-     *        description="Tag Not Found.",
-     *    )
-     * )
-     * @param Tag $tag
-     * @return TagResource
-     */
-    public function show(Tag $tag): TagResource
-    {
-        return new TagResource($tag);
-    }
-
-    /**
-     * Update Tag.
-     *
-     * @OA\Put (
-     *     tags={"Tags"},
-     *     path="/admin/tags/{tag}",
-     *    @OA\Parameter(
-     *      name="tag",
-     *      in="path",
-     *      required=true,
-     *      description="integer",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
-     *    ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -188,9 +97,9 @@ class TagController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=200,
-     *         description="Tag updated.",
-     *         @OA\JsonContent(),
+     *         response=201,
+     *         description="Tag created.",
+     *         @OA\JsonContent(ref="#/components/schemas/Tag"),
      *     ),
      *     @OA\Response(
      *         response=422,
@@ -198,16 +107,106 @@ class TagController extends Controller
      *     ),
      * )
      *
-     * @param UpdateTagRequest $request
+     * @param StoreTagRequest $request
+     * @param Tag $tag
+     * @param TagRequestMapper $tagRequestMapper
+     * @return TagResource
+     */
+    public function store(StoreTagRequest $request, Tag $tag, TagRequestMapper $tagRequestMapper): TagResource
+    {
+        return new TagResource($tagRequestMapper->map($tag, $request->validated()));
+    }
+
+    /**
+     * Show a selected tag.
+     *
+     * @OA\Get(
+     *    tags={"Tags"},
+     *    path="/admin/tags/{tag}",
+     *    @OA\Parameter(
+     *        name="tag",
+     *        in="path",
+     *        required=true,
+     *        description="Tag ID",
+     *        @OA\Schema(type="integer"),
+     *    ),
+     *    @OA\Response(
+     *        response=200,
+     *        description="Display a selected tag.",
+     *        @OA\JsonContent(ref="#/components/schemas/Tag"),
+     *    ),
+     *    @OA\Response(
+     *        response=404,
+     *        description="Tag not found.",
+     *        @OA\JsonContent(),
+     *    )
+     * )
      * @param Tag $tag
      * @return TagResource
      */
-    public function update(UpdateTagRequest $request, Tag $tag): TagResource
+    public function show(Tag $tag): TagResource
     {
-        $tag->fill($request->validated());
-        $tag->save();
-
         return new TagResource($tag);
+    }
+
+    /**
+     * Update Tag.
+     *
+     * @OA\Put (
+     *    tags={"Tags"},
+     *    path="/admin/tags/{tag}",
+     *    @OA\Parameter(
+     *      name="tag",
+     *      in="path",
+     *      required=true,
+     *      description="integer",
+     *      @OA\Schema(type="string"),
+     *    ),
+     *    @OA\RequestBody(
+     *        required=true,
+     *        @OA\MediaType(
+     *            mediaType="application/x-www-form-urlencoded",
+     *            @OA\Schema(
+     *                required={"name"},
+     *                @OA\Property(
+     *                    property="name",
+     *                    type="string",
+     *                    description="Name.",
+     *                ),
+     *                @OA\Property(
+     *                    property="description",
+     *                    type="string",
+     *                    nullable=true,
+     *                    description="Desciption.",
+     *                ),
+     *                @OA\Property(
+     *                    property="is_highlighted",
+     *                    type="integer",
+     *                    description="1|0",
+     *                    example="0",
+     *                ),
+     *            )
+     *        )
+     *    ),
+     *    @OA\Response(
+     *        response=201,
+     *        description="Tag updated.",
+     *        @OA\JsonContent(ref="#/components/schemas/Tag"),
+     *    ),
+     *    @OA\Response(
+     *        response=422,
+     *        description="Error in fields."
+     *    ),
+     * )
+     *
+     * @param UpdateTagRequest $request
+     * @param Tag $tag
+     * @param TagRequestMapper $tagRequestMapper
+     * @return TagResource
+     */
+    public function update(UpdateTagRequest $request, Tag $tag, TagRequestMapper $tagRequestMapper): TagResource
+    {
+        return new TagResource($tagRequestMapper->map($tag, $request->validated()));
     }
 
     /**
@@ -216,16 +215,15 @@ class TagController extends Controller
      * @OA\Delete (
      *     tags={"Tags"},
      *     path="/admin/tags/{tag}",
+     *     @OA\RequestBody(
+     *         required=false,
+     *         @OA\MediaType(mediaType="application/x-www-form-urlencoded"),
+     *     ),
      *    @OA\Parameter(
      *      name="tag",
      *      in="path",
-     *      description="integer",
-     *      @OA\Schema(
-     *          type="string"
-     *      )
-     *    ),
-     *    @OA\RequestBody(
-     *      required=false,
+     *      description="Tag ID",
+     *      @OA\Schema(type="integer"),
      *    ),
      *    @OA\Response(
      *      response=204,
@@ -234,11 +232,12 @@ class TagController extends Controller
      *    ),
      *    @OA\Response(
      *      response=404,
-     *      description="Tag not found."
+     *      description="Tag not found.",
+     *      @OA\JsonContent(),
      *    ),
      *    @OA\Response(
      *      response=422,
-     *      description="Tag cannot be deleted due to existence of related resources."
+     *      description="Tag cannot be deleted due to existence of related resources.",
      *    ),
      * )
      *

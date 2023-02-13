@@ -32,8 +32,7 @@ class ArticleApiTest extends TestCase
     {
         $latestArticles = Article::query()
             ->select('uuid')
-            ->where('active', '=', 1)
-            ->where('hidden', '=', 0)
+            ->where('is_active', '=', 1)
             ->orderByDesc('title')
             ->limit(3)
             ->pluck('uuid')

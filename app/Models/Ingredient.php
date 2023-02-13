@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Interfaces\HasDependencies;
 use App\Traits\GeneratesSlug;
+use App\Traits\HasUuid;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -62,6 +63,7 @@ class Ingredient extends Model implements HasDependencies
 {
     use HasFactory;
     use GeneratesSlug;
+    use HasUuid;
 
     /**
      * @var string

@@ -25,7 +25,7 @@ class StoreIngredientRequest extends FormRequest
                 }
             }],
             'comedogen_index' => 'nullable|integer|between:0,5',
-            'description' => 'nullable|string',
+            'description' => 'nullable|array',
             'image_id' => 'nullable|exists:media,id',
             'is_approved' => 'required|boolean',
             'categories' => 'required|array|min:1',

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Enum\IngredientEwgDataEnum;
 use App\Models\Category;
 use App\Models\Ingredient;
+use Database\Helpers\BlockStyleEditorFakeContentBuilder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;
 
@@ -30,7 +31,7 @@ class IngredientFactory extends Factory
                 return fake()->numberBetween($values['ewg_score'], 10);
             },
             'comedogen_index' => fake()->numberBetween(0, 5),
-            'description' => fake()->paragraph(),
+            'description' => fn () => $this->fakeDescription(),
             'is_approved' => fake()->boolean(),
             'image_id' => null,
         ];
@@ -46,5 +47,25 @@ class IngredientFactory extends Factory
         return $this->hasAttached(
             $categories ?? CategoryFactory::new()->count($count)
         );
+    }
+
+    private function fakeDescription(): array
+    {
+        $builder = app()->make(BlockStyleEditorFakeContentBuilder::class);
+
+        $paragraphsCount = $this->faker->numberBetween(3, 6);
+
+        $builder = $builder
+            ->addHeader()
+            ->addParagraph()
+            ->addParagraph()
+            ->addQuote()
+            ->addList();
+
+        foreach (range(1, $paragraphsCount) as $iter) {
+            $builder->addParagraph();
+        }
+
+        return $builder->build();
     }
 }

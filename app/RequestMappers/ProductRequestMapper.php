@@ -4,7 +4,6 @@ namespace App\RequestMappers;
 
 use App\Models\Media;
 use App\Models\Product;
-use Illuminate\Support\Arr;
 
 class ProductRequestMapper
 {

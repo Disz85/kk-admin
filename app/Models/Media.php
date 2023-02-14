@@ -14,6 +14,7 @@ use OpenApi\Annotations as OA;
  * @OA\Schema(
  *     @OA\Xml(name="Media"),
  *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="uuid", type="string"),
  *     @OA\Property(property="title", type="string"),
  *     @OA\Property(property="path", type="string"),
  *     @OA\Property(property="type", type="string"),
@@ -28,6 +29,7 @@ use OpenApi\Annotations as OA;
  * @package App\Models
  *
  * @property int $id
+ * @property string $uuid
  * @property string $path
  * @property string $type
  * @property string|null $title

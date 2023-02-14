@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Traits\GeneratesSlug;
-use App\Traits\HasUuid;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +18,7 @@ use OpenApi\Annotations as OA;
  * @OA\Schema(
  *     @OA\Xml(name="Article"),
  *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="uuid", type="string"),
  *     @OA\Property(property="title", type="string"),
  *     @OA\Property(property="slug", type="string"),
  *     @OA\Property(property="lead", type="string"),
@@ -39,6 +39,7 @@ use OpenApi\Annotations as OA;
  *
  * Fields
  * @property int $id
+ * @property string $uuid
  * @property string $title
  * @property string $slug
  * @property string|null $lead
@@ -61,7 +62,6 @@ class Article extends Model
 {
     use GeneratesSlug;
     use HasFactory;
-    use HasUuid;
 
     /**
      * @var string

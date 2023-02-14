@@ -4,7 +4,6 @@ namespace App\RequestMappers;
 
 use App\Models\Ingredient;
 use App\Models\Media;
-use Illuminate\Support\Arr;
 
 class IngredientRequestMapper
 {

@@ -16,6 +16,7 @@ use OpenApi\Annotations as OA;
  * @OA\Schema(
  *     @OA\Xml(name="Tag"),
  *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="uuid", type="string"),
  *     @OA\Property(property="name", type="string"),
  *     @OA\Property(property="slug", type="string"),
  *     @OA\Property(property="description", type="string"),
@@ -31,6 +32,7 @@ use OpenApi\Annotations as OA;
  *
  * Fields
  * @property int $id
+ * @property string $uuid
  * @property string $name
  * @property string $slug
  * @property string|null $description

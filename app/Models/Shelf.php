@@ -15,6 +15,7 @@ use OpenApi\Annotations as OA;
  *  @OA\Schema(
  *     @OA\Xml(name="Shelf"),
  *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="uuid", type="string"),
  *     @OA\Property(property="title", type="string"),
  *     @OA\Property(property="slug", type="string"),
  *     @OA\Property(property="is_private", type="bool"),
@@ -28,6 +29,7 @@ use OpenApi\Annotations as OA;
  *
  * Fields
  * @property int $id
+ * @property string $uuid
  * @property string $title
  * @property string $slug
  * @property bool $is_private

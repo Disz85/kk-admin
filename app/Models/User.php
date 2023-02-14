@@ -21,6 +21,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @OA\Schema(
  *     @OA\Xml(name="User"),
  *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="uuid", type="string"),
  *     @OA\Property(property="sso_id", type="string"),
  *     @OA\Property(property="title", type="string"),
  *     @OA\Property(property="lastname", type="string"),
@@ -42,6 +43,7 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * Fields
  * @property int $id
+ * @property string $uuid
  * @property string|null $sso_id
  * @property string|null $title
  * @property string|null $lastname

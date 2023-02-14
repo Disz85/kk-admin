@@ -17,6 +17,7 @@ use OpenApi\Annotations as OA;
  * @OA\Schema(
  *     @OA\Xml(name="Author"),
  *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="uuid", type="string"),
  *     @OA\Property(property="title", type="string"),
  *     @OA\Property(property="name", type="string"),
  *     @OA\Property(property="email", type="string"),
@@ -29,6 +30,7 @@ use OpenApi\Annotations as OA;
  * );
  *
  * @property int $id
+ * @property string $uuid
  * @property string|null $title
  * @property string $name
  * @property string $slug

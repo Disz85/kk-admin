@@ -6,7 +6,6 @@ use App\Enum\CategoryTypeEnum;
 use App\Interfaces\HasDependencies;
 use App\Traits\CategoryHierarchy;
 use App\Traits\GeneratesSlug;
-use App\Traits\HasUuid;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +18,7 @@ use OpenApi\Annotations as OA;
  * @OA\Schema(
  *     @OA\Xml(name="Category"),
  *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="uuid", type="string"),
  *     @OA\Property(property="name", type="string"),
  *     @OA\Property(property="slug", type="string"),
  *     @OA\Property(property="description", type="string"),
@@ -36,6 +36,7 @@ use OpenApi\Annotations as OA;
  *
  * Fields
  * @property int $id
+ * @property string $uuid
  * @property string $name
  * @property string $slug
  * @property string|null $description
@@ -52,7 +53,6 @@ use OpenApi\Annotations as OA;
 class Category extends Model implements HasDependencies
 {
     use HasFactory;
-    use HasUuid;
     use GeneratesSlug;
     use CategoryHierarchy;
 

@@ -15,6 +15,7 @@ use OpenApi\Annotations as OA;
  * @OA\Schema(
  *     @OA\Xml(name="FavoriteProduct"),
  *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="uuid", type="string"),
  *     @OA\Property(property="name", type="string"),
  *     @OA\Property(property="product1_id", type="int"),
  *     @OA\Property(property="product2_id", type="int"),
@@ -28,6 +29,7 @@ use OpenApi\Annotations as OA;
  *
  * Fields
  * @property int $id
+ * @property string $uuid
  * @property string $name
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at

@@ -4,7 +4,6 @@ namespace App\RequestMappers;
 
 use App\Models\Brand;
 use App\Models\Media;
-use Illuminate\Support\Arr;
 
 class BrandRequestMapper
 {

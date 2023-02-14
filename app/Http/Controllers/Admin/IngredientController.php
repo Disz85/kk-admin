@@ -291,7 +291,7 @@ class IngredientController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=201,
+     *         response=200,
      *         description="Ingredient updated.",
      *         @OA\JsonContent(ref="#/components/schemas/Ingredient"),
      *     ),

@@ -320,8 +320,8 @@ class ArticleController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=201,
-     *         description="Product updated.",
+     *         response=200,
+     *         description="Article updated.",
      *         @OA\JsonContent(ref="#/components/schemas/Article"),
      *     ),
      *     @OA\Response(

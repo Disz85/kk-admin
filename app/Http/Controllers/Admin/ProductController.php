@@ -226,7 +226,7 @@ class ProductController extends Controller
      *    ),
      *    @OA\Response(
      *        response=404,
-     *        description="Article not found.",
+     *        description="Product not found.",
      *        @OA\JsonContent()
      *    ),
      * )
@@ -364,7 +364,7 @@ class ProductController extends Controller
      *         ),
      *     ),
      *     @OA\Response(
-     *         response=201,
+     *         response=200,
      *         description="Product updated.",
      *         @OA\JsonContent(ref="#/components/schemas/Product")
      *     ),

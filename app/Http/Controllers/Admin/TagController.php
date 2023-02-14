@@ -189,7 +189,7 @@ class TagController extends Controller
      *        )
      *    ),
      *    @OA\Response(
-     *        response=201,
+     *        response=200,
      *        description="Tag updated.",
      *        @OA\JsonContent(ref="#/components/schemas/Tag"),
      *    ),

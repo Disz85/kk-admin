@@ -219,7 +219,7 @@ class BrandChangeRequestController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=201,
+     *         response=200,
      *         description="Brand change request updated.",
      *         @OA\JsonContent(ref="#/components/schemas/BrandChangeRequest"),
      *     ),

@@ -209,7 +209,7 @@ class AuthorController extends Controller
      *         )
      *     ),*
      *     @OA\Response(
-     *         response=201,
+     *         response=200,
      *         description="Author updated.",
      *         @OA\JsonContent(ref="#/components/schemas/Author")
      *     ),

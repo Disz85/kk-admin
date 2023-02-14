@@ -23,7 +23,7 @@ class ArticleStatusController extends Controller
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Response(
-     *         response=201,
+     *         response=200,
      *         description="Article status updated.",
      *         @OA\JsonContent()
      *     ),

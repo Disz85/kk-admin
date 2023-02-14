@@ -98,7 +98,7 @@ class ProductChangeRequestController extends Controller
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"name","product_id", "image_id", "is_active", "is_sponsored","is_18_plus","created_by", "brand_id", "price"},
+     *                 required={"name", "image_id", "is_active", "is_sponsored","is_18_plus","created_by", "brand_id", "price"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
@@ -347,7 +347,7 @@ class ProductChangeRequestController extends Controller
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"name","product_id", "image_id", "is_active", "is_sponsored","is_18_plus","created_by", "brand_id", "price"},
+     *                 required={"name", "image_id", "is_active", "is_sponsored","is_18_plus","created_by", "brand_id", "price"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",

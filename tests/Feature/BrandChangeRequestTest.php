@@ -4,10 +4,13 @@ namespace Tests\Feature;
 
 use App\Models\BrandChangeRequest;
 use Database\Factories\BrandFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class BrandChangeRequestTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_can_store_a_new_brand_change_request()
     {

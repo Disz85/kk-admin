@@ -23,8 +23,7 @@ class UserFactory extends Factory
             'firstname' => fake()->firstName(),
             'lastname' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
-            'username' => fake()->userName(),
-            'slug' => fake()->slug(),
+            'username' => fake()->unique()->userName(),
         ];
     }
 

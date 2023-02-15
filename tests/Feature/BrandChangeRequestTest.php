@@ -15,7 +15,9 @@ class BrandChangeRequestTest extends TestCase
     public function it_can_store_a_new_brand_change_request()
     {
         $brand = BrandFactory::new()->raw();
+        $brand['image']['id'] = $brand['image_id'];
         $response = $this->post(route('admin.brand-change-requests.store'), $brand);
+        unset($brand['image_id']);
         $response->assertCreated();
         $response->assertJsonFragment([
             'data' => $brand,
@@ -42,6 +44,7 @@ class BrandChangeRequestTest extends TestCase
     {
         $brand = BrandChangeRequest::factory()->create();
         $brandChanged = BrandFactory::new()->raw();
+        $brandChanged['image']['id'] = $brandChanged['image_id'];
         $response = $this->put(route('admin.brand-change-requests.update', ['brand_change_request' => $brand->id]), $brandChanged);
         $response->assertOk();
         $response->assertJsonFragment([

@@ -25,8 +25,8 @@ class IngredientRequestMapper
             'created_by' => data_get($data, 'created_by'),
         ]);
 
-        if (data_get($data, 'image_id')) {
-            $ingredient->image()->associate(Media::findOrFail($data['image_id']));
+       if (data_get($data, 'image.id')) {
+            $ingredient->image()->associate(Media::findOrFail($data['image']['id']));
         }
 
         $ingredient->save();

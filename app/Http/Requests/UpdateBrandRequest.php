@@ -17,7 +17,7 @@ class UpdateBrandRequest extends FormRequest
             'title' => 'required|string|max:255|unique:brands,title,'.$this->brand->id,
             'url' => 'nullable|url|max:255',
             'description' => 'nullable|array',
-            'image_id' => 'required|integer|exists:media,id',
+            'image.id' => 'required|int|exists:media,id',
             'where_to_find' => 'nullable|string',
             'updated_by' => 'nullable|integer|exists:users,id',
         ];

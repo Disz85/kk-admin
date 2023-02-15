@@ -96,9 +96,9 @@ class ProductChangeRequestController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
+     *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"name", "image_id", "is_active", "is_sponsored","is_18_plus","created_by", "brand_id", "price"},
+     *                 required={"name", "image[id]", "is_active", "is_sponsored","is_18_plus","created_by", "brand_id", "price"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
@@ -159,9 +159,9 @@ class ProductChangeRequestController extends Controller
      *                     description="created_by",
      *                 ),
      *                 @OA\Property (
-     *                     property="image_id",
+     *                     property="image[id]",
      *                     type="integer",
-     *                     description="image id",
+     *                     description="Image ID",
      *                 ),
      *                 @OA\Property(
      *                     property="ingredients_by",
@@ -345,9 +345,9 @@ class ProductChangeRequestController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
+     *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"name", "image_id", "is_active", "is_sponsored","is_18_plus","created_by", "brand_id", "price"},
+     *                 required={"name", "image[id]", "is_active", "is_sponsored","is_18_plus","created_by", "brand_id", "price"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
@@ -408,9 +408,9 @@ class ProductChangeRequestController extends Controller
      *                     description="created_by",
      *                 ),
      *                 @OA\Property (
-     *                     property="image_id",
+     *                     property="image[id]",
      *                     type="integer",
-     *                     description="image id",
+     *                     description="Image ID",
      *                 ),
      *                 @OA\Property(
      *                     property="ingredients_by",

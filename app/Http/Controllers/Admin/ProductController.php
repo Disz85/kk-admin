@@ -74,9 +74,9 @@ class ProductController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
+     *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"name", "image_id", "is_active", "is_sponsored", "is_18_plus", "brand_id", "price"},
+     *                 required={"name", "image[id]", "is_active", "is_sponsored", "is_18_plus", "brand_id", "price"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
@@ -134,9 +134,9 @@ class ProductController extends Controller
      *                     description="created_by",
      *                 ),
      *                 @OA\Property (
-     *                     property="image_id",
+     *                     property="image[id]",
      *                     type="integer",
-     *                     description="image id",
+     *                     description="Image ID",
      *                 ),
      *                 @OA\Property (
      *                     property="categories[0]",
@@ -257,9 +257,9 @@ class ProductController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
+     *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"name", "image_id", "is_active", "is_sponsored", "is_18_plus", "brand_id", "price"},
+     *                 required={"name", "image[id]", "is_active", "is_sponsored", "is_18_plus", "brand_id", "price"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
@@ -317,9 +317,9 @@ class ProductController extends Controller
      *                     description="updated_by",
      *                 ),
      *                 @OA\Property (
-     *                     property="image_id",
+     *                     property="image[id]",
      *                     type="integer",
-     *                     description="image id",
+     *                     description="Image ID",
      *                 ),
      *                 @OA\Property (
      *                     property="categories[0]",

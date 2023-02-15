@@ -75,7 +75,7 @@ class AuthorController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
+     *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                 required={"name","email"},
      *                 @OA\Property(
@@ -99,7 +99,7 @@ class AuthorController extends Controller
      *                     description="Desciption.",
      *                 ),
      *                 @OA\Property(
-     *                     property="image_id",
+     *                     property="image[id]",
      *                     type="integer",
      *                     description="Image ID.",
      *                 ),
@@ -177,7 +177,7 @@ class AuthorController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
+     *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                 required={"name","email"},
      *                 @OA\Property(
@@ -201,7 +201,7 @@ class AuthorController extends Controller
      *                     description="Desciption.",
      *                 ),
      *                 @OA\Property(
-     *                     property="image_id",
+     *                     property="image[id]",
      *                     type="integer",
      *                     description="Image ID.",
      *                 ),

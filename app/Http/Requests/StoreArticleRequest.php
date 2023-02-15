@@ -20,7 +20,7 @@ class StoreArticleRequest extends FormRequest
             'is_active' => 'sometimes|boolean',
             'is_sponsored' => 'sometimes|boolean',
             'is_18_plus' => 'sometimes|boolean',
-            'image_id' => 'nullable|integer|exists:media,id',
+            'image.id' => 'required|int|exists:media,id',
             'authors' => 'required|array|exists:authors,id',
             'tags' => 'nullable|array|exists:tags,id',
             'categories' => 'nullable|array|exists:categories,id',

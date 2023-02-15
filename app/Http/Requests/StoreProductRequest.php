@@ -26,7 +26,7 @@ class StoreProductRequest extends FormRequest
             'brand_id' => 'required|integer|exists:brands,id',
             'created_by' => 'nullable|integer|exists:users,id',
             'ingredients_by' => 'nullable|integer|exists:users,id',
-            'image_id' => 'required|integer|exists:media,id',
+            'image.id' => 'required|int|exists:media,id',
             'tags' => 'nullable|array|exists:tags,id',
             'categories' => 'nullable|array|exists:categories,id',
             'ingredients' => 'nullable|array|exists:ingredients,id',

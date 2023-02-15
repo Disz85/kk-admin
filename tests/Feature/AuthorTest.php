@@ -25,8 +25,10 @@ class AuthorTest extends TestCase
     public function it_can_store_a_author()
     {
         $data = AuthorFactory::new()->raw();
+        $data['image']['id'] = $data['image_id'];
         $this->post(route('admin.authors.store'), $data)
             ->assertCreated();
+        unset($data['image']);
         $this->assertDatabaseHas(Author::class, $data);
     }
 
@@ -35,8 +37,10 @@ class AuthorTest extends TestCase
     {
         $author = Author::factory()->create();
         $data = AuthorFactory::new()->raw();
+        $data['image']['id'] = $data['image_id'];
         $this->put(route('admin.authors.update', ['author' => $author->id]), $data)
             ->assertOk();
+        unset($data['image']);
         $this->assertDatabaseHas(Author::class, $data);
     }
 

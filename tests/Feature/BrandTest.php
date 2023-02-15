@@ -27,10 +27,11 @@ class BrandTest extends TestCase
     public function it_can_store_a_brand()
     {
         $data = BrandFactory::new()->raw();
+        $data['image']['id'] = $data['image_id'];
         $this->post(route('admin.brands.store'), $data)
             ->assertCreated();
         $data['description'] = json_encode($data['description']);
-        $this->assertDatabaseHas(Brand::class, Arr::except($data, ['created_by']));
+        $this->assertDatabaseHas(Brand::class, Arr::except($data, ['created_by', 'image']));
     }
 
     /** @test */
@@ -38,10 +39,11 @@ class BrandTest extends TestCase
     {
         $brand = Brand::factory()->create();
         $data = BrandFactory::new()->raw();
+        $data['image']['id'] = $data['image_id'];
         $this->put(route('admin.brands.update', ['brand' => $brand->id]), $data)
             ->assertOk();
         $data['description'] = json_encode($data['description']);
-        $this->assertDatabaseHas(Brand::class, Arr::except($data, 'created_by'));
+        $this->assertDatabaseHas(Brand::class, Arr::except($data, ['created_by', 'image']));
     }
 
     /** @test */

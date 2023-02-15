@@ -24,8 +24,8 @@ class ArticleRequestMapper
             'published_at' => data_get($data, 'published_at'),
         ]);
 
-        if (data_get($data, 'image_id')) {
-            $article->image()->associate(Media::findOrFail($data['image_id']));
+       if (data_get($data, 'image.id')) {
+            $article->image()->associate(Media::findOrFail($data['image']['id']));
         }
 
         $article->save();

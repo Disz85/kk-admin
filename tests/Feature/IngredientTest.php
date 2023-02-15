@@ -91,6 +91,8 @@ class IngredientTest extends TestCase
     protected function makeDummyRequestData(): array
     {
         $ingredient = IngredientFactory::new()->raw();
+        $ingredient['image']['id'] = $ingredient['image_id'];
+        unset($ingredient['image_id']);
         $categories = Category::factory()->count(2)->create([
             'type' => CategoryTypeEnum::Ingredient->value,
         ]);

@@ -20,6 +20,7 @@ class ProductChangeRequestTest extends TestCase
     {
         list($product, $tags, $categories, $user, $ingredients) = $this->makeDummyRequestData();
         $response = $this->post(route('admin.product-change-requests.store'), $product);
+        unset($product['image_id']);
         $response->assertCreated();
         $response->assertJsonFragment([
             'data' => $product,
@@ -108,6 +109,7 @@ class ProductChangeRequestTest extends TestCase
         $categories = Category::factory()->count(3)->create();
         $tags = Tag::factory()->count(2)->create();
         $product = ProductFactory::new()->raw();
+        $product['image']['id'] = $product['image_id'];
         $ingredients = Ingredient::factory()->count(2)->create();
         $user = User::factory()->create();
         $product['categories'] = (array_column($categories->toArray(), 'id'));

@@ -138,6 +138,8 @@ class ArticleTest extends TestCase
 
         $article = ArticleFactory::new()->raw();
 
+        $article['image']['id'] = $article['image_id'];
+        unset($article['image_id']);
         $article['authors'] = $authors->pluck('id')->toArray();
         $article['categories'] = $categories->pluck('id')->toArray();
         $article['tags'] = $tags->pluck('id')->toArray();

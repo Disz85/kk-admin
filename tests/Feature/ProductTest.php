@@ -125,6 +125,7 @@ class ProductTest extends TestCase
         $tags = Tag::factory()->count(2)->create();
         $ingredients = Ingredient::factory()->count(2)->create();
         $product = ProductFactory::new()->raw();
+        $product['image']['id'] = $product['image_id'];
         $product['categories'] = (array_column($categories->toArray(), 'id'));
         $product['tags'] = (array_column($tags->toArray(), 'id'));
         $product['ingredients'] = (array_column($ingredients->toArray(), 'id'));

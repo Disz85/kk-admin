@@ -80,9 +80,9 @@ class ArticleController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
+     *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"title", "body"},
+     *                 required={"title", "body", "image[id]"},
      *                 @OA\Property (
      *                     property="title",
      *                     type="string",
@@ -117,9 +117,9 @@ class ArticleController extends Controller
      *                     example="0"
      *                 ),
      *                 @OA\Property (
-     *                     property="image_id",
+     *                     property="image[id]",
      *                     type="integer",
-     *                     description="image id"
+     *                     description="Image ID"
      *                 ),
      *                 @OA\Property (
      *                     property="authors[0]",
@@ -236,9 +236,9 @@ class ArticleController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
+     *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"title", "body"},
+     *                 required={"title", "body", "image[id]"},
      *                 @OA\Property (
      *                     property="title",
      *                     type="string",
@@ -273,9 +273,9 @@ class ArticleController extends Controller
      *                     example="0"
      *                 ),
      *                 @OA\Property (
-     *                     property="image_id",
+     *                     property="image[id]",
      *                     type="integer",
-     *                     description="image id"
+     *                     description="Image ID"
      *                 ),
      *                 @OA\Property (
      *                     property="authors[0]",

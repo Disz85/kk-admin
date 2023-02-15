@@ -97,9 +97,9 @@ class BrandChangeRequestController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
+     *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"title", "brand_id", "created_by", "image_id"},
+     *                 required={"title", "brand_id", "created_by", "image[id]"},
      *                 @OA\Property(
      *                     property="title",
      *                     type="string",
@@ -121,7 +121,7 @@ class BrandChangeRequestController extends Controller
      *                     description="Description of the brand",
      *                 ),
      *                 @OA\Property(
-     *                     property="image_id",
+     *                     property="image[id]",
      *                     type="integer",
      *                     description="Image ID",
      *                 ),
@@ -177,9 +177,9 @@ class BrandChangeRequestController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="application/x-www-form-urlencoded",
+     *            mediaType="multipart/form-data",
      *            @OA\Schema(
-     *                 required={"title", "brand_id", "created_by", "image_id"},
+     *                 required={"title", "brand_id", "created_by", "image[id]"},
      *                 @OA\Property(
      *                     property="title",
      *                     type="string",
@@ -201,7 +201,7 @@ class BrandChangeRequestController extends Controller
      *                     description="Description of the brand",
      *                 ),
      *                 @OA\Property(
-     *                     property="image_id",
+     *                     property="image[id]",
      *                     type="integer",
      *                     description="Image ID",
      *                 ),

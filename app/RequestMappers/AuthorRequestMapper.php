@@ -21,8 +21,8 @@ class AuthorRequestMapper
             'description' => data_get($data, 'description'),
         ]);
 
-        if (data_get($data, 'image_id')) {
-            $author->image()->associate(Media::findOrFail($data['image_id']));
+       if (data_get($data, 'image.id')) {
+            $author->image()->associate(Media::findOrFail($data['image']['id']));
         }
 
         $author->save();

@@ -27,7 +27,8 @@ help: ## * Show help (Default task)
 config: ## Setup step #1: Create .env for the admin project
 	cp -f .env.example .env
 	cp -f keycloak.json.example public/keycloak.json
-	sudo chmod -R 777 storage
+	docker exec -it $(PHP_CONTAINER) usermod -u $(USER_ID) www-data
+	docker exec -it $(PHP_CONTAINER) groupmod -g $(GROUP_ID) www-data
 
 composer-install: ## Setup step #2: Run composer install
 	docker exec -it $(PHP_CONTAINER) composer install
@@ -85,8 +86,11 @@ uninstall: ## Cleanup project by removing .env, PHP packages, node modules, file
 	rm -rf vendor
 	rm -rf node_modules
 
-shell: ## Connect to the php container with a bash prompt
+shell: ## Open bash as host user in the PHP container
 	docker exec -u $(USER_ID):$(GROUP_ID) -it $(PHP_CONTAINER) bash
+
+shell-root: ## Open bash as root in the PHP container
+	docker exec -it $(PHP_CONTAINER) bash
 
 tinker: ## Run Artisan Tinker
 	docker exec -it $(PHP_CONTAINER) php artisan tinker

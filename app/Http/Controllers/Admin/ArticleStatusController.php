@@ -15,6 +15,7 @@ class ArticleStatusController extends Controller
      * @OA\Patch (
      *     tags={"Articles"},
      *     path="/admin/articles/{article}/status",
+     *     security={{"bearer":{}}},
      *     @OA\Parameter(
      *         name="article",
      *         in="path",

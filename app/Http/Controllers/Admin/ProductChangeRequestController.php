@@ -28,6 +28,7 @@ class ProductChangeRequestController extends Controller
      * @OA\Get(
      *    tags={"ProductChangeRequests"},
      *    path="/admin/product-change-requests",
+     *    security={{"bearer":{}}},
      *    @OA\MediaType(mediaType="application/json"),
      *    @OA\Parameter(
      *      name="page",
@@ -61,6 +62,7 @@ class ProductChangeRequestController extends Controller
      * @OA\Get(
      *    tags={"ProductChangeRequests"},
      *    path="/admin/product-change-requests/{product_change_request}",
+     *    security={{"bearer":{}}},
      *    @OA\Parameter(
      *      name="product_change_request",
      *      in="path",
@@ -93,6 +95,7 @@ class ProductChangeRequestController extends Controller
      * @OA\Post (
      *     tags={"ProductChangeRequests"},
      *     path="/admin/product-change-requests",
+     *     security={{"bearer":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -251,6 +254,7 @@ class ProductChangeRequestController extends Controller
      * @OA\Post (
      *     tags={"ProductChangeRequests"},
      *     path="/admin/product-change-requests/{product_change_request}/approve",
+     *     security={{"bearer":{}}},
      *     @OA\MediaType(mediaType="application/json"),
      *    @OA\Parameter(
      *      name="product_change_request",
@@ -298,6 +302,7 @@ class ProductChangeRequestController extends Controller
      * @OA\Post (
      *     tags={"ProductChangeRequests"},
      *     path="/admin/product-change-requests/{product_change_request}/reject",
+     *     security={{"bearer":{}}},
      *     @OA\MediaType(mediaType="application/json"),
      *    @OA\Parameter(
      *      name="product_change_request",
@@ -336,6 +341,7 @@ class ProductChangeRequestController extends Controller
      * @OA\Put (
      *    tags={"ProductChangeRequests"},
      *    path="/admin/product-change-requests/{product_change_request}",
+     *    security={{"bearer":{}}},
      *    @OA\Parameter(
      *      name="product_change_request",
      *      in="path",

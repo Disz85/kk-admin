@@ -24,6 +24,7 @@ class ArticleController extends Controller
      * @OA\Get(
      *    tags={"Articles"},
      *    path="/admin/articles",
+     *    security={{"bearer":{}}},
      *    @OA\Parameter(
      *        name="page",
      *        in="query",
@@ -77,6 +78,7 @@ class ArticleController extends Controller
      * @OA\Post (
      *     tags={"Articles"},
      *     path="/admin/articles",
+     *     security={{"bearer":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -191,6 +193,7 @@ class ArticleController extends Controller
      * @OA\Get(
      *     tags={"Articles"},
      *     path="/admin/articles/{article}",
+     *     security={{"bearer":{}}},
      *     @OA\Parameter(
      *         name="article",
      *         in="path",
@@ -226,6 +229,7 @@ class ArticleController extends Controller
      * @OA\Put (
      *     tags={"Articles"},
      *     path="/admin/articles/{article}",
+     *     security={{"bearer":{}}},
      *     @OA\Parameter(
      *         name="article",
      *         in="path",
@@ -346,6 +350,7 @@ class ArticleController extends Controller
      * @OA\Delete (
      *     tags={"Articles"},
      *     path="/admin/articles/{article}",
+     *     security={{"bearer":{}}},
      *     @OA\RequestBody(
      *         required=false,
      *         @OA\MediaType(mediaType="application/x-www-form-urlencoded")

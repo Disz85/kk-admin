@@ -24,6 +24,7 @@ class CategoryController extends Controller
      * @OA\Get(
      *    tags={"Categories"},
      *    path="/admin/categories",
+     *    security={{"bearer":{}}},
      *    @OA\Parameter(
      *        name="page",
      *        in="query",
@@ -71,6 +72,7 @@ class CategoryController extends Controller
      * @OA\Post (
      *     tags={"Categories"},
      *     path="/admin/categories",
+     *     security={{"bearer":{}}},
      *     @OA\MediaType(mediaType="application/json"),
      *     @OA\RequestBody(
      *         required=true,
@@ -133,6 +135,7 @@ class CategoryController extends Controller
      * @OA\Get(
      *    tags={"Categories"},
      *    path="/admin/categories/{category}",
+     *    security={{"bearer":{}}},
      *     @OA\Parameter(
      *         name="category",
      *         in="path",
@@ -165,6 +168,7 @@ class CategoryController extends Controller
      * @OA\Put (
      *     tags={"Categories"},
      *     path="/admin/categories/{category}",
+     *     security={{"bearer":{}}},
      *     @OA\MediaType(mediaType="application/json"),
      *    @OA\Parameter(
      *      name="category",
@@ -235,6 +239,7 @@ class CategoryController extends Controller
      * @OA\Delete (
      *     tags={"Categories"},
      *     path="/admin/categories/{category}",
+     *     security={{"bearer":{}}},
      *     @OA\RequestBody(
      *         required=false,
      *         @OA\MediaType(mediaType="application/x-www-form-urlencoded"),
@@ -277,6 +282,7 @@ class CategoryController extends Controller
      * @OA\Get(
      *    tags={"Categories"},
      *    path="/admin/categories/get-types",
+     *    security={{"bearer":{}}},
      *    @OA\MediaType(mediaType="application/json"),
      *    @OA\Response(
      *      response=200,

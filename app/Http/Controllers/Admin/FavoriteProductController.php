@@ -23,6 +23,7 @@ class FavoriteProductController extends Controller
      * @OA\Post (
      *     tags={"FavoriteProducts"},
      *     path="/admin/favorite-products",
+     *     security={{"bearer":{}}},
      *     @OA\MediaType(
      *         mediaType="application/json"
      *     ),
@@ -94,6 +95,7 @@ class FavoriteProductController extends Controller
      * @OA\Get(
      *    tags={"FavoriteProducts"},
      *    path="/admin/favorite-products/{favorite_product}",
+     *    security={{"bearer":{}}},
      *    @OA\Response(
      *      response="200",
      *      description="Display a favorite products group.",
@@ -121,6 +123,7 @@ class FavoriteProductController extends Controller
      * @OA\Put (
      *     tags={"FavoriteProducts"},
      *     path="/admin/favorite-products/{favorite_product}",
+     *     security={{"bearer":{}}},
      *    @OA\Parameter(
      *      name="favorite_product",
      *      in="path",
@@ -197,6 +200,7 @@ class FavoriteProductController extends Controller
      * @OA\Get(
      *    tags={"FavoriteProducts"},
      *    path="/admin/favorite-products",
+     *    security={{"bearer":{}}},
      *    @OA\Response(
      *      response="200",
      *      description="Display a listing of favorite product groups.",
@@ -238,6 +242,7 @@ class FavoriteProductController extends Controller
      * @OA\Delete (
      *     tags={"FavoriteProducts"},
      *     path="/admin/favorite-products/{favorite_product}",
+     *     security={{"bearer":{}}},
      *    @OA\Parameter(
      *      name="favorite_product",
      *      in="path",

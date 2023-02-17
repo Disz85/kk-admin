@@ -23,6 +23,7 @@ class TagController extends Controller
      * @OA\Get(
      *    tags={"Tags"},
      *    path="/admin/tags",
+     *    security={{"bearer":{}}},
      *    @OA\Parameter(
      *      name="page",
      *      in="query",
@@ -70,6 +71,7 @@ class TagController extends Controller
      * @OA\Post (
      *     tags={"Tags"},
      *     path="/admin/tags",
+     *     security={{"bearer":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -123,6 +125,7 @@ class TagController extends Controller
      * @OA\Get(
      *    tags={"Tags"},
      *    path="/admin/tags/{tag}",
+     *    security={{"bearer":{}}},
      *    @OA\Parameter(
      *        name="tag",
      *        in="path",
@@ -155,6 +158,7 @@ class TagController extends Controller
      * @OA\Put (
      *    tags={"Tags"},
      *    path="/admin/tags/{tag}",
+     *    security={{"bearer":{}}},
      *    @OA\Parameter(
      *      name="tag",
      *      in="path",
@@ -215,6 +219,7 @@ class TagController extends Controller
      * @OA\Delete (
      *     tags={"Tags"},
      *     path="/admin/tags/{tag}",
+     *     security={{"bearer":{}}},
      *     @OA\RequestBody(
      *         required=false,
      *         @OA\MediaType(mediaType="application/x-www-form-urlencoded"),

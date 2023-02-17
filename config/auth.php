@@ -153,7 +153,19 @@ return [
         [
             'name' => 'brand-manager',
             'permissions' => ['manage-brands'],
-        ]
+        ],
+        [
+            'name' => 'favorite-product-manager',
+            'permissions' => ['manage-favorite-products'],
+        ],
+        [
+            'name' => 'product-change-request-manager',
+            'permissions' => ['manage-product-change-requests'],
+        ],
+        [
+            'name' => 'brand-change-request-manager',
+            'permissions' => ['manage-brand-change-requests'],
+        ],
     ],
 
 ];

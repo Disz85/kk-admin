@@ -17,6 +17,7 @@ class UserController extends Controller
      * @OA\Get(
      *    tags={"Users"},
      *    path="/admin/users",
+     *    security={{"bearer":{}}},
      *    @OA\Parameter(
      *      name="page",
      *      in="query",
@@ -65,6 +66,7 @@ class UserController extends Controller
      * @OA\Get(
      *    tags={"Users"},
      *    path="/admin/users/{user}",
+     *    security={{"bearer":{}}},
      *    @OA\Parameter(
      *        name="user",
      *        in="path",

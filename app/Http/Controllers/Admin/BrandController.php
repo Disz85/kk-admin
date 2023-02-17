@@ -25,6 +25,7 @@ class BrandController extends Controller
      * @OA\Get(
      *    tags={"Brands"},
      *    path="/admin/brands",
+     *    security={{"bearer":{}}},
      *    @OA\Parameter(
      *       name="page",
      *       in="query",
@@ -72,6 +73,7 @@ class BrandController extends Controller
      * @OA\Post (
      *     tags={"Brands"},
      *     path="/admin/brands",
+     *     security={{"bearer":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -137,6 +139,7 @@ class BrandController extends Controller
      * @OA\Get(
      *    tags={"Brands"},
      *    path="/admin/brands/{brand}",
+     *    security={{"bearer":{}}},
      *     @OA\Parameter(
      *         name="brand",
      *         in="path",
@@ -171,6 +174,7 @@ class BrandController extends Controller
      * @OA\Put (
      *     tags={"Brands"},
      *     path="/admin/brands/{brand}",
+     *     security={{"bearer":{}}},
      *    @OA\Parameter(
      *      name="brand",
      *      in="path",
@@ -244,6 +248,7 @@ class BrandController extends Controller
      * @OA\Delete (
      *     tags={"Brands"},
      *     path="/admin/brands/{brand}",
+     *     security={{"bearer":{}}},
      *     @OA\RequestBody(
      *         required=false,
      *         @OA\MediaType(mediaType="application/x-www-form-urlencoded"),

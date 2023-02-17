@@ -4,12 +4,22 @@ namespace Tests\Feature;
 
 use App\Models\BrandChangeRequest;
 use Database\Factories\BrandFactory;
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class BrandChangeRequestTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = UserFactory::new()->create();
+        $this->user->givePermissionTo('manage-admin', 'manage-brand-change-requests');
+        $this->actingAs($this->user);
+    }
 
     /** @test */
     public function it_can_store_a_new_brand_change_request()

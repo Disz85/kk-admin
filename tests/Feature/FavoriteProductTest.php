@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\FavoriteProduct;
 use Database\Factories\FavoriteProductFactory;
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Tests\TestCase;
@@ -11,6 +12,15 @@ use Tests\TestCase;
 class FavoriteProductTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = UserFactory::new()->create();
+        $this->user->givePermissionTo('manage-admin', 'manage-favorite-products');
+        $this->actingAs($this->user);
+    }
 
     /** @test */
     public function it_can_store_a_favorite_product_group()

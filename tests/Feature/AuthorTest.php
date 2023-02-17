@@ -4,6 +4,7 @@ namespace Tests\Feature\Feature;
 
 use App\Models\Author;
 use Database\Factories\AuthorFactory;
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -13,6 +14,15 @@ class AuthorTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = UserFactory::new()->create();
+        $this->user->givePermissionTo('manage-admin', 'manage-authors');
+        $this->actingAs($this->user);
+    }
 
     /** @test */
     public function it_can_list_authors(): void

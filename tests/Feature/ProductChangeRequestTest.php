@@ -8,12 +8,22 @@ use App\Models\ProductChangeRequest;
 use App\Models\Tag;
 use App\Models\User;
 use Database\Factories\ProductFactory;
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ProductChangeRequestTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = UserFactory::new()->create();
+        $this->user->givePermissionTo('manage-admin', 'manage-product-change-requests');
+        $this->actingAs($this->user);
+    }
 
     /** @test */
     public function it_can_store_a_new_product_change_request()

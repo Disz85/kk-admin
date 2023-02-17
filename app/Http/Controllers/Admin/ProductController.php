@@ -24,6 +24,7 @@ class ProductController extends Controller
      * @OA\Get(
      *    tags={"Products"},
      *    path="/admin/products",
+     *    security={{"bearer":{}}},
      *    @OA\Parameter(
      *        name="page",
      *        in="query",
@@ -71,6 +72,7 @@ class ProductController extends Controller
      * @OA\Post (
      *     tags={"Products"},
      *     path="/admin/products",
+     *     security={{"bearer":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -207,6 +209,7 @@ class ProductController extends Controller
      * @OA\Get(
      *    tags={"Products"},
      *    path="/admin/products/{product}",
+     *    security={{"bearer":{}}},
      *    @OA\MediaType(
      *      mediaType="application/json"
      *    ),
@@ -247,6 +250,7 @@ class ProductController extends Controller
      * @OA\Put (
      *     tags={"Products"},
      *     path="/admin/products/{product}",
+     *     security={{"bearer":{}}},
      *    @OA\Parameter(
      *      name="product",
      *      in="path",
@@ -390,6 +394,7 @@ class ProductController extends Controller
      * @OA\Delete (
      *     tags={"Products"},
      *     path="/admin/product/{product}",
+     *     security={{"bearer":{}}},
      *     @OA\RequestBody(
      *         required=false,
      *         @OA\MediaType(mediaType="application/x-www-form-urlencoded"),

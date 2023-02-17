@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Category;
 use Database\Factories\CategoryFactory;
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use Tests\TestCase;
@@ -11,6 +12,15 @@ use Tests\TestCase;
 class CategoryTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = UserFactory::new()->create();
+        $this->user->givePermissionTo('manage-admin', 'manage-categories');
+        $this->actingAs($this->user);
+    }
 
     /** @test */
     public function it_can_list_categories(): void

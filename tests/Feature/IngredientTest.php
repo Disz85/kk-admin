@@ -6,6 +6,7 @@ use App\Enum\CategoryTypeEnum;
 use App\Models\Category;
 use App\Models\Ingredient;
 use Database\Factories\IngredientFactory;
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
@@ -15,6 +16,15 @@ class IngredientTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = UserFactory::new()->create();
+        $this->user->givePermissionTo('manage-admin', 'manage-ingredients');
+        $this->actingAs($this->user);
+    }
 
     /** @test */
     public function it_can_list_ingredients(): void

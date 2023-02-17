@@ -24,6 +24,7 @@ class AuthorController extends Controller
      * @OA\Get(
      *    tags={"Authors"},
      *    path="/admin/authors",
+     *    security={{"bearer":{}}},
      *    @OA\Parameter(
      *      name="page",
      *      in="query",
@@ -72,6 +73,7 @@ class AuthorController extends Controller
      * @OA\Post (
      *     tags={"Authors"},
      *     path="/admin/authors",
+     *     security={{"bearer":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -132,6 +134,7 @@ class AuthorController extends Controller
      * @OA\Get(
      *    tags={"Authors"},
      *    path="/admin/authors/{author}",
+     *     security={{"bearer":{}}},
      *    @OA\Parameter(
      *        name="author",
      *        in="path",
@@ -164,6 +167,7 @@ class AuthorController extends Controller
      * @OA\Put (
      *     tags={"Authors"},
      *     path="/admin/authors/{author}",
+     *     security={{"bearer":{}}},
      *     @OA\MediaType(
      *         mediaType="application/json",
      *     ),
@@ -235,6 +239,7 @@ class AuthorController extends Controller
      * @OA\Delete (
      *     tags={"Authors"},
      *     path="/admin/authors/{author}",
+     *     security={{"bearer":{}}},
      *     @OA\Parameter(
      *       name="author",
      *       in="path",

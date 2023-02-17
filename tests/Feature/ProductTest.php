@@ -6,7 +6,9 @@ use App\Models\Category;
 use App\Models\Ingredient;
 use App\Models\Product;
 use App\Models\Tag;
+use App\Models\User;
 use Database\Factories\ProductFactory;
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Tests\TestCase;
@@ -14,6 +16,17 @@ use Tests\TestCase;
 class ProductTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = UserFactory::new()->create();
+        $this->user->givePermissionTo('manage-admin', 'manage-products');
+        $this->actingAs($this->user);
+    }
 
     /** @test */
     public function it_can_list_products(): void

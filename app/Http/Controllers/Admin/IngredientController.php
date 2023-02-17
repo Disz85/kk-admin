@@ -25,6 +25,7 @@ class IngredientController extends Controller
      * @OA\Get(
      *    tags={"Ingredients"},
      *    path="/admin/ingredients",
+     *    security={{"bearer":{}}},
      *    @OA\Parameter(
      *        name="page",
      *        in="query",
@@ -72,6 +73,7 @@ class IngredientController extends Controller
      *  @OA\Post (
      *     tags={"Ingredients"},
      *     path="/admin/ingredients",
+     *     security={{"bearer":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -174,6 +176,7 @@ class IngredientController extends Controller
      * @OA\Get(
      *    tags={"Ingredients"},
      *    path="/admin/ingredients/{ingredient}",
+     *    security={{"bearer":{}}},
      *     @OA\Parameter(
      *         name="ingredient",
      *         in="path",
@@ -208,6 +211,7 @@ class IngredientController extends Controller
      * @OA\Put (
      *     tags={"Ingredients"},
      *     path="/admin/ingredients/{ingredient}",
+     *     security={{"bearer":{}}},
      *    @OA\Parameter(
      *      name="ingredient",
      *      in="path",
@@ -317,6 +321,7 @@ class IngredientController extends Controller
      * @OA\Delete (
      *     tags={"Ingredients"},
      *     path="/admin/ingredients/{ingredient}",
+     *     security={{"bearer":{}}},
      *     @OA\RequestBody(
      *         required=false,
      *         @OA\MediaType(mediaType="application/x-www-form-urlencoded"),
@@ -359,6 +364,7 @@ class IngredientController extends Controller
      * @OA\Get(
      *    tags={"Ingredients"},
      *    path="/admin/ingredients/get-ewg-data-types",
+     *    security={{"bearer":{}}},
      *    @OA\MediaType(mediaType="application/json"),
      *    @OA\Response(
      *      response=200,
@@ -377,6 +383,7 @@ class IngredientController extends Controller
      * @OA\Get(
      *    tags={"Ingredients"},
      *    path="/admin/ingredients/get-categories",
+     *    security={{"bearer":{}}},
      *    @OA\MediaType(mediaType="application/json"),
      *    @OA\Response(
      *      response=200,

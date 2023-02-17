@@ -26,6 +26,7 @@ class BrandChangeRequestController extends Controller
      * @OA\Get(
      *    tags={"BrandChangeRequests"},
      *    path="/admin/brand-change-requests",
+     *    security={{"bearer":{}}},
      *    @OA\MediaType(mediaType="application/json"),
      *    @OA\Parameter(
      *      name="page",
@@ -59,6 +60,7 @@ class BrandChangeRequestController extends Controller
      * @OA\Get(
      *    tags={"BrandChangeRequests"},
      *    path="/admin/brand-change-requests/{brand_change_request}",
+     *    security={{"bearer":{}}},
      *    @OA\MediaType(mediaType="application/json"),
      *    @OA\Parameter(
      *      name="brand_change_request",
@@ -94,6 +96,7 @@ class BrandChangeRequestController extends Controller
      * @OA\Post (
      *     tags={"BrandChangeRequests"},
      *     path="/admin/brand-change-requests",
+     *     security={{"bearer":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -168,6 +171,7 @@ class BrandChangeRequestController extends Controller
      * @OA\Put (
      *     tags={"BrandChangeRequests"},
      *     path="/admin/brand-change-requests/{brand_change_request}",
+     *     security={{"bearer":{}}},
      *    @OA\Parameter(
      *      name="brand_change_request",
      *      in="path",
@@ -249,6 +253,7 @@ class BrandChangeRequestController extends Controller
      * @OA\Post (
      *     tags={"BrandChangeRequests"},
      *     path="/admin/brand-change-requests/{brand_change_request}/approve",
+     *     security={{"bearer":{}}},
      *     @OA\MediaType(mediaType="application/json"),
      *     @OA\Parameter(
      *       name="brand_change_request",
@@ -285,6 +290,7 @@ class BrandChangeRequestController extends Controller
      * @OA\Post (
      *     tags={"BrandChangeRequests"},
      *     path="/admin/brand-change-requests/{brand_change_request}/reject",
+     *     security={{"bearer":{}}},
      *     @OA\MediaType(mediaType="application/json"),
      *    @OA\Parameter(
      *      name="brand_change_request",

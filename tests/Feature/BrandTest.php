@@ -5,6 +5,7 @@ namespace Tests\Feature\Feature;
 use App\Models\Brand;
 use App\Models\Product;
 use Database\Factories\BrandFactory;
+use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -15,6 +16,15 @@ class BrandTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = UserFactory::new()->create();
+        $this->user->givePermissionTo('manage-admin', 'manage-brands');
+        $this->actingAs($this->user);
+    }
 
     /** @test */
     public function it_can_list_brands(): void

@@ -261,7 +261,7 @@ class ProductController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
+     *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 required={"name", "image[id]", "is_active", "is_sponsored", "is_18_plus", "brand_id", "price"},
      *                 @OA\Property(

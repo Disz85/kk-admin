@@ -185,7 +185,7 @@ class BrandController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
+     *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 required={"title", "image[id]"},
      *                 @OA\Property(

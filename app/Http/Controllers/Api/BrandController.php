@@ -12,6 +12,48 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class BrandController extends BaseController
 {
+
+    /**
+     * Display a listing of brands.
+     *
+     * @OA\Get(
+     *    tags={"Brands API"},
+     *    path="/api/brands",
+     *    @OA\Parameter(
+     *        name="page",
+     *        in="query",
+     *        description="Page number",
+     *        @OA\Schema(type="integer"),
+     *        allowEmptyValue="true",
+     *    ),
+     *    @OA\Parameter(
+     *        name="per_page",
+     *        in="query",
+     *        description="Page size",
+     *        @OA\Schema(type="integer"),
+     *        allowEmptyValue="true",
+     *    ),
+     *    @OA\Parameter(
+     *        name="filter[title]",
+     *        in="query",
+     *        description="Title",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Response(
+     *        response=200,
+     *        description="Display a listing of brands.",
+     *        @OA\JsonContent(ref="#/components/schemas/Brand")
+     *    ),
+     *    @OA\Response(
+     *        response=404,
+     *        description="No brands.",
+     *        @OA\JsonContent()
+     *    )
+     * )
+     *
+     * @param Request $request
+     * @return BrandCollection
+     */
     public function index(Request $request): BrandCollection
     {
         return new BrandCollection(
@@ -29,7 +71,7 @@ class BrandController extends BaseController
      * Display the specified brand.
      *
      * @OA\Get(
-     *     tags={"Brand API"},
+     *     tags={"Brands API"},
      *     path="/api/brands/{brand}",
      *     @OA\Parameter(
      *         name="brand",

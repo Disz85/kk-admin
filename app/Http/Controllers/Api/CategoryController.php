@@ -19,7 +19,7 @@ class CategoryController extends Controller
      * Display a listing of categories.
      *
      * @OA\Get(
-     *    tags={"Categories"},
+     *    tags={"Categories API"},
      *    path="/api/categories",
      *    @OA\Parameter(
      *        name="page",
@@ -38,7 +38,7 @@ class CategoryController extends Controller
      *    @OA\Parameter(
      *        name="filter[name]",
      *        in="query",
-     *        description="Title",
+     *        description="Name",
      *        @OA\Schema(type="string")
      *    ),
      *    @OA\Response(
@@ -84,7 +84,7 @@ class CategoryController extends Controller
      * Display the specified category.
      *
      * @OA\Get(
-     *     tags={"Categories"},
+     *     tags={"Categories API"},
      *     path="/api/categories/{category}",
      *     @OA\Parameter(
      *         name="category",
@@ -95,7 +95,7 @@ class CategoryController extends Controller
      *     ),
      *    @OA\Response(
      *        response=200,
-     *        description="Display a selected Category.",
+     *        description="Display a selected category.",
      *        @OA\JsonContent(ref="#/components/schemas/Category"),
      *    ),
      *    @OA\Response(

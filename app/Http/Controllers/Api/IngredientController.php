@@ -34,9 +34,9 @@ class IngredientController extends Controller
      *        allowEmptyValue="true"
      *    ),
      *    @OA\Parameter(
-     *        name="filter[title]",
+     *        name="filter[name]",
      *        in="query",
-     *        description="Title",
+     *        description="Name",
      *        @OA\Schema(type="string")
      *    ),
      *    @OA\Response(
@@ -69,7 +69,7 @@ class IngredientController extends Controller
     }
 
     /**
-     * Display the specified category.
+     * Display the specified ingredient.
      *
      * @OA\Get(
      *     tags={"Ingredients API"},
@@ -83,12 +83,12 @@ class IngredientController extends Controller
      *     ),
      *    @OA\Response(
      *        response=200,
-     *        description="Display a selected Ingredient.",
+     *        description="Display a selected ingredient.",
      *        @OA\JsonContent(ref="#/components/schemas/Ingredient")
      *    ),
      *    @OA\Response(
      *        response=404,
-     *        description="Category not found.",
+     *        description="Ingredient not found.",
      *        @OA\JsonContent(ref="#/components/schemas/Ingredient")
      *    )
      * )

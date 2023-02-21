@@ -222,7 +222,7 @@ class IngredientController extends Controller
      *    @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
+     *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 required={"name"},
      *                 @OA\Property(

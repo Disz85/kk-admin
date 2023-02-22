@@ -67,6 +67,7 @@
         "axios": "^1.2.1",
         "classnames": "^2.3.2",
         "cropperjs": "^1.5.13",
+        "date-fns": "^2.29.3",
         "framer-motion": "^8.4.2",
         "glob": "^8.0.3",
         "i18next": "^22.4.6",
@@ -75,12 +76,15 @@
         "prop-types": "^15.8.1",
         "qs": "^6.11.0",
         "react": "^18.2.0",
+        "react-bootstrap-typeahead": "^6.0.0",
         "react-cropper": "^2.1.8",
+        "react-datepicker": "^4.10.0",
         "react-dom": "^18.2.0",
         "react-i18next": "^12.1.1",
         "react-modal": "^3.16.1",
         "react-router-dom": "^6.6.1",
         "react-router-prompt": "^0.3.0",
+        "react-select": "^5.7.0",
         "shortid": "^2.2.16",
         "tailwindcss": "^3.2.4"
     }

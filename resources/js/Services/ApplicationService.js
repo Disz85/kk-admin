@@ -29,6 +29,11 @@ const ApplicationService = {
     find: (resource, id) =>
         axios.get(`/admin/${resource}/${id}`).then((r) => r.data),
 
+    autocomplete: (resource, params = {}) =>
+        axios
+            .get(queryParams(`/admin/autocomplete/${resource}`, { ...params }))
+            .then((r) => r.data),
+
     post: (resource, path, payload) =>
         axios.post(`/admin/${resource}/${path}`, payload).then((r) => r.data),
 

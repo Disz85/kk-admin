@@ -13,7 +13,9 @@ h3 {
     @apply text-3xl;
 }
 
-input, :global(.cdx-input), .gallery, textarea {
+input,
+textarea,
+.gallery {
     @apply p-2.5 m-2;
     @apply text-black font-normal bg-light-grey;
     @apply border border-solid border-2 border-medium-grey rounded-lg;
@@ -24,18 +26,6 @@ input, :global(.cdx-input), .gallery, textarea {
 .label {
     @apply block ml-2;
     @apply text-black text-2xl font-medium;
-}
-
-:global(.ce-toolbar) {
-    @apply right-5;
-}
-
-:global(.ce-block__content) {
-    @apply my-0 ml-24 mr-12;
-}
-
-:global(.cdx-framed) {
-    @apply bg-light-cloud mx-24 my-8 p-6 flex;
 }
 
 .galleryHeader {
@@ -51,39 +41,32 @@ input, :global(.cdx-input), .gallery, textarea {
     @apply flex flex-col md:flex-row items-center my-4 p-2 bg-light-snow rounded-lg;
 }
 
-.galleryUpload,
-.galleryDelete {
+.galleryUploadWrapper,
+.galleryDeleteWrapper {
     @apply bg-medium-blackberry text-light-snow text-2xl;
     @apply mt-5 w-fit rounded-lg;
     @apply hover:bg-dark-night;
-
-    & > button {
-        @apply py-2.5 px-5;
-    }
 }
 
-.galleryUpload{
+.galleryUpload,
+.galleryDelete {
+    @apply py-2.5 px-5;
+}
+
+.galleryUploadWrapper {
     @apply py-2.5;
-
-    & > label {
-        @apply cursor-pointer py-2.5 px-5;
-    }
 }
 
-.galleryItem{
+.galleryUpload {
+    @apply cursor-pointer py-2.5 px-5;
+}
+
+.galleryItem {
     @apply mb-2.5;
 }
 
 .galleryImageText {
-    @apply m-3;
-
-    inline-size: 100%;
-
-    & > textarea {
-        @apply w-full;
-
-        min-block-size: 12rem;
-    }
+    @apply m-3 w-full;
 }
 
 .galleryTitle {
@@ -95,7 +78,9 @@ input, :global(.cdx-input), .gallery, textarea {
 }
 
 .galleryTextarea {
-    @apply max-w-2xl;
+    @apply w-full max-w-2xl;
+
+    min-block-size: 12rem;
 }
 
 .galleryLabel {

@@ -22,4 +22,21 @@ class StoreBrandRequest extends FormRequest
             'created_by' => 'nullable|integer|exists:users,id',
         ];
     }
+
+    /**
+     * Get the validation errors.
+     *
+     * @return string[]
+     */
+    public function messages(): array
+    {
+        return [
+            'title.required' => 'A név megadása kötelező.',
+            'title.max' => 'A név nem lehet hosszabb :max karakternél.',
+            'title.unique' => 'A megadott névvel már létezik márka.',
+            'url.url' => 'Az url formátuma nem valid. Használja a https://valami.hu alakot.',
+            'url.max' => 'Az url nem lehet hosszabb :max karakternél.',
+            'image.id.required' => 'Kép feltöltése kötelező.',
+        ];
+    }
 }

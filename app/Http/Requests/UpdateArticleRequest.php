@@ -21,10 +21,29 @@ class UpdateArticleRequest extends FormRequest
             'is_sponsored' => 'sometimes|boolean',
             'is_18_plus' => 'sometimes|boolean',
             'image.id' => 'required|int|exists:media,id',
-            'authors' => 'required|array|exists:authors,id',
-            'tags' => 'nullable|array|exists:tags,id',
-            'categories' => 'nullable|array|exists:categories,id',
+            'authors' => 'required|array',
+            'authors.*.id' => 'required|int|exists:authors,id',
+            'tags.*.id' => 'nullable|int|exists:tags,id',
+            'categories.*.id' => 'nullable|int|exists:categories,id',
             'published_at' => 'nullable|date|date_format:Y-m-d H:i:s',
+        ];
+    }
+
+    /**
+     * Get the validation errors.
+     *
+     * @return string[]
+     */
+    public function messages(): array
+    {
+        return [
+            'title.required' => 'A cím megadása kötelező.',
+            'title.max' => 'A cím nem lehet hosszabb :max karakternél.',
+            'title.unique' => 'A megadott címmel már létezik cikk.',
+            'lead.max' => 'A lead nem lehet hosszabb :max karakternél.',
+            'body.required' => 'A szövegtörzs kitöltése kötelező.',
+            'image.id.required' => 'Kép feltöltése kötelező.',
+            'authors.required' => 'Szerző megadása kötelező.',
         ];
     }
 }

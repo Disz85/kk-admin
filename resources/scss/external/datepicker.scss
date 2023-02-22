@@ -1,0 +1,225 @@
+//––––––––––––––––––––––––––––––––––––––––––––––––––
+//  REACT DATE PICKER CUSTOM STYLE
+//––––––––––––––––––––––––––––––––––––––––––––––––––
+
+.react-datepicker {
+    @apply border-none inline-block relative text-2xl top-4;
+    @apply bg-light-snow text-black rounded;
+
+    box-shadow: 0 0.2em 0.5em rgb(3 9 12 / 10%);
+
+    &__input {
+         @apply text-2xl m-0;
+    }
+
+    &-wrapper {
+        @apply inline-block p-0 border-none w-full;
+        inline-size: 18rem;
+
+        &:focus-within ~ label {
+            transform: translateY(-4.5rem) translateX(0);
+        }
+    }
+
+    &__header {
+        @apply bg-light-snow border-none rounded-none pb-3.5 px-0;
+    }
+
+    &__current-month,
+    &-time__header,
+    &-year-header {
+        @apply text-light-snow bg-dark-night uppercase text-center py-4;
+    }
+
+    &__time-box {
+        padding-inline: 0.5rem;
+    }
+
+    &__year-read-view,
+    &__day-name {
+        @apply text-2xl font-medium text-dark-night;
+    }
+
+    &__time-list-item,
+    &__day {
+        @apply text-center;
+
+        &--today {
+            @apply text-light-snow bg-medium-sky rounded-full;
+        }
+
+        &--selected,
+        &--keyboard-selected,
+        &--selected:hover {
+            @apply text-light-snow bg-dark-night rounded-full;
+        }
+
+        &:hover {
+            @apply border-none outline-none rounded-full;
+            @apply text-light-snow bg-dark-night cursor-pointer;
+        }
+
+        &--weekend {
+            @apply text-red;
+        }
+
+        &--selected {
+            &:focus {
+                @apply border-none outline-none;
+            }
+
+            &:hover {
+                @apply opacity-80;
+            }
+        }
+    }
+
+    &__day-names {
+        @apply -mb-3 mx-1.5 whitespace-nowrap;
+
+        border-block-end: solid 0.1rem grey;
+    }
+
+    &__time-container {
+        @apply float-right w-32;
+
+        border-left: 1px solid grey;
+    }
+
+    &__day-name,
+    &__day,
+    &__time-name {
+        @apply inline-block text-center w-12 leading-10 m-0.5;
+
+        transition: all 0.3s cubic-bezier(0.45, 0, 0.55, 1);
+    }
+
+    &__close-icon {
+        &::after {
+            @apply w-8 h-20;
+        }
+    }
+
+    &-popper[data-placement^='bottom'] & {
+        &__triangle {
+            @apply top-0 w-0 -mt-3.5 -ml-1.5;
+
+            &::before,
+            &::after {
+                @apply absolute box-content -top-0.5 -left-3 -z-10 w-0.5 h-0;
+
+                content: "";
+                border: 0.8rem solid transparent;
+                border-top: none;
+                border-bottom-color: #0b2e13;
+            }
+        }
+    }
+
+    &__year-select,
+    &__year-select:focus,
+    &__month-select,
+    &__month-select:focus {
+        @apply border-none rounded-none my-4 mx-0 py-1.5 px-4;
+    }
+
+    &__navigation {
+        @apply absolute flex items-center justify-center text-center overflow-hidden;
+        @apply bg-light-snow cursor-pointer border-none p-0 top-4 z-10 w-12 h-12;
+
+        inline-size: 2rem;
+        block-size: 2rem;
+        box-shadow: 0 0.2em 0.5em rgb(3 9 12 / 10%);
+        border-radius: 2.5rem;
+        text-indent: -999em;
+
+        &--previous {
+            @apply left-0;
+
+            inset-inline-start: 0.5rem;
+        }
+
+        &--next {
+            @apply right-36;
+        }
+
+        &-icon {
+            @apply relative top-0 w-0;
+
+            inset-block-start: 0.1rem;
+
+            &--previous {
+                @apply right-0;
+
+                &:before {
+                    transform: rotate(225deg);
+                    right: -0.7rem;
+                }
+            }
+
+            &--next {
+                inset-inline-start: 0;
+                left: -0.5rem;
+
+                &:before {
+                    @apply rotate-45;
+                }
+            }
+
+            &:before {
+                @apply block absolute border-dark-night border-solid top-2 w-3.5 h-3.5;
+
+                content: "";
+                border-width: 3px 3px 0 0;
+            }
+        }
+    }
+
+    &__year-read-view--down-arrow,
+    &__month-read-view--down-arrow,
+    &__month-year-read-view--down-arrow,
+    &__navigation-icon::before {
+        @apply border-dark-night;
+    }
+
+    &__month-container {
+        @apply float-left;
+    }
+
+    &__month {
+        @apply m-1.5 text-center;
+    }
+
+    &__week {
+        @apply whitespace-nowrap;
+    }
+
+    &__time-list {
+        @apply list-none m-0 overflow-y-scroll px-0 w-full box-content;
+
+
+        &::-webkit-scrollbar {
+            @apply w-3;
+            transition: all 0.3s;
+            opacity: 0.8;
+
+            // track
+            &-track {
+                @apply bg-medium-sky rounded;
+            }
+
+            // Handle
+            &-thumb {
+                @apply bg-dark-night rounded;
+            }
+        }
+    }
+
+    &__aria-live {
+        @apply hidden;
+    }
+
+    &__time-list-item {
+        @apply py-2 px-4;
+    }
+}

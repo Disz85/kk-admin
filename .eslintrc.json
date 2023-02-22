@@ -44,7 +44,9 @@
         "react/jsx-props-no-spreading": "off",
         "react/jsx-no-constructed-context-values": "off",
         "react/forbid-prop-types": "off",
-        "prefer-regex-literals": "off"
+        "prefer-regex-literals": "off",
+        "no-prototype-builtins": "off",
+        "no-param-reassign": "off"
     },
     "plugins": ["prettier"]
 }

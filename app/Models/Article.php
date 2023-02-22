@@ -78,9 +78,6 @@ class Article extends Model
      */
     protected $casts = [
         'body' => 'array',
-        'is_active' => 'boolean',
-        'is_sponsored' => 'boolean',
-        'is_18_plus' => 'boolean',
     ];
 
     /**
@@ -94,6 +91,7 @@ class Article extends Model
         'is_active',
         'is_sponsored',
         'is_18_plus',
+        'published_at',
     ];
 
     /**

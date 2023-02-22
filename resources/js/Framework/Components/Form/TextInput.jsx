@@ -38,7 +38,7 @@ export default TextInput;
 
 TextInput.propTypes = {
     /**
-     * entity of onChange
+     * Type of onChange
      */
     onChange: PropTypes.func.isRequired,
     /**

@@ -12,7 +12,6 @@ use App\Models\Author;
 use App\RequestMappers\AuthorRequestMapper;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;

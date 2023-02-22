@@ -35,7 +35,7 @@ class ProductRequestMapper
             $product->published_at = data_get($data, 'published_at');
         }
 
-       if (data_get($data, 'image.id')) {
+        if (data_get($data, 'image.id')) {
             $product->image()->associate(Media::findOrFail($data['image']['id']));
         }
 

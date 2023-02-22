@@ -22,6 +22,8 @@ export default {
 
     back: 'Vissza',
     passLock: 'Átveszem',
+    noResults: 'Nincs találat',
+    search: 'Keresés...',
 
     home: 'Kezdőlap',
     logout: 'Kijelentkezés',

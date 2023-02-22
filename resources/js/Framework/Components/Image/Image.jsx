@@ -87,7 +87,12 @@ const Image = ({
             <Label className={form.label} to="image-wrapper">
                 {t('application.image')}
             </Label>
-            <div id="image-wrapper" className={style.imageWrapper}>
+            <div
+                id="image-wrapper"
+                className={`${style.imageWrapper} ${
+                    errors[`${name}.id`] ? form.isInvalid : ''
+                }`}
+            >
                 <input
                     type="file"
                     name={name}

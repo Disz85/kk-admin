@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\ArticleStatusController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\AuthorController;
+use App\Http\Controllers\Admin\AutocompleteController;
 use App\Http\Controllers\Admin\BrandChangeRequestController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -82,6 +83,13 @@ Route::middleware(['permission:manage-admin'])->group(function () {
         Route::delete('/{media}', [MediaController::class, 'delete']);
         Route::post('/delete-multiple', [MediaController::class, 'deleteMultiple']);
     });
+});
+
+Route::prefix('/autocomplete')->group(function () {
+    Route::get('/authors', [AutocompleteController::class, 'authors']);
+    Route::get('/categories/{type}', [AutocompleteController::class, 'categories']);
+    Route::get('/tags', [AutocompleteController::class, 'tags']);
+
 });
 
 Route::prefix('auth')->group(function () {

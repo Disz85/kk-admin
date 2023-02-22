@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 
 import Button from './Button';
 
+// STYLES
+import style from '../../../../scss/components/buttons/button.module.scss';
+
 const Delete = ({ entity, remove, ...props }) => (
-    <Button click={() => remove(entity)} {...props} />
+    <Button classNames={style.delete} click={() => remove(entity)} {...props} />
 );
 
 export default Delete;

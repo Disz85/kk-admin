@@ -14,11 +14,30 @@ class StoreAuthorRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:authors',
             'title' => 'nullable|string|max:255',
+            'name' => 'required|string|max:255|unique:authors',
+            'email' => 'required|email|unique:authors',
             'description' => 'nullable|string',
             'image.id' => 'int|exists:media,id',
+        ];
+    }
+
+    /**
+     * Get the validation errors.
+     *
+     * @return string[]
+     */
+    public function messages(): array
+    {
+        return [
+            'title.max' => 'A titulus nem lehet hosszabb :max karakternél.',
+            'name.required' => 'A név megadása kötelező.',
+            'name.max' => 'A név nem lehet hosszabb :max karakternél.',
+            'name.unique' => 'A megadott névvel már létezik szerző.',
+            'email.required' => 'E-mail cím megadása kötelező.',
+            'email.email' => 'Az e-mail cím formátuma nem megfelelő.',
+            'email.unique' => 'Ezzel az e-mail címmel már létezik szerző.',
+            'image.id.required' => 'Kép feltöltése kötelező.',
         ];
     }
 }

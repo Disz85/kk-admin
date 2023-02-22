@@ -1,0 +1,29 @@
+.rbt-input-wrapper {
+    @apply flex;
+}
+
+.rbt-token {
+    @apply relative flex mr-3 p-2 rounded-3xl bg-dark-night text-light-snow;
+}
+
+.rbt-token-remove-button {
+    @apply absolute flex justify-end items-center right-1.5;
+}
+
+.rbt-token-label {
+    @apply mr-5;
+}
+
+.rbt-input-main {
+    padding: 0.5rem !important;
+}
+
+.rbt-menu {
+    @apply bg-light-snow border border-solid border-2 border-medium-grey rounded-lg;
+    @apply h-min p-3 mb-3 z-10;
+}
+
+.dropdown-item {
+    @apply inline-block overflow-hidden mt-3 mr-3 py-1 px-4 rounded-3xl;
+    @apply bg-dark-night text-light-snow text-ellipsis;
+}

@@ -3,6 +3,7 @@ import MediaService from '../../../../Services/MediaService';
 /*  eslint class-methods-use-this: ["error", { "exceptMethods": ["makeListItem", "makeImageIdHiddenInput", "makeImage", "makeDescription", "getGalleryListItemId", "makeGalleryTitleInput", "makeGalleryList", "inputFocus" ] }]  */
 
 // STYLES
+import formStyle from '../../../../../scss/components/form.module.scss';
 import style from '../../../../../scss/components/editor.module.scss';
 
 // TRANSLATIONS
@@ -41,7 +42,9 @@ class Gallery {
             description: style.galleryImageText,
             textarea: style.galleryTextarea,
             title: style.galleryTitle,
-            uploadBtn: style.galleryUpload,
+            uploadWrapper: style.galleryUploadWrapper,
+            uploadLabel: style.galleryUpload,
+            deleteWrapper: style.galleryDeleteWrapper,
             deleteBtn: style.galleryDelete,
             draggable: '-draggable',
             draggingAction: '-dragging',
@@ -178,12 +181,11 @@ class Gallery {
 
     inputFocus(input) {
         const focusEvent = () => {
-            const top = '-onTop';
             if (input.value) {
-                input.classList.add(top);
+                input.classList.add(formStyle.onTop);
                 return;
             }
-            input.classList.remove(top);
+            input.classList.remove(formStyle.onTop);
         };
 
         focusEvent();
@@ -226,7 +228,8 @@ class Gallery {
     makeListItem() {
         const listItem = document.createElement('li');
 
-        listItem.classList.add(...this.CSS.item, this.CSS.draggable);
+        listItem.className = this.CSS.item;
+        listItem.classList.add(this.CSS.draggable);
 
         listItem.draggable = true;
 
@@ -323,8 +326,10 @@ class Gallery {
         title = '',
         attribute = ['type', 'button'],
         label = false,
+        className,
     }) {
         const button = document.createElement(label ? 'label' : 'button');
+        button.className = className;
 
         if (attribute.length) {
             button.setAttribute(...attribute);
@@ -344,11 +349,12 @@ class Gallery {
     makeDeleteButton() {
         const wrapper = document.createElement('div');
 
-        wrapper.className = this.CSS.deleteBtn;
+        wrapper.className = this.CSS.deleteWrapper;
 
         const deleteButton = Gallery.makeButton({
             type: 'delete',
             title: translation.gallery.delete,
+            className: this.CSS.deleteBtn,
         });
 
         deleteButton.onclick = (e) => {
@@ -375,9 +381,10 @@ class Gallery {
             title: translation.gallery.imageUpload,
             attribute: ['for', 'file-input'],
             label: true,
+            className: this.CSS.uploadLabel,
         });
 
-        fileInputWrapper.className = this.CSS.uploadBtn;
+        fileInputWrapper.className = this.CSS.uploadWrapper;
 
         fileInputWrapper.appendChild(uploadButton);
         fileInputWrapper.appendChild(fileInput);
@@ -401,11 +408,12 @@ class Gallery {
      */
     makeDeleteAllButton() {
         const wrapper = document.createElement('div');
-        wrapper.className = this.CSS.deleteBtn;
+        wrapper.className = this.CSS.deleteWrapper;
 
         const deleteAllButton = Gallery.makeButton({
             type: 'delete',
             title: translation.gallery.deleteAll,
+            className: this.CSS.deleteBtn,
         });
 
         deleteAllButton.onclick = () => {

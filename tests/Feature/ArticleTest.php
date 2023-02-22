@@ -150,9 +150,9 @@ class ArticleTest extends TestCase
 
         $article['image']['id'] = $article['image_id'];
         unset($article['image_id']);
-        $article['authors'] = $authors->pluck('id')->toArray();
-        $article['categories'] = $categories->pluck('id')->toArray();
-        $article['tags'] = $tags->pluck('id')->toArray();
+        $article['authors'] = $authors->toArray();
+        $article['categories'] = $categories->toArray();
+        $article['tags'] = $tags->toArray();
 
         return [
             'article' => $article,

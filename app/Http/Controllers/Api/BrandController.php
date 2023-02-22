@@ -12,7 +12,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class BrandController extends BaseController
 {
-
     /**
      * Display a listing of brands.
      *

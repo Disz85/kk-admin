@@ -23,7 +23,7 @@ class BrandRequestMapper
             'updated_by' => data_get($data, 'updated_by'),
         ]);
 
-       if (data_get($data, 'image.id')) {
+        if (data_get($data, 'image.id')) {
             $brand->image()->associate(Media::findOrFail($data['image']['id']));
         }
 

@@ -24,15 +24,23 @@ class ArticleRequestMapper
             'published_at' => data_get($data, 'published_at'),
         ]);
 
-       if (data_get($data, 'image.id')) {
+        if (data_get($data, 'image.id')) {
             $article->image()->associate(Media::findOrFail($data['image']['id']));
         }
 
         $article->save();
 
-        $article->authors()->sync(data_get($data, 'authors'));
-        $article->tags()->sync(data_get($data, 'tags'));
-        $article->categories()->sync(data_get($data, 'categories'));
+        if ($authors = data_get($data, 'authors.*.id')) {
+            $article->authors()->sync($authors);
+        }
+
+        if ($tags = data_get($data, 'tags.*.id')) {
+            $article->tags()->sync($tags);
+        }
+
+        if ($categories = data_get($data, 'categories.*.id')) {
+            $article->categories()->sync($categories);
+        }
 
         $article->refresh();
 

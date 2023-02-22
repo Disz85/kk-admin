@@ -17,7 +17,6 @@ const Button = ({
     ...props
 }) => {
     const { t } = useTranslation();
-
     return (
         <button
             className={`${style.button} ${classNames}`}

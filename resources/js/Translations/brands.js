@@ -8,6 +8,5 @@ export default {
     url: 'URL',
     where_to_find: 'Lelőhely',
     description: 'Leírás',
-    approved: 'Elfogadva',
     delete: 'Törlés',
 };

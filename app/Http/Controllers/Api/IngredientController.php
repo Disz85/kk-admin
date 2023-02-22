@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\IngredientResource;
 use App\Http\Resources\Api\IngredientCollection;
-use App\Models\Category;
 use App\Models\Ingredient;
 use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;

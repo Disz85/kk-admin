@@ -14,9 +14,23 @@ class StoreTagRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|unique:tags',
+            'name' => 'required|string|max:255|unique:tags',
             'description' => 'nullable|string',
             'is_highlighted' => 'sometimes|boolean',
+        ];
+    }
+
+    /**
+     * Get the validation errors.
+     *
+     * @return string[]
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'A név megadása kötelező.',
+            'name.max' => 'A név nem lehet hosszabb :max karakternél.',
+            'name.unique' => 'A megadott névvel már létezik címke.',
         ];
     }
 }

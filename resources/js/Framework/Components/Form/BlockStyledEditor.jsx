@@ -49,7 +49,7 @@ const BlockStyledEditor = ({
             header: {
                 class: Header,
                 config: {
-                    placeholder: t('editor.header-placeholder'),
+                    placeholder: t('editor.headerPlaceholder'),
                     levels: [2, 3],
                     defaultLevel: 2,
                 },

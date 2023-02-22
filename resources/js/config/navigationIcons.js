@@ -10,6 +10,7 @@ import {
 const navigationIcons = {
     users: faUser,
     authors: faUsers,
+    articles: faNewspaper,
     tags: faTags,
     categories: faNewspaper,
     brands: faBriefcase,

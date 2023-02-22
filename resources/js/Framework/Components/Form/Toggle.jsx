@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 // COMPONENTS
@@ -10,6 +10,12 @@ import style from '../../../../scss/components/form.module.scss';
 const Toggle = ({ onChange, entity, ...props }) => {
     // SIDE EFFECTS
     const change = () => onChange({ [props.name]: !entity[props.name] });
+
+    useEffect(() => {
+        if (!entity.hasOwnProperty(props.name)) {
+            entity[props.name] = false;
+        }
+    }, []);
 
     // RENDER
     return (
@@ -37,7 +43,7 @@ export default Toggle;
 
 Toggle.propTypes = {
     /**
-     * entity of onChange
+     * Type of onChange
      */
     onChange: PropTypes.func.isRequired,
     /**

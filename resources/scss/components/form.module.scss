@@ -7,12 +7,14 @@
     @apply text-black text-2xl font-medium;
 }
 
-.formTextInput {
+.formTextInput,
+.textArea,
+.autocomplete {
     @apply w-full p-2.5;
     @apply text-black font-normal bg-light-grey;
     @apply border border-solid border-2 border-medium-grey rounded-lg;
     @apply transition ease-in-out m-0;
-    @apply focus:text-dark-grey focus:bg-light-snow focus:border-medium-sky focus:outline-none focus:border-medium-sky focus:border-2;
+    @apply focus:text-black focus:bg-light-snow focus:border-medium-sky focus:outline-none focus:border-medium-sky focus:border-2;
 }
 
 .formToggle {
@@ -42,4 +44,12 @@
 
 .isInvalid {
     @apply border-dark-brick text-red;
+}
+
+.textArea {
+    @apply text-2xl;
+}
+
+.inputToken {
+    @apply bg-medium-sky;
 }

@@ -9,10 +9,9 @@ use App\Http\Resources\Admin\ArticleCollection;
 use App\Http\Resources\Admin\ArticleResource;
 use App\Models\Article;
 use App\RequestMappers\ArticleRequestMapper;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use OpenApi\Annotations as OA;
-use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -63,12 +62,13 @@ class ArticleController extends Controller
     public function index(Request $request): ArticleCollection
     {
         return new ArticleCollection(
-            QueryBuilder::for(Article::class)
-            ->allowedFilters('title')
-            ->defaultSort('-published_at')
-            ->allowedSorts('published_at', 'created_at', 'updated_at')
-            ->paginate($request->get('per_page', 20))
-            ->appends($request->query())
+            Article::query()
+                ->when(
+                    $request->has('title'),
+                    fn (Builder $query) => $query->where('title', 'like', '%' . $request->get('title') . '%')
+                )
+                ->orderByDesc('published_at')
+                ->paginate($request->get('size', 20))
         );
     }
 

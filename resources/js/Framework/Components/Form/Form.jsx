@@ -22,6 +22,9 @@ import Submit from './Submit';
 import Modal from '../Modal';
 import Button from '../Buttons/Button';
 
+// STYLES
+import style from '../../../../scss/components/form.module.scss';
+
 // const NAVIGATION_MESSAGE =
 //     'Biztosan elhagyod az oldalt? A módosításaid így elvesznek!';
 
@@ -79,11 +82,13 @@ const Form = ({
             return;
         }
 
-        const error =
-            ref.current.querySelector('.m-form__feedback')?.parentNode;
+        const error = ref.current.querySelector(
+            `.${style.isInvalid}`,
+        )?.parentNode;
 
         if (error) {
             error.scrollIntoView();
+            window.scrollBy(0, -70);
         }
     };
 
@@ -281,19 +286,19 @@ export default Form;
 
 Form.propTypes = {
     /**
-     * entity of remove
+     * Type of service
      */
     service: PropTypes.object.isRequired,
     /**
-     * Type of entity
+     * Type of resource
      */
     resource: PropTypes.object.isRequired,
     /**
-     * Type of props
+     * Type of history
      */
     history: PropTypes.object.isRequired,
     /**
-     * Type of props
+     * Type of immutable
      */
     immutable: PropTypes.bool,
     /**
@@ -304,7 +309,7 @@ Form.propTypes = {
         PropTypes.node,
     ]).isRequired,
     /**
-     * Type of props
+     * Type of creates
      */
     creates: PropTypes.string,
 };

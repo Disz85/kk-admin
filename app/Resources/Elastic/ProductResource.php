@@ -37,7 +37,7 @@ class ProductResource extends JsonResource
             'skin_concerns' => $this->whenLoaded(
                 'categories',
                 CategoryResource::collection($this->skinConcernCategories)
-            )
+            ),
         ];
     }
 }

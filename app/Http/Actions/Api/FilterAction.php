@@ -19,7 +19,7 @@ class FilterAction
         return Query::bool()
             ->when(
                 $productCategories,
-                fn(BoolQueryBuilder $builder) => $builder
+                fn (BoolQueryBuilder $builder) => $builder
                     ->filter(
                         Query::terms()
                             ->field('category_hierarchy.uuid.keyword')
@@ -28,7 +28,7 @@ class FilterAction
             )
             ->when(
                 $brands,
-                fn(BoolQueryBuilder $builder) => $builder
+                fn (BoolQueryBuilder $builder) => $builder
                     ->filter(
                         Query::terms()
                             ->field('brand.uuid.keyword')
@@ -37,7 +37,7 @@ class FilterAction
             )
             ->when(
                 $ingredients,
-                fn(BoolQueryBuilder $builder) => $builder
+                fn (BoolQueryBuilder $builder) => $builder
                     ->filter(
                         Query::terms()
                             ->field('ingredients.uuid.keyword')
@@ -46,7 +46,7 @@ class FilterAction
             )
             ->when(
                 $skinTypes,
-                fn(BoolQueryBuilder $builder) => $builder
+                fn (BoolQueryBuilder $builder) => $builder
                     ->filter(
                         Query::terms()
                             ->field('skin_types.uuid.keyword')
@@ -55,7 +55,7 @@ class FilterAction
             )
             ->when(
                 $skinConcerns,
-                fn(BoolQueryBuilder $builder) => $builder
+                fn (BoolQueryBuilder $builder) => $builder
                     ->filter(
                         Query::terms()
                             ->field('skin_concerns.uuid.keyword')
@@ -64,7 +64,7 @@ class FilterAction
             )
             ->when(
                 $ingredientsToExclude,
-                fn(BoolQueryBuilder $builder) => $builder
+                fn (BoolQueryBuilder $builder) => $builder
                     ->mustNot(
                         Query::terms()
                             ->field('ingredients.uuid.keyword')

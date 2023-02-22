@@ -3,9 +3,9 @@
 namespace App\Http\Resources\Api;
 
 use App\Models\Article;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Contracts\Support\Arrayable;
 use JsonSerializable;
 
 /** @mixin Article */

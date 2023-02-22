@@ -10,8 +10,8 @@ use Elastic\ScoutDriverPlus\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use OpenApi\Annotations as OA;
 use Kalnoy\Nestedset\NodeTrait;
+use OpenApi\Annotations as OA;
 
 /**
  * Class Category

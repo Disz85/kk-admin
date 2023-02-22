@@ -13,6 +13,7 @@
         "babenkoivan/elastic-scout-driver-plus": "^4.2",
         "darkaonline/l5-swagger": "^8.4",
         "deployer/deployer": "^7.0",
+        "doctrine/dbal": "^3.6",
         "firebase/php-jwt": "^6.3",
         "guzzlehttp/guzzle": "^7.2",
         "kalnoy/nestedset": "^6.0",

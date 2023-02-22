@@ -86,7 +86,7 @@ class ImportCremes extends Command
                 TRIM(_tmp_Cremes.CretBy),
                 TRIM(_tmp_Cremes.ModOn),
                 TRIM(_tmp_Cremes.ModBy),
-                TRIM(_tmp_Cremes.ModOn),
+                IF(_tmp_Cremes.IsApproved = 1, TRIM(_tmp_Cremes.ModOn), NULL),
                 TRIM(_tmp_Cremes.INCICretBy)
             FROM _tmp_Cremes INNER JOIN brands ON brands.legacy_id = _tmp_Cremes.BrandID
             ON DUPLICATE KEY UPDATE

@@ -4,6 +4,7 @@ namespace App\Console\Commands\Import;
 
 use App\Helpers\Import\HtmlToEditorJsConverterIngredient;
 use App\Models\Ingredient;
+use App\Models\User;
 use App\XMLReaders\IngredientXMLReader;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -72,6 +73,11 @@ class ImportIngredient extends Command
                     $data["ewgdata"] = "None";
                 }
 
+                $creator = User::query()
+                    ->where('legacy_nickname', '=', $data['cretby'])
+                    ->first()
+                    ?->id;
+
                 $ingredient->legacy_id = $data["id"];
                 $ingredient->name = $data["title"] ?? null;
                 $ingredient->slug = $data["slug"] ?? null;
@@ -82,6 +88,7 @@ class ImportIngredient extends Command
                 $ingredient->updated_at = $data["modon"] ?? null;
                 $ingredient->published_at = $data["isapproved"] ? Carbon::now() : null;
                 $ingredient->comedogen_index = $data["comedogenicindex"] ?? null;
+                $ingredient->created_by = $creator;
 
                 $ingredient->save();
             } catch (\Throwable $e) {

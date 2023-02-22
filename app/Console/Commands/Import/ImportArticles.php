@@ -71,7 +71,7 @@ class ImportArticles extends Command
                 $article = new Article();
             }
 
-            $body = (implode('', $data['embeds']) . $data['body']) ?? null;
+            $body = implode('', $data['embeds']) . $data['body'];
 
             try {
                 $article->legacy_id = $data['id'] ?? null;
@@ -90,7 +90,10 @@ class ImportArticles extends Command
 
                 $article->legacy_slug = $data['slug'];
                 $article->lead = $data['_aioseop_description'] ?? $data['lead'] ?? null;
-                $article->body = $body ?? null;
+
+                if ($body) {
+                    $article->body = $body;
+                }
 
                 $article->published_at = $data['active'] ? $data['created_at'] : null;
                 $article->created_at = $data['created_at'];

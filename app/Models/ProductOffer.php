@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use OpenApi\Annotations as OA;
 
 /**
  * Class ProductOffer
@@ -21,7 +20,7 @@ use OpenApi\Annotations as OA;
  *     @OA\Property(property="description", type="string"),
  *     @OA\Property(property="price", type="string"),
  *     @OA\Property(property="used", type="string"),
- *     @OA\Property(property="place", type="string"),
+ *     @OA\Property(property="where_to_find", type="string"),
  *     @OA\Property(property="shipping_payment", type="string"),
  *     @OA\Property(property="is_sold", type="bool"),
  *     @OA\Property(property="image", type="int"),
@@ -40,7 +39,7 @@ use OpenApi\Annotations as OA;
  * @property string|null $description
  * @property string|null $price
  * @property string|null $used
- * @property string|null $place
+ * @property string|null $where_to_find
  * @property string|null $shipping_payment
  * @property bool|null $is_sold
  *
@@ -76,7 +75,7 @@ class ProductOffer extends Model
         'image_id',
         'price',
         'used',
-        'place',
+        'where_to_find',
         'shipping_payment',
         'is_sold',
         'approved_at',

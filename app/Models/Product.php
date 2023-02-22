@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
+use App\Enum\CategoryTypeEnum;
+use App\Resources\Elastic\ProductResource;
 use App\Traits\GeneratesSlug;
 use Carbon\Carbon;
+use Elastic\ScoutDriverPlus\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use OpenApi\Annotations as OA;
+use Illuminate\Support\Collection;
 
 /**
  * Class Product
@@ -56,23 +60,28 @@ use OpenApi\Annotations as OA;
  * @property bool $is_active
  * @property bool $is_sponsored
  * @property bool $is_18_plus
+ * @property Media $image
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property mixed $categories
+ * @property Category|null $productCategory
+ * @property Ingredient[]|Collection $ingredients
+ * @property Collection $skinTypeCategories
+ * @property Collection $skinConcernCategories
+ * @property int|null $created_by
+ * @property int|null $updated_by
  * @property Carbon|null $published_at
- *
- * @property Media|null $image_id
+ * @property int|null $image_id
  * @property Tag $tags
- * @property Category $categories
  * @property Brand $brand_id
- * @property Ingredient $ingredients
- * @property User|null $created_by
- * @property User|null $updated_by
- * @property User|null $ingredients_by
+ * @property int|null $ingredients_by
+ * @property ?Brand $brand
  */
 class Product extends Model
 {
     use GeneratesSlug;
     use HasFactory;
+    use Searchable;
 
     /**
      * @var string
@@ -113,9 +122,26 @@ class Product extends Model
         'published_at',
     ];
 
-    /**
-     * @return BelongsTo
-     */
+    public function shouldBeSearchable(): bool
+    {
+        return $this->is_active;
+    }
+
+    public function searchableWith(): array
+    {
+        return ['image', 'categories.ancestors', 'brand', 'ingredients'];
+    }
+
+    public function toSearchableArray(): array
+    {
+        return (new ProductResource($this))->toArray(request());
+    }
+
+    public function getCategoryAttribute(): ?Category
+    {
+        return $this->categories->first();
+    }
+
     public function image(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'image_id');
@@ -168,5 +194,20 @@ class Product extends Model
     public function ingredients(): BelongsToMany
     {
         return $this->belongsToMany(Ingredient::class, 'product_ingredient');
+    }
+
+    public function getProductCategoryAttribute(): ?Category
+    {
+        return $this->categories()->where('type', CategoryTypeEnum::Product)->first();
+    }
+
+    public function getSkinTypeCategoriesAttribute(): Collection
+    {
+        return $this->categories()->where('type', CategoryTypeEnum::SkinType)->get();
+    }
+
+    public function getSkinConcernCategoriesAttribute(): Collection
+    {
+        return $this->categories()->where('type', CategoryTypeEnum::SkinConcern)->get();
     }
 }

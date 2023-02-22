@@ -104,3 +104,9 @@ A kontroller `destroy()` metódusának adjuk át a fentebb implementált törlé
 ```
 
 Ha legalább egy kapcsolat létezik, akkor a request 422-es HTTP kóddal és a `Resource cannot be deleted due to existence of related resources` hibaüzenettel tér majd vissza ahelyett, hogy lefutna a `destroy()` metódus.
+
+### Elastic
+
+Az elastichoz ne felejts el futtatni queue workert.
+
+`php artisan scout:import App\\Models\\Product` commanddal tudod felindexelni a Product modellt.

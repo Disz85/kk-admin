@@ -2,9 +2,6 @@
 
 namespace App\Http\Resources\Api;
 
-use App\Http\Resources\Admin\MediaResource;
-use App\Http\Resources\Admin\ProductResource;
-use App\Http\Resources\Admin\TagResource;
 use App\Models\Brand;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;

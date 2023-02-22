@@ -4,13 +4,14 @@ namespace App\Models;
 
 use App\Enum\CategoryTypeEnum;
 use App\Interfaces\HasDependencies;
-use App\Traits\CategoryHierarchy;
 use App\Traits\GeneratesSlug;
 use Carbon\Carbon;
+use Elastic\ScoutDriverPlus\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use OpenApi\Annotations as OA;
+use Kalnoy\Nestedset\NodeTrait;
 
 /**
  * Class Category
@@ -54,7 +55,10 @@ class Category extends Model implements HasDependencies
 {
     use HasFactory;
     use GeneratesSlug;
-    use CategoryHierarchy;
+    use Searchable;
+    use NodeTrait {
+        Searchable::usesSoftDelete insteadof NodeTrait;
+    }
 
     /**
      * @var string

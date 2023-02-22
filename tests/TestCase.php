@@ -4,6 +4,9 @@ namespace Tests;
 
 use Database\Seeders\TestDatabaseSeeder;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Queue;
+use Laravel\Scout\Jobs\MakeSearchable;
+use Laravel\Scout\Jobs\RemoveFromSearch;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -11,4 +14,15 @@ abstract class TestCase extends BaseTestCase
 
     protected $seeder = TestDatabaseSeeder::class;
     protected $seed = true;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Queue::fake([
+            MakeSearchable::class,
+            RemoveFromSearch::class,
+            \Elastic\ScoutDriverPlus\Jobs\RemoveFromSearch::class,
+        ]);
+    }
 }

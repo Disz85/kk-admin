@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\IngredientController;
+use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -42,4 +43,9 @@ Route::middleware(['cache.headers:max_age=' . config('api.max-age')])->group(fun
         ->name('ingredients.index');
     Route::get('/ingredients/{ingredient:uuid}', [ IngredientController::class, 'show' ])
         ->name('ingredients.show');
+
+    Route::get('products', [ ProductController::class, 'index' ])
+        ->name('products.index');
+    Route::get('products/{product:uuid}', [ ProductController::class, 'show' ])
+        ->name('products.show');
 });

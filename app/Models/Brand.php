@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Collection;
 use OpenApi\Annotations as OA;
 
 /**
@@ -49,9 +50,10 @@ use OpenApi\Annotations as OA;
  *
  * @property User|null $created_by
  * @property User|null $updated_by
- * @property Media|null $image_id
- * @property Product|null $products
- * @property Tag|null $tags
+ * @property int|null $image_id
+ * @property Media|null $image
+ * @property Product[]|Collection $products
+ * @property Tag[]|Collection $tags
  */
 class Brand extends Model implements HasDependencies
 {

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Collection;
 use OpenApi\Annotations as OA;
 
 /**
@@ -49,9 +50,9 @@ use OpenApi\Annotations as OA;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @property Media|null $image_id
- * @property Category|null $categories
- * @property Product|null $products
+ * @property Media|null $image
+ * @property Category[]|Collection $categories
+ * @property Product[]|Collection $products
  * @property User|null $created_by
  */
 

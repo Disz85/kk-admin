@@ -2,15 +2,13 @@
 
 namespace App\Http\Resources\Api;
 
-use App\Http\Resources\Admin\AuthorResource;
-use App\Http\Resources\Admin\CategoryResource;
-use App\Http\Resources\Admin\MediaResource;
-use App\Http\Resources\Admin\TagResource;
-use Illuminate\Contracts\Support\Arrayable;
+use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Contracts\Support\Arrayable;
 use JsonSerializable;
 
+/** @mixin Article */
 class ArticleResource extends JsonResource
 {
     /**

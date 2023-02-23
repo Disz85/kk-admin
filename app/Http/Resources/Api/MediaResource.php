@@ -14,10 +14,10 @@ class MediaResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
-     * @return array
+     * @param Request $request
+     * @return array<string, mixed>
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
             'uuid' => $this->uuid,

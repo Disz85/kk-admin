@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Category;
+use App\Models\User;
 use Database\Factories\CategoryFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -12,6 +13,8 @@ use Tests\TestCase;
 class CategoryTest extends TestCase
 {
     use RefreshDatabase;
+
+    private User $user;
 
     protected function setUp(): void
     {
@@ -30,7 +33,7 @@ class CategoryTest extends TestCase
     }
 
     /** @test */
-    public function it_can_store_a_category()
+    public function it_can_store_a_category(): void
     {
         $data = CategoryFactory::new()->raw();
         $this->post(route('admin.categories.store'), $data)
@@ -40,7 +43,7 @@ class CategoryTest extends TestCase
     }
 
     /** @test */
-    public function it_can_update_a_category()
+    public function it_can_update_a_category(): void
     {
         $category = Category::factory()->create();
         $data = CategoryFactory::new()->raw();
@@ -51,7 +54,7 @@ class CategoryTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_a_category()
+    public function it_can_show_a_category(): void
     {
         $category = Category::factory()->create();
         $this->get(route('admin.categories.show', ['category' => $category->id]))
@@ -63,7 +66,7 @@ class CategoryTest extends TestCase
     }
 
     /** @test */
-    public function it_can_remove_a_category()
+    public function it_can_remove_a_category(): void
     {
         $category = Category::factory()->create();
         $this->delete(route('admin.categories.destroy', ['category' => $category->id]))

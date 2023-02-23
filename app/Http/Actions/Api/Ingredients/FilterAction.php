@@ -2,12 +2,17 @@
 
 namespace App\Http\Actions\Api\Ingredients;
 
+use Elastic\ScoutDriverPlus\Builders\AbstractParameterizedQueryBuilder;
 use Elastic\ScoutDriverPlus\Builders\BoolQueryBuilder;
 use Elastic\ScoutDriverPlus\Support\Query;
 
 class FilterAction
 {
-    public function __invoke(array $filters): BoolQueryBuilder
+    /**
+     * @param array<string, mixed> $filters
+     * @return AbstractParameterizedQueryBuilder
+     */
+    public function __invoke(array $filters): AbstractParameterizedQueryBuilder
     {
         $name = data_get($filters, 'name');
         $abc = data_get($filters, 'abc');

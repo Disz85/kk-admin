@@ -28,7 +28,7 @@ class StoreFavoriteProductRequest extends FormRequest
         ];
     }
 
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         if (! $this->request->has('categories')) {
             $this->merge([

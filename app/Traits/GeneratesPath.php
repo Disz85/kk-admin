@@ -15,9 +15,9 @@ trait GeneratesPath
         return implode('/', $path);
     }
 
-    public static function bootGeneratesPath()
+    public static function bootGeneratesPath(): void
     {
-        static::saving(function ($model) {
+        static::saving(function ($model): void {
             if (! $model->slug) {
                 $model->generateSlug();
             }

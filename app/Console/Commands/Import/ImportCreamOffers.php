@@ -59,7 +59,7 @@ class ImportCreamOffers extends Command
      * @param string $path
      * @return void
      */
-    private function importProductOffers(string $path)
+    private function importProductOffers(string $path): void
     {
         $this->call(ImportXML::class, ['--path' => $path]);
 
@@ -76,7 +76,7 @@ class ImportCreamOffers extends Command
     /**
      * @return void
      */
-    private function updateForeignKeys()
+    private function updateForeignKeys(): void
     {
         $this->info("Stage 2/4: update foreign key from ".self::USERS_TABLE." to ".self::PRODUCT_OFFERS_TABLE."..");
         DB::statement("
@@ -100,13 +100,13 @@ class ImportCreamOffers extends Command
     /**
      * @return void
      */
-    private function importImages()
+    private function importImages(): void
     {
         $this->info("Stage 4/4: insert image's url path to media..");
         ProductOffer::query()
             ->whereNull('image_id')
             ->whereRaw('LEFT(legacy_image_url, 5) <> "https"')
-            ->eachById(function ($productOffer) {
+            ->eachById(function ($productOffer): void {
                 ImportImage::dispatch($productOffer)->onQueue('image');
             });
     }
@@ -114,12 +114,12 @@ class ImportCreamOffers extends Command
     /**
      * @return void
      */
-    private function convertHtmlToEditorJs()
+    private function convertHtmlToEditorJs(): void
     {
         ProductOffer::query()
             ->whereNotNull('legacy_description')
             ->whereNull('description')
-            ->eachById(function ($brand) {
+            ->eachById(function ($brand): void {
                 ConvertHtmlToEditorJs::dispatch($brand)->onQueue('editorjs');
             });
     }

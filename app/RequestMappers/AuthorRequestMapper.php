@@ -9,7 +9,7 @@ class AuthorRequestMapper
 {
     /**
      * @param Author $author
-     * @param array $data
+     * @param array<string, mixed> $data
      * @return Author
      */
     public function map(Author $author, array $data): Author

@@ -49,7 +49,7 @@ class ImportWishLists extends Command
         $this->call(DropXmlTable::class, ['--path' => $path]);
     }
 
-    private function importShelves()
+    private function importShelves(): void
     {
         DB::unprepared("
             INSERT INTO shelves (
@@ -76,7 +76,7 @@ class ImportWishLists extends Command
         ");
     }
 
-    private function importProductShelf()
+    private function importProductShelf(): void
     {
         DB::unprepared("
             REPLACE INTO product_shelf (

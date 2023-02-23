@@ -118,6 +118,7 @@ class IngredientController extends Controller
             page: $request->validated('page', 1),
         );
 
+        // @phpstan-ignore-next-line
         $paginated->data = $paginated->onlyModels()->transform(function ($model) {
             return new IngredientResource($model);
         });

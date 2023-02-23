@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use Illuminate\Contracts\Filesystem\FileExistsException;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -59,7 +57,6 @@ class MediaRepository implements MediaRepositoryInterface
     /**
      * @param string $path
      * @return false|mixed|resource|null
-     * @throws FileNotFoundException
      */
     public function stream(string $path): mixed
     {
@@ -76,7 +73,6 @@ class MediaRepository implements MediaRepositoryInterface
 
     /**
      * @inheritDoc
-     * @throws FileExistsException
      */
     public function writeStream(string $path, string $tmpPath): bool
     {

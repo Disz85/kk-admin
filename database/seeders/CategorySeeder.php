@@ -15,7 +15,7 @@ class CategorySeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         foreach (CategoryTypeEnum::cases() as $type) {
             Category::factory()->count(self::COUNT)->create(['type' => $type]);

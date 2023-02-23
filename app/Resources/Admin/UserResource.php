@@ -6,15 +6,17 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin User
+ */
 class UserResource extends JsonResource
 {
     /**
      * @param Request $request
-     * @return array
+     * @return array<string, mixed>
      */
     public function toArray($request): array
     {
-        /** @var User $this */
         return [
             'id' => $this->id,
             'first_name' => $this->first_name,

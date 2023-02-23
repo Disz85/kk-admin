@@ -11,9 +11,9 @@ return new class () extends Migration {
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table): void {
             $table->id();
             $table->uuid()->default(DB::raw('UUID()'));
             $table->unsignedBigInteger('legacy_id')->nullable()->index();
@@ -24,7 +24,7 @@ return new class () extends Migration {
             $table->string('name')->unique();
             $table->string('canonical_name')->nullable();
             $table->string('slug')->unique();
-            $table->integer('image_id')->nullable()->constrained('media')
+            $table->foreignId('image_id')->nullable()->constrained('media')
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('price')->nullable();
             $table->string('size')->nullable();
@@ -54,7 +54,7 @@ return new class () extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('products');
     }

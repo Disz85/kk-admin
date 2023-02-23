@@ -10,9 +10,9 @@ return new class () extends Migration {
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::table('brands', function (Blueprint $table) {
+        Schema::table('brands', function (Blueprint $table): void {
             $table->string('legacy_image_url', 1024)->change();
         });
     }

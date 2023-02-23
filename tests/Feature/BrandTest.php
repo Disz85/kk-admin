@@ -4,6 +4,7 @@ namespace Tests\Feature\Feature;
 
 use App\Models\Brand;
 use App\Models\Product;
+use App\Models\User;
 use Database\Factories\BrandFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,6 +17,8 @@ class BrandTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+
+    private User $user;
 
     protected function setUp(): void
     {
@@ -34,7 +37,7 @@ class BrandTest extends TestCase
     }
 
     /** @test */
-    public function it_can_store_a_brand()
+    public function it_can_store_a_brand(): void
     {
         $data = BrandFactory::new()->raw();
         $data['image']['id'] = $data['image_id'];
@@ -45,7 +48,7 @@ class BrandTest extends TestCase
     }
 
     /** @test */
-    public function it_can_update_a_brand()
+    public function it_can_update_a_brand(): void
     {
         $brand = Brand::factory()->create();
         $data = BrandFactory::new()->raw();
@@ -57,7 +60,7 @@ class BrandTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_a_brand()
+    public function it_can_show_a_brand(): void
     {
         $brand = Brand::factory()->create();
         $this->get(route('admin.brands.show', ['brand' => $brand->id]))
@@ -69,7 +72,7 @@ class BrandTest extends TestCase
     }
 
     /** @test */
-    public function it_cannot_remove_a_brand_that_is_connected_to_a_product()
+    public function it_cannot_remove_a_brand_that_is_connected_to_a_product(): void
     {
         $brand = Brand::factory()->create();
         $product = Product::factory()->create(['brand_id' => $brand->id]);
@@ -81,7 +84,7 @@ class BrandTest extends TestCase
     }
 
     /** @test */
-    public function it_can_remove_a_brand_that_is_not_connected_to_a_product()
+    public function it_can_remove_a_brand_that_is_not_connected_to_a_product(): void
     {
         $brand = Brand::factory()->create();
         $this->delete(route('admin.brands.destroy', ['brand' => $brand->id]))

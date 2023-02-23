@@ -55,9 +55,11 @@ class ArticleController extends Controller
      */
     public function index(Request $request): ArticleCollection
     {
+        $articles = Article::query()
+            ->where('is_active', '=', 1);
+
         return new ArticleCollection(
-            QueryBuilder::for(Article::class)
-                ->where('is_active', '=', 1)
+            QueryBuilder::for($articles)
                 ->allowedFilters('title')
                 ->defaultSort('-published_at')
                 ->allowedSorts([

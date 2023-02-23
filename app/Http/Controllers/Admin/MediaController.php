@@ -74,9 +74,9 @@ class MediaController extends Controller
      * @return void
      * @throws Throwable
      */
-    public function delete(Media $media)
+    public function delete(Media $media): void
     {
-        DB::transaction(function () use ($media) {
+        DB::transaction(function () use ($media): void {
             $this->mediaRepository->delete($media->path);
             $media->delete();
         });
@@ -87,10 +87,10 @@ class MediaController extends Controller
      * @return void
      * @throws Throwable
      */
-    public function deleteMultiple(Request $request)
+    public function deleteMultiple(Request $request): void
     {
         $mediaModels = Media::findMany($request->all());
-        DB::transaction(function () use ($mediaModels) {
+        DB::transaction(function () use ($mediaModels): void {
             foreach ($mediaModels as $media) {
                 $this->mediaRepository->delete($media->path);
                 $media->delete();

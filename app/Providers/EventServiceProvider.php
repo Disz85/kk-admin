@@ -34,7 +34,7 @@ class EventServiceProvider extends ServiceProvider
     /**
      * The model observers.
      *
-     * @var array
+     * @var array<string, string[]>
      */
     protected $observers = [
         Article::class => [ ArticleObserver::class ],
@@ -50,7 +50,7 @@ class EventServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         //
     }

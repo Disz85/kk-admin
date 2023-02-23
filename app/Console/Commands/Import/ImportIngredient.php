@@ -49,7 +49,7 @@ class ImportIngredient extends Command
         $progress = $this->output->createProgressBar($ingredientXMLReader->count($path));
         $progress->start();
 
-        $ingredientXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress, $converterIngredient) {
+        $ingredientXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress, $converterIngredient): void {
             $ingredient = Ingredient::where("legacy_id", "=", $data["id"])->first() ?? new Ingredient();
 
             if ($ingredient->exists) {

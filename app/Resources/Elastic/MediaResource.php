@@ -10,6 +10,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class MediaResource extends JsonResource
 {
+    /**
+     * @param $request
+     * @return array<string, int>
+     */
     public function toArray($request): array
     {
         return [

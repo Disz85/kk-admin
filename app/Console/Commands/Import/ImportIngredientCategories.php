@@ -47,7 +47,7 @@ class ImportIngredientCategories extends Command
         $progress = $this->output->createProgressBar($ingredientCategoryXMLReader->count($path));
         $progress->start();
 
-        $ingredientCategoryXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress, $converterIngredient) {
+        $ingredientCategoryXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress, $converterIngredient): void {
             $category = Category::where('slug', '=', $data['slug'])->first() ?? new Category();
 
             if ($category->exists) {

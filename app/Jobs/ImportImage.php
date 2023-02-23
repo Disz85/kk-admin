@@ -34,7 +34,7 @@ class ImportImage implements ShouldQueue
      *
      * @return void
      */
-    public function handle(ImageHelper $imageHelper)
+    public function handle(ImageHelper $imageHelper): void
     {
         $remoteRootFolder = match ($this->model->getTable()) {
             'product_offers' => 'UploadedMakeUps',

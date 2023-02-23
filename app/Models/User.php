@@ -48,11 +48,15 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $sso_id
  * @property string|null $title
  * @property string|null $lastname
+ * @property string|null $last_name
  * @property string|null $firstname
+ * @property string|null $first_name
+ * @property string|null $full_name
  * @property string $username
  * @property string|null $email
  * @property string|null $slug
  * @property string|null $description
+ * @property Media|null $image
  * @property int|null $birth_year
  * @property string|null $skin_type
  * @property string|null $skin_concern
@@ -90,7 +94,7 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'title',
@@ -105,7 +109,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -115,7 +119,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
@@ -124,13 +128,16 @@ class User extends Authenticatable
     ];
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<Media, User>
      */
     public function image(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'image_id');
     }
 
+    /**
+     * @return HasMany<ProductChangeRequest>
+     */
     public function productChangeRequests(): HasMany
     {
         return $this->HasMany(ProductChangeRequest::class);

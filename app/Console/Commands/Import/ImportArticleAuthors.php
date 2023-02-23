@@ -46,7 +46,7 @@ class ImportArticleAuthors extends Command
         $progress = $this->output->createProgressBar($articleAuthorXMLReader->count($path));
         $progress->start();
 
-        $articleAuthorXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress) {
+        $articleAuthorXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress): void {
             $author = Author::query()
                 ->where('legacy_id', '=', $data['id'])
                 ->first()

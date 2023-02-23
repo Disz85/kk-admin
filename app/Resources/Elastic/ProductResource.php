@@ -12,6 +12,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class ProductResource extends JsonResource
 {
+    /**
+     * @param $request
+     * @return array<string, mixed>
+     */
     public function toArray($request): array
     {
         return [
@@ -22,7 +26,7 @@ class ProductResource extends JsonResource
             'category_hierarchy' => $this->whenLoaded(
                 'categories',
                 CategoryResource::collection(
-                    Category::ancestorsAndSelf($this->productCategory)?->toFlatTree()
+                    Category::ancestorsAndSelf($this->productCategory)->toFlatTree()
                 )
             ),
             'brand' => $this->whenLoaded('brand', new ProductBrandResource($this->brand)),

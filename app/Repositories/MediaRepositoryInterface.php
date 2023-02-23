@@ -11,7 +11,7 @@ interface MediaRepositoryInterface
      * @param File $file
      * @param string $path
      * @param string|null $name
-     * @param array $meta
+     * @param array<string, mixed> $meta
      * @return string
      */
     public function store(File $file, string $path, string $name = null, array $meta = []): string;
@@ -20,7 +20,7 @@ interface MediaRepositoryInterface
      * @param File $file
      * @param string $path
      * @param string|null $name
-     * @param array $meta
+     * @param array<string, mixed> $meta
      * @return string
      */
     public function storeWithPrefix(File $file, string $path, string $name = null, array $meta = []): string;
@@ -39,7 +39,7 @@ interface MediaRepositoryInterface
     public function stream(string $path): mixed;
 
     /**
-     * @param array|string $paths
+     * @param array<string, mixed>|string $paths
      * @return bool
      */
     public function delete(array|string $paths): bool;
@@ -53,8 +53,8 @@ interface MediaRepositoryInterface
 
     /**
      * @param string $path
-     * @param $contents
-     * @param array $options
+     * @param mixed $contents
+     * @param array<string, mixed> $options
      * @return bool
      */
     public function put(string $path, $contents, array $options = []): bool;

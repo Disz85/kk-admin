@@ -8,7 +8,7 @@ class IngredientRequestMapper
 {
     /**
      * @param Ingredient $ingredient
-     * @param array $data
+     * @param array<string, mixed> $data
      * @return Ingredient
      */
     public function map(Ingredient $ingredient, array $data): Ingredient

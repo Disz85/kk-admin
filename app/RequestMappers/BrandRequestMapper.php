@@ -9,7 +9,7 @@ class BrandRequestMapper
 {
     /**
      * @param Brand $brand
-     * @param array $data
+     * @param array<string, mixed> $data
      * @return Brand
      */
     public function map(Brand $brand, array $data): Brand

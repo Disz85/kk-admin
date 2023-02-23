@@ -13,7 +13,7 @@ class BrandObserver
      * @param Brand $brand
      * @return void
      */
-    public function deleting(Brand $brand)
+    public function deleting(Brand $brand): void
     {
         $brand->image()->delete();
         $brand->tags()->detach();

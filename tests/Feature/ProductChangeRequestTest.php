@@ -5,16 +5,20 @@ namespace Tests\Feature;
 use App\Enum\CategoryTypeEnum;
 use App\Models\Category;
 use App\Models\Ingredient;
+use App\Models\Product;
 use App\Models\ProductChangeRequest;
 use App\Models\User;
 use Database\Factories\ProductFactory;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ProductChangeRequestTest extends TestCase
 {
     use RefreshDatabase;
+
+    private User $user;
 
     protected function setUp(): void
     {
@@ -25,8 +29,9 @@ class ProductChangeRequestTest extends TestCase
         $this->actingAs($this->user);
     }
 
-    public function it_can_approve_a_product_change_request()
+    public function it_can_approve_a_product_change_request(): void
     {
+        /** @var ProductChangeRequest $productChangeRequest */
         $productChangeRequest = ProductChangeRequest::factory()->create();
         $response = $this->post(route('admin.product-change-requests.approve', ['product_change_request' => $productChangeRequest->id]));
 
@@ -44,8 +49,9 @@ class ProductChangeRequestTest extends TestCase
     }
 
     /** @test */
-    public function it_can_reject_a_product_change_request()
+    public function it_can_reject_a_product_change_request(): void
     {
+        /** @var ProductChangeRequest $productChangeRequest */
         $productChangeRequest = ProductChangeRequest::factory()->create();
         $response = $this->post(route('admin.product-change-requests.reject', ['product_change_request' => $productChangeRequest->id]));
         $response->assertOk();
@@ -53,8 +59,9 @@ class ProductChangeRequestTest extends TestCase
     }
 
     /** @test */
-    public function it_can_update_a_product_change_request()
+    public function it_can_update_a_product_change_request(): void
     {
+        /** @var ProductChangeRequest $product */
         $product = ProductChangeRequest::factory()->create();
         list($productChanged) = $this->makeDummyRequestData();
         $response = $this->put(route('admin.product-change-requests.update', ['product_change_request' => $product->id]), $productChanged);
@@ -73,8 +80,9 @@ class ProductChangeRequestTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_a_product_change_request()
+    public function it_can_show_a_product_change_request(): void
     {
+        /** @var ProductChangeRequest $product */
         $product = ProductChangeRequest::factory()->create();
         $response = $this->get(route('admin.product-change-requests.show', ['product_change_request' => $product->id]));
         $response->assertOk();
@@ -89,11 +97,13 @@ class ProductChangeRequestTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_the_product_change_request_list()
+    public function it_can_show_the_product_change_request_list(): void
     {
+        /** @var Collection|Product[] $products */
         $products = ProductChangeRequest::factory()->count(3)->create();
         $response = $this->get(route('admin.product-change-requests.index'));
         $response->assertOk();
+
         foreach ($products as $product) {
             $response->assertJsonFragment([
                 'id' => $product['id'],
@@ -102,6 +112,9 @@ class ProductChangeRequestTest extends TestCase
         }
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function makeDummyRequestData(): array
     {
         $category = Category::factory()->create(['type' => CategoryTypeEnum::Product->value]);

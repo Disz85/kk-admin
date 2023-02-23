@@ -18,7 +18,7 @@ class ArticleSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $authors = Author::query()->pluck('id');
         $categories = Category::query()->where('type', CategoryTypeEnum::Article->value)->pluck('id');

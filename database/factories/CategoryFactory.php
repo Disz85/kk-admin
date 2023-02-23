@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Enum\CategoryTypeEnum;
 use App\Models\Category;
 use Database\Helpers\BlockStyleEditorFakeContentBuilder;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -29,6 +30,10 @@ class CategoryFactory extends Factory
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws BindingResolutionException
+     */
     private function fakeArrayContent(): array
     {
         $builder = app()->make(BlockStyleEditorFakeContentBuilder::class);

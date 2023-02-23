@@ -11,7 +11,7 @@ enum IngredientEwgDataEnum: string
     case EWG_DATA_ROBUST = 'Robust';
 
     /**
-     * @return array
+     * @return array<int, string>
      */
     public static function toArray(): array
     {

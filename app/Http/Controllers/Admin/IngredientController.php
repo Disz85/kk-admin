@@ -362,7 +362,7 @@ class IngredientController extends Controller
      *    ),
      * )
      *
-     * @return array
+     * @return array<int, IngredientEwgDataEnum>
      */
     public function getEwgDataTypes(): array
     {

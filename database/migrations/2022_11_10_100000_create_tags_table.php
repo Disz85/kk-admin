@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class () extends Migration {
-    public function up()
+    public function up(): void
     {
-        Schema::create('tags', function (Blueprint $table) {
+        Schema::create('tags', function (Blueprint $table): void {
             $table->id();
             $table->uuid()->default(DB::raw('UUID()'));
             $table->string('legacy_id')->nullable();
@@ -22,7 +22,7 @@ return new class () extends Migration {
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::drop('tags');
     }

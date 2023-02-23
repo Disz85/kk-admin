@@ -14,16 +14,16 @@ class CheckDependencies implements Rule
     /**
      * @inheritDoc
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         /* @var HasDependencies $this->dependable */
         return ! $this->dependable->hasDependencies();
     }
 
     /**
-     * @inheritDoc
+     * @return string
      */
-    public function message()
+    public function message(): string
     {
         return 'Resource cannot be deleted due to existence of related resources.';
     }

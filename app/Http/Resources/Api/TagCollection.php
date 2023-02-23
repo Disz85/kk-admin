@@ -13,9 +13,9 @@ class TagCollection extends ResourceCollection
      * Transform the resource collection into an array.
      *
      * @param  Request  $request
-     * @return array|Arrayable|JsonSerializable
+     * @return array<string, mixed>|Arrayable<string, mixed>|JsonSerializable
      */
-    public function toArray($request): array|Arrayable|JsonSerializable
+    public function toArray(Request $request): array|Arrayable|JsonSerializable
     {
         return parent::toArray($request);
     }

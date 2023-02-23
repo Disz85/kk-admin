@@ -12,7 +12,7 @@ class AuthorObserver
      * @param Author $author
      * @return void
      */
-    public function deleting(Author $author)
+    public function deleting(Author $author): void
     {
         $author->image()->delete();
     }

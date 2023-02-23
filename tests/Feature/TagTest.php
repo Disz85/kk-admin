@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Tag;
+use App\Models\User;
 use Database\Factories\TagFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,6 +15,8 @@ class TagTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+
+    private User $user;
 
     protected function setUp(): void
     {

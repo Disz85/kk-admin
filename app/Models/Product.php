@@ -97,7 +97,7 @@ class Product extends Model
     protected $with = ['image'];
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     protected $casts = [
         'description' => 'array',
@@ -129,23 +129,32 @@ class Product extends Model
         return $this->is_active;
     }
 
+    /**
+     * @return string[]
+     */
     public function searchableWith(): array
     {
         return ['categories.ancestors', 'brand', 'ingredients'];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toSearchableArray(): array
     {
         return (new ProductResource($this))->toArray(request());
     }
 
+    /**
+     * @return BelongsTo<Media, Product>
+     */
     public function image(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'image_id');
     }
 
     /**
-     * @return MorphToMany
+     * @return MorphToMany<Shelf>
      */
     public function shelves(): MorphToMany
     {
@@ -153,7 +162,7 @@ class Product extends Model
     }
 
     /**
-     * @return MorphToMany
+     * @return MorphToMany<Tag>
      */
     public function tags(): MorphToMany
     {
@@ -161,7 +170,7 @@ class Product extends Model
     }
 
     /**
-     * @return MorphToMany
+     * @return MorphToMany<Category>
      */
     public function categories(): MorphToMany
     {
@@ -170,7 +179,7 @@ class Product extends Model
     }
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<User, Product>
      */
     public function user(): BelongsTo
     {
@@ -178,7 +187,7 @@ class Product extends Model
     }
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<Brand, Product>
      */
     public function brand(): BelongsTo
     {
@@ -186,7 +195,7 @@ class Product extends Model
     }
 
     /**
-     * @return BelongsToMany
+     * @return BelongsToMany<Ingredient>
      */
     public function ingredients(): BelongsToMany
     {
@@ -198,16 +207,25 @@ class Product extends Model
         return $this->categories()->where('type', CategoryTypeEnum::Product->value)->first();
     }
 
+    /**
+     * @return Collection<int, Category>
+     */
     public function getSkinTypeCategoriesAttribute(): Collection
     {
         return $this->categories()->where('type', CategoryTypeEnum::SkinType->value)->get();
     }
 
+    /**
+     * @return Collection<int, Category>
+     */
     public function getSkinConcernCategoriesAttribute(): Collection
     {
         return $this->categories()->where('type', CategoryTypeEnum::SkinConcern->value)->get();
     }
 
+    /**
+     * @return Collection<int, Category>
+     */
     public function getHairProblemCategoriesAttribute(): Collection
     {
         return $this->categories()->where('type', CategoryTypeEnum::HairProblem->value)->get();

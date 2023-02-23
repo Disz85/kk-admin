@@ -117,3 +117,17 @@ Az elastichoz ne felejts el futtatni queue workert. Az alábbi commandokkal tudo
 
 Egy friss import után rendbe kell tenni a `Category` hierarchiát, amit `tinker`-ben a `Category::fixTree();` hívással tudunk megtenni.
 
+## PHPStan
+
+A hatékony munkához, hogy az analízis report-ban phpstorm-ban megnyíló kattintható linkeket kapjunk a következő beállításokra van szükség.
+Hozzunk létre egy `phpstan.neon` fájlt a következő tartalommal, ahol a `/path/to/your/project/`-t lecseréljük a lokális projekt path-ra.
+
+```yml
+includes:
+	- phpstan.neon.dist
+
+parameters:
+	editorUrl: 'phpstorm://open?file=/path/to/your/project/%%relFile%%&line=%%line%%'
+```
+
+Telepíteni kell egy filehandler-t is, hogy a rendszerünk tudja értelemzni a reportban generált linkeket. Pl.: https://github.com/sanduhrs/phpstorm-url-handler

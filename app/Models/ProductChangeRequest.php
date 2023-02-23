@@ -24,10 +24,10 @@ use OpenApi\Annotations as OA;
  *
  * Fields
  * @property int $id
- * @property string $data
+ * @property array $data
+ * @property Media $image
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- *
  * @property Product $product_id
  */
 class ProductChangeRequest extends Model
@@ -41,14 +41,14 @@ class ProductChangeRequest extends Model
     ];
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     protected $casts = [
         'data' => 'array',
     ];
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<Product, ProductChangeRequest>
      */
     public function product(): BelongsTo
     {
@@ -56,7 +56,7 @@ class ProductChangeRequest extends Model
     }
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<User, ProductChangeRequest>
      */
     public function user(): BelongsTo
     {

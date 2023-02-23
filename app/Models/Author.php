@@ -70,7 +70,7 @@ class Author extends Model implements HasDependencies
     ];
 
     /**
-     * @return BelongsToMany
+     * @return BelongsToMany<Article>
      */
     public function articles(): BelongsToMany
     {
@@ -78,7 +78,7 @@ class Author extends Model implements HasDependencies
     }
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<Media, Author>
      */
     public function image(): BelongsTo
     {

@@ -53,7 +53,7 @@ class ImportArticleMedia extends Command
         $progress = $this->output->createProgressBar($articleMediaXMLReader->count($path));
         $progress->start();
 
-        $articleMediaXMLReader->read($path, function (array $data) use ($converter, $deleteIfExist, &$skipped, $progress, $timeconverter) {
+        $articleMediaXMLReader->read($path, function (array $data) use ($converter, $deleteIfExist, &$skipped, $progress, $timeconverter): void {
             $media = Media::where('legacy_id', '=', $data['legacy_id'])->first();
 
             if ($media) {

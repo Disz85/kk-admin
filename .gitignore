@@ -34,3 +34,4 @@ public/keycloak.json
 public/mix-manifest.json
 
 
+phpstan.neon

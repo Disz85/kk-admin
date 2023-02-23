@@ -34,6 +34,9 @@ use Kalnoy\Nestedset\NodeTrait;
  *
  * @package App\Models
  *
+ * @method static \Kalnoy\Nestedset\Collection ancestorsAndSelf($category)
+ * @method static \Kalnoy\Nestedset\Collection toFlatTree()
+ *
  * Fields
  * @property int $id
  * @property string $uuid
@@ -82,7 +85,7 @@ class Category extends Model implements HasDependencies
     ];
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     protected $casts = [
         'description' => 'array',
@@ -90,7 +93,7 @@ class Category extends Model implements HasDependencies
     ];
 
     /**
-     * @return MorphToMany
+     * @return MorphToMany<Article>
      */
     public function articles(): MorphToMany
     {
@@ -98,7 +101,7 @@ class Category extends Model implements HasDependencies
     }
 
     /**
-     * @return MorphToMany
+     * @return MorphToMany<Product>
      */
     public function products(): MorphToMany
     {
@@ -106,7 +109,7 @@ class Category extends Model implements HasDependencies
     }
 
     /**
-     * @return MorphToMany
+     * @return MorphToMany<Ingredient>
      */
     public function ingredients(): MorphToMany
     {

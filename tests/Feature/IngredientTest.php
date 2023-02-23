@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Enum\CategoryTypeEnum;
 use App\Models\Category;
 use App\Models\Ingredient;
+use App\Models\User;
 use Database\Factories\IngredientFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,6 +17,8 @@ class IngredientTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+
+    private User $user;
 
     protected function setUp(): void
     {
@@ -34,7 +37,7 @@ class IngredientTest extends TestCase
     }
 
     /** @test */
-    public function it_can_store_an_ingredient()
+    public function it_can_store_an_ingredient(): void
     {
         list($ingredient, $categories) = $this->makeDummyRequestData();
 
@@ -51,7 +54,7 @@ class IngredientTest extends TestCase
     }
 
     /** @test */
-    public function it_can_update_an_ingredient()
+    public function it_can_update_an_ingredient(): void
     {
         list($ingredient, $categories) = $this->createIngredientWithRelations();
         list($changedIngredient, $changedCategories) = $this->makeDummyRequestData();
@@ -70,7 +73,7 @@ class IngredientTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_an_ingredient()
+    public function it_can_show_an_ingredient(): void
     {
         list($ingredient, $categories) = $this->createIngredientWithRelations();
         $response = $this->get(route('admin.ingredients.show', ['ingredient' => $ingredient->id]))
@@ -87,7 +90,7 @@ class IngredientTest extends TestCase
     }
 
     /** @test */
-    public function it_can_remove_an_ingredient()
+    public function it_can_remove_an_ingredient(): void
     {
         $ingredient = Ingredient::factory()->create();
         $this->delete(route('admin.ingredients.destroy', ['ingredient' => $ingredient->id]))
@@ -96,7 +99,7 @@ class IngredientTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<int, mixed>
      */
     protected function makeDummyRequestData(): array
     {
@@ -110,7 +113,7 @@ class IngredientTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<int, mixed>
      */
     private function createIngredientWithRelations(): array
     {

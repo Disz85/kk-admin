@@ -20,7 +20,7 @@ class StoreCategoryRequest extends FormRequest
             'description' => 'nullable|array',
             'type' => ['required', 'string', new Enum(CategoryTypeEnum::class)],
             'parent' => 'nullable|array',
-            'parent.type' => ['required_with:parent', 'string', function ($attribute, $value, $fail) {
+            'parent.type' => ['required_with:parent', 'string', function ($attribute, $value, $fail): void {
                 if ($value != $this->type) {
                     $fail('A szülő típusa nem egyezik meg az aktuális kategóriáéval.');
                 }

@@ -16,9 +16,9 @@ class ProductResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
             'uuid' => $this->uuid,
@@ -41,7 +41,7 @@ class ProductResource extends JsonResource
             'category_hierarchy' => $this->whenLoaded(
                 'categories',
                 new CategoryCollection(
-                    Category::ancestorsAndSelf($this->productCategory)?->toFlatTree()
+                    Category::ancestorsAndSelf($this->productCategory)->toFlatTree()
                 )
             ),
         ];

@@ -55,7 +55,7 @@ class ImportArticleTags extends Command
         $progress = $this->output->createProgressBar($articleTagXMLReader->count($path));
         $progress->start();
 
-        $articleTagXMLReader->read($path, function (array $data) use ($converter, $deleteIfExist, &$skipped, $progress, $timeconverter) {
+        $articleTagXMLReader->read($path, function (array $data) use ($converter, $deleteIfExist, &$skipped, $progress, $timeconverter): void {
             $tag = Tag::query()
                 ->where('slug', 'LIKE', $data['slug'] . '%')
                 ->first() ?? new Tag();

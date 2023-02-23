@@ -1,0 +1,31 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - app/
+        - config/
+        - database/
+        - routes/
+        - tests/
+    excludePaths:
+        analyseAndScan:
+            - app/Console/Commands/Import
+            - app/Console/Commands/Update
+            - app/Helpers/Import
+            - app/Helpers/ImportImage.php
+            - app/Jobs/ImportImage.php
+            - app/Jobs/ConvertHtmlToEditorJs.php
+            - app/XMLReaders
+
+    # Level 9 is the highest level
+    level: 6
+
+#    ignoreErrors:
+#        - '#PHPDoc tag @var#'
+#
+#    excludePaths:
+#        - ./*/*/FileToBeExcluded.php
+#
+#    checkMissingIterableValueType: false

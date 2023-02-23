@@ -7,6 +7,7 @@ use App\Enum\IngredientEwgDataEnum;
 use App\Models\Category;
 use App\Models\Ingredient;
 use Database\Helpers\BlockStyleEditorFakeContentBuilder;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;
 
@@ -39,9 +40,9 @@ class IngredientFactory extends Factory
     }
 
     /**
-     * @param Category|Collection|null $categories
+     * @param Category|Collection<int, Category>|null $categories
      * @param int $count
-     * @return $this
+     * @return self
      */
     public function withCategories(Category|Collection $categories = null, int $count = 1): self
     {
@@ -52,6 +53,10 @@ class IngredientFactory extends Factory
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws BindingResolutionException
+     */
     private function fakeArrayContent(): array
     {
         $builder = app()->make(BlockStyleEditorFakeContentBuilder::class);

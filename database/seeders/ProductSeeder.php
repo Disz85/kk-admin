@@ -20,7 +20,7 @@ class ProductSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $categories = Category::query()->where(['type' => CategoryTypeEnum::Product->value])->pluck('id');
         $skinTypes = Category::query()->where(['type' => CategoryTypeEnum::SkinType->value])->pluck('id');

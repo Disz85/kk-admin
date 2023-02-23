@@ -24,7 +24,7 @@ class Categoryable extends MorphPivot
     {
         parent::boot();
 
-        static::created(function (Categoryable $pivot) {
+        static::created(function (Categoryable $pivot): void {
             if (($article = $pivot->pivotParent) instanceof Article) {
                 $article->rebuildSlug();
                 $article->timestamps = false;

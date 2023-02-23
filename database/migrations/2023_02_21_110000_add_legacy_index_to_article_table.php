@@ -10,9 +10,9 @@ return new class () extends Migration {
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::table('articles', function (Blueprint $table) {
+        Schema::table('articles', function (Blueprint $table): void {
             $table->index('legacy_id', 'idx_legacy_id');
             $table->index('legacy_slug', 'idx_legacy_slug');
         });
@@ -23,9 +23,9 @@ return new class () extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::table('articles', function (Blueprint $table) {
+        Schema::table('articles', function (Blueprint $table): void {
             $table->dropIndex('idx_legacy_id');
             $table->dropIndex('idx_legacy_slug');
         });

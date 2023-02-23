@@ -40,7 +40,10 @@ class ProductTest extends TestCase
     /** @test */
     public function a_product_belongs_to_a_brand(): void
     {
+        /** @var Brand $brand */
         $brand = Brand::factory()->create();
+
+        /** @var Product $product */
         $product = Product::factory()->create(['brand_id' => $brand->id]);
 
         $this->assertInstanceOf(Brand::class, $product->brand);
@@ -57,7 +60,7 @@ class ProductTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_a_product()
+    public function it_can_show_a_product(): void
     {
         list($product, $tags, $category, $ingredients) = $this->createAProductWithRelations();
         $response = $this->get(route('admin.products.show', ['product' => $product->id]));
@@ -154,6 +157,9 @@ class ProductTest extends TestCase
         $this->assertNull(Product::find($product->id));
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     private function makeDummyRequestData(): array
     {
         $category = Category::factory()->createOne(['type' => CategoryTypeEnum::Product->value]);
@@ -169,6 +175,9 @@ class ProductTest extends TestCase
         return [$product, $tags, $category, $ingredients];
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     private function createAProductWithRelations(): array
     {
         $category = Category::factory()->createOne(['type' => CategoryTypeEnum::Product->value]);

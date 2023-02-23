@@ -11,6 +11,9 @@ enum CategoryTypeEnum: string
     case HairProblem = 'hairproblem';
     case Ingredient = 'ingredient';
 
+    /**
+     * @return array<int, string>
+     */
     public static function toArray(): array
     {
         return array_column(self::cases(), 'value');

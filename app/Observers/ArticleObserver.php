@@ -12,7 +12,7 @@ class ArticleObserver
      * @param Article $article
      * @return void
      */
-    public function deleting(Article $article)
+    public function deleting(Article $article): void
     {
         $article->image()->delete();
         $article->authors()->detach();

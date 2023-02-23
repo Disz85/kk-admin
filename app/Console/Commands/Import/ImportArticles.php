@@ -57,7 +57,7 @@ class ImportArticles extends Command
         $progress = $this->output->createProgressBar($articleXMLReader->count($path));
         $progress->start();
 
-        $articleXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress, $timeconverter) {
+        $articleXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress, $timeconverter): void {
             $article = Article::where('legacy_id', '=', $data['id'])->first() ?? new Article();
 
             if ($article->exists) {

@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Author;
 use App\Models\Category;
 use App\Models\Tag;
+use App\Models\User;
 use Database\Factories\ArticleFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,6 +19,8 @@ class ArticleTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+
+    private User $user;
 
     protected function setUp(): void
     {
@@ -113,17 +116,17 @@ class ArticleTest extends TestCase
 
         $response->assertOk();
 
-        $article->authors->every(fn ($author) => $response->assertJsonFragment([
+        $article->authors->every(fn (Author $author) => (bool) $response->assertJsonFragment([
             'name' => $author->name,
             'id' => $author->id,
         ]));
 
-        $article->tags->every(fn ($tag) => $response->assertJsonFragment([
+        $article->tags->every(fn (Tag $tag) => (bool) $response->assertJsonFragment([
             'name' => $tag->name,
             'id' => $tag->id,
         ]));
 
-        $article->categories->every(fn ($category) => $response->assertJsonFragment([
+        $article->categories->every(fn (Category $category) => (bool) $response->assertJsonFragment([
             'name' => $category->name,
             'id' => $category->id,
         ]));
@@ -138,6 +141,9 @@ class ArticleTest extends TestCase
         $this->assertNull(Article::find($article->id));
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function makeDummyRequestData(): array
     {
         [
@@ -177,7 +183,10 @@ class ArticleTest extends TestCase
             ->create();
     }
 
-    private function articleRelations()
+    /**
+     * @return array<string, mixed>
+     */
+    private function articleRelations(): array
     {
         return [
             'authors' => Author::factory()->count(3)->create(),

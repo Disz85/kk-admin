@@ -8,14 +8,18 @@ use App\Models\Category;
 use App\Models\Ingredient;
 use App\Models\Product;
 use App\Models\ProductChangeRequest;
+use App\Models\User;
 use Database\Factories\ProductFactory;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ProductChangeRequestApiTest extends TestCase
 {
     use RefreshDatabase;
+
+    private User $user;
 
     protected function setUp(): void
     {
@@ -27,7 +31,7 @@ class ProductChangeRequestApiTest extends TestCase
     }
 
     /** @test */
-    public function it_can_store_a_new_product_change_request()
+    public function it_can_store_a_new_product_change_request(): void
     {
         $product = $this->makeDummyRequestData();
         $response = $this->post(route('api.product-change-requests.store'), $product);
@@ -49,7 +53,7 @@ class ProductChangeRequestApiTest extends TestCase
     }
 
     /** @test */
-    public function it_can_store_a_product_patch_request()
+    public function it_can_store_a_product_patch_request(): void
     {
         $product = Product::factory()->create();
         $data = [
@@ -66,8 +70,9 @@ class ProductChangeRequestApiTest extends TestCase
     }
 
     /** @test */
-    public function it_can_list_product_change_requests()
+    public function it_can_list_product_change_requests(): void
     {
+        /** @var Collection<int, ProductChangeRequest> $productChangeRequests */
         $productChangeRequests = ProductChangeRequest::factory(['user_id' => $this->user->id ])->count(3)->create();
         $response = $this->get(route('api.product-change-requests.index'));
         $response->assertOk();
@@ -83,8 +88,9 @@ class ProductChangeRequestApiTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_a_product_change_request()
+    public function it_can_show_a_product_change_request(): void
     {
+        /** @var ProductChangeRequest $productChangeRequest */
         $productChangeRequest = ProductChangeRequest::factory(['user_id' => $this->user->id ])->create();
         $this->get(route('api.product-change-requests.show', ['product_change_request' => $productChangeRequest->id ]))
         ->assertOk()
@@ -98,16 +104,18 @@ class ProductChangeRequestApiTest extends TestCase
     }
 
     /** @test */
-    public function it_can_delete_a_product_change_request()
+    public function it_can_delete_a_product_change_request(): void
     {
+        /** @var ProductChangeRequest $productChangeRequest */
         $productChangeRequest = ProductChangeRequest::factory(['user_id' => $this->user->id ])->create();
         $this->delete(route('api.product-change-requests.destroy', ['product_change_request' => $productChangeRequest->id ]))
             ->assertStatus(204);
     }
 
     /** @test */
-    public function it_can_update_a_product_change_request()
+    public function it_can_update_a_product_change_request(): void
     {
+        /** @var ProductChangeRequest $productChangeRequest */
         $productChangeRequest = ProductChangeRequest::factory(['user_id' => $this->user->id ])->create();
         $data = $this->makeDummyRequestData();
         $response = $this->put(route('api.product-change-requests.update', ['product_change_request' => $productChangeRequest->id]), $data);
@@ -125,6 +133,9 @@ class ProductChangeRequestApiTest extends TestCase
         ]);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function makeDummyRequestData(): array
     {
         $category = Category::factory()->create(['type' => CategoryTypeEnum::Product]);

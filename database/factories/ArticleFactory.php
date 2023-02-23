@@ -8,6 +8,7 @@ use App\Models\Author;
 use App\Models\Category;
 use App\Models\Tag;
 use Database\Helpers\BlockStyleEditorFakeContentBuilder;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;
 
@@ -39,6 +40,11 @@ class ArticleFactory extends Factory
         ];
     }
 
+    /**
+     * @param Author|Collection<int, Author>|null $authors
+     * @param int $count
+     * @return self
+     */
     public function withAuthors(Author|Collection $authors = null, int $count = 1): self
     {
         return $this->hasAttached(
@@ -48,6 +54,11 @@ class ArticleFactory extends Factory
         );
     }
 
+    /**
+     * @param Tag|Collection<int, Tag>|null $tags
+     * @param int $count
+     * @return self
+     */
     public function withTags(Tag|Collection $tags = null, int $count = 1): self
     {
         return $this->hasAttached(
@@ -57,6 +68,11 @@ class ArticleFactory extends Factory
         );
     }
 
+    /**
+     * @param Category|Collection<int, Category>|null $categories
+     * @param int $count
+     * @return self
+     */
     public function withCategories(Category|Collection $categories = null, int $count = 1): self
     {
         return $this->hasAttached(
@@ -66,6 +82,10 @@ class ArticleFactory extends Factory
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws BindingResolutionException
+     */
     private function fakeArrayContent(): array
     {
         $builder = app()->make(BlockStyleEditorFakeContentBuilder::class);

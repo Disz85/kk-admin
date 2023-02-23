@@ -87,7 +87,7 @@ class Ingredient extends Model implements HasDependencies
     protected $slugFrom = 'name';
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     protected $casts = [
         'description' => 'array',
@@ -98,18 +98,24 @@ class Ingredient extends Model implements HasDependencies
         return ! is_null($this->published_at);
     }
 
+    /**
+     * @return string[]
+     */
     public function searchableWith(): array
     {
         return ['categories'];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toSearchableArray(): array
     {
         return (new IngredientResource($this))->toArray(request());
     }
 
     /**
-     * @return MorphToMany
+     * @return MorphToMany<Category>
      */
     public function categories(): MorphToMany
     {
@@ -118,7 +124,7 @@ class Ingredient extends Model implements HasDependencies
     }
 
     /**
-     * @return BelongsToMany
+     * @return BelongsToMany<Product>
      */
     public function products(): BelongsToMany
     {
@@ -134,7 +140,7 @@ class Ingredient extends Model implements HasDependencies
     }
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<User, Ingredient>
      */
     public function user(): BelongsTo
     {

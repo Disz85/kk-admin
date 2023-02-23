@@ -13,7 +13,7 @@ class ProductObserver
      * @param Product $product
      * @return void
      */
-    public function deleting(Product $product)
+    public function deleting(Product $product): void
     {
         $product->image()->delete();
         $product->ingredients()->detach();

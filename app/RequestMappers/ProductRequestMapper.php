@@ -9,7 +9,7 @@ class ProductRequestMapper
 {
     /**
      * @param Product $product
-     * @param array $data
+     * @param array<string, mixed> $data
      * @return Product
      */
     public function map(Product $product, array $data): Product

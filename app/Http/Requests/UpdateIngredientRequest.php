@@ -11,7 +11,7 @@ class UpdateIngredientRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function rules(): array
     {
@@ -19,7 +19,7 @@ class UpdateIngredientRequest extends FormRequest
             'name' => 'required|string|max:255|unique:ingredients,name,'.$this->ingredient->id,
             'ewg_data' => ['nullable', 'string', new Enum(IngredientEwgDataEnum::class)],
             'ewg_score' => 'nullable|integer|between:0,10',
-            'ewg_score_max' => ['nullable', 'integer', 'between:0,10', function ($attribute, $value, $fail) {
+            'ewg_score_max' => ['nullable', 'integer', 'between:0,10', function ($attribute, $value, $fail): void {
                 if ($value < $this->ewg_score) {
                     $fail('Az EWG max kockázatnak nagyobbnak kell lennie, mint az EWG kockázatnak.');
                 }

@@ -58,7 +58,7 @@ class ImportArticlesBlogger extends Command
         $progress = $this->output->createProgressBar($count);
         $progress->start();
 
-        $articleXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress, $timeconverter, &$i) {
+        $articleXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress, $timeconverter, &$i): void {
             if (! isset($data['is_article']) || empty($data['content'])) {
                 return;
             }

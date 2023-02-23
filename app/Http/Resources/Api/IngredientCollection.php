@@ -12,10 +12,10 @@ class IngredientCollection extends ResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @param  Request  $request
-     * @return array|Arrayable|JsonSerializable
+     * @param Request $request
+     * @return array<string, mixed>|Arrayable<string, mixed>|JsonSerializable
      */
-    public function toArray($request)
+    public function toArray(Request $request): array|JsonSerializable|Arrayable
     {
         return parent::toArray($request);
     }

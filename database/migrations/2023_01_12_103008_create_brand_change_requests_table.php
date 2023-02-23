@@ -10,9 +10,9 @@ return new class () extends Migration {
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('brand_change_requests', function (Blueprint $table) {
+        Schema::create('brand_change_requests', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('brand_id')->nullable()->constrained('brands')->cascadeOnUpdate()->cascadeOnDelete();
             $table->longText('data');
@@ -25,7 +25,7 @@ return new class () extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('brand_change_requests');
     }

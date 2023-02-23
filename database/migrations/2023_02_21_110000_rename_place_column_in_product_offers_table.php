@@ -10,9 +10,9 @@ return new class () extends Migration {
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::table('product_offers', function (Blueprint $table) {
+        Schema::table('product_offers', function (Blueprint $table): void {
             $table->renameColumn('place', 'where_to_find');
         });
     }
@@ -22,9 +22,9 @@ return new class () extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::table('product_offers', function (Blueprint $table) {
+        Schema::table('product_offers', function (Blueprint $table): void {
             $table->renameColumn('where_to_find', 'place');
         });
     }

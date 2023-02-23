@@ -25,7 +25,7 @@ class ImportCremeCategories extends Command
      */
     protected $description = 'Imports creme categories from XML file';
 
-    public function handle(CremeCategoryXMLReader $categoryXMLReader)
+    public function handle(CremeCategoryXMLReader $categoryXMLReader): void
     {
         $skipped = 0;
         $path = $this->option('path');
@@ -34,7 +34,7 @@ class ImportCremeCategories extends Command
         $progress = $this->output->createProgressBar($categoryXMLReader->count($path));
         $progress->start();
 
-        $categoryXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress) {
+        $categoryXMLReader->read($path, function (array $data) use ($deleteIfExist, &$skipped, $progress): void {
             $parentLegacyId = null;
             $baseCategoryId = substr($data['id'], 0, 1);
             if ($baseCategoryId == 4 || $data['id'] == 1) {

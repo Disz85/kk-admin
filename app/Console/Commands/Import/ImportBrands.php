@@ -28,7 +28,7 @@ class ImportBrands extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $paths = $this->option('path');
 
@@ -48,7 +48,7 @@ class ImportBrands extends Command
         }
     }
 
-    private function importBrands()
+    private function importBrands(): void
     {
         DB::unprepared("
             INSERT INTO brands (
@@ -88,7 +88,7 @@ class ImportBrands extends Command
         ");
     }
 
-    private function importBrandTags()
+    private function importBrandTags(): void
     {
         DB::unprepared("
             INSERT INTO tags (
@@ -114,7 +114,7 @@ class ImportBrands extends Command
         ");
     }
 
-    private function importBrandTagRelations()
+    private function importBrandTagRelations(): void
     {
         DB::unprepared("
             REPLACE INTO taggables (
@@ -133,7 +133,7 @@ class ImportBrands extends Command
         ");
     }
 
-    private function updateBrandUsers()
+    private function updateBrandUsers(): void
     {
         $this->info("Update foreign key from users to brands.");
         DB::statement("
@@ -148,22 +148,22 @@ class ImportBrands extends Command
         ");
     }
 
-    private function importBrandImages()
+    private function importBrandImages(): void
     {
         Brand::query()
             ->whereNull('image_id')
             ->whereRaw('LEFT(legacy_image_url, 5) <> "https"')
-            ->eachById(function ($brand) {
+            ->eachById(function ($brand): void {
                 ImportImage::dispatch($brand)->onQueue('image');
             });
     }
 
-    private function convertHtmlToEditorJs()
+    private function convertHtmlToEditorJs(): void
     {
         Brand::query()
             ->whereNotNull('legacy_description')
             ->whereNull('description')
-            ->eachById(function ($brand) {
+            ->eachById(function ($brand): void {
                 ConvertHtmlToEditorJs::dispatch($brand)->onQueue('editorjs');
             });
     }

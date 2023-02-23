@@ -51,7 +51,7 @@ class ImportArticleCategories extends Command
         $progress = $this->output->createProgressBar($articleCategoryXMLReader->count($path));
         $progress->start();
 
-        $articleCategoryXMLReader->read($path, function (array $data) use ($converter, $deleteIfExist, &$skipped, $progress) {
+        $articleCategoryXMLReader->read($path, function (array $data) use ($converter, $deleteIfExist, &$skipped, $progress): void {
             $article_category = Category::where('slug', '=', $data['slug'])
                 ->first() ?? new Category();
 

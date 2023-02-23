@@ -11,6 +11,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class IngredientResource extends JsonResource
 {
+    /**
+     * @param $request
+     * @return array<string, mixed>
+     */
     public function toArray($request): array
     {
         return [

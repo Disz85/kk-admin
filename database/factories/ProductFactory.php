@@ -8,6 +8,7 @@ use App\Models\Ingredient;
 use App\Models\Product;
 use App\Models\Tag;
 use Database\Helpers\BlockStyleEditorFakeContentBuilder;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;
 
@@ -45,9 +46,9 @@ class ProductFactory extends Factory
     }
 
     /**
-     * @param Tag|Collection|null $tags
+     * @param Tag|Collection<int, Tag>|null $tags
      * @param int $count
-     * @return $this
+     * @return self
      */
     public function withTags(Tag|Collection $tags = null, int $count = 1): self
     {
@@ -59,23 +60,23 @@ class ProductFactory extends Factory
     }
 
     /**
-     * @param Category|Collection $category
+     * @param Category|Collection<int, Category> $category
      * @param int $count
-     * @return $this
+     * @return self
      */
     public function withCategory(Category|Collection $category, int $count = 1): self
     {
         return $this->hasAttached(
-            $category ?? CategoryFactory::new(['type' => CategoryTypeEnum::Product->value])->count($count),
+            $category,
             [],
             'categories'
         );
     }
 
     /**
-     * @param Category|Collection|null $categories
+     * @param Category|Collection<int, Category>|null $categories
      * @param int $count
-     * @return $this
+     * @return self
      */
     public function withSkinTypes(Category|Collection $categories = null, int $count = 1): self
     {
@@ -87,9 +88,9 @@ class ProductFactory extends Factory
     }
 
     /**
-     * @param Category|Collection|null $categories
+     * @param Category|Collection<int, Category>|null $categories
      * @param int $count
-     * @return $this
+     * @return self
      */
     public function withSkinConcerns(Category|Collection $categories = null, int $count = 1): self
     {
@@ -101,9 +102,9 @@ class ProductFactory extends Factory
     }
 
     /**
-     * @param Category|Collection|null $categories
+     * @param Category|Collection<int, Category>|null $categories
      * @param int $count
-     * @return $this
+     * @return self
      */
     public function withHairProblems(Category|Collection $categories = null, int $count = 1): self
     {
@@ -115,9 +116,9 @@ class ProductFactory extends Factory
     }
 
     /**
-     * @param Ingredient|Collection|null $ingredients
+     * @param Ingredient|Collection<int, Ingredient>|null $ingredients
      * @param int $count
-     * @return $this
+     * @return self
      */
     public function withIngredients(Ingredient|Collection $ingredients = null, int $count = 1): self
     {
@@ -128,6 +129,10 @@ class ProductFactory extends Factory
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws BindingResolutionException
+     */
     private function fakeArrayContent(): array
     {
         $builder = app()->make(BlockStyleEditorFakeContentBuilder::class);

@@ -96,6 +96,7 @@ class BrandController extends BaseController
             page: $request->validated('page', 1),
         );
 
+        // @phpstan-ignore-next-line
         $paginated->data = $paginated->onlyModels()->transform(function ($model) {
             return new BrandResource($model);
         });

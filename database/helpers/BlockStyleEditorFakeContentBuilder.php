@@ -6,6 +6,7 @@ use Faker\Generator;
 
 class BlockStyleEditorFakeContentBuilder
 {
+    /** @var array<int, mixed> */
     protected array $parts;
     private Generator $faker;
 
@@ -15,6 +16,9 @@ class BlockStyleEditorFakeContentBuilder
         $this->reset();
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function build(): array
     {
         $body = [
@@ -36,6 +40,10 @@ class BlockStyleEditorFakeContentBuilder
         $this->parts = [];
     }
 
+    /**
+     * @param array<string, mixed> $merge
+     * @return $this
+     */
     public function addParagraph(array $merge = []): self
     {
         $this->parts[] = $this->generateParagraph($merge);
@@ -43,6 +51,10 @@ class BlockStyleEditorFakeContentBuilder
         return $this;
     }
 
+    /**
+     * @param array<string, mixed> $merge
+     * @return $this
+     */
     public function addHeader(array $merge = []): self
     {
         $this->parts[] = $this->generateHeader($merge);
@@ -50,6 +62,10 @@ class BlockStyleEditorFakeContentBuilder
         return $this;
     }
 
+    /**
+     * @param array<string, mixed> $merge
+     * @return $this
+     */
     public function addList(array $merge = []): self
     {
         $this->parts[] = $this->generateList($merge);
@@ -57,6 +73,10 @@ class BlockStyleEditorFakeContentBuilder
         return $this;
     }
 
+    /**
+     * @param array<string, mixed> $merge
+     * @return $this
+     */
     public function addQuote(array $merge = []): self
     {
         $this->parts[] = $this->generateQuote($merge);
@@ -64,6 +84,10 @@ class BlockStyleEditorFakeContentBuilder
         return $this;
     }
 
+    /**
+     * @param array<string, mixed> $merge
+     * @return array<string, mixed>
+     */
     protected function generateParagraph(array $merge = []): array
     {
         return array_merge([
@@ -73,6 +97,10 @@ class BlockStyleEditorFakeContentBuilder
         ], $merge);
     }
 
+    /**
+     * @param array<string, mixed> $merge
+     * @return array<string, mixed>
+     */
     protected function generateHeader(array $merge = []): array
     {
         return array_merge([
@@ -85,6 +113,10 @@ class BlockStyleEditorFakeContentBuilder
         ], $merge);
     }
 
+    /**
+     * @param array<string, mixed> $merge
+     * @return array<string, mixed>
+     */
     protected function generateList(array $merge = []): array
     {
         return array_merge([
@@ -105,6 +137,10 @@ class BlockStyleEditorFakeContentBuilder
         ], $merge);
     }
 
+    /**
+     * @param array<string, mixed> $merge
+     * @return array<string, mixed>
+     */
     protected function generateQuote(array $merge = []): array
     {
         return array_merge([

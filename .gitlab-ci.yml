@@ -90,7 +90,6 @@ phpstan:
         key: ${CI_COMMIT_REF_SLUG}-larastan
         paths:
             - vendor/
-    allow_failure: true
     tags:
         - kremmania
     only:

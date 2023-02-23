@@ -22,7 +22,7 @@ class ImportCremeCategoriesConnection extends Command
      */
     protected $description = 'Imports creme categories connection from temp table file';
 
-    public function handle()
+    public function handle(): void
     {
         $path = $this->option('path');
         $this->call(ImportXml::class, ['--path' => $path]);

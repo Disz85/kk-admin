@@ -24,7 +24,7 @@ class FavoriteProductsCategoryUnique implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         if (empty($this->request->categories)) {
             if ($this->request->favorite_product) {
@@ -42,7 +42,7 @@ class FavoriteProductsCategoryUnique implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         return 'Only one default Favorite product group can be exists';
     }

@@ -10,9 +10,9 @@ return new class () extends Migration {
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('categoryables', function (Blueprint $table) {
+        Schema::create('categoryables', function (Blueprint $table): void {
             $table->foreignId('category_id')->constrained('categories')
                 ->cascadeOnUpdate()->cascadeOnDelete();
             $table->unsignedBigInteger('categoryable_id');
@@ -29,7 +29,7 @@ return new class () extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('categoryables');
     }

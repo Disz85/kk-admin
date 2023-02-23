@@ -10,9 +10,9 @@ return new class () extends Migration {
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('article_author', function (Blueprint $table) {
+        Schema::create('article_author', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('article_id')->constrained('articles')
                 ->cascadeOnUpdate()->cascadeOnDelete();
@@ -27,7 +27,7 @@ return new class () extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('article_author');
     }

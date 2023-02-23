@@ -12,8 +12,8 @@ class UserObserver
      * @param User $user
      * @return void
      */
-    public function deleting(User $user)
+    public function deleting(User $user): void
     {
-        $user->image()->detach();
+        $user->image()->delete();
     }
 }

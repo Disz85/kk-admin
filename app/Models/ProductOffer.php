@@ -82,14 +82,14 @@ class ProductOffer extends Model
     ];
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     protected $casts = [
         'description' => 'array',
     ];
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<Media, ProductOffer>
      */
     public function image(): BelongsTo
     {

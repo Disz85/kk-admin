@@ -12,7 +12,7 @@ trait GeneratesSlug
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom($this->slugFrom ?? 'name')
+            ->generateSlugsFrom($this->slugFrom)
             ->saveSlugsTo('slug')
             ->usingLanguage('hu')
             ->doNotGenerateSlugsOnUpdate();

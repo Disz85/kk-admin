@@ -64,7 +64,7 @@ class Tag extends Model implements HasDependencies
     ];
 
     /**
-     * @return MorphToMany
+     * @return MorphToMany<Article>
      */
     public function articles(): MorphToMany
     {
@@ -72,7 +72,7 @@ class Tag extends Model implements HasDependencies
     }
 
     /**
-     * @return MorphToMany
+     * @return MorphToMany<Product>
      */
     public function products(): MorphToMany
     {
@@ -80,7 +80,7 @@ class Tag extends Model implements HasDependencies
     }
 
     /**
-     * @return MorphToMany
+     * @return MorphToMany<Brand>
      */
     public function brands(): MorphToMany
     {

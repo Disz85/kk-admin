@@ -17,7 +17,7 @@ class IngredientSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $categories = Category::query()->where(['type' => CategoryTypeEnum::Ingredient->value])->pluck('id');
         $users = User::query()->pluck('id');

@@ -6,6 +6,11 @@ use App\Models\Category;
 
 class CategoryRequestMapper
 {
+    /**
+     * @param Category $category
+     * @param array<string, mixed> $data
+     * @return Category
+     */
     public function map(Category $category, array $data): Category
     {
         $category->fill([

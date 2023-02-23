@@ -44,7 +44,7 @@ class ImportUsers extends Command
         }
     }
 
-    private function importUsers()
+    private function importUsers(): void
     {
         DB::unprepared("
             INSERT INTO users (
@@ -72,7 +72,7 @@ class ImportUsers extends Command
         ");
     }
 
-    private function importAspNetUsers()
+    private function importAspNetUsers(): void
     {
         DB::unprepared("
             INSERT INTO users (

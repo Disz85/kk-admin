@@ -39,7 +39,7 @@ class ArticleStatusController extends Controller
      */
     public function __invoke(Article $article): ArticleResource
     {
-        $article->active = ! $article->active;
+        $article->is_active = ! $article->is_active;
         $article->save();
 
         return new ArticleResource($article->refresh());

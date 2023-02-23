@@ -48,6 +48,10 @@ class JWTGuard implements Guard
         return $this->user = $user;
     }
 
+    /**
+     * @param array<string, mixed> $credentials
+     * @return bool
+     */
     public function validate(array $credentials = []): bool
     {
         return false;

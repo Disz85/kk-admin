@@ -40,7 +40,7 @@ class ImportCremeIngredients extends Command
         $this->call(DropXmlTable::class, [ '--path' => $path ]);
     }
 
-    private function importCremeIngredients()
+    private function importCremeIngredients(): void
     {
         DB::unprepared("
             INSERT INTO product_ingredient (

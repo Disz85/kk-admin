@@ -15,7 +15,7 @@ class BrandSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $users = User::query()->pluck('id');
 

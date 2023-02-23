@@ -46,7 +46,7 @@ class ImportCremes extends Command
         $this->call(DropXmlTable::class, [ '--path' => $path ]);
     }
 
-    private function importCremesFast()
+    private function importCremesFast(): void
     {
         DB::unprepared("
             INSERT INTO products (
@@ -109,7 +109,7 @@ class ImportCremes extends Command
         ");
     }
 
-    private function updateProductUsers()
+    private function updateProductUsers(): void
     {
         $this->info("Update created_by, updated_by, ingredients_by from users to products.");
         DB::statement("
@@ -129,22 +129,22 @@ class ImportCremes extends Command
         ");
     }
 
-    private function importCremeImages()
+    private function importCremeImages(): void
     {
         Product::query()
             ->whereNull('image_id')
             ->whereRaw('LEFT(legacy_image_url, 5) <> "https"')
-            ->eachById(function ($product) {
+            ->eachById(function ($product): void {
                 ImportImage::dispatch($product)->onQueue('image');
             });
     }
 
-    private function convertHtmlToEditorJs()
+    private function convertHtmlToEditorJs(): void
     {
         Product::query()
             ->whereNotNull('legacy_description')
             ->whereNull('description')
-            ->eachById(function ($product) {
+            ->eachById(function ($product): void {
                 ConvertHtmlToEditorJs::dispatch($product)->onQueue('editorjs');
             });
     }

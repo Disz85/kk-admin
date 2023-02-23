@@ -8,7 +8,7 @@ class TagRequestMapper
 {
     /**
      * @param Tag $tag
-     * @param array $data
+     * @param array<string, mixed> $data
      * @return Tag
      */
     public function map(Tag $tag, array $data): Tag

@@ -8,6 +8,9 @@ use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
+    /**
+     * @var array<string>
+     */
     public array $singletons = [
         MediaRepositoryInterface::class => MediaRepository::class,
     ];

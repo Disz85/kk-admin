@@ -11,9 +11,9 @@ class AddUuidIndexToTagsTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::table('tags', function (Blueprint $table) {
+        Schema::table('tags', function (Blueprint $table): void {
             $table->unique('uuid');
         });
     }
@@ -23,9 +23,9 @@ class AddUuidIndexToTagsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::table('tags', function (Blueprint $table) {
+        Schema::table('tags', function (Blueprint $table): void {
             $table->dropUnique(['uuid']);
         });
     }

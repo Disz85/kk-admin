@@ -36,7 +36,7 @@ class ImportImages extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $urls = $this->option('url');
         $type = $this->option('type');

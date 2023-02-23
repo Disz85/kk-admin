@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\FavoriteProduct;
+use App\Models\User;
 use Database\Factories\FavoriteProductFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -12,6 +13,8 @@ use Tests\TestCase;
 class FavoriteProductTest extends TestCase
 {
     use RefreshDatabase;
+
+    private User $user;
 
     protected function setUp(): void
     {
@@ -23,7 +26,7 @@ class FavoriteProductTest extends TestCase
     }
 
     /** @test */
-    public function it_can_store_a_favorite_product_group()
+    public function it_can_store_a_favorite_product_group(): void
     {
         $data = FavoriteProductFactory::new()->raw();
         $this->post(route('admin.favorite-products.store'), $data)
@@ -32,7 +35,7 @@ class FavoriteProductTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_a_favorite_product_group()
+    public function it_can_show_a_favorite_product_group(): void
     {
         $favoriteProduct = FavoriteProduct::factory()->create();
         $this->get(route('admin.favorite-products.show', ['favorite_product' => $favoriteProduct->id]))
@@ -44,7 +47,7 @@ class FavoriteProductTest extends TestCase
     }
 
     /** @test */
-    public function it_can_update_a_favorite_product_group()
+    public function it_can_update_a_favorite_product_group(): void
     {
         $favoriteProduct = FavoriteProduct::factory()->create();
         $data = FavoriteProductFactory::new()->raw();

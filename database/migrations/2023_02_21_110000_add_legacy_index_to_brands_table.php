@@ -10,9 +10,9 @@ return new class () extends Migration {
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::table('brands', function (Blueprint $table) {
+        Schema::table('brands', function (Blueprint $table): void {
             $table->index('legacy_image_url', 'idx_legacy_image_url');
         });
     }
@@ -22,9 +22,9 @@ return new class () extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::table('brands', function (Blueprint $table) {
+        Schema::table('brands', function (Blueprint $table): void {
             $table->dropIndex('idx_legacy_image_url');
         });
     }

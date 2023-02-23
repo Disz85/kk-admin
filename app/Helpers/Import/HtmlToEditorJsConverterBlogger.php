@@ -185,7 +185,7 @@ class HtmlToEditorJsConverterBlogger
      * @throws StrictException
      * @throws UnknownChildTypeException
      */
-    private function processSubContent(HtmlNode $node, array &$blocks, ?string $type, int $recursionDepth)
+    private function processSubContent(HtmlNode $node, array &$blocks, ?string $type, int $recursionDepth): void
     {
         $sub_dom = new Dom();
         $sub_dom->loadStr($node->innerhtml());

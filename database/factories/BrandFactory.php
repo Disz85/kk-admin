@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Brand;
 use Database\Helpers\BlockStyleEditorFakeContentBuilder;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -27,6 +29,10 @@ class BrandFactory extends Factory
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     * @throws BindingResolutionException
+     */
     private function fakeArrayContent(): array
     {
         $builder = app()->make(BlockStyleEditorFakeContentBuilder::class);

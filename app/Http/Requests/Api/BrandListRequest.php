@@ -10,6 +10,9 @@ class BrandListRequest extends FormRequest
 {
     use ProcessRequestSortValue;
 
+    /**
+     * @return array<string, mixed>
+     */
     public function rules(): array
     {
         return [

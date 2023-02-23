@@ -4,12 +4,12 @@ namespace App\Models;
 
 use App\Traits\GeneratesSlug;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Support\Str;
 use OpenApi\Annotations as OA;
 
 /**
@@ -53,10 +53,9 @@ use OpenApi\Annotations as OA;
  * @property Carbon|null $published_at
  *
  * @property Media|null $image_id
- * @property Tag|null $tags
- * @property Category|null $categories
- * @property Author $authors
- *
+ * @property-read Collection|Tag[]|null $tags
+ * @property-read Collection|Category[]|null $categories
+ * @property-read Collection|Author[] $authors
  */
 class Article extends Model
 {
@@ -74,7 +73,7 @@ class Article extends Model
     protected $with = ['image'];
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     protected $casts = [
         'body' => 'array',
@@ -95,7 +94,7 @@ class Article extends Model
     ];
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<Media, Article>
      */
     public function image(): BelongsTo
     {
@@ -103,7 +102,7 @@ class Article extends Model
     }
 
     /**
-     * @return MorphToMany
+     * @return MorphToMany<Tag>
      */
     public function tags(): MorphToMany
     {
@@ -111,7 +110,7 @@ class Article extends Model
     }
 
     /**
-     * @return MorphToMany
+     * @return MorphToMany<Category>
      */
     public function categories(): MorphToMany
     {
@@ -120,7 +119,7 @@ class Article extends Model
     }
 
     /**
-     * @return BelongsToMany
+     * @return BelongsToMany<Author>
      */
     public function authors(): BelongsToMany
     {
@@ -132,13 +131,7 @@ class Article extends Model
      */
     public function rebuildSlug(): void
     {
-        if ($this->slug_frozen) {
-            $currentSlugEnd = Str::afterLast($this->slug, '/');
-            $this->slug = $currentSlugEnd;
-            $this->slugOptions = $this->getSlugOptions();
-        } else {
-            $this->generateSlug();
-        }
+        $this->generateSlug();
 
         $this->slug = $this->makeSlugUnique($this->slug);
     }

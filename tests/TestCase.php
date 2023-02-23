@@ -12,8 +12,8 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    protected $seeder = TestDatabaseSeeder::class;
-    protected $seed = true;
+    protected string $seeder = TestDatabaseSeeder::class;
+    protected bool $seed = true;
 
     protected function setUp(): void
     {

@@ -12,7 +12,7 @@ class IngredientObserver
      * @param Ingredient $ingredient
      * @return void
      */
-    public function deleting(Ingredient $ingredient)
+    public function deleting(Ingredient $ingredient): void
     {
         $ingredient->categories()->detach();
     }

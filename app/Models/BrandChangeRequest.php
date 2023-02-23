@@ -24,7 +24,8 @@ use OpenApi\Annotations as OA;
  *
  * Fields
  * @property int $id
- * @property string $data
+ * @property array $data
+ * @property Media|null $image
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -43,14 +44,14 @@ class BrandChangeRequest extends Model
     ];
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     protected $casts = [
         'data' => 'array',
     ];
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<Brand, BrandChangeRequest>
      */
     public function brand(): BelongsTo
     {

@@ -58,7 +58,7 @@ class Shelf extends Model
     ];
 
     /**
-     * @return BelongsToMany
+     * @return BelongsToMany<Product>
      */
     public function products(): BelongsToMany
     {

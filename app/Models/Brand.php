@@ -74,7 +74,7 @@ class Brand extends Model implements HasDependencies
     protected $slugFrom = 'title';
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     protected $casts = [
         'description' => 'array',
@@ -94,13 +94,16 @@ class Brand extends Model implements HasDependencies
         'updated_by',
     ];
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toSearchableArray(): array
     {
         return (new BrandResource($this))->toArray(request());
     }
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<Media, Brand>
      */
     public function image(): BelongsTo
     {
@@ -108,7 +111,7 @@ class Brand extends Model implements HasDependencies
     }
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<User, Brand>
      */
     public function createdBy(): BelongsTo
     {
@@ -116,20 +119,23 @@ class Brand extends Model implements HasDependencies
     }
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<User, Brand>
      */
     public function updatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
 
+    /**
+     * @return HasMany<Product>
+     */
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
     }
 
     /**
-     * @return MorphToMany
+     * @return MorphToMany<Tag>
      */
     public function tags(): MorphToMany
     {

@@ -44,7 +44,7 @@ class ImportIngredientCategoriesConnection extends Command
         $progress = $this->output->createProgressBar($ingredientCategoryConnectionXMLReader->count($path));
         $progress->start();
 
-        $ingredientCategoryConnectionXMLReader->read($path, function (array $data) use ($progress) {
+        $ingredientCategoryConnectionXMLReader->read($path, function (array $data) use ($progress): void {
             $ingredient = Ingredient::where('legacy_id', '=', $data['ingredientid'])->first();
             $category = Category::where('legacy_id', '=', $data['ingredientfunctionid'])->first();
 

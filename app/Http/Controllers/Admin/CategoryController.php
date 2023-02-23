@@ -309,7 +309,7 @@ class CategoryController extends Controller
      *    ),
      * )
      *
-     * @return array
+     * @return array<int, CategoryTypeEnum>
      */
     public function getTypes(): array
     {

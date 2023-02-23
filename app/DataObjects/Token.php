@@ -15,11 +15,14 @@ class Token
         $this->token = JWT::decode($token, $this->formatKey($key));
     }
 
-    public function id()
+    public function id(): string
     {
         return $this->token->sub;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function profile(): array
     {
         return [

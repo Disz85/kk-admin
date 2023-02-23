@@ -10,6 +10,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class ProductBrandResource extends JsonResource
 {
+    /**
+     * @param $request
+     * @return array<string, string>
+     */
     public function toArray($request): array
     {
         return [

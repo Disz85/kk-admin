@@ -33,7 +33,7 @@ class ConvertHtmlToEditorJs implements ShouldQueue
      *
      * @return void
      */
-    public function handle(HtmlToEditorJsConverter $converter)
+    public function handle(HtmlToEditorJsConverter $converter): void
     {
         try {
             $this->model->description = $converter->convert($this->model->legacy_description, $this->model->getTable());

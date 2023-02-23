@@ -9,7 +9,7 @@ class ArticleRequestMapper
 {
     /**
      * @param Article $article
-     * @param array $data
+     * @param array<string, mixed> $data
      * @return Article
      */
     public function map(Article $article, array $data): Article

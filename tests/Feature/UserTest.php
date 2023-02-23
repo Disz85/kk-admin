@@ -11,6 +11,8 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -21,7 +23,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_users()
+    public function it_can_show_users(): void
     {
         $user = User::factory()->create();
         $response = $this->get(route('admin.users.index'));
@@ -35,7 +37,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_a_user()
+    public function it_can_show_a_user(): void
     {
         $user = User::factory()->create();
         $this->get(route('admin.users.show', ['user' => $user->id]))

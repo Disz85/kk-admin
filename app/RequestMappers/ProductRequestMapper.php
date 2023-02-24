@@ -26,13 +26,13 @@ class ProductRequestMapper
             'is_18_plus' => data_get($data, 'is_18_plus'),
             'created_by' => data_get($data, 'created_by'),
             'updated_by' => data_get($data, 'updated_by'),
-            'brand_id' => data_get($data, 'brand_id'),
+            'brand_id' => data_get($data, 'brand.id'),
             'published_at' => data_get($data, 'published_at'),
             'ingredients_by' => data_get($data, 'ingredients_by'),
         ]);
 
-        if ($product->published_at === null && data_get($data, 'is_active') === true) {
-            $product->published_at = data_get($data, 'published_at');
+        if ($product->published_at === null && data_get($data, 'is_active')) {
+            $product->published_at = now();
         }
 
         if (data_get($data, 'image.id')) {
@@ -41,9 +41,28 @@ class ProductRequestMapper
 
         $product->save();
 
-        $product->categories()->sync(data_get($data, 'categories'));
-        $product->tags()->sync(data_get($data, 'tags'));
-        $product->ingredients()->sync(data_get($data, 'ingredients'));
+        $categories = [];
+        if ($productCategory = data_get($data, 'category.id')) {
+            $categories[] = $productCategory;
+        }
+
+        if ($skinTypes = data_get($data, 'skin_types.*.id')) {
+            $categories = array_merge($categories, $skinTypes);
+        }
+
+        if ($skinConcerns = data_get($data, 'skin_concerns.*.id')) {
+            $categories = array_merge($categories, $skinConcerns);
+        }
+
+        $product->categories()->sync($categories);
+
+        if ($tags = data_get($data, 'tags.*.id')) {
+            $product->tags()->sync($tags);
+        }
+
+        if ($ingredients = data_get($data, 'ingredients.*.id')) {
+            $product->ingredients()->sync($ingredients);
+        }
 
         $product->refresh();
 

@@ -15,6 +15,8 @@ import BrandList from './Pages/Brands/BrandList';
 import BrandForm from './Pages/Brands/BrandForm';
 import ArticleList from './Pages/Articles/ArticleList';
 import ArticleForm from './Pages/Articles/ArticleForm';
+import ProductList from './Pages/Products/ProductList';
+import ProductForm from './Pages/Products/ProductForm';
 
 const Dashboard = () => {
     return (
@@ -24,6 +26,7 @@ const Dashboard = () => {
             <Resource name="articles" list={ArticleList} form={ArticleForm} />
             <Resource name="brands" list={BrandList} form={BrandForm} />
             <Resource name="tags" list={TagList} form={TagForm} />
+            <Resource name="products" list={ProductList} form={ProductForm} />
             <Resource
                 name="logout"
                 routes={logoutRoutes}

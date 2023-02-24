@@ -25,6 +25,12 @@ export default {
     noResults: 'Nincs találat',
     search: 'Keresés...',
 
+    brands: 'Márkák',
+    categories: 'Kategóriák',
+    tags: 'Címkék',
+    authors: 'Szerzők',
+    ingredients: 'Összetevők',
+
     home: 'Kezdőlap',
     logout: 'Kijelentkezés',
 };

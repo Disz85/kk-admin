@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enum\CategoryTypeEnum;
 use App\Models\Category;
 use App\Models\Ingredient;
 use App\Models\ProductChangeRequest;
@@ -28,12 +29,15 @@ class ProductChangeRequestTest extends TestCase
     /** @test */
     public function it_can_store_a_new_product_change_request()
     {
-        list($product, $tags, $categories, $user, $ingredients) = $this->makeDummyRequestData();
+        list($product, $tags, $category, $user, $ingredients) = $this->makeDummyRequestData();
         $response = $this->post(route('admin.product-change-requests.store'), $product);
         unset($product['image_id']);
         $response->assertCreated();
         $response->assertJsonFragment([
-            'data' => $product,
+            'name' => $product['name'],
+            'where_to_find' => $product['where_to_find'],
+            'id' => $product['brand']['id'],
+            'id' => $category['id'],
         ]);
     }
 
@@ -49,9 +53,10 @@ class ProductChangeRequestTest extends TestCase
             'is_sponsored' => $productChangeRequest->data['is_sponsored'],
             'description' => $productChangeRequest->data['description'],
             'created_by' => $productChangeRequest->data['created_by'],
-            'id' => $productChangeRequest->data['categories'][0],
-            'id' => $productChangeRequest->data['tags'][0],
-            'id' => $productChangeRequest->data['ingredients'][0],
+            'brand.id' => $productChangeRequest->data['brand_id'],
+            'category.id' => $productChangeRequest->data['category']['id'],
+            'tags.id' => $productChangeRequest->data['tags'][0],
+            'ingredients.id' => $productChangeRequest->data['ingredients'][0],
         ]);
     }
 
@@ -68,7 +73,7 @@ class ProductChangeRequestTest extends TestCase
     public function it_can_update_a_product_change_request()
     {
         $product = ProductChangeRequest::factory()->create();
-        list($productChanged, $tags, $categories, $user) = $this->makeDummyRequestData();
+        list($productChanged, $tags) = $this->makeDummyRequestData();
         $response = $this->put(route('admin.product-change-requests.update', ['product_change_request' => $product->id]), $productChanged);
         $response->assertOk();
 
@@ -78,8 +83,9 @@ class ProductChangeRequestTest extends TestCase
             'is_sponsored' => $productChanged['is_sponsored'],
             'description' => $productChanged['description'],
             'created_by' => $productChanged['created_by'],
-            'tags' => $productChanged['tags'],
-            'categories' => $productChanged['categories'],
+            'id' => $productChanged['brand_id'],
+            'id' => $productChanged['category'],
+            'id' => $tags[0]['id'],
         ]);
     }
 
@@ -92,11 +98,13 @@ class ProductChangeRequestTest extends TestCase
         $response->assertJsonFragment([
             'name' => $product->data['name'],
             'where_to_find' => $product->data['where_to_find'],
+            'is_active' => $product->data['is_active'],
             'is_sponsored' => $product->data['is_sponsored'],
             'description' => $product->data['description'],
             'created_by' => $product->data['created_by'],
-            'categories' => $product->data['categories'],
-            'tags' => $product->data['tags'],
+            'brand_id' => $product->data['brand_id'],
+            'id' => $product->data['category']['id'],
+            'id' => $product->data['tags'][0]['id'],
         ]);
     }
 
@@ -116,17 +124,18 @@ class ProductChangeRequestTest extends TestCase
 
     public function makeDummyRequestData(): array
     {
-        $categories = Category::factory()->count(3)->create();
+        $category = Category::factory()->create(['type' => CategoryTypeEnum::Product]);
         $tags = Tag::factory()->count(2)->create();
         $product = ProductFactory::new()->raw();
+        $product['brand']['id'] = $product['brand_id'];
         $product['image']['id'] = $product['image_id'];
         $ingredients = Ingredient::factory()->count(2)->create();
         $user = User::factory()->create();
-        $product['categories'] = (array_column($categories->toArray(), 'id'));
-        $product['ingredients'] = (array_column($ingredients->toArray(), 'id'));
-        $product['tags'] = (array_column($tags->toArray(), 'id'));
+        $product['category'] = $category;
+        $product['ingredients'] = $ingredients->toArray();
+        $product['tags'] = $tags->toArray();
         $product['created_by'] = $user->id;
 
-        return [$product, $tags, $categories, $user, $ingredients];
+        return [$product, $tags, $category, $user, $ingredients];
     }
 }

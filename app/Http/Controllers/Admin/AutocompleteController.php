@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\AuthorCollection;
+use App\Http\Resources\Admin\BrandCollection;
 use App\Http\Resources\Admin\CategoryCollection;
+use App\Http\Resources\Admin\IngredientCollection;
 use App\Http\Resources\Admin\TagCollection;
 use App\Models\Author;
+use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Ingredient;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -41,6 +45,24 @@ class AutocompleteController extends Controller
                     $request->has('name'),
                     fn (Builder $query) => $query->where('name', 'like', '%' . $request->get('name') . '%')
                 )
+                ->orderBy('name')
+                ->get()
+        );
+    }
+
+    public function brands(Request $request): BrandCollection
+    {
+        return new BrandCollection(
+            Brand::where('title', 'LIKE', '%' . $request->get('title') . '%')
+                ->orderBy('title')
+                ->get()
+        );
+    }
+
+    public function ingredients(Request $request): IngredientCollection
+    {
+        return new IngredientCollection(
+            Ingredient::where('name', 'LIKE', '%' . $request->get('name') . '%')
                 ->orderBy('name')
                 ->get()
         );

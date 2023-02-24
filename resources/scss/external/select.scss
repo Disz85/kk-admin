@@ -1,9 +1,9 @@
 .rbt-input-wrapper {
-    @apply flex;
+    @apply flex flex-wrap -mb-3;
 }
 
 .rbt-token {
-    @apply relative flex mr-3 p-2 rounded-3xl bg-dark-night text-light-snow;
+    @apply relative flex mr-3 mb-3 p-2 rounded-3xl bg-dark-night text-light-snow;
 }
 
 .rbt-token-remove-button {
@@ -15,6 +15,9 @@
 }
 
 .rbt-input-main {
+    @apply border-none;
+
+    background-color: transparent;
     padding: 0.5rem !important;
 }
 

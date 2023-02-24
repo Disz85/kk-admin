@@ -19,7 +19,7 @@ const TagInput = ({ entity, onChange, resource, service, errors }) => {
             name="tags"
             searchBy="name"
             reference="tags"
-            placeholder={t('application.tag-search')}
+            placeholder={t('application.tags')}
             isMultiple
             errors={errors}
         />

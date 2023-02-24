@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enum\CategoryTypeEnum;
 use App\Models\Category;
 use App\Models\Ingredient;
 use App\Models\Product;
@@ -24,6 +25,7 @@ class ProductFactory extends Factory
     {
         return [
             'name' => fake()->unique()->name(),
+            'canonical_name' => fake()->unique()->name(),
             'description' => $this->fakeArrayContent(),
             'is_sponsored' => fake()->boolean(),
             'is_18_plus' => fake()->boolean(),
@@ -35,6 +37,10 @@ class ProductFactory extends Factory
             'image_id' => MediaFactory::new(),
             'ingredients_by' => UserFactory::new(),
             'created_by' => UserFactory::new(),
+            'updated_by' => UserFactory::new(),
+            'published_at' => function ($values) {
+                return $values['is_active'] ? $this->faker->dateTime()->format('Y-m-d H:i:s') : null;
+            },
         ];
     }
 
@@ -51,14 +57,37 @@ class ProductFactory extends Factory
     }
 
     /**
+     * @param Category $category
+     * @return $this
+     */
+    public function withCategory(Category $category): self
+    {
+        return $this->hasAttached(
+            $category ?? Category::factory()->createOne(['type' => CategoryTypeEnum::Product])
+        );
+    }
+
+    /**
      * @param Category|Collection|null $categories
      * @param int $count
      * @return $this
      */
-    public function withCategories(Category|Collection $categories = null, int $count = 1): self
+    public function withSkinTypes(Category|Collection $categories = null, int $count = 1): self
     {
         return $this->hasAttached(
-            $categories ?? CategoryFactory::new()->count($count)
+            $categories ?? CategoryFactory::new(['type' => CategoryTypeEnum::SkinType])->count($count)
+        );
+    }
+
+    /**
+     * @param Category|Collection|null $categories
+     * @param int $count
+     * @return $this
+     */
+    public function withSkinConcerns(Category|Collection $categories = null, int $count = 1): self
+    {
+        return $this->hasAttached(
+            $categories ?? CategoryFactory::new(['type' => CategoryTypeEnum::SkinConcern])->count($count)
         );
     }
 

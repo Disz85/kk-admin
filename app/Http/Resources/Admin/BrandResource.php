@@ -29,10 +29,9 @@ class BrandResource extends JsonResource
             'description' => $this->description,
             'where_to_find' => $this->where_to_find,
             'image' => new MediaResource($this->image),
+            'tags' => TagResource::collection($this->whenLoaded('tags')),
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
-            'products' => ProductResource::collection($this->whenLoaded('products')),
-            'tags' => TagResource::collection($this->whenLoaded('tags')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

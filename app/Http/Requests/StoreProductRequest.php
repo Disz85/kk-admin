@@ -16,21 +16,41 @@ class StoreProductRequest extends FormRequest
         return [
             'name' => 'required|string|max:255|unique:products',
             'canonical_name' => 'nullable|string|max:255',
-            'price' => 'required|string',
+            'price' => 'nullable|string',
             'size' => 'nullable|string',
             'where_to_find' => 'nullable|string|max:255',
-            'description' => 'nullable|array',
+            'description' => 'required|array',
             'is_active' => 'required|boolean',
             'is_sponsored' => 'required|boolean',
             'is_18_plus' => 'required|boolean',
-            'brand_id' => 'required|integer|exists:brands,id',
+            'brand.id' => 'required|integer|exists:brands,id',
             'created_by' => 'nullable|integer|exists:users,id',
             'ingredients_by' => 'nullable|integer|exists:users,id',
-            'image.id' => 'required|int|exists:media,id',
-            'tags' => 'nullable|array|exists:tags,id',
-            'categories' => 'nullable|array|exists:categories,id',
-            'ingredients' => 'nullable|array|exists:ingredients,id',
-            'published_at' => 'nullable|date|date_format:Y-m-d H:i:s',
+            'image.id' => 'nullable|int|exists:media,id',
+            'tags.*.id' => 'nullable|int|exists:tags,id',
+            'category.id' => 'required|int|exists:categories,id',
+            'skin_types.*.id' => 'nullable|int|exists:categories,id',
+            'skin_concerns.*.id' => 'nullable|int|exists:categories,id',
+            'ingredients.*.id' => 'nullable|int|exists:ingredients,id',
+        ];
+    }
+
+    /**
+     * Get the validation errors.
+     *
+     * @return string[]
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'A név megadása kötelező.',
+            'name.max' => 'A név nem lehet hosszabb :max karakternél.',
+            'name.unique' => 'A megadott névvel már létezik termék.',
+            'canonical_name.max' => 'A canonical név nem lehet hosszabb :max karakternél.',
+            'description.required' => 'A leírás kitöltése kötelező.',
+            'where_to_find.max' => 'A lelőhely nem lehet hosszabb :max karakternél.',
+            'brand.id.required' => 'A márka megadása kötelező.',
+            'category.id.required' => 'Kategória megadása kötelező.',
         ];
     }
 }

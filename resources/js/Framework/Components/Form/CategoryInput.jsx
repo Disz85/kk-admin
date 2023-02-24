@@ -7,7 +7,16 @@ import { useTranslation } from 'react-i18next';
 // COMPONENTS
 import AutoComplete from './AutoComplete';
 
-const CategoryInput = ({ entity, onChange, resource, service, errors }) => {
+const CategoryInput = ({
+    entity,
+    onChange,
+    resource,
+    service,
+    name,
+    type,
+    isMultiple,
+    errors,
+}) => {
     const { t } = useTranslation();
 
     return (
@@ -16,11 +25,11 @@ const CategoryInput = ({ entity, onChange, resource, service, errors }) => {
             onChange={onChange}
             resource={resource}
             service={service}
-            name="categories"
+            name={name}
             searchBy="name"
-            reference="categories/article"
-            placeholder={t('application.category-search')}
-            isMultiple
+            reference={`categories/${type}`}
+            placeholder={t('application.categories')}
+            isMultiple={isMultiple}
             errors={errors}
         />
     );
@@ -46,7 +55,23 @@ CategoryInput.propTypes = {
      */
     service: PropTypes.object.isRequired,
     /**
+     * Type of name
+     */
+    name: PropTypes.string.isRequired,
+    /**
+     * Type of type
+     */
+    type: PropTypes.string.isRequired,
+    /**
+     * Type of isMultiple
+     */
+    isMultiple: PropTypes.bool,
+    /**
      * Type of errors
      */
     errors: PropTypes.object.isRequired,
+};
+
+CategoryInput.defaultProps = {
+    isMultiple: true,
 };

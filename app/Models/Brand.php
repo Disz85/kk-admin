@@ -45,11 +45,11 @@ use OpenApi\Annotations as OA;
  * @property string|null $url
  * @property string|null $description
  * @property string|null $where_to_find
+ * @property User|null $created_by
+ * @property User|null $updated_by
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @property User|null $created_by
- * @property User|null $updated_by
  * @property int|null $image_id
  * @property Media|null $image
  * @property Product[]|Collection $products

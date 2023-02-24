@@ -5,6 +5,7 @@ import {
     faNewspaper,
     faBriefcase,
     faArrowRightFromBracket,
+    faBasketShopping,
 } from '@fortawesome/free-solid-svg-icons';
 
 const navigationIcons = {
@@ -14,6 +15,7 @@ const navigationIcons = {
     tags: faTags,
     categories: faNewspaper,
     brands: faBriefcase,
+    products: faBasketShopping,
     logout: faArrowRightFromBracket,
 };
 

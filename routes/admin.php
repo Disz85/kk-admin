@@ -89,6 +89,8 @@ Route::prefix('/autocomplete')->group(function () {
     Route::get('/authors', [AutocompleteController::class, 'authors']);
     Route::get('/categories/{type}', [AutocompleteController::class, 'categories']);
     Route::get('/tags', [AutocompleteController::class, 'tags']);
+    Route::get('/brands', [AutocompleteController::class, 'brands']);
+    Route::get('/ingredients', [AutocompleteController::class, 'ingredients']);
 
 });
 

@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
-use OpenApi\Annotations as OA;
 
 /**
  * Class Product
@@ -119,7 +118,6 @@ class Product extends Model
         'created_by',
         'updated_by',
         'ingredients_by',
-        'published_at',
     ];
 
     public function shouldBeSearchable(): bool
@@ -135,11 +133,6 @@ class Product extends Model
     public function toSearchableArray(): array
     {
         return (new ProductResource($this))->toArray(request());
-    }
-
-    public function getCategoryAttribute(): ?Category
-    {
-        return $this->categories->first();
     }
 
     public function image(): BelongsTo

@@ -21,6 +21,10 @@ textarea,
     @apply border border-solid border-2 border-medium-grey rounded-lg;
     @apply transition ease-in-out;
     @apply focus:text-dark-grey focus:bg-light-snow focus:border-medium-sky focus:outline-none focus:border-medium-sky focus:border-2;
+
+    &:disabled {
+        @apply bg-light-snow border-none;
+    }
 }
 
 .label {

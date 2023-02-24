@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 // COMPONENTS
 import AutoComplete from './AutoComplete';
 
-const AuthorInput = ({ entity, onChange, resource, service, errors }) => {
+const BrandInput = ({ entity, onChange, resource, service, errors }) => {
     const { t } = useTranslation();
 
     return (
@@ -16,19 +16,19 @@ const AuthorInput = ({ entity, onChange, resource, service, errors }) => {
             onChange={onChange}
             resource={resource}
             service={service}
-            name="authors"
-            searchBy="name"
-            reference="authors"
-            placeholder={t('application.authors')}
-            isMultiple
+            name="brand"
+            searchBy="title"
+            reference="brands"
+            placeholder={t('application.brands')}
+            isMultiple={false}
             errors={errors}
         />
     );
 };
 
-export default AuthorInput;
+export default BrandInput;
 
-AuthorInput.propTypes = {
+BrandInput.propTypes = {
     /**
      * Type of entity
      */

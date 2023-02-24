@@ -20,14 +20,14 @@ class ProductChangeRequestFactory extends Factory
 
     private function getProductDummyData()
     {
-        $categories = Category::factory()->count(3)->create();
+        $category = Category::factory()->create();
         $tags = Tag::factory()->count(2)->create();
         $ingredients = Ingredient::factory()->count(2)->create();
         $user = User::factory()->create();
         $product = ProductFactory::new()->raw();
-        $product['categories'] = $categories->pluck('id')->toArray();
-        $product['ingredients'] = $ingredients->pluck('id')->toArray();
-        $product['tags'] = $tags->pluck('id')->toArray();
+        $product['category'] = $category;
+        $product['ingredients'] = $ingredients->toArray();
+        $product['tags'] = $tags->toArray();
         $product['created_by'] = $user->id;
         $product['ingredients_new'] = [];
 

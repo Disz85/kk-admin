@@ -15,7 +15,7 @@ import Field from './Field';
 import '../../../../scss/external/datepicker.scss';
 
 const DateTime = ({ entity, onChange, ...props }) => {
-    const { name } = props;
+    const { name, readOnly } = props;
 
     const [date, setDate] = useState(
         entity[name] ? new Date(entity[name]) : null,
@@ -30,7 +30,7 @@ const DateTime = ({ entity, onChange, ...props }) => {
     }, [date]);
 
     return (
-        <Field styleType="text" labelStyle={`-${props.name}`} {...props}>
+        <Field {...props}>
             {(attributes) => (
                 <DatePicker
                     onChange={change}
@@ -42,6 +42,7 @@ const DateTime = ({ entity, onChange, ...props }) => {
                     timeIntervals={10}
                     locale={hu}
                     className="react-datepicker__input"
+                    disabled={readOnly}
                     {...attributes}
                 />
             )}
@@ -64,4 +65,12 @@ DateTime.propTypes = {
      * Type of name
      */
     name: PropTypes.string.isRequired,
+    /**
+     * Type of readOnly
+     */
+    readOnly: PropTypes.bool,
+};
+
+DateTime.defaultProps = {
+    readOnly: false,
 };

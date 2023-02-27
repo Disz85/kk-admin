@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import { useTranslation } from 'react-i18next';
+import { Typeahead } from 'react-bootstrap-typeahead';
 import useUpdateEffect from '../../../Hooks/useUpdateEffect';
 
 // COMPONENTS
@@ -9,55 +8,31 @@ import Field from './Field';
 
 // STYLES
 import style from '../../../../scss/components/form.module.scss';
-import '../../../../scss/external/select.scss';
 
-const AutoComplete = ({
+const StaticAutoComplete = ({
     entity,
     onChange,
-    placeholder,
+    isMultiple,
+    items,
     searchBy,
-    service,
-    reference,
-    isMultiple = false,
+    placeholder,
     ...props
 }) => {
     const { name } = props;
-    const { t } = useTranslation();
 
-    const [state, setState] = useState({
-        items: [],
-        selected: entity[name]
+    const [selected, setSelected] = useState(
+        entity[name]
             ? (Array.isArray(entity[name]) && entity[name]) || [entity[name]]
             : [],
-        isLoading: false,
-    });
-
-    const update = (change) =>
-        setState((oldState) => ({ ...oldState, ...change }));
-
-    const onSearch = (query) => {
-        update({ isLoading: true });
-
-        service
-            .autocomplete(reference, { [searchBy]: query })
-            .then((result) => {
-                const items = [...result.data];
-
-                update({ items, isLoading: false });
-            });
-    };
-
-    const onSelectionChange = (selection) => {
-        update({ selected: selection });
-    };
+    );
 
     useUpdateEffect(() => {
         if (isMultiple) {
-            onChange({ [name]: state.selected });
+            onChange({ [name]: selected });
         } else {
-            onChange({ [name]: state.selected[0] || null });
+            onChange({ [name]: selected[0] || null });
         }
-    }, [state.selected]);
+    }, [selected]);
 
     return (
         <div className={style.formGroup}>
@@ -66,21 +41,15 @@ const AutoComplete = ({
                     const { hasError, ...attr } = attributes;
 
                     return (
-                        <AsyncTypeahead
-                            id={`${entity.name}.${name}-select`}
+                        <Typeahead
                             className={`${style.autocomplete} -${name}`}
-                            isLoading={state.isLoading}
-                            onSearch={onSearch}
-                            promptText={placeholder}
-                            minLength={3}
+                            placeholder={placeholder}
                             multiple={isMultiple}
                             labelKey={searchBy}
-                            options={state.items}
-                            selected={state.selected}
+                            options={items}
+                            selected={selected}
                             flip
-                            emptyLabel={t('application.noResults')}
-                            searchText={t('application.search')}
-                            onChange={onSelectionChange}
+                            onChange={setSelected}
                             inputProps={{
                                 id: attributes.id,
                                 className: `${style.textArea} ${
@@ -96,9 +65,9 @@ const AutoComplete = ({
     );
 };
 
-export default AutoComplete;
+export default StaticAutoComplete;
 
-AutoComplete.propTypes = {
+StaticAutoComplete.propTypes = {
     /**
      * Type of entity
      */
@@ -114,7 +83,7 @@ AutoComplete.propTypes = {
     /**
      * Type of searchBy
      */
-    searchBy: PropTypes.string.isRequired,
+    searchBy: PropTypes.string,
     /**
      * Type of service
      */
@@ -131,4 +100,12 @@ AutoComplete.propTypes = {
      * Type of name
      */
     name: PropTypes.string.isRequired,
+    /**
+     * Type of items
+     */
+    items: PropTypes.array.isRequired,
+};
+
+StaticAutoComplete.defaultProps = {
+    searchBy: 'name',
 };

@@ -9,6 +9,7 @@ import authors from './Translations/authors';
 import articles from './Translations/articles';
 import brands from './Translations/brands';
 import products from './Translations/products';
+import ingredients from './Translations/ingredients';
 import editor from './Translations/editor';
 
 const resources = {
@@ -23,6 +24,7 @@ const resources = {
             articles,
             brands,
             products,
+            ingredients,
             editor,
         },
     },

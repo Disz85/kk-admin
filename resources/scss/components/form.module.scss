@@ -8,7 +8,9 @@
 }
 
 .formTextInput,
+.formNumber,
 .textArea,
+.select,
 .autocomplete {
     @apply w-full p-2.5;
     @apply text-black font-normal bg-light-grey;

@@ -59,7 +59,7 @@ class IngredientController extends Controller
             QueryBuilder::for(Ingredient::class)
                 ->allowedFields([ 'uuid', 'name' ])
                 ->allowedFilters([ 'name' ])
-                ->allowedIncludes([ 'image', 'products', 'categories' ])
+                ->allowedIncludes([ 'products', 'categories' ])
                 ->defaultSort('name')
                 ->allowedSorts([ 'name' ])
                 ->paginate($request->get('per_page', 20))

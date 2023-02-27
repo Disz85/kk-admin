@@ -128,11 +128,6 @@ class IngredientController extends Controller
      *                     description="Desciption.",
      *                 ),
      *                 @OA\Property(
-     *                     property="image[id]",
-     *                     type="integer",
-     *                     description="Image ID.",
-     *                 ),
-     *                 @OA\Property(
      *                     property="published_at",
      *                     type="datetime",
      *                  @OA\Schema(
@@ -271,11 +266,6 @@ class IngredientController extends Controller
      *                     property="description",
      *                     type="string",
      *                     description="Desciption.",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="image[id]",
-     *                     type="integer",
-     *                     description="Image ID.",
      *                 ),
      *                 @OA\Property(
      *                     property="published_at",

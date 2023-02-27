@@ -46,6 +46,11 @@ const ApplicationService = {
 
     remove: (resource, id) =>
         axios.delete(`/admin/${resource}/${id}`).then((r) => r.data),
+
+    get: (path, params = {}) =>
+        axios
+            .get(queryParams(`/admin/${path}`, { ...params }))
+            .then((r) => r.data),
 };
 
 export default ApplicationService;

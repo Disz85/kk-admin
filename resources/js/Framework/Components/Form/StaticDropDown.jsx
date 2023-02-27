@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 // COMPONENTS
@@ -9,13 +9,28 @@ import style from '../../../../scss/components/form.module.scss';
 
 const StaticDropDown = ({
     entity,
-    options,
+    path,
     value,
     label,
     onChange,
+    service,
     ...props
 }) => {
     const { name } = props;
+    const [options, setOptions] = useState([]);
+
+    useEffect(() => {
+        service.get(path).then((result) => {
+            const resultOptions = [...result];
+
+            setOptions(
+                resultOptions.map((item) => ({
+                    id: item,
+                    label: item,
+                })),
+            );
+        });
+    }, []);
 
     const change = (e) => {
         onChange({
@@ -24,40 +39,45 @@ const StaticDropDown = ({
     };
 
     return (
-        <Field styleType="text" labelStyle={`-${name}`} {...props}>
-            {(attributes) => {
-                const { hasError, ...attr } = attributes;
+        <div className={style.formGroup}>
+            <Field {...props}>
+                {(attributes) => {
+                    const { hasError, ...attr } = attributes;
 
-                return (
-                    <select
-                        value={
-                            entity[name]
-                                ? (Object.hasOwnProperty.call(
-                                      entity[name],
-                                      value,
-                                  ) &&
-                                      entity[name][value]) ||
-                                  entity[name]
-                                : ''
-                        }
-                        onChange={change}
-                        {...attr}
-                    >
-                        <option value="">&nbsp;</option>
-                        {options.map((item, index) => {
-                            return (
-                                <option
-                                    value={item[value]}
-                                    key={item.id || item.value || index}
-                                >
-                                    {item[label]}
-                                </option>
-                            );
-                        })}
-                    </select>
-                );
-            }}
-        </Field>
+                    return (
+                        options && (
+                            <select
+                                className={style.select}
+                                value={
+                                    entity[name]
+                                        ? (Object.hasOwnProperty.call(
+                                              entity[name],
+                                              value,
+                                          ) &&
+                                              entity[name][value]) ||
+                                          entity[name]
+                                        : ''
+                                }
+                                onChange={change}
+                                {...attr}
+                            >
+                                <option value="">&nbsp;</option>
+                                {options.map((item, index) => {
+                                    return (
+                                        <option
+                                            value={item[value]}
+                                            key={item.id || item.value || index}
+                                        >
+                                            {item.label}
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                        )
+                    );
+                }}
+            </Field>
+        </div>
     );
 };
 
@@ -69,9 +89,13 @@ StaticDropDown.propTypes = {
      */
     entity: PropTypes.object.isRequired,
     /**
+     * Type of path
+     */
+    path: PropTypes.string.isRequired,
+    /**
      * Type of options
      */
-    options: PropTypes.object.isRequired,
+    options: PropTypes.array.isRequired,
     /**
      * Type of value
      */
@@ -84,6 +108,10 @@ StaticDropDown.propTypes = {
      * Type of onChange
      */
     onChange: PropTypes.func.isRequired,
+    /**
+     * Type of service
+     */
+    service: PropTypes.object.isRequired,
     /**
      * Type of name
      */

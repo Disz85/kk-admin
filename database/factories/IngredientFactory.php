@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enum\CategoryTypeEnum;
 use App\Enum\IngredientEwgDataEnum;
 use App\Models\Category;
 use App\Models\Ingredient;
@@ -33,7 +34,6 @@ class IngredientFactory extends Factory
             'comedogen_index' => fake()->numberBetween(0, 5),
             'description' => $this->fakeArrayContent(),
             'published_at' => fake()->date('Y-m-d H:i:s'),
-            'image_id' => MediaFactory::new(),
             'created_by' => UserFactory::new(),
         ];
     }
@@ -46,7 +46,7 @@ class IngredientFactory extends Factory
     public function withCategories(Category|Collection $categories = null, int $count = 1): self
     {
         return $this->hasAttached(
-            $categories ?? CategoryFactory::new()->count($count)
+            $categories ?? CategoryFactory::new(['type' => CategoryTypeEnum::Ingredient])->count($count)
         );
     }
 

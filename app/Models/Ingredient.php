@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
-use OpenApi\Annotations as OA;
 
 /**
  * Ingredient model
@@ -26,7 +25,6 @@ use OpenApi\Annotations as OA;
  *     @OA\Property(property="ewg_score_max", type="int", minimum=0, maximum=10),
  *     @OA\Property(property="comedogen_index", type="int", minimum=0, maximum=5),
  *     @OA\Property(property="description", type="string"),
- *     @OA\Property(property="image_id", type="int"),
  *     @OA\Property(property="categories", type="int"),
  *     @OA\Property(property="products", type="int"),
  *     @OA\Property(property="created_by", type="int"),
@@ -50,7 +48,6 @@ use OpenApi\Annotations as OA;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @property Media|null $image
  * @property Category[]|Collection $categories
  * @property Product[]|Collection $products
  * @property User|null $created_by
@@ -71,7 +68,6 @@ class Ingredient extends Model implements HasDependencies
      */
     protected $fillable = [
         'name',
-        'image_id',
         'description',
         'ewg_data',
         'ewg_score',
@@ -92,14 +88,6 @@ class Ingredient extends Model implements HasDependencies
     protected $casts = [
         'description' => 'array',
     ];
-
-    /**
-     * @return BelongsTo
-     */
-    public function image(): BelongsTo
-    {
-        return $this->belongsTo(Media::class, 'image_id');
-    }
 
     /**
      * @return MorphToMany

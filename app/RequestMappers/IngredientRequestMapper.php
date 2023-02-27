@@ -3,7 +3,6 @@
 namespace App\RequestMappers;
 
 use App\Models\Ingredient;
-use App\Models\Media;
 
 class IngredientRequestMapper
 {
@@ -25,13 +24,11 @@ class IngredientRequestMapper
             'created_by' => data_get($data, 'created_by'),
         ]);
 
-        if (data_get($data, 'image.id')) {
-            $ingredient->image()->associate(Media::findOrFail($data['image']['id']));
-        }
-
         $ingredient->save();
 
-        $ingredient->categories()->sync(data_get($data, 'categories'));
+        if ($categories = data_get($data, 'categories.*.id')) {
+            $ingredient->categories()->sync($categories);
+        }
 
         $ingredient->refresh();
 

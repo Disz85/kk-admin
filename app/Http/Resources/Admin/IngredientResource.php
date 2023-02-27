@@ -28,7 +28,6 @@ class IngredientResource extends JsonResource
             'comedogen_index' => $this->comedogen_index,
             'published_at' => $this->published_at,
             'created_by' => $this->created_by,
-            'image' => new MediaResource($this->image),
             'products' => ProductResource::collection($this->whenLoaded('products')),
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),
         ];

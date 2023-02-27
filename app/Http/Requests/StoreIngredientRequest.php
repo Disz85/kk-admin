@@ -16,20 +16,33 @@ class StoreIngredientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|unique:ingredients',
+            'name' => 'required|string|max:255|unique:ingredients',
             'ewg_data' => ['nullable', 'string', new Enum(IngredientEwgDataEnum::class)],
             'ewg_score' => 'nullable|integer|between:0,10',
             'ewg_score_max' => ['nullable', 'integer', 'between:0,10', function ($attribute, $value, $fail) {
                 if ($value < $this->ewg_score) {
-                    $fail('Ewg_score_max must be bigger than ewg_score.');
+                    $fail('Az EWG max kockázatnak nagyobbnak kell lennie, mint az EWG kockázatnak.');
                 }
             }],
             'comedogen_index' => 'nullable|integer|between:0,5',
             'description' => 'nullable|array',
-            'image.id' => 'int|exists:media,id',
             'published_at' => 'nullable|date|date_format:Y-m-d H:i:s',
             'created_by' => 'nullable|integer|exists:users,id',
-            'categories' => 'required|array|min:1|exists:categories,id',
+            'categories.*.id' => 'nullable|int|exists:categories,id',
+        ];
+    }
+
+    /**
+     * Get the validation errors.
+     *
+     * @return string[]
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'A név megadása kötelező.',
+            'name.max' => 'A név nem lehet hosszabb :max karakternél.',
+            'name.unique' => 'A megadott névvel már létezik összetevő.',
         ];
     }
 }

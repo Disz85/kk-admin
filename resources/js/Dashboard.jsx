@@ -17,6 +17,8 @@ import ArticleList from './Pages/Articles/ArticleList';
 import ArticleForm from './Pages/Articles/ArticleForm';
 import ProductList from './Pages/Products/ProductList';
 import ProductForm from './Pages/Products/ProductForm';
+import IngredientList from './Pages/Ingredients/IngredientList';
+import IngredientForm from './Pages/Ingredients/IngredientForm';
 
 const Dashboard = () => {
     return (
@@ -27,6 +29,11 @@ const Dashboard = () => {
             <Resource name="brands" list={BrandList} form={BrandForm} />
             <Resource name="tags" list={TagList} form={TagForm} />
             <Resource name="products" list={ProductList} form={ProductForm} />
+            <Resource
+                name="ingredients"
+                list={IngredientList}
+                form={IngredientForm}
+            />
             <Resource
                 name="logout"
                 routes={logoutRoutes}

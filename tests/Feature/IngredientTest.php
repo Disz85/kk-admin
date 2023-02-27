@@ -38,9 +38,9 @@ class IngredientTest extends TestCase
     {
         list($ingredient, $categories) = $this->makeDummyRequestData();
 
-        $response = $this->post(route('admin.ingredients.store'), $ingredient)
-            ->assertCreated();
-        $this->assertDatabaseHas(Ingredient::class, Arr::only($ingredient, ['name', 'is_approved']));
+        $response = $this->post(route('admin.ingredients.store'), $ingredient);
+        $response->assertCreated();
+        $this->assertDatabaseHas(Ingredient::class, Arr::only($ingredient, ['name']));
 
         foreach ($categories as $category) {
             $response->assertJsonFragment([
@@ -101,12 +101,10 @@ class IngredientTest extends TestCase
     protected function makeDummyRequestData(): array
     {
         $ingredient = IngredientFactory::new()->raw();
-        $ingredient['image']['id'] = $ingredient['image_id'];
-        unset($ingredient['image_id']);
         $categories = Category::factory()->count(2)->create([
-            'type' => CategoryTypeEnum::Ingredient->value,
+            'type' => CategoryTypeEnum::Ingredient,
         ]);
-        $ingredient['categories'] = (array_column($categories->toArray(), 'id'));
+        $ingredient['categories'] = $categories->toArray();
 
         return [$ingredient, $categories];
     }
@@ -116,7 +114,7 @@ class IngredientTest extends TestCase
      */
     private function createIngredientWithRelations(): array
     {
-        $categories = Category::factory()->count(2)->create();
+        $categories = Category::factory()->count(2)->create(['type' => CategoryTypeEnum::Ingredient]);
         $ingredient = Ingredient::factory()
             ->withCategories($categories)
             ->create();

@@ -110,3 +110,9 @@ Ha legalább egy kapcsolat létezik, akkor a request 422-es HTTP kóddal és a `
 Az elastichoz ne felejts el futtatni queue workert.
 
 `php artisan scout:import App\\Models\\Product` commanddal tudod felindexelni a Product modellt.
+
+
+### Category
+
+Egy friss import után rendbe kell tenni a `Category` hierarchiát, amit `tinker`-ben a `Category::fixTree();` hívással tudunk megtenni.
+

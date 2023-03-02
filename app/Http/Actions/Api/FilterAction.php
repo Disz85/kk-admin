@@ -9,6 +9,7 @@ class FilterAction
 {
     public function __invoke(array $filters): BoolQueryBuilder
     {
+        $name = data_get($filters, 'name');
         $productCategories = data_get($filters, 'product_categories');
         $brands = data_get($filters, 'brands');
         $ingredients = data_get($filters, 'ingredients');
@@ -17,6 +18,14 @@ class FilterAction
         $skinConcerns = data_get($filters, 'skin_concerns');
 
         return Query::bool()
+            ->when($name,
+                fn (BoolQueryBuilder $builder) => $builder
+                    ->filter(
+                        Query::match()
+                            ->field('name')
+                            ->query($name)
+                    )
+            )
             ->when(
                 $productCategories,
                 fn (BoolQueryBuilder $builder) => $builder

@@ -42,7 +42,7 @@ class ProductController extends Controller
      *        @OA\JsonContent()
      *    )
      * )
-     * @param Request $request
+     * @param ProductListRequest $request
      * @param FilterAction $filterAction
      * @return ProductCollection
      */

@@ -3,21 +3,20 @@
 namespace App\Resources\Elastic;
 
 use App\Models\Brand;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin Brand
+ * @mixin User
  */
-class BrandResource extends JsonResource
+class UserResource extends JsonResource
 {
     public function toArray($request): array
     {
         return [
             'uuid' => $this->uuid,
-            'title' => $this->title,
-            'created_at' => new Carbon($this->created_at),
-            'created_by' => $this->whenLoaded('createdBy', new UserResource($this->createdBy))
+            'username' => $this->username,
         ];
     }
 }

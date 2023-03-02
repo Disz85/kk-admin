@@ -3,8 +3,12 @@
 namespace App\Models;
 
 use App\Interfaces\HasDependencies;
+use App\Resources\Elastic\BrandResource;
+use App\Resources\Elastic\ProductBrandResource;
+use App\Resources\Elastic\ProductResource;
 use App\Traits\GeneratesSlug;
 use Carbon\Carbon;
+use Elastic\ScoutDriverPlus\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -59,6 +63,7 @@ class Brand extends Model implements HasDependencies
 {
     use GeneratesSlug;
     use HasFactory;
+    use Searchable;
 
     /**
      * @var string[]
@@ -90,6 +95,11 @@ class Brand extends Model implements HasDependencies
         'created_by',
         'updated_by',
     ];
+
+    public function toSearchableArray(): array
+    {
+        return (new BrandResource($this))->toArray(request());
+    }
 
     /**
      * @return BelongsTo

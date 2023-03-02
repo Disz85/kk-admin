@@ -25,7 +25,7 @@ class ProductResource extends JsonResource
                     Category::ancestorsAndSelf($this->productCategory)?->toFlatTree()
                 )
             ),
-            'brand' => $this->whenLoaded('brand', new BrandResource($this->brand)),
+            'brand' => $this->whenLoaded('brand', new ProductBrandResource($this->brand)),
             'ingredients' => $this->whenLoaded(
                 'ingredients',
                 ProductIngredientResource::collection($this->ingredients)

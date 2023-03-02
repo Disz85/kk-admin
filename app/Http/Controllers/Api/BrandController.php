@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Actions\Api\Brands\FilterAction;
+use App\Http\Requests\Api\BrandListRequest;
 use App\Http\Resources\Api\BrandCollection;
 use App\Http\Resources\Api\BrandResource;
+use App\Http\Resources\Api\ProductCollection;
+use App\Http\Resources\Api\ProductResource;
 use App\Models\Brand;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use OpenApi\Annotations as OA;
@@ -50,20 +55,29 @@ class BrandController extends BaseController
      *    )
      * )
      *
-     * @param Request $request
+     * @param BrandListRequest $request
      * @return BrandCollection
      */
-    public function index(Request $request): BrandCollection
+    public function index(BrandListRequest $request, FilterAction $filterAction): BrandCollection
     {
-        return new BrandCollection(
-            QueryBuilder::for(Brand::class)
-                ->allowedFilters('title')
-                ->defaultSort('title')
-                ->allowedSorts('id', 'title')
-                ->allowedIncludes(['image','createdBy','updatedBy'])
-                ->paginate($request->get('per_page', 20))
-                ->appends($request->query())
+        if ($filters = $request->validated('filter')) {
+            $filteredQuery = $filterAction($filters);
+        }
+
+        $query = Brand::searchQuery($filteredQuery ?? null)
+            ->sort($request->getSortBy(), $request->getSortDirection())
+            ->load(['image', 'createdBy', 'updatedBy']);
+
+        $paginated = $query->paginate(
+            perPage: $request->validated('per_page', 20),
+            page: $request->validated('page', 1),
         );
+
+        $paginated->data = $paginated->onlyModels()->transform(function ($model) {
+            return new BrandResource($model);
+        });
+
+        return new BrandCollection($paginated);
     }
 
     /**

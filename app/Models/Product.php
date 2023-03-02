@@ -127,7 +127,7 @@ class Product extends Model
 
     public function searchableWith(): array
     {
-        return ['image', 'categories.ancestors', 'brand', 'ingredients'];
+        return ['categories.ancestors', 'brand', 'ingredients'];
     }
 
     public function toSearchableArray(): array

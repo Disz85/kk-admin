@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Interfaces\HasDependencies;
+use App\Resources\Elastic\IngredientResource;
 use App\Traits\GeneratesSlug;
 use Carbon\Carbon;
+use Elastic\ScoutDriverPlus\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -37,6 +39,7 @@ use Illuminate\Support\Collection;
  *
  * Fields
  * @property int $id
+ * @property string $uuid
  * @property string $name
  * @property string $slug
  * @property string|null $ewg_data
@@ -57,6 +60,7 @@ class Ingredient extends Model implements HasDependencies
 {
     use HasFactory;
     use GeneratesSlug;
+    use Searchable;
 
     /**
      * @var string
@@ -88,6 +92,21 @@ class Ingredient extends Model implements HasDependencies
     protected $casts = [
         'description' => 'array',
     ];
+
+    public function shouldBeSearchable(): bool
+    {
+        return !is_null($this->published_at);
+    }
+
+    public function searchableWith(): array
+    {
+        return ['categories'];
+    }
+
+    public function toSearchableArray(): array
+    {
+        return (new IngredientResource($this))->toArray(request());
+    }
 
     /**
      * @return MorphToMany

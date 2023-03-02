@@ -107,10 +107,11 @@ Ha legalább egy kapcsolat létezik, akkor a request 422-es HTTP kóddal és a `
 
 ### Elastic
 
-Az elastichoz ne felejts el futtatni queue workert.
+Az elastichoz ne felejts el futtatni queue workert. Az alábbi commandokkal tudod felindexelni a releváns modellt.
 
-`php artisan scout:import App\\Models\\Product` commanddal tudod felindexelni a Product modellt.
-
+`php artisan scout:import App\\Models\\Product`    
+`php artisan scout:import App\\Models\\Brand`  
+`php artisan scout:import App\\Models\\Ingredient`  
 
 ### Category
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Actions\Api\FilterAction;
+use App\Http\Actions\Api\Products\FilterAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProductListRequest;
 use App\Http\Resources\Api\ProductCollection;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Actions\Api;
+namespace App\Http\Actions\Api\Products;
 
 use Elastic\ScoutDriverPlus\Builders\BoolQueryBuilder;
 use Elastic\ScoutDriverPlus\Support\Query;

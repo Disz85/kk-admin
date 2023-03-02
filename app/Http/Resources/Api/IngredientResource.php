@@ -29,8 +29,7 @@ class IngredientResource extends JsonResource
             'ewg_score' => $this->ewg_score,
             'ewg_score_max' => $this->ewg_score_max,
             'comedogen_index' => $this->comedogen_index,
-            'is_approved' => $this->is_approved,
-            'image' => new MediaResource($this->whenLoaded('image')),
+            'published_at' => $this->published_at,
             'products' => new ProductCollection($this->whenLoaded('products')),
             'categories' => new CategoryCollection($this->whenLoaded('categories')),
         ];

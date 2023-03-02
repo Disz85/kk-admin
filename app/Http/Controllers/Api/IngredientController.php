@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Actions\Api\Ingredients\FilterAction;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Admin\IngredientResource;
+use App\Http\Requests\Api\IngredientListRequest;
 use App\Http\Resources\Api\IngredientCollection;
+use App\Http\Resources\Api\IngredientResource;
 use App\Models\Ingredient;
-use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class IngredientController extends Controller
 {
@@ -50,21 +50,29 @@ class IngredientController extends Controller
      *    )
      * )
      *
-     * @param Request $request
+     * @param IngredientListRequest $request
      * @return IngredientCollection
      */
-    public function index(Request $request): IngredientCollection
+    public function index(IngredientListRequest $request, FilterAction $filterAction): IngredientCollection
     {
-        return new IngredientCollection(
-            QueryBuilder::for(Ingredient::class)
-                ->allowedFields([ 'uuid', 'name' ])
-                ->allowedFilters([ 'name' ])
-                ->allowedIncludes([ 'products', 'categories' ])
-                ->defaultSort('name')
-                ->allowedSorts([ 'name' ])
-                ->paginate($request->get('per_page', 20))
-                ->appends($request->query())
+        if ($filters = $request->validated('filter')) {
+            $filteredQuery = $filterAction($filters);
+        }
+
+        $query = Ingredient::searchQuery($filteredQuery ?? null)
+            ->sort($request->getSortBy(), $request->getSortDirection())
+            ->load(['categories']);
+
+        $paginated = $query->paginate(
+            perPage: $request->validated('per_page', 20),
+            page: $request->validated('page', 1),
         );
+
+        $paginated->data = $paginated->onlyModels()->transform(function ($model) {
+            return new IngredientResource($model);
+        });
+
+        return new IngredientCollection($paginated);
     }
 
     /**

@@ -34,7 +34,7 @@ class ArticleFactory extends Factory
             'is_18_plus' => fake()->boolean(),
             'image_id' => MediaFactory::new(),
             'published_at' => function ($values) {
-                return $values['is_active'] ? Carbon::now() : null;
+                return $values['is_active'] ? date('Y-m-d H:i:s') : null;
             },
         ];
     }

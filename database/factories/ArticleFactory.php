@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Author;
 use App\Models\Category;
 use App\Models\Tag;
+use Carbon\Carbon;
 use Database\Helpers\BlockStyleEditorFakeContentBuilder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;
@@ -32,6 +33,9 @@ class ArticleFactory extends Factory
             'is_sponsored' => fake()->boolean(),
             'is_18_plus' => fake()->boolean(),
             'image_id' => MediaFactory::new(),
+            'published_at' => function ($values) {
+                return $values['is_active'] ? Carbon::now() : null;
+            },
         ];
     }
 

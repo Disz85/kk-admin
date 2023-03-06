@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enum\CategoryTypeEnum;
+use App\Filters\DepthFilter;
 use App\Filters\ParentIdFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\CategoryResource;
@@ -66,11 +67,12 @@ class CategoryController extends Controller
         // GET /categories?filter[name]=john&include=children&sort=-created_at&filter[parent_id]=91eefdf0-0f10-420a-bd31-2f6d3c2eb0a5
         return new CategoryCollection(
             QueryBuilder::for(Category::class)
-                ->where('type', '=', CategoryTypeEnum::Article)
                 ->allowedFields([ 'uuid', 'name', 'slug' ])
                 ->allowedFilters([
+                    'type',
                     'name',
                     AllowedFilter::custom('parent_id', new ParentIdFilter()),
+                    AllowedFilter::custom('depth', new DepthFilter()),
                 ])
                 ->allowedIncludes([ 'children.children' ])
                 ->defaultSort('-updated_at')

@@ -7,6 +7,7 @@ use App\Http\Requests\Api\BrandListRequest;
 use App\Http\Resources\Api\BrandCollection;
 use App\Http\Resources\Api\BrandResource;
 use App\Models\Brand;
+use Elastic\ScoutDriverPlus\Builders\SearchParametersBuilder;
 use Illuminate\Routing\Controller as BaseController;
 use OpenApi\Annotations as OA;
 
@@ -33,10 +34,30 @@ class BrandController extends BaseController
      *        allowEmptyValue="true",
      *    ),
      *    @OA\Parameter(
-     *        name="filter[title]",
+     *        name="sort",
+     *        in="query",
+     *        description="sort_by and sort order ('-' prefix means desc)",
+     *        @OA\Schema(type="string"),
+     *    ),
+     *    @OA\Parameter(
+     *        name="filter[name]",
      *        in="query",
      *        description="Title",
      *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter (
+     *         name="filter[abc][0]",
+     *         in="query",
+     *         description="abc 1",
+     *         @OA\Schema(type="string"),
+     *         allowEmptyValue="true"
+     *    ),
+     *    @OA\Parameter (
+     *         name="filter[abc][1]",
+     *         in="query",
+     *         @OA\Schema(type="string"),
+     *         description="abc 2",
+     *         allowEmptyValue="true"
      *    ),
      *    @OA\Response(
      *        response=200,
@@ -60,7 +81,14 @@ class BrandController extends BaseController
         }
 
         $query = Brand::searchQuery($filteredQuery ?? null)
-            ->sort($request->getSortBy(), $request->getSortDirection())
+            ->when(
+                $request->has('sort'),
+                fn (SearchParametersBuilder $builder) => $builder
+                ->sort(
+                    $request->getSortBy(),
+                    $request->getSortDirection()
+                )
+            )
             ->load(['image', 'createdBy', 'updatedBy']);
 
         $paginated = $query->paginate(
@@ -105,6 +133,6 @@ class BrandController extends BaseController
      */
     public function show(Brand $brand): BrandResource
     {
-        return new BrandResource($brand->load(['image','createdBy','updatedBy']));
+        return new BrandResource($brand->load(['image', 'createdBy', 'updatedBy']));
     }
 }

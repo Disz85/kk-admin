@@ -8,6 +8,7 @@ use App\Http\Requests\Api\IngredientListRequest;
 use App\Http\Resources\Api\IngredientCollection;
 use App\Http\Resources\Api\IngredientResource;
 use App\Models\Ingredient;
+use Elastic\ScoutDriverPlus\Builders\SearchParametersBuilder;
 use OpenApi\Annotations as OA;
 
 class IngredientController extends Controller
@@ -33,10 +34,52 @@ class IngredientController extends Controller
      *        allowEmptyValue="true"
      *    ),
      *    @OA\Parameter(
+     *        name="sort",
+     *        in="query",
+     *        description="sort_by and sort order ('-' prefix means desc)",
+     *        @OA\Schema(type="string"),
+     *    ),
+     *    @OA\Parameter(
      *        name="filter[name]",
      *        in="query",
      *        description="Name",
-     *        @OA\Schema(type="string")
+     *        @OA\Schema(type="string"),
+     *        allowEmptyValue="true"
+     *    ),
+     *    @OA\Parameter(
+     *       name="filter[ewg_score]",
+     *       in="query",
+     *       description="EWG Score (0-9)",
+     *       @OA\Schema(type="integer"),
+     *       allowEmptyValue="true"
+     *    ),
+     *    @OA\Parameter (
+     *         name="filter[categories][0]",
+     *         in="query",
+     *         description="category 1 uuid",
+     *         @OA\Schema(type="string"),
+     *         allowEmptyValue="true"
+     *    ),
+     *    @OA\Parameter (
+     *        name="filter[categories][1]",
+     *        in="query",
+     *        description="category 2 uuid",
+     *        @OA\Schema(type="string"),
+     *        allowEmptyValue="true"
+     *    ),
+     *    @OA\Parameter (
+     *         name="filter[abc][0]",
+     *         in="query",
+     *         description="abc 1",
+     *         @OA\Schema(type="string"),
+     *         allowEmptyValue="true"
+     *    ),
+     *    @OA\Parameter (
+     *         name="filter[abc][1]",
+     *         in="query",
+     *         @OA\Schema(type="string"),
+     *         description="abc 2",
+     *         allowEmptyValue="true"
      *    ),
      *    @OA\Response(
      *        response=200,
@@ -60,7 +103,14 @@ class IngredientController extends Controller
         }
 
         $query = Ingredient::searchQuery($filteredQuery ?? null)
-            ->sort($request->getSortBy(), $request->getSortDirection())
+            ->when(
+                $request->has('sort'),
+                fn (SearchParametersBuilder $builder) => $builder
+                ->sort(
+                    $request->getSortBy(),
+                    $request->getSortDirection()
+                )
+            )
             ->load(['categories']);
 
         $paginated = $query->paginate(

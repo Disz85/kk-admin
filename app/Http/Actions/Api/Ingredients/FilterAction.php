@@ -30,7 +30,7 @@ class FilterAction
                     ->filter(
                         Query::regexp()
                             ->field('name')
-                            ->value(implode('|', $abc) . '.*')
+                            ->value('[' . implode('', $abc) . '].*')
                             ->caseInsensitive(true)
                     )
             )
@@ -48,7 +48,7 @@ class FilterAction
                 fn (BoolQueryBuilder $builder) => $builder
                     ->filter(
                         Query::terms()
-                            ->field('categories')
+                            ->field('categories.uuid.keyword')
                             ->values($categories)
                     )
             );

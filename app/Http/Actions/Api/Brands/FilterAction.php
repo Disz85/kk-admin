@@ -27,8 +27,8 @@ class FilterAction
                 fn (BoolQueryBuilder $builder) => $builder
                     ->filter(
                         Query::regexp()
-                            ->field('title')
-                            ->value('^[' . implode('', $abc) . ']' . '.*')
+                            ->field('title.keyword')
+                            ->value('[' . implode('', $abc) . '].*')
                             ->caseInsensitive(true)
                     )
             );

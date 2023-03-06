@@ -17,8 +17,9 @@ class BrandListRequest extends FormRequest
             'page' => ['sometimes', 'int'],
             'sort' => ['sometimes', Rule::in(['created_at', '-created_at'])],
             'filter' => ['sometimes', 'array'],
-            'filter.title' => ['sometimes', 'string'],
+            'filter.name' => ['sometimes', 'string'],
             'filter.abc' => ['sometimes', 'array'],
+            'filter.abc.*' => ['string', 'size:1'],
         ];
     }
 }

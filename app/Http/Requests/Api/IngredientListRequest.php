@@ -19,6 +19,7 @@ class IngredientListRequest extends FormRequest
             'filter' => ['sometimes', 'array'],
             'filter.name' => ['sometimes', 'string'],
             'filter.abc' => ['sometimes', 'array'],
+            'filter.abc.*' => ['string', 'size:1'],
             'filter.ewg_score' => ['sometimes', 'numeric'],
             'filter.categories' => ['sometimes', 'array'],
         ];

@@ -17,7 +17,7 @@ class BrandResource extends JsonResource
             'uuid' => $this->uuid,
             'title' => $this->title,
             'created_at' => new Carbon($this->created_at),
-            'created_by' => $this->whenLoaded('createdBy', new UserResource($this->createdBy))
+            'created_by' => $this->whenLoaded('createdBy', new UserResource($this->createdBy)),
         ];
     }
 }

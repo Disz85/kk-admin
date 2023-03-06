@@ -2,9 +2,7 @@
 
 namespace App\Resources\Elastic;
 
-use App\Models\Brand;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**

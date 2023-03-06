@@ -95,7 +95,7 @@ class Ingredient extends Model implements HasDependencies
 
     public function shouldBeSearchable(): bool
     {
-        return !is_null($this->published_at);
+        return ! is_null($this->published_at);
     }
 
     public function searchableWith(): array

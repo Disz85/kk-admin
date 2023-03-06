@@ -4,8 +4,6 @@ namespace App\Models;
 
 use App\Interfaces\HasDependencies;
 use App\Resources\Elastic\BrandResource;
-use App\Resources\Elastic\ProductBrandResource;
-use App\Resources\Elastic\ProductResource;
 use App\Traits\GeneratesSlug;
 use Carbon\Carbon;
 use Elastic\ScoutDriverPlus\Searchable;

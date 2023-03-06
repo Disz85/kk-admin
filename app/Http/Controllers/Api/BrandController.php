@@ -6,14 +6,9 @@ use App\Http\Actions\Api\Brands\FilterAction;
 use App\Http\Requests\Api\BrandListRequest;
 use App\Http\Resources\Api\BrandCollection;
 use App\Http\Resources\Api\BrandResource;
-use App\Http\Resources\Api\ProductCollection;
-use App\Http\Resources\Api\ProductResource;
 use App\Models\Brand;
-use App\Models\Product;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use OpenApi\Annotations as OA;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class BrandController extends BaseController
 {

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enum\CategoryTypeEnum;
 use App\Filters\DepthFilter;
 use App\Filters\ParentIdFilter;
 use App\Http\Controllers\Controller;

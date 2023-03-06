@@ -3,7 +3,6 @@
 namespace App\Http\Resources\Api;
 
 use App\Http\Resources\Admin\CategoryCollection;
-use App\Http\Resources\Admin\MediaResource;
 use App\Http\Resources\Admin\ProductCollection;
 use App\Models\Ingredient;
 use Illuminate\Http\Request;

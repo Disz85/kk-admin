@@ -6,7 +6,6 @@ use App\Models\Article;
 use App\Models\Author;
 use App\Models\Category;
 use App\Models\Tag;
-use Carbon\Carbon;
 use Database\Helpers\BlockStyleEditorFakeContentBuilder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;

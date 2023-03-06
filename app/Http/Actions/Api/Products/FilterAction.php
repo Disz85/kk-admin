@@ -18,7 +18,8 @@ class FilterAction
         $skinConcerns = data_get($filters, 'skin_concerns');
 
         return Query::bool()
-            ->when($name,
+            ->when(
+                $name,
                 fn (BoolQueryBuilder $builder) => $builder
                     ->filter(
                         Query::match()

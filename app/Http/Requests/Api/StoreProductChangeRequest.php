@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Api;
 
 use App\Enum\CategoryTypeEnum;
 use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateProductChangeRequest extends FormRequest
+class StoreProductChangeRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -17,13 +17,13 @@ class UpdateProductChangeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'nullable|string|max:255|unique:products',
-            'brand.id' => 'nullable|integer|exists:brands,id',
+            'name' => 'required|string|max:255|unique:products',
+            'brand.id' => 'required|integer|exists:brands,id',
             'price' => 'nullable|string',
             'size' => 'nullable|string',
-            'description' => 'nullable|array',
+            'description' => 'required|array',
             'image.id' => 'nullable|int|exists:media,id',
-            'category.id' => ['nullable', 'int',
+            'category.id' => ['required', 'int',
                 Rule::exists(Category::class, 'id')->where('type', CategoryTypeEnum::Product->value)],
             'skin_types.*.id' => ['required', 'int',
                 Rule::exists(Category::class, 'id')->where('type', CategoryTypeEnum::SkinType->value)],
@@ -33,7 +33,6 @@ class UpdateProductChangeRequest extends FormRequest
                 Rule::exists(Category::class, 'id')->where('type', CategoryTypeEnum::HairProblem->value)],
             'ingredients' => 'nullable|array',
             'ingredients.*' => 'string',
-            'where_to_find' => 'nullable|string',
-            ];
+        ];
     }
 }

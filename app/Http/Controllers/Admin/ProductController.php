@@ -145,32 +145,32 @@ class ProductController extends Controller
      *                     description="Category id",
      *                 ),
      *                 @OA\Property (
-     *                     property="skin_types[0]",
+     *                     property="skin_types[0][id]",
      *                     type="integer",
      *                     description="Skin type 1 id",
      *                 ),
      *                 @OA\Property (
-     *                     property="skin_types[1]",
+     *                     property="skin_types[1][id]",
      *                     type="integer",
      *                     description="Skin type 2 id",
      *                 ),
      *                 @OA\Property (
-     *                     property="skin_concerns[0]",
+     *                     property="skin_concerns[0][id]",
      *                     type="integer",
      *                     description="Skin concerns 1 id",
      *                 ),
      *                 @OA\Property (
-     *                     property="skin_concerns[1]",
+     *                     property="skin_concerns[1][id]",
      *                     type="integer",
      *                     description="Skin concerns 2 id",
      *                 ),
      *                 @OA\Property (
-     *                     property="hair_problems[0]",
+     *                     property="hair_problems[0][id]",
      *                     type="integer",
      *                     description="Hair problem 1 id",
      *                 ),
      *                 @OA\Property (
-     *                     property="hair_problems[1]",
+     *                     property="hair_problems[1][id]",
      *                     type="integer",
      *                     description="Hair problem 2 id",
      *                 ),

@@ -32,8 +32,16 @@ class JWTGuard implements Guard
         }
 
         $auth = $this->token->profile();
-        $user = User::findOrNew([ 'sso_id' => $auth['sub'] ]);
-        $user->save();
+        User::firstOrCreate(
+            [ 'sso_id' => $auth['sub'] ],
+            [
+            'sso_id' => $auth['sub'],
+            'username' => $auth['family_name'].' '.$auth['given_name'],
+            'firstname' => $auth['given_name'],
+            'lastname' => $auth['family_name'],
+            'email' => $auth['email'],
+        ]
+        );
 
         $user = $this->provider->retrieveByCredentials([ 'sso_id' => $this->token->id() ]);
 

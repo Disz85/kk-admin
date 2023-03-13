@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreProductChangeRequest;
 use App\Http\Requests\UpdateProductChangeRequest;
 use App\Http\Resources\Admin\ProductChangeRequestCollection;
 use App\Http\Resources\Admin\ProductChangeRequestResource;
 use App\Http\Resources\Admin\ProductResource;
 use App\Mail\ProductChangeRequestRejectionMail;
 use App\Models\Ingredient;
+use App\Models\Media;
 use App\Models\Product;
 use App\Models\ProductChangeRequest;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -86,164 +85,10 @@ class ProductChangeRequestController extends Controller
      */
     public function show(ProductChangeRequest $productChangeRequest): ProductChangeRequestResource
     {
-        return new ProductChangeRequestResource($productChangeRequest);
-    }
-
-    /**
-     * Store a product change request.
-     *
-     * @OA\Post (
-     *     tags={"ProductChangeRequests"},
-     *     path="/admin/product-change-requests",
-     *     security={{"bearer":{}}},
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 required={"name", "image[id]", "is_active", "is_sponsored","is_18_plus","created_by", "brand_id", "price"},
-     *                 @OA\Property(
-     *                     property="name",
-     *                     type="string",
-     *                     description="name",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="product_id",
-     *                     type="integer",
-     *                     description="product_id",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="canonical_name",
-     *                     type="string",
-     *                     description="canonical_name",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="description",
-     *                     type="string",
-     *                     description="Desciption",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="price",
-     *                     type="integer",
-     *                     description="price",
-     *                     example="1",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="size",
-     *                     type="string",
-     *                     description="size",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="brand_id",
-     *                     type="integer",
-     *                     description="brand_id",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="is_active",
-     *                     type="integer",
-     *                     description="1|0",
-     *                     example="0",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="is_sponsored",
-     *                     type="integer",
-     *                     description="1|0",
-     *                     example="0",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="is_18_plus",
-     *                     type="integer",
-     *                     description="1|0",
-     *                     example="0",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="created_by",
-     *                     type="integer",
-     *                     description="created_by",
-     *                 ),
-     *                 @OA\Property (
-     *                     property="image[id]",
-     *                     type="integer",
-     *                     description="Image ID",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="ingredients_by",
-     *                     type="integer",
-     *                     description="ingredients_by",
-     *                 ),
-     *                 @OA\Property (
-     *                     property="categories[0]",
-     *                     type="integer",
-     *                     description="category 1 id",
-     *                 ),
-     *                 @OA\Property (
-     *                     property="categories[1]",
-     *                     type="integer",
-     *                     description="category 2 id",
-     *                 ),
-     *                 @OA\Property (
-     *                     property="tags[0]",
-     *                     type="integer",
-     *                     description="tag 1 id",
-     *                 ),
-     *                 @OA\Property (
-     *                     property="tags[1]",
-     *                     type="integer",
-     *                     description="tag 2 id",
-     *                 ),
-     *                 @OA\Property (
-     *                     property="ingredients[0]",
-     *                     type="integer",
-     *                     description="ingredient 1 id",
-     *                 ),
-     *                 @OA\Property (
-     *                     property="ingredients[1]",
-     *                     type="integer",
-     *                     description="ingredient 2 id",
-     *                 ),
-     *                 @OA\Property (
-     *                     property="ingredients_new[0]",
-     *                     type="integer",
-     *                     description="new ingredient 1",
-     *                 ),
-     *                 @OA\Property (
-     *                     property="ingredients_new[1]",
-     *                     type="integer",
-     *                     description="new ingredient 2",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="published_at",
-     *                     type="datetime",
-     *                      @OA\Schema(
-     *                          type="string",
-     *                          format ="date-time",
-     *                      ),
-     *                     description="Format: Y-m-d H:i:s",
-     *                 ),
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Product change request created.",
-     *         @OA\JsonContent(ref="#/components/schemas/ProductChangeRequest"),
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Error in fields.",
-     *         @OA\JsonContent(),
-     *     ),
-     * )
-     *
-     * @param StoreProductChangeRequest $request
-     * @return ProductChangeRequestResource
-     */
-    public function store(StoreProductChangeRequest $request): ProductChangeRequestResource
-    {
-        $productChangeRequest = ProductChangeRequest::create([
-            'data' => $request->validated(),
-            'product_id' => $request->product_id ?? null,
-        ]);
+        $productChangeRequest->image = isset($productChangeRequest->data['image']['id'])
+            ? Media::find($productChangeRequest->data['image']['id'])
+            : null;
+        $productChangeRequest->load(['product']);
 
         return new ProductChangeRequestResource($productChangeRequest);
     }
@@ -276,18 +121,47 @@ class ProductChangeRequestController extends Controller
     public function approve(ProductChangeRequest $productChangeRequest): ProductResource
     {
         $product = DB::transaction(function () use ($productChangeRequest) {
-            $product = Product::updateOrCreate(['id' => $productChangeRequest->product->id ?? null], $productChangeRequest->data);
-            foreach ($productChangeRequest->data['ingredients_new'] ?? [] as $newIngredientName) {
-                $newIngredientIds[] = Ingredient::create(['name' => $newIngredientName])->id;
+            $data = $productChangeRequest->data;
+            if (data_get($data, "brand.id")) {
+                $data['brand_id'] = data_get($data, "brand.id");
             }
-            $product->ingredients()->sync(
-                array_merge(
-                    $newIngredientIds ?? [],
-                    $productChangeRequest->data['ingredients'] ?? []
-                )
-            );
-            $product->tags()->sync($productChangeRequest->data['tags'] ?? []);
-            $product->categories()->sync($productChangeRequest->data['categories'] ?? []);
+            if (data_get($data, "image.id")) {
+                $data['image_id'] = data_get($data, "image.id");
+            }
+
+            $product = Product::updateOrCreate(['id' => $productChangeRequest->product->id ?? null], $data);
+
+            $ingredients = [];
+            foreach ($productChangeRequest->data['ingredients'] ?? [] as $newIngredientName) {
+                $ingredient = Ingredient::firstOrCreate(
+                    ['name' => $newIngredientName]
+                );
+                $ingredients[] = $ingredient->id;
+            }
+
+            if ($ingredients) {
+                $product->ingredients()->sync($ingredients);
+            }
+            if (! $productChangeRequest->product) {
+                // new product
+                $categories = [];
+                if ($productCategory = data_get($data, 'category.id')) {
+                    $categories[] = $productCategory;
+                }
+
+                if ($skinTypes = data_get($data, 'skin_types.*.id')) {
+                    $categories = array_merge($categories, $skinTypes);
+                }
+
+                if ($skinConcerns = data_get($data, 'skin_concerns.*.id')) {
+                    $categories = array_merge($categories, $skinConcerns);
+                }
+
+                if ($hairProblems = data_get($data, 'hair_problems.*.id')) {
+                    $categories = array_merge($categories, $hairProblems);
+                }
+                $product->categories()->sync($categories);
+            }
             $productChangeRequest->delete();
 
             return $product->refresh();
@@ -323,10 +197,10 @@ class ProductChangeRequestController extends Controller
      */
     public function reject(ProductChangeRequest $productChangeRequest): JsonResponse
     {
-        $user = User::findOrFail($productChangeRequest->data['created_by']);
+        $productChangeRequest->load('user');
 
         try {
-            Mail::send(new ProductChangeRequestRejectionMail($productChangeRequest, $user));
+            Mail::send(new ProductChangeRequestRejectionMail($productChangeRequest));
         } catch (\Exception $e) {
             return response()->json(['error' => 'Email küldés sikertelen'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -353,32 +227,20 @@ class ProductChangeRequestController extends Controller
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
-     *                 required={"name", "image[id]", "is_active", "is_sponsored","is_18_plus","created_by", "brand_id", "price"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
      *                     description="name",
      *                 ),
      *                 @OA\Property(
-     *                     property="product_id",
+     *                     property="brand[id]",
      *                     type="integer",
-     *                     description="product_id",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="canonical_name",
-     *                     type="string",
-     *                     description="canonical_name",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="description",
-     *                     type="string",
-     *                     description="Desciption",
+     *                     description="brand[id]",
      *                 ),
      *                 @OA\Property(
      *                     property="price",
-     *                     type="integer",
+     *                     type="string",
      *                     description="price",
-     *                     example="1",
      *                 ),
      *                 @OA\Property(
      *                     property="size",
@@ -386,91 +248,64 @@ class ProductChangeRequestController extends Controller
      *                     description="size",
      *                 ),
      *                 @OA\Property(
-     *                     property="brand_id",
-     *                     type="integer",
-     *                     description="brand_id",
+     *                     property="where_to_find",
+     *                     type="string",
+     *                     description="where_to_find",
      *                 ),
      *                 @OA\Property(
-     *                     property="is_active",
-     *                     type="integer",
-     *                     description="1|0",
-     *                     example="0",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="is_sponsored",
-     *                     type="integer",
-     *                     description="1|0",
-     *                     example="0",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="is_18_plus",
-     *                     type="integer",
-     *                     description="1|0",
-     *                     example="0",
-     *                 ),
-     *                 @OA\Property(
-     *                     property="created_by",
-     *                     type="integer",
-     *                     description="created_by",
+     *                     property="description[0]",
+     *                     type="string",
+     *                     description="Desciption",
      *                 ),
      *                 @OA\Property (
      *                     property="image[id]",
      *                     type="integer",
      *                     description="Image ID",
      *                 ),
-     *                 @OA\Property(
-     *                     property="ingredients_by",
-     *                     type="integer",
-     *                     description="ingredients_by",
-     *                 ),
      *                 @OA\Property (
-     *                     property="categories[0]",
+     *                     property="category[id]",
      *                     type="integer",
-     *                     description="category 1 id",
-     *                 ),
-     *                 @OA\Property (
-     *                     property="categories[1]",
-     *                     type="integer",
-     *                     description="category 2 id",
-     *                 ),
-     *                 @OA\Property (
-     *                     property="tags[0]",
-     *                     type="integer",
-     *                     description="tag 1 id",
-     *                 ),
-     *                 @OA\Property (
-     *                     property="tags[1]",
-     *                     type="integer",
-     *                     description="tag 2 id",
+     *                     description="category id",
      *                 ),
      *                 @OA\Property (
      *                     property="ingredients[0]",
      *                     type="integer",
-     *                     description="ingredient 1 id",
+     *                     description="ingredient 1 name",
      *                 ),
      *                 @OA\Property (
      *                     property="ingredients[1]",
      *                     type="integer",
-     *                     description="ingredient 2 id",
+     *                     description="ingredient 2 name",
      *                 ),
      *                 @OA\Property (
-     *                     property="ingredients_new[0]",
+     *                     property="skin_types[0][id]",
      *                     type="integer",
-     *                     description="new ingredient 1 name",
+     *                     description="Skin type 1 id",
      *                 ),
      *                 @OA\Property (
-     *                     property="ingredients_new[1]",
+     *                     property="skin_types[1][id]",
      *                     type="integer",
-     *                     description="new ingredient 2 name",
+     *                     description="Skin type 2 id",
      *                 ),
-     *                 @OA\Property(
-     *                     property="published_at",
-     *                     type="datetime",
-     *                  @OA\Schema(
-     *                      type="string",
-     *                      format ="date-time",
-     *                  ),
-     *                     description="Format: Y-m-d H:i:s",
+     *                 @OA\Property (
+     *                     property="skin_concerns[0][id]",
+     *                     type="integer",
+     *                     description="Skin concerns 1 id",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="skin_concerns[1][id]",
+     *                     type="integer",
+     *                     description="Skin concerns 2 id",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="hair_problems[0][id]",
+     *                     type="integer",
+     *                     description="Hair problems 1 id",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="hair_problems[1][id]",
+     *                     type="integer",
+     *                     description="Hair problems 2 id",
      *                 ),
      *             )
      *         )
@@ -493,8 +328,12 @@ class ProductChangeRequestController extends Controller
      */
     public function update(UpdateProductChangeRequest $request, ProductChangeRequest $productChangeRequest): ProductChangeRequestResource
     {
-        $productChangeRequest->data = $request->validated();
-        $productChangeRequest->product_id = $request->product_id ?? null;
+        $originalData = $productChangeRequest->data;
+        $productChangeRequest->data = array_merge(
+            $request->validated(),
+            data_get($originalData, 'created_by') ? ['created_by' => $originalData['created_by']] : [],
+            data_get($originalData, 'ingredients_by') ? ['ingredients_by' => $originalData['ingredients_by']] : [],
+        );
         $productChangeRequest->save();
 
         return new ProductChangeRequestResource($productChangeRequest);

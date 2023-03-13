@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Enum\CategoryTypeEnum;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Ingredient;
-use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -15,21 +16,24 @@ class ProductChangeRequestFactory extends Factory
         return [
             'data' => fn () => $this->getProductDummyData(),
             'product_id' => null,
+            'user_id' => function ($values) {
+                return $values['data']['created_by'];
+            },
         ];
     }
 
     private function getProductDummyData()
     {
-        $category = Category::factory()->create();
-        $tags = Tag::factory()->count(2)->create();
+        $category = Category::factory(['type' => CategoryTypeEnum::Product->value ])->createOne();
         $ingredients = Ingredient::factory()->count(2)->create();
         $user = User::factory()->create();
+        $brand = Brand::factory()->create();
         $product = ProductFactory::new()->raw();
-        $product['category'] = $category;
-        $product['ingredients'] = $ingredients->toArray();
-        $product['tags'] = $tags->toArray();
+        $product['category']['id'] = $category->id;
+        $product['brand']['id'] = $brand->id;
+        $product['ingredients'] = $ingredients->pluck('name')->toArray();
         $product['created_by'] = $user->id;
-        $product['ingredients_new'] = [];
+        $product['ingredients_by'] = $user->id;
 
         return $product;
     }

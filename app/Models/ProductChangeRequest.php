@@ -37,6 +37,7 @@ class ProductChangeRequest extends Model
     protected $fillable = [
         'data',
         'product_id',
+        'user_id',
     ];
 
     /**
@@ -52,5 +53,13 @@ class ProductChangeRequest extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

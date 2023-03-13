@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use App\Models\ProductChangeRequest;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
@@ -17,17 +16,15 @@ class ProductChangeRequestRejectionMail extends Mailable
     use SerializesModels;
 
     private ProductChangeRequest $productChangeRequest;
-    private User $user;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(ProductChangeRequest $productChangeRequest, User $user)
+    public function __construct(ProductChangeRequest $productChangeRequest)
     {
         $this->productChangeRequest = $productChangeRequest;
-        $this->user = $user;
     }
 
     /**
@@ -38,7 +35,7 @@ class ProductChangeRequestRejectionMail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            to:  [new Address($this->user->email, $this->user->lastname." ".$this->user->firstname)],
+            to:  [new Address($this->productChangeRequest->user->email, $this->productChangeRequest->user->lastname." ".$this->productChangeRequest->user->firstname)],
             subject: 'Termék '.($this->productChangeRequest->product ? 'módosítási' : 'feltöltési').' kérés elutasítva'
         );
     }
@@ -54,7 +51,7 @@ class ProductChangeRequestRejectionMail extends Mailable
             view: 'emails.productChangeRequests.rejection',
             with: [
                 'productChangeRequest' => $this->productChangeRequest,
-                'user' => $this->user,
+                'user' => $this->productChangeRequest->user,
             ]
         );
     }

@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\IngredientController;
+use App\Http\Controllers\Api\ProductChangeRequestController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,8 +20,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    Route::patch('product-change-requests/store-patch', [ ProductChangeRequestController::class, 'storePatch' ])
+        ->name('product-change-requests.store-patch');
+    Route::resource('product-change-requests', ProductChangeRequestController::class)
+        ->except(['create','edit']);
 });
 
 Route::middleware(['cache.headers:max_age=' . config('api.max-age')])->group(function () {

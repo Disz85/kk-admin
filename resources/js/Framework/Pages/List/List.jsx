@@ -1,26 +1,35 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
 // TRANSLATION
 import { useTranslation } from 'react-i18next';
+
 // HELPERS
 import { parse, stringify } from 'qs';
 import _ from 'lodash';
 import { update } from '../../../Helpers/objectOperations';
 import getFields from '../../../Helpers/getters';
+
 // CONFIG
 import navigationIcons from '../../../config/navigationIcons';
+
 // HOOKS
 import useDebounce from '../../../Hooks/useDebounce';
 import useUpdateEffect from '../../../Hooks/useUpdateEffect';
+
 // CONTEXTS
 import ApplicationContext from '../../Context/ApplicationContext';
+
 // COMPONENTS
 import Table from '../../Components/Table';
 import Create from '../../Components/Buttons/Create';
 import Paginator from '../../Components/Paginator/Paginator';
 import Modal from '../../Components/Modal';
 import Button from '../../Components/Buttons/Button';
+
+// STYLES
+import style from '../../../../scss/components/list.module.scss';
 
 const List = ({
     resource,
@@ -45,6 +54,15 @@ const List = ({
         entities: [],
         params: parse(window.location.search.replace('?', '')),
     });
+    const [deleteError, setDeleteError] = useState(false);
+
+    let url = resource;
+    if (window.location.pathname.includes('categories')) {
+        const type = window.location.pathname.split('/')[1];
+
+        list.params.type = type.replace('categories-', '');
+        url = 'categories';
+    }
 
     // EVENTS
     const updateSearch = useDebounce(500, (newParams) => {
@@ -61,8 +79,9 @@ const List = ({
 
     const paginate = () => {
         setIsLoading(true);
+
         service
-            .list(resource, list.current, 25, list.params)
+            .list(url, list.current, 25, list.params)
             .then(({ data: entities, meta }) => {
                 update(
                     {
@@ -81,20 +100,26 @@ const List = ({
 
     // DELETE
     const markEntityForDeletion = (entity) => setMarked(entity);
-    const clearMark = () => setMarked(null);
+    const clearMark = () => {
+        setMarked(null);
+        setDeleteError(false);
+    };
 
     const removeEntity = (entity) =>
         service
-            .remove(resource, entity.id)
+            .remove(url, entity.id)
             .then(() => paginate())
-            .then(() => setMarked(null));
+            .then(() => setMarked(null))
+            .catch((error) => {
+                if (error.response) {
+                    setDeleteError(error.response.data.message);
+                }
+            });
 
     // SIDE EFFECTS
     useEffect(() => {
         setPageInfo({
-            title: t(`application.list`, {
-                resource: t(`${resource}.resource`),
-            }),
+            title: t(`${resource}.${resource}`),
             icon: navigationIcons[resource],
         });
     }, []);
@@ -147,9 +172,21 @@ const List = ({
                             ?
                         </p>
                     )}
-                    <Button name="delete" click={() => removeEntity(marked)}>
-                        Törlés
-                    </Button>
+                    {!deleteError && (
+                        <Button
+                            name="delete"
+                            click={() => removeEntity(marked)}
+                        >
+                            Törlés
+                        </Button>
+                    )}
+                    {deleteError && (
+                        <div className={style.errorMessage}>
+                            {t(`application.${deleteError}`, {
+                                resource: t(`application.${resource}`),
+                            })}
+                        </div>
+                    )}
                 </Modal>
             )}
         </>

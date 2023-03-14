@@ -102,7 +102,7 @@ class IngredientTest extends TestCase
     {
         $ingredient = IngredientFactory::new()->raw();
         $categories = Category::factory()->count(2)->create([
-            'type' => CategoryTypeEnum::Ingredient,
+            'type' => CategoryTypeEnum::Ingredient->value,
         ]);
         $ingredient['categories'] = $categories->toArray();
 
@@ -114,7 +114,7 @@ class IngredientTest extends TestCase
      */
     private function createIngredientWithRelations(): array
     {
-        $categories = Category::factory()->count(2)->create(['type' => CategoryTypeEnum::Ingredient]);
+        $categories = Category::factory()->count(2)->create(['type' => CategoryTypeEnum::Ingredient->value]);
         $ingredient = Ingredient::factory()
             ->withCategories($categories)
             ->create();

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enum\CategoryTypeEnum;
 use App\Models\Article;
 use App\Models\Author;
 use App\Models\Category;
@@ -41,21 +42,27 @@ class ArticleFactory extends Factory
     public function withAuthors(Author|Collection $authors = null, int $count = 1): self
     {
         return $this->hasAttached(
-            $authors ?? AuthorFactory::new()->count($count)
+            $authors ?? AuthorFactory::new()->count($count),
+            [],
+            'authors'
         );
     }
 
     public function withTags(Tag|Collection $tags = null, int $count = 1): self
     {
         return $this->hasAttached(
-            $tags ?? TagFactory::new()->count($count)
+            $tags ?? TagFactory::new()->count($count),
+            [],
+            'tags'
         );
     }
 
     public function withCategories(Category|Collection $categories = null, int $count = 1): self
     {
         return $this->hasAttached(
-            $categories ?? CategoryFactory::new()->count($count)
+            $categories ?? CategoryFactory::new(['type' => CategoryTypeEnum::Article->value])->count($count),
+            [],
+            'categories'
         );
     }
 

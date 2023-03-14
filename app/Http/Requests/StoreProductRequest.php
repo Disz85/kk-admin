@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enum\CategoryTypeEnum;
+use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreProductRequest extends FormRequest
 {
@@ -28,9 +31,14 @@ class StoreProductRequest extends FormRequest
             'ingredients_by' => 'nullable|integer|exists:users,id',
             'image.id' => 'nullable|int|exists:media,id',
             'tags.*.id' => 'nullable|int|exists:tags,id',
-            'category.id' => 'required|int|exists:categories,id',
-            'skin_types.*.id' => 'nullable|int|exists:categories,id',
-            'skin_concerns.*.id' => 'nullable|int|exists:categories,id',
+            'category.id' => ['required', 'int',
+                Rule::exists(Category::class, 'id')->where('type', CategoryTypeEnum::Product->value)],
+            'skin_types.*.id' => ['required', 'int',
+                Rule::exists(Category::class, 'id')->where('type', CategoryTypeEnum::SkinType->value)],
+            'skin_concerns.*.id' => ['required', 'int',
+                Rule::exists(Category::class, 'id')->where('type', CategoryTypeEnum::SkinConcern->value)],
+            'hair_problems.*.id' => ['required', 'int',
+                Rule::exists(Category::class, 'id')->where('type', CategoryTypeEnum::HairProblem->value)],
             'ingredients.*.id' => 'nullable|int|exists:ingredients,id',
         ];
     }
@@ -47,10 +55,18 @@ class StoreProductRequest extends FormRequest
             'name.max' => 'A név nem lehet hosszabb :max karakternél.',
             'name.unique' => 'A megadott névvel már létezik termék.',
             'canonical_name.max' => 'A canonical név nem lehet hosszabb :max karakternél.',
+            'image.exists' => 'A kiválasztott kép nem létezik.',
             'description.required' => 'A leírás kitöltése kötelező.',
             'where_to_find.max' => 'A lelőhely nem lehet hosszabb :max karakternél.',
             'brand.id.required' => 'A márka megadása kötelező.',
+            'brand.exists' => 'A kiválasztott márka nem létezik.',
             'category.id.required' => 'Kategória megadása kötelező.',
+            'category.exists' => 'A kiválasztott kategóriák között van olyan, ami nem létezik.',
+            'skin_types.exists' => 'A kiválasztott bőrtípusok között van olyan, ami nem létezik.',
+            'skin_concerns.exists' => 'A kiválasztott bőrproblémák között van olyan, ami nem létezik.',
+            'hair_problems.exists' => 'A kiválasztott hajproblémák között van olyan, ami nem létezik.',
+            'ingredients.exists' => 'A kiválasztott összetevők között van olyan, ami nem létezik.',
+            'tags.exists' => 'A kiválasztott címkék között van olyan, ami nem létezik.',
         ];
     }
 }

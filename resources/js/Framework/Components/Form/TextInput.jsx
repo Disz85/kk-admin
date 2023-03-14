@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// COMPONENTS
 import Field from './Field';
 
+// STYLES
 import style from '../../../../scss/components/form.module.scss';
 
 const TextInput = ({ onChange, entity, regex = null, ...props }) => {

@@ -10,7 +10,7 @@ import navigationIcons from '../../config/navigationIcons';
 import ApplicationContext from '../Context/ApplicationContext';
 // COMPONENTS
 import Card from '../Components/Card';
-
+// STYLES
 import style from '../../../scss/pages/home.module.scss';
 
 const Home = ({ resources }) => {
@@ -26,7 +26,10 @@ const Home = ({ resources }) => {
     return (
         <div className={style.wrapper}>
             {resources
-                .filter(({ name }) => name !== 'logout')
+                .filter(
+                    ({ name, groupParent }) =>
+                        name !== 'logout' && !groupParent,
+                )
                 .map(({ name, path }) => (
                     <Card
                         key={name}

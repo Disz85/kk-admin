@@ -7,6 +7,13 @@ import {
     faArrowRightFromBracket,
     faBasketShopping,
     faFlask,
+    faFlaskVial,
+    faCartFlatbed,
+    faBoxesStacked,
+    faHands,
+    faHandDots,
+    faPaste,
+    faUserNurse,
 } from '@fortawesome/free-solid-svg-icons';
 
 const navigationIcons = {
@@ -14,10 +21,16 @@ const navigationIcons = {
     authors: faUsers,
     articles: faNewspaper,
     tags: faTags,
-    categories: faNewspaper,
     brands: faBriefcase,
     products: faBasketShopping,
     ingredients: faFlask,
+    categories: faBoxesStacked,
+    'categories-article': faPaste,
+    'categories-ingredient': faFlaskVial,
+    'categories-product': faCartFlatbed,
+    'categories-skintype': faHands,
+    'categories-skinconcern': faHandDots,
+    'categories-hairproblem': faUserNurse,
     logout: faArrowRightFromBracket,
 };
 

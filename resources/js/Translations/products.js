@@ -21,6 +21,7 @@ export default {
     category: 'Kategória',
     skin_types: 'Bőrtípus',
     skin_concerns: 'Bőrproblémák',
+    hair_problems: 'Hajproblémák',
     ingredients: 'Összetevők',
 
     delete: 'Törlés',

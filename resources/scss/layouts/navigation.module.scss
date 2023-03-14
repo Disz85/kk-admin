@@ -21,7 +21,7 @@
 
 .item {
     @apply hover:shadow-md shadow-dark-night;
-    @apply hover:bg-dark-night;
+    @apply hover:bg-dark-night hover:text-light-snow;
 
     &:hover {
         .icon {
@@ -33,7 +33,15 @@
                 @extend %icon;
             }
         }
+
+        .link {
+            @apply text-light-snow;
+        }
     }
+}
+
+.angle {
+    @apply absolute right-8;
 }
 
 .icon {
@@ -47,10 +55,14 @@
 }
 
 // NavItem
+.groupClosed {
+    @apply hidden;
+}
 
 .link {
     @extend %link;
     @apply text-medium-blackberry hover:text-light-snow font-nav text-2xl font-medium not-italic uppercase tracking-wide;
+    @apply w-full;
 
     &Active {
         @extend %link;
@@ -68,8 +80,46 @@
             }
         }
     }
+
+    &Parent {
+        @extend %link;
+        @apply text-medium-blackberry hover:text-light-snow font-nav text-2xl font-medium not-italic uppercase tracking-wide;
+        @apply w-full;
+    }
 }
 
 .text {
     @apply block;
+}
+
+.groupOpen {
+    &:hover {
+        @apply bg-light-snow;
+
+        .linkParent {
+            @apply text-medium-blackberry;
+        }
+
+        .link,
+        .iconOpen,
+        .iconClose {
+            @apply text-medium-blackberry;
+            @apply hover:text-light-snow;
+        }
+
+        .item:hover,
+        .linkActive {
+            @apply text-light-snow;
+
+            .icon {
+                &Closed {
+                    @extend %icon;
+                }
+
+                &Open {
+                    @extend %icon;
+                }
+            }
+        }
+    }
 }

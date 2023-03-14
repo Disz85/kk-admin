@@ -22,6 +22,8 @@ import Error from './Error';
 import formStyle from '../../../../scss/components/form.module.scss';
 import style from '../../../../scss/components/editor.module.scss';
 
+import '../../../../scss/external/editor.scss';
+
 const BlockStyledEditor = ({
     entity,
     name,

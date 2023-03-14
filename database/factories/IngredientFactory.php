@@ -46,7 +46,9 @@ class IngredientFactory extends Factory
     public function withCategories(Category|Collection $categories = null, int $count = 1): self
     {
         return $this->hasAttached(
-            $categories ?? CategoryFactory::new(['type' => CategoryTypeEnum::Ingredient])->count($count)
+            $categories ?? CategoryFactory::new(['type' => CategoryTypeEnum::Ingredient->value])->count($count),
+            [],
+            'categories'
         );
     }
 

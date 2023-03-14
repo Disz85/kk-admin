@@ -39,6 +39,7 @@ class ProductResource extends JsonResource
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'skin_types' => CategoryResource::collection($this->skinTypeCategories),
             'skin_concerns' => CategoryResource::collection($this->skinConcernCategories),
+            'hair_problems' => CategoryResource::collection($this->hairProblemCategories),
             'ingredients' => IngredientResource::collection($this->whenLoaded('ingredients')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

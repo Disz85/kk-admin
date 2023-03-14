@@ -39,7 +39,10 @@ const AutoComplete = ({
         update({ isLoading: true });
 
         service
-            .autocomplete(reference, { [searchBy]: query })
+            .autocomplete(reference, {
+                [searchBy]: query,
+                withoutId: entity.id,
+            })
             .then((result) => {
                 const items = [...result.data];
 

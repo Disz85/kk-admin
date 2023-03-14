@@ -13,7 +13,6 @@ use App\Models\Category;
 use App\RequestMappers\CategoryRequestMapper;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -38,6 +37,12 @@ class CategoryController extends Controller
      *      description="Filter by name",
      *      @OA\Schema(type="string"),
      *    ),
+     *    @OA\Parameter(
+     *      name="type",
+     *      in="query",
+     *      description="Filter by type: article|product|skintype|skinconcern|ingredient",
+     *      @OA\Schema(type="string"),
+     *    ),
      *    @OA\Response(
      *        response=200,
      *        description="Display a listing of categories.",
@@ -60,6 +65,10 @@ class CategoryController extends Controller
                 ->when(
                     $request->has('name'),
                     fn (Builder $query) => $query->where('name', 'like', '%' . $request->get('name') . '%')
+                )
+                ->when(
+                    $request->has('type'),
+                    fn (Builder $query) => $query->where('type', '=', $request->get('type'))
                 )
                 ->orderByDesc('updated_at')
                 ->paginate($request->get('size', 20))
@@ -88,7 +97,7 @@ class CategoryController extends Controller
      *                 @OA\Property(
      *                     property="type",
      *                     type="string",
-     *                     description="article|product|skintype|skinconcern|ingredient",
+     *                     description="article|product|skintype|skinconcern|hairproblem|ingredient",
      *                 ),
      *                 @OA\Property(
      *                     property="description",
@@ -96,9 +105,14 @@ class CategoryController extends Controller
      *                     description="Desciption.",
      *                 ),
      *                 @OA\Property(
-     *                     property="parent_id",
+     *                     property="parent[id]",
      *                     type="integer",
      *                     description="Parent ID.",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="parent[type]",
+     *                     type="string",
+     *                     description="article|product|skintype|skinconcern|hairproblem|ingredient",
      *                 ),
      *                 @OA\Property(
      *                     property="is_archived",
@@ -191,7 +205,7 @@ class CategoryController extends Controller
      *                 @OA\Property(
      *                     property="type",
      *                     type="string",
-     *                     description="article|product|skintype|skinconcern|ingredient",
+     *                     description="article|product|skintype|skinconcern|hairproblem|ingredient",
      *                 ),
      *                 @OA\Property(
      *                     property="description",
@@ -199,9 +213,14 @@ class CategoryController extends Controller
      *                     description="Desciption.",
      *                 ),
      *                 @OA\Property(
-     *                     property="parent_id",
+     *                     property="parent[id]",
      *                     type="integer",
      *                     description="Parent ID.",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="parent[type]",
+     *                     type="string",
+     *                     description="article|product|skintype|skinconcern|hairproblem|ingredient",
      *                 ),
      *                 @OA\Property(
      *                     property="is_archived",

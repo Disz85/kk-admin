@@ -39,7 +39,7 @@ class ArticleController extends Controller
      *        allowEmptyValue="true"
      *    ),
      *    @OA\Parameter(
-     *        name="filter[title]",
+     *        name="title",
      *        in="query",
      *        description="Title",
      *        @OA\Schema(type="string")

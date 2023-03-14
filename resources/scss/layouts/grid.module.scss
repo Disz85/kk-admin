@@ -1,0 +1,15 @@
+.gridWrapper {
+    @apply grid grid-cols-12 gap-2;
+}
+
+.gridColumn {
+    @apply bg-light-snow p-4 shadow-dark-night;
+}
+
+.gridLeft {
+    @apply col-span-12 xl:col-span-8 lg:col-span-6;
+}
+
+.gridRight {
+    @apply col-span-12 xl:col-span-4 lg:col-span-6;
+}

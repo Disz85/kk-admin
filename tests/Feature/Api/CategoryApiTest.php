@@ -17,7 +17,7 @@ class CategoryApiTest extends TestCase
 
         Category::factory(3)
             ->create([
-                'type' => CategoryTypeEnum::Article,
+                'type' => CategoryTypeEnum::Article->value,
             ]);
     }
 
@@ -33,7 +33,7 @@ class CategoryApiTest extends TestCase
     {
         $rootCategories = Category::query()
             ->select('uuid')
-            ->where('type', CategoryTypeEnum::Article)
+            ->where('type', CategoryTypeEnum::Article->value)
             ->whereNull('parent_id')
             ->orderByDesc('updated_at')
             ->pluck('uuid')

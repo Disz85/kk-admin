@@ -8,7 +8,8 @@
     @apply ml-5;
 }
 
-.create {
+.create,
+.submit {
     @apply rounded-full text-light-snow bg-dark-night h-20 uppercase;
     @apply flex justify-center content-center;
     @apply fixed bottom-4 right-4;
@@ -18,26 +19,22 @@
     &:hover {
         @apply px-3;
 
-        .createText {
+        .createText,
+        .submitText {
             @apply visible opacity-100 w-full mx-3 my-auto text-2xl;
         }
     }
 }
 
-.createText {
+.createText,
+.submitText {
     @apply invisible opacity-0 w-0 transition-opacity;
     @apply whitespace-nowrap;
 }
 
-.createIcon {
+.createIcon,
+.submitIcon {
     @apply text-light-snow text-center m-auto text-3xl;
-}
-
-.submit {
-    @apply bg-dark-night text-light-snow text-2xl;
-    @apply py-2.5 px-5 mt-5 rounded-lg;
-
-    @apply hover:bg-medium-blackberry;
 }
 
 .delete {

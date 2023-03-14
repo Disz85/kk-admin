@@ -1,0 +1,15 @@
+.ce-block__content {
+    @apply max-w-none ml-20 mr-4 px-4;
+}
+
+.ce-toolbar__content {
+    @apply max-w-none;
+}
+
+.ce-toolbar__actions {
+    @apply right-auto left-0 pr-0;
+}
+
+.ce-toolbar__settings-btn {
+    @apply ml-0;
+}

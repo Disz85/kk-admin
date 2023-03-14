@@ -3,10 +3,13 @@
 namespace Database\Seeders;
 
 use App\Models\Brand;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class BrandSeeder extends Seeder
 {
+    public const COUNT = 30;
+
     /**
      * Run the database seeds.
      *
@@ -14,6 +17,8 @@ class BrandSeeder extends Seeder
      */
     public function run()
     {
-        Brand::factory()->count(30)->create();
+        $users = User::inRandomOrder()->pluck('id');
+
+        Brand::factory()->count(self::COUNT)->create(['created_by' => $users->random(1)->first()]);
     }
 }

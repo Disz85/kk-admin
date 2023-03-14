@@ -54,15 +54,15 @@ class ProductRequestMapper
             $categories = array_merge($categories, $skinConcerns);
         }
 
+        if ($hairProblems = data_get($data, 'hair_problems.*.id')) {
+            $categories = array_merge($categories, $hairProblems);
+        }
+
         $product->categories()->sync($categories);
 
-        if ($tags = data_get($data, 'tags.*.id')) {
-            $product->tags()->sync($tags);
-        }
+        $product->tags()->sync(data_get($data, 'tags.*.id'));
 
-        if ($ingredients = data_get($data, 'ingredients.*.id')) {
-            $product->ingredients()->sync($ingredients);
-        }
+        $product->ingredients()->sync(data_get($data, 'ingredients.*.id'));
 
         $product->refresh();
 

@@ -156,7 +156,7 @@ class ProductTest extends TestCase
 
     private function makeDummyRequestData(): array
     {
-        $category = Category::factory()->createOne(['type' => CategoryTypeEnum::Product]);
+        $category = Category::factory()->createOne(['type' => CategoryTypeEnum::Product->value]);
         $tags = Tag::factory()->count(2)->create();
         $ingredients = Ingredient::factory()->count(2)->create();
         $product = ProductFactory::new()->raw();
@@ -171,7 +171,7 @@ class ProductTest extends TestCase
 
     private function createAProductWithRelations(): array
     {
-        $category = Category::factory()->createOne(['type' => CategoryTypeEnum::Product]);
+        $category = Category::factory()->createOne(['type' => CategoryTypeEnum::Product->value]);
         $tags = Tag::factory()->count(2)->create();
         $ingredients = Ingredient::factory()->count(2)->create();
 

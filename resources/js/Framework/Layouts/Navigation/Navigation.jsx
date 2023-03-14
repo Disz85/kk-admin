@@ -10,20 +10,17 @@ import navigationIcons from '../../../config/navigationIcons';
 // COMPONENTS
 import NavItem from './NavItem';
 
+// STYLES
 import style from '../../../../scss/layouts/navigation.module.scss';
+import NavigationGroup from './NavigationGroup';
 
 const Navigation = ({ items, action }) => {
     // Contexts
     const { t } = useTranslation();
-    const ANR = ' ';
 
     return (
         <nav className={style.menu}>
-            <ul
-                className={`${style.list} ${
-                    action ? ANR + style.listClosed : ''
-                }`}
-            >
+            <ul className={`${style.list} ${action ? style.listClosed : ''}`}>
                 <NavItem
                     key="home"
                     title={t('application.home')}
@@ -31,15 +28,40 @@ const Navigation = ({ items, action }) => {
                     action={action}
                     icon={faHome}
                 />
-                {items.map(({ name, path }) => (
-                    <NavItem
-                        key={name}
-                        title={t(`${name}.${name}`)}
-                        path={path}
-                        action={action}
-                        icon={navigationIcons[name]}
-                    />
-                ))}
+                {items
+                    .filter((item) => {
+                        return !item.group || (item.group && item.groupParent);
+                    })
+                    .map(({ name, group, groupParent, path }) => {
+                        if (!groupParent) {
+                            return (
+                                <NavItem
+                                    key={name}
+                                    title={t(`${group ?? name}.${name}`)}
+                                    path={path}
+                                    action={action}
+                                    icon={navigationIcons[name]}
+                                    group={group}
+                                    isParent={groupParent}
+                                />
+                            );
+                        }
+
+                        // GROUP NAVIGATION
+                        return (
+                            <NavigationGroup
+                                key={name}
+                                name={name}
+                                action={action}
+                                items={items.filter((item) => {
+                                    return (
+                                        item.group === group &&
+                                        !item.groupParent
+                                    );
+                                })}
+                            />
+                        );
+                    })}
             </ul>
         </nav>
     );
@@ -51,7 +73,6 @@ Navigation.propTypes = {
      */
     items: PropTypes.arrayOf(
         PropTypes.shape({
-            // map: PropTypes.shape.isRequired,
             name: PropTypes.string,
             path: PropTypes.string,
         }),

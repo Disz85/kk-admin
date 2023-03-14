@@ -13,5 +13,11 @@ export default {
     published_at: 'Publikálva',
     categories: 'Funkciók',
 
+    Robust: 'Nagyon sok',
+    Good: 'Sok',
+    Fair: 'Közepes',
+    Limited: 'Korlátozott',
+    None: 'Nincs',
+
     delete: 'Törlés',
 };

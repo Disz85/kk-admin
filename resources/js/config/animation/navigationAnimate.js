@@ -1,7 +1,7 @@
 const navigationAnimate = {
     open: {
         paddingTop: '0',
-        width: '24rem',
+        width: '28rem',
         transition: {
             type: 'tween',
             when: 'beforeChildren',
@@ -19,7 +19,7 @@ const navigationAnimate = {
     },
     listItem: {
         hover: {
-            scale: 1.1,
+            scale: 1.03,
             transition: {
                 type: 'spring',
                 stiffness: 400,

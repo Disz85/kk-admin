@@ -78,7 +78,7 @@ class ProductController extends Controller
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"name", "image[id]", "is_active", "is_sponsored", "is_18_plus", "brand_id", "price"},
+     *                 required={"name", "description", "category[id]", "image[id]", "is_active", "is_sponsored", "is_18_plus", "brand[id]"},
      *                 @OA\Property(
      *                     property="name",
      *                     type="string",
@@ -92,13 +92,12 @@ class ProductController extends Controller
      *                 @OA\Property(
      *                     property="description",
      *                     type="string",
-     *                     description="Desciption",
+     *                     description="Description",
      *                 ),
      *                 @OA\Property(
      *                     property="price",
      *                     type="string",
      *                     description="price",
-     *                     example="1",
      *                 ),
      *                 @OA\Property(
      *                     property="size",
@@ -106,7 +105,7 @@ class ProductController extends Controller
      *                     description="size",
      *                 ),
      *                 @OA\Property(
-     *                     property="brand_id",
+     *                     property="brand[id]",
      *                     type="integer",
      *                     description="brand_id",
      *                 ),
@@ -141,14 +140,39 @@ class ProductController extends Controller
      *                     description="Image ID",
      *                 ),
      *                 @OA\Property (
-     *                     property="categories[0]",
+     *                     property="category[id]",
      *                     type="integer",
-     *                     description="category 1 id",
+     *                     description="Category id",
      *                 ),
      *                 @OA\Property (
-     *                     property="categories[1]",
+     *                     property="skin_types[0]",
      *                     type="integer",
-     *                     description="category 2 id",
+     *                     description="Skin type 1 id",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="skin_types[1]",
+     *                     type="integer",
+     *                     description="Skin type 2 id",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="skin_concerns[0]",
+     *                     type="integer",
+     *                     description="Skin concerns 1 id",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="skin_concerns[1]",
+     *                     type="integer",
+     *                     description="Skin concerns 2 id",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="hair_problems[0]",
+     *                     type="integer",
+     *                     description="Hair problem 1 id",
+     *                 ),
+     *                 @OA\Property (
+     *                     property="hair_problems[1]",
+     *                     type="integer",
+     *                     description="Hair problem 2 id",
      *                 ),
      *                 @OA\Property (
      *                     property="tags[0]",
@@ -393,7 +417,7 @@ class ProductController extends Controller
      *
      * @OA\Delete (
      *     tags={"Products"},
-     *     path="/admin/product/{product}",
+     *     path="/admin/products/{product}",
      *     security={{"bearer":{}}},
      *     @OA\RequestBody(
      *         required=false,

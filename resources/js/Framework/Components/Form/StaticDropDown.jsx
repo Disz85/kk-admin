@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+// TRANSLATIONS
+import { useTranslation } from 'react-i18next';
+
 // COMPONENTS
 import Field from './Field';
 
@@ -14,10 +17,12 @@ const StaticDropDown = ({
     label,
     onChange,
     service,
+    readonly,
     ...props
 }) => {
-    const { name } = props;
+    const { name, resource } = props;
     const [options, setOptions] = useState([]);
+    const { t } = useTranslation();
 
     useEffect(() => {
         service.get(path).then((result) => {
@@ -26,7 +31,7 @@ const StaticDropDown = ({
             setOptions(
                 resultOptions.map((item) => ({
                     id: item,
-                    label: item,
+                    label: t(`${resource}.${item}`),
                 })),
             );
         });
@@ -59,15 +64,13 @@ const StaticDropDown = ({
                                         : ''
                                 }
                                 onChange={change}
+                                disabled={readonly}
                                 {...attr}
                             >
                                 <option value="">&nbsp;</option>
-                                {options.map((item, index) => {
+                                {options.map((item) => {
                                     return (
-                                        <option
-                                            value={item[value]}
-                                            key={item.id || item.value || index}
-                                        >
+                                        <option value={item.id} key={item.id}>
                                             {item.label}
                                         </option>
                                     );
@@ -116,4 +119,16 @@ StaticDropDown.propTypes = {
      * Type of name
      */
     name: PropTypes.string.isRequired,
+    /**
+     * Type of resource
+     */
+    resource: PropTypes.string.isRequired,
+    /**
+     * Type of readonly
+     */
+    readonly: PropTypes.bool,
+};
+
+StaticDropDown.defaultProps = {
+    readonly: false,
 };

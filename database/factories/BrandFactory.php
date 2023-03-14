@@ -18,7 +18,7 @@ class BrandFactory extends Factory
     public function definition()
     {
         return [
-            'title' => fake()->company,
+            'title' => fake()->unique()->company,
             'description' => $this->fakeArrayContent(),
             'url' => fake()->url,
             'where_to_find' => fake()->text(),

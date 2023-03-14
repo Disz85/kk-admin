@@ -2,7 +2,15 @@ import React from 'react';
 
 const resourceToCollection = (
     resources,
-    { name, list, form, routes = [], requiresPermission = true },
+    {
+        name,
+        list,
+        form,
+        groupParent,
+        children,
+        routes = [],
+        requiresPermission = true,
+    },
 ) => {
     if (name && list) {
         resources.push({
@@ -38,6 +46,66 @@ const resourceToCollection = (
         });
     }
 
+    if (name && groupParent) {
+        resources.push({
+            name,
+            requiresPermission,
+            group: name,
+            groupParent,
+            listable: true,
+            children,
+        });
+
+        children.map((child) => {
+            const {
+                name: childName,
+                list: childList,
+                form: childForm,
+                group: childGroup,
+                requiresPermission: childRequiresPermission = true,
+            } = child.props;
+
+            if (childName && childList) {
+                resources.push({
+                    name: childName,
+                    requiresPermission: childRequiresPermission,
+                    path: `/${childName}`,
+                    component: childList,
+                    listable: true,
+                    group: childGroup,
+                });
+                resources.push({
+                    name: childName,
+                    requiresPermission: childRequiresPermission,
+                    path: `/${childName}/page/:page`,
+                    component: childList,
+                    listable: false,
+                    group: childGroup,
+                });
+            }
+
+            if (childName && childForm) {
+                resources.push({
+                    name: childGroup,
+                    requiresPermission: childRequiresPermission,
+                    path: `/${childGroup}/new`,
+                    component: childForm,
+                    listable: false,
+                    group: childGroup,
+                });
+                resources.push({
+                    name: childGroup,
+                    requiresPermission: childRequiresPermission,
+                    path: `/${childGroup}/:id/show`,
+                    component: childForm,
+                    listable: false,
+                    group: childGroup,
+                });
+            }
+            return null;
+        });
+    }
+
     routes.map(({ path, listable, component }) =>
         resources.push({
             name,
@@ -54,6 +122,7 @@ const registerResources = (children) => {
     React.Children.forEach(children, (child) =>
         resourceToCollection(resources, child.props),
     );
+
     return resources;
 };
 

@@ -8,6 +8,7 @@ enum CategoryTypeEnum: string
     case Product = 'product';
     case SkinType = 'skintype';
     case SkinConcern = 'skinconcern';
+    case HairProblem = 'hairproblem';
     case Ingredient = 'ingredient';
 
     public static function toArray(): array

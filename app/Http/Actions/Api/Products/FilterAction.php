@@ -16,6 +16,7 @@ class FilterAction
         $ingredientsToExclude = data_get($filters, 'exclude_ingredients');
         $skinTypes = data_get($filters, 'skin_types');
         $skinConcerns = data_get($filters, 'skin_concerns');
+        $hairProblems = data_get($filters, 'hair_problems');
 
         return Query::bool()
             ->when(
@@ -70,6 +71,15 @@ class FilterAction
                         Query::terms()
                             ->field('skin_concerns.uuid.keyword')
                             ->values($skinConcerns)
+                    )
+            )
+            ->when(
+                $hairProblems,
+                fn (BoolQueryBuilder $builder) => $builder
+                    ->filter(
+                        Query::terms()
+                            ->field('hair_problems.uuid.keyword')
+                            ->values($hairProblems)
                     )
             )
             ->when(

@@ -26,9 +26,7 @@ class IngredientRequestMapper
 
         $ingredient->save();
 
-        if ($categories = data_get($data, 'categories.*.id')) {
-            $ingredient->categories()->sync($categories);
-        }
+        $ingredient->categories()->sync(data_get($data, 'categories.*.id'));
 
         $ingredient->refresh();
 

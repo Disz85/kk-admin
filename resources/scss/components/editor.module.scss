@@ -33,8 +33,8 @@ textarea,
 }
 
 .galleryHeader {
-    @apply flex justify-between mb-4;
-    @apply md:items-center;
+    @apply flex flex-col justify-between mb-4;
+    @apply xl:flex-row;
 }
 
 .galleryFooter {
@@ -42,7 +42,7 @@ textarea,
 }
 
 .galleryTile {
-    @apply flex flex-col md:flex-row items-center my-4 p-2 bg-light-snow rounded-lg;
+    @apply flex flex-col xl:flex-row items-center my-4 p-2 bg-light-snow rounded-lg;
 }
 
 .galleryUploadWrapper,

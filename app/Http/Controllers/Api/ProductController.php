@@ -102,6 +102,20 @@ class ProductController extends Controller
      *         allowEmptyValue="true"
      *    ),
      *    @OA\Parameter (
+     *         name="filter[hair_problems][0]",
+     *         in="query",
+     *         description="hair_problem 1",
+     *         @OA\Schema(type="string"),
+     *         allowEmptyValue="true"
+     *    ),
+     *    @OA\Parameter (
+     *         name="filter[hair_problems][1]",
+     *         in="query",
+     *         @OA\Schema(type="string"),
+     *         description="hair_problem 2",
+     *         allowEmptyValue="true"
+     *    ),
+     *    @OA\Parameter (
      *         name="filter[ingredients][0]",
      *         in="query",
      *         description="ingredient 1",

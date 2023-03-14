@@ -34,6 +34,9 @@ use Illuminate\Support\Collection;
  *     @OA\Property(property="image_id", type="int"),
  *     @OA\Property(property="tags", type="int"),
  *     @OA\Property(property="categories", type="int"),
+ *     @OA\Property(property="skin_types", type="int"),
+ *     @OA\Property(property="skin_concerns", type="int"),
+ *     @OA\Property(property="hair_problems", type="int"),
  *     @OA\Property(property="brand_id", type="int"),
  *     @OA\Property(property="ingredients", type="int"),
  *     @OA\Property(property="ingredients_by", type="int"),
@@ -67,6 +70,7 @@ use Illuminate\Support\Collection;
  * @property Ingredient[]|Collection $ingredients
  * @property Collection $skinTypeCategories
  * @property Collection $skinConcernCategories
+ * @property Collection $hairProblemCategories
  * @property int|null $created_by
  * @property int|null $updated_by
  * @property Carbon|null $published_at
@@ -191,16 +195,21 @@ class Product extends Model
 
     public function getProductCategoryAttribute(): ?Category
     {
-        return $this->categories()->where('type', CategoryTypeEnum::Product)->first();
+        return $this->categories()->where('type', CategoryTypeEnum::Product->value)->first();
     }
 
     public function getSkinTypeCategoriesAttribute(): Collection
     {
-        return $this->categories()->where('type', CategoryTypeEnum::SkinType)->get();
+        return $this->categories()->where('type', CategoryTypeEnum::SkinType->value)->get();
     }
 
     public function getSkinConcernCategoriesAttribute(): Collection
     {
-        return $this->categories()->where('type', CategoryTypeEnum::SkinConcern)->get();
+        return $this->categories()->where('type', CategoryTypeEnum::SkinConcern->value)->get();
+    }
+
+    public function getHairProblemCategoriesAttribute(): Collection
+    {
+        return $this->categories()->where('type', CategoryTypeEnum::HairProblem->value)->get();
     }
 }

@@ -52,18 +52,23 @@ class ProductFactory extends Factory
     public function withTags(Tag|Collection $tags = null, int $count = 1): self
     {
         return $this->hasAttached(
-            $tags ?? TagFactory::new()->count($count)
+            $tags ?? TagFactory::new()->count($count),
+            [],
+            'tags'
         );
     }
 
     /**
-     * @param Category $category
+     * @param Category|Collection $category
+     * @param int $count
      * @return $this
      */
-    public function withCategory(Category $category): self
+    public function withCategory(Category|Collection $category, int $count = 1): self
     {
         return $this->hasAttached(
-            $category ?? Category::factory()->createOne(['type' => CategoryTypeEnum::Product])
+            $category ?? CategoryFactory::new(['type' => CategoryTypeEnum::Product->value])->count($count),
+            [],
+            'categories'
         );
     }
 
@@ -75,7 +80,9 @@ class ProductFactory extends Factory
     public function withSkinTypes(Category|Collection $categories = null, int $count = 1): self
     {
         return $this->hasAttached(
-            $categories ?? CategoryFactory::new(['type' => CategoryTypeEnum::SkinType])->count($count)
+            $categories ?? CategoryFactory::new(['type' => CategoryTypeEnum::SkinType->value])->count($count),
+            [],
+            'categories'
         );
     }
 
@@ -87,7 +94,23 @@ class ProductFactory extends Factory
     public function withSkinConcerns(Category|Collection $categories = null, int $count = 1): self
     {
         return $this->hasAttached(
-            $categories ?? CategoryFactory::new(['type' => CategoryTypeEnum::SkinConcern])->count($count)
+            $categories ?? CategoryFactory::new(['type' => CategoryTypeEnum::SkinConcern->value])->count($count),
+            [],
+            'categories'
+        );
+    }
+
+    /**
+     * @param Category|Collection|null $categories
+     * @param int $count
+     * @return $this
+     */
+    public function withHairProblems(Category|Collection $categories = null, int $count = 1): self
+    {
+        return $this->hasAttached(
+            $categories ?? CategoryFactory::new(['type' => CategoryTypeEnum::HairProblem->value])->count($count),
+            [],
+            'categories'
         );
     }
 
@@ -99,7 +122,9 @@ class ProductFactory extends Factory
     public function withIngredients(Ingredient|Collection $ingredients = null, int $count = 1): self
     {
         return $this->hasAttached(
-            $ingredients ?? IngredientFactory::new()->count($count)
+            $ingredients ?? IngredientFactory::new()->count($count),
+            [],
+            'ingredients'
         );
     }
 

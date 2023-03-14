@@ -38,6 +38,10 @@ class ProductResource extends JsonResource
                 'categories',
                 CategoryResource::collection($this->skinConcernCategories)
             ),
+            'hair_problems' => $this->whenLoaded(
+                'categories',
+                CategoryResource::collection($this->hairProblemCategories)
+            ),
         ];
     }
 }

@@ -22,6 +22,10 @@ class AutocompleteController extends Controller
     {
         return new AuthorCollection(
             Author::where('name', 'like', '%' . $request->get('name') . '%')
+                ->when(
+                    $request->has('withoutId'),
+                    fn (Builder $query) => $query->where('id', '!=', $request->get('withoutId'))
+                )
                 ->orderBy('name')
                 ->get()
         );
@@ -31,6 +35,10 @@ class AutocompleteController extends Controller
     {
         return new TagCollection(
             Tag::where('name', 'LIKE', '%' . $request->get('name') . '%')
+                ->when(
+                    $request->has('withoutId'),
+                    fn (Builder $query) => $query->where('id', '!=', $request->get('withoutId'))
+                )
                 ->orderBy('name')
                 ->get()
         );
@@ -45,6 +53,10 @@ class AutocompleteController extends Controller
                     $request->has('name'),
                     fn (Builder $query) => $query->where('name', 'like', '%' . $request->get('name') . '%')
                 )
+                ->when(
+                    $request->has('withoutId'),
+                    fn (Builder $query) => $query->where('id', '!=', $request->get('withoutId'))
+                )
                 ->orderBy('name')
                 ->get()
         );
@@ -54,6 +66,10 @@ class AutocompleteController extends Controller
     {
         return new BrandCollection(
             Brand::where('title', 'LIKE', '%' . $request->get('title') . '%')
+                ->when(
+                    $request->has('withoutId'),
+                    fn (Builder $query) => $query->where('id', '!=', $request->get('withoutId'))
+                )
                 ->orderBy('title')
                 ->get()
         );
@@ -63,6 +79,10 @@ class AutocompleteController extends Controller
     {
         return new IngredientCollection(
             Ingredient::where('name', 'LIKE', '%' . $request->get('name') . '%')
+                ->when(
+                    $request->has('withoutId'),
+                    fn (Builder $query) => $query->where('id', '!=', $request->get('withoutId'))
+                )
                 ->orderBy('name')
                 ->get()
         );

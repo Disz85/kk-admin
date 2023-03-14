@@ -30,17 +30,11 @@ class ArticleRequestMapper
 
         $article->save();
 
-        if ($authors = data_get($data, 'authors.*.id')) {
-            $article->authors()->sync($authors);
-        }
+        $article->authors()->sync(data_get($data, 'authors.*.id'));
 
-        if ($tags = data_get($data, 'tags.*.id')) {
-            $article->tags()->sync($tags);
-        }
+        $article->tags()->sync(data_get($data, 'tags.*.id'));
 
-        if ($categories = data_get($data, 'categories.*.id')) {
-            $article->categories()->sync($categories);
-        }
+        $article->categories()->sync(data_get($data, 'categories.*.id'));
 
         $article->refresh();
 

@@ -2,17 +2,19 @@ import React from 'react';
 
 // COMPONENTS
 import Form from '../../Framework/Components/Form/Form';
-import Panel from '../../Framework/Components/Panel';
 import TextInput from '../../Framework/Components/Form/TextInput';
 import Toggle from '../../Framework/Components/Form/Toggle';
+import Grid, { GridLeft } from '../../Framework/Layouts/Grid';
 
 const TagForm = (props) => (
     <Form {...props}>
-        <Panel className="md:w-2/4">
-            <TextInput name="name" />
-            <TextInput name="description" />
-            <Toggle name="is_highlighted" />
-        </Panel>
+        <Grid>
+            <GridLeft>
+                <TextInput name="name" />
+                <TextInput name="description" />
+                <Toggle name="is_highlighted" />
+            </GridLeft>
+        </Grid>
     </Form>
 );
 

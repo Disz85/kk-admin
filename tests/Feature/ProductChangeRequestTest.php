@@ -124,7 +124,7 @@ class ProductChangeRequestTest extends TestCase
 
     public function makeDummyRequestData(): array
     {
-        $category = Category::factory()->create(['type' => CategoryTypeEnum::Product]);
+        $category = Category::factory()->create(['type' => CategoryTypeEnum::Product->value]);
         $tags = Tag::factory()->count(2)->create();
         $product = ProductFactory::new()->raw();
         $product['brand']['id'] = $product['brand_id'];

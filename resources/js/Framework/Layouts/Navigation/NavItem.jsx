@@ -11,7 +11,7 @@ import navigationAnimate from '../../../config/animation/navigationAnimate';
 
 import style from '../../../../scss/layouts/navigation.module.scss';
 
-const NavItem = ({ title, path, action, icon = false }) => {
+const NavItem = ({ title, path, action, icon = false, className }) => {
     const initialState = 'open';
     const animation = action ? 'closed' : initialState;
 
@@ -20,7 +20,7 @@ const NavItem = ({ title, path, action, icon = false }) => {
             whileHover="hover"
             variants={navigationAnimate.listItem}
             key={title}
-            className={style.item}
+            className={`${style.item} ${className}`}
         >
             <NavLink
                 className={({ isActive }) =>
@@ -70,8 +70,13 @@ NavItem.propTypes = {
      * Type of icon
      */
     icon: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+    /**
+     * Type of className
+     */
+    className: PropTypes.string,
 };
 
 NavItem.defaultProps = {
     icon: false,
+    className: '',
 };

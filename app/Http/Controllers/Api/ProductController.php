@@ -178,12 +178,12 @@ class ProductController extends Controller
      *
      * @OA\Get(
      *     tags={"Products API"},
-     *     path="/api/products/{product}",
+     *     path="/api/products/{slug}",
      *     @OA\Parameter(
-     *         name="product",
+     *         name="slug",
      *         in="path",
      *         required=true,
-     *         description="Product UUID",
+     *         description="Product slug",
      *         @OA\Schema(type="string"),
      *     ),
      *    @OA\Response(

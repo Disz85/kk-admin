@@ -46,6 +46,6 @@ Route::middleware(['cache.headers:max_age=' . config('api.max-age')])->group(fun
 
     Route::get('products', [ ProductController::class, 'index' ])
         ->name('products.index');
-    Route::get('products/{product:uuid}', [ ProductController::class, 'show' ])
+    Route::get('products/{product:slug}', [ ProductController::class, 'show' ])
         ->name('products.show');
 });

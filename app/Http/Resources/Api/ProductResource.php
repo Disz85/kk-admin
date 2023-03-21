@@ -36,8 +36,9 @@ class ProductResource extends JsonResource
             'is_sponsored' => $this->is_sponsored,
             'is_18_plus' => $this->is_18_plus,
             'created_by' => new UserResource($this->whenLoaded('createdBy')),
-            'updated_by' => new UserResource($this->whenLoaded('updatedBy')),
+            'ingredients_by' => new UserResource($this->whenLoaded('ingredientsBy')),
             'published_at' => $this->published_at,
+            'tags' => TagResource::collection($this->whenLoaded('tags')),
             'category_hierarchy' => $this->whenLoaded(
                 'categories',
                 new CategoryCollection(

@@ -187,6 +187,30 @@ class Product extends Model
     }
 
     /**
+     * @return BelongsTo<User, Product>
+     */
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * @return BelongsTo<User, Product>
+     */
+    public function updatedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    /**
+     * @return BelongsTo<User, Product>
+     */
+    public function ingredientsBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'ingredients_by');
+    }
+
+    /**
      * @return BelongsTo<Brand, Product>
      */
     public function brand(): BelongsTo

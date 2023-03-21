@@ -41,11 +41,13 @@ Route::middleware(['cache.headers:max_age=' . config('api.max-age')])->group(fun
 
     Route::get('/ingredients', [ IngredientController::class, 'index' ])
         ->name('ingredients.index');
-    Route::get('/ingredients/{ingredient:uuid}', [ IngredientController::class, 'show' ])
+    Route::get('/ingredients/{ingredient:slug}', [ IngredientController::class, 'show' ])
         ->name('ingredients.show');
 
     Route::get('products', [ ProductController::class, 'index' ])
         ->name('products.index');
     Route::get('products/{product:slug}', [ ProductController::class, 'show' ])
         ->name('products.show');
+    Route::get('products/ingredient-functions/{product:slug}', [ ProductController::class, 'show' ])
+        ->name('products.ingredientFunctions');
 });

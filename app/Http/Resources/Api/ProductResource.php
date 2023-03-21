@@ -30,6 +30,8 @@ class ProductResource extends JsonResource
             'where_to_find' => $this->where_to_find,
             'description' => $this->description,
             'brand' => new BrandResource($this->whenLoaded('brand')),
+            'ingredients' => IngredientResource::collection($this->whenLoaded('ingredients')),
+            'categories' => CategoryResource::collection($this->whenLoaded('categories')),
             'is_active' => $this->is_active,
             'is_sponsored' => $this->is_sponsored,
             'is_18_plus' => $this->is_18_plus,

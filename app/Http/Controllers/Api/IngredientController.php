@@ -130,12 +130,12 @@ class IngredientController extends Controller
      *
      * @OA\Get(
      *     tags={"Ingredients API"},
-     *     path="/api/ingredients/{ingredient}",
+     *     path="/api/ingredients/{slug}",
      *     @OA\Parameter(
-     *         name="ingredient",
+     *         name="slug",
      *         in="path",
      *         required=true,
-     *         description="Ingredient UUID",
+     *         description="Ingredient slug",
      *         @OA\Schema(type="string"),
      *     ),
      *    @OA\Response(

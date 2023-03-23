@@ -20,11 +20,9 @@ class ArticleSeeder extends Seeder
      */
     public function run()
     {
-        $authors = Author::factory()->count(10)->create();
-        $categories = Category::factory()->count(10)->create([
-            'type' => CategoryTypeEnum::Article->value,
-        ]);
-        $tags = Tag::factory()->count(30)->create();
+        $authors = Author::query()->pluck('id');
+        $categories = Category::query()->where('type', CategoryTypeEnum::Article->value)->pluck('id');
+        $tags = Tag::query()->pluck('id');
 
         foreach (range(1, self::COUNT) as $iter) {
             Article::factory()

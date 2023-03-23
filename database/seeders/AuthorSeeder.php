@@ -2,10 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Author;
 use Illuminate\Database\Seeder;
 
 class AuthorSeeder extends Seeder
 {
+    public const COUNT = 20;
+
     /**
      * Run the database seeds.
      *
@@ -13,6 +16,6 @@ class AuthorSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Author::factory()->count(self::COUNT)->create();
     }
 }

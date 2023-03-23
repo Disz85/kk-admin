@@ -17,7 +17,7 @@ class BrandSeeder extends Seeder
      */
     public function run()
     {
-        $users = User::inRandomOrder()->pluck('id');
+        $users = User::query()->pluck('id');
 
         Brand::factory()->count(self::COUNT)->create(['created_by' => $users->random()]);
     }

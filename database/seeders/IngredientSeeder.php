@@ -19,13 +19,13 @@ class IngredientSeeder extends Seeder
      */
     public function run()
     {
-        $categories = Category::where(['type' => CategoryTypeEnum::Ingredient->value])->inRandomOrder()->pluck('id');
-        $users = User::inRandomOrder()->pluck('id');
+        $categories = Category::query()->where(['type' => CategoryTypeEnum::Ingredient->value])->pluck('id');
+        $users = User::query()->pluck('id');
 
         foreach (range(1, self::COUNT) as $iter) {
             Ingredient::factory()
                 ->withCategories($categories->random(rand(1, 5)))
-                ->create(['created_by' => $users->random(1)->first()]);
+                ->create(['created_by' => $users->random()]);
         }
     }
 }

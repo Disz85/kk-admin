@@ -22,19 +22,19 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        $categories = Category::where(['type' => CategoryTypeEnum::Product->value])->inRandomOrder()->pluck('id');
-        $skinTypes = Category::where(['type' => CategoryTypeEnum::SkinType->value])->inRandomOrder()->pluck('id');
-        $skinConcerns = Category::where(['type' => CategoryTypeEnum::SkinConcern->value])->inRandomOrder()->pluck('id');
-        $hairProblems = Category::where(['type' => CategoryTypeEnum::HairProblem->value])->inRandomOrder()->pluck('id');
+        $categories = Category::query()->where(['type' => CategoryTypeEnum::Product->value])->pluck('id');
+        $skinTypes = Category::query()->where(['type' => CategoryTypeEnum::SkinType->value])->pluck('id');
+        $skinConcerns = Category::query()->where(['type' => CategoryTypeEnum::SkinConcern->value])->pluck('id');
+        $hairProblems = Category::query()->where(['type' => CategoryTypeEnum::HairProblem->value])->pluck('id');
 
-        $tags = Tag::inRandomOrder()->pluck('id');
-        $ingredients = Ingredient::inRandomOrder()->pluck('id');
-        $users = User::inRandomOrder()->pluck('id');
-        $brands = Brand::inRandomOrder()->pluck('id');
+        $tags = Tag::query()->pluck('id');
+        $ingredients = Ingredient::query()->pluck('id');
+        $users = User::query()->pluck('id');
+        $brands = Brand::query()->pluck('id');
 
         foreach (range(1, self::COUNT) as $iter) {
-            $user = $users->random(1)->first();
-            $brand = $brands->random(1)->first();
+            $user = $users->random();
+            $brand = $brands->random();
 
             Product::factory()
                 ->withTags($tags->random(rand(0, 5)))

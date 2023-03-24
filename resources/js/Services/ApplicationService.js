@@ -37,11 +37,9 @@ const ApplicationService = {
     post: (resource, path, payload) =>
         axios.post(`/admin/${resource}/${path}`, payload).then((r) => r.data),
 
-    store: (resource, entity) =>
-        entity.id
-            ? axios
-                  .put(`/admin/${resource}/${entity.id}`, entity)
-                  .then((r) => r.data)
+    store: (resource, entity, id = false) =>
+        id
+            ? axios.put(`/admin/${resource}/${id}`, entity).then((r) => r.data)
             : axios.post(`/admin/${resource}`, entity).then((r) => r.data),
 
     remove: (resource, id) =>
@@ -50,6 +48,16 @@ const ApplicationService = {
     get: (path, params = {}) =>
         axios
             .get(queryParams(`/admin/${path}`, { ...params }))
+            .then((r) => r.data),
+
+    approve: (resource, entity, changeId) =>
+        axios
+            .post(`/admin/${resource}/${changeId}/approve`, entity)
+            .then((r) => r.data),
+
+    reject: (resource, entity, changeId) =>
+        axios
+            .post(`/admin/${resource}/${changeId}/reject`, entity)
             .then((r) => r.data),
 };
 

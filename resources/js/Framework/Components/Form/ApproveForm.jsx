@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 // ROUTES
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 // TRANSLATION
 import { useTranslation } from 'react-i18next';
 // CONFIG
@@ -9,21 +9,17 @@ import navigationIcons from '../../../config/navigationIcons';
 // HOOKS
 import useUpdateEffect from '../../../Hooks/useUpdateEffect';
 // CONTEXTS
-import { AuthContext } from '../../Context/AuthContext';
 import { MessageContext } from '../../Context/MessageContext';
 import ApplicationContext from '../../Context/ApplicationContext';
 // HELPERS
-import {
-    createNewEntityFromChildren,
-    recursiveMap,
-} from '../../../Helpers/recursions';
-// COMPONENTS
-import Submit from './Submit';
-import Modal from '../Modal';
-import Button from '../Buttons/Button';
+import { recursiveMap } from '../../../Helpers/recursions';
 
 // STYLES
 import style from '../../../../scss/components/form.module.scss';
+
+// BUTTONS
+import Approve from '../Buttons/Approve';
+import Reject from '../Buttons/Reject';
 
 // const NAVIGATION_MESSAGE =
 //     'Biztosan elhagyod az oldalt? A módosításaid így elvesznek!';
@@ -40,7 +36,7 @@ import style from '../../../../scss/components/form.module.scss';
  * @returns {null|*}
  * @constructor
  */
-const Form = ({
+const ApproveForm = ({
     service,
     resource,
     history,
@@ -50,7 +46,7 @@ const Form = ({
 }) => {
     const setPageInfo = useContext(ApplicationContext);
     const { pushMessage } = useContext(MessageContext);
-    const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
     const { t } = useTranslation();
     const { id } = useParams();
     const ref = useRef(null);
@@ -62,7 +58,6 @@ const Form = ({
         loading: true,
         changed: false,
         created: false,
-        lock: null,
     });
 
     const { entity, errors, loading } = state;
@@ -70,12 +65,6 @@ const Form = ({
     const update = (change) => {
         setState((oldState) => ({ ...oldState, ...change }));
     };
-
-    // MODEL LOCK CALLBACKS
-    const passLock = () =>
-        service.passLock(state.lock, user).then(() => history.go(0));
-
-    const back = () => history.goBack();
 
     const scrollToFirstError = () => {
         if (!ref.current) {
@@ -92,37 +81,89 @@ const Form = ({
         }
     };
 
-    const save = () => {
-        if (immutable || !state.changed || loading) {
-            return;
-        }
-
-        update({ loading: true, changed: false, errors: {} });
-
+    const approve = () => {
         service
-            .store(resource, entity, entity.id)
+            .approve(resource, entity, id)
             .then((result) => {
                 if (creates) {
-                    history.push(`/${creates}/${result.id}/show`);
-                    return;
+                    update({ loading: false, changed: false });
+                    pushMessage({ title: t('application.approved') });
+                    setTimeout(() => {
+                        navigate(`/${creates}/${result.data.id}/show`);
+                    }, 2000);
                 }
-
-                update({ entity: result.data, created: !entity.id });
-                pushMessage({ title: 'Sikeres mentés!' });
             })
             .catch(({ response }) => {
                 pushMessage({
-                    title: 'A szerkesztés meghiúsult!',
+                    title: t('application.approvalFailed'),
                     type: 'error',
                 });
 
                 update({
                     errors: (response && response.data.errors) || {},
-                    changed: true,
                 });
                 scrollToFirstError();
             })
-            .finally(() => update({ loading: false }));
+            .finally(() => {
+                update({ loading: false });
+            });
+    };
+
+    const save = () => {
+        if (immutable || loading) {
+            return;
+        }
+
+        update({ loading: true, errors: {} });
+
+        if (state.changed) {
+            service
+                .store(resource, entity, id)
+                .then((result) => {
+                    update({ entity: result.data, created: !entity.id });
+                    approve();
+                })
+                .catch(({ response }) => {
+                    pushMessage({
+                        title: t('application.saveFailed'),
+                        type: 'error',
+                    });
+
+                    update({
+                        errors: (response && response.data.errors) || {},
+                    });
+                    scrollToFirstError();
+                });
+        } else {
+            approve();
+        }
+    };
+
+    const reject = () => {
+        service
+            .reject(resource, entity, id)
+            .then(() => {
+                if (creates) {
+                    pushMessage({ title: t('application.rejected') });
+                    setTimeout(() => {
+                        navigate(`/${resource}`);
+                    }, 2000);
+                }
+            })
+            .catch(({ response }) => {
+                pushMessage({
+                    title: t('application.rejectionFailed'),
+                    type: 'error',
+                });
+
+                update({
+                    errors: (response && response.data.errors) || {},
+                });
+                scrollToFirstError();
+            })
+            .finally(() => {
+                update({ loading: false });
+            });
     };
 
     // Callbacks
@@ -170,20 +211,11 @@ const Form = ({
 
                     if (response.status === 423) {
                         update({
-                            lock: response.data,
                             display: true,
                             loading: false,
                         });
                     }
                 });
-        }
-
-        if (!id) {
-            update({
-                loading: false,
-                display: true,
-                entity: createNewEntityFromChildren(children),
-            });
         }
     }, []);
 
@@ -195,7 +227,7 @@ const Form = ({
             display: true,
             loading: false,
             created: false,
-            changed: false,
+            changed: true,
         });
     }, [id]);
 
@@ -214,23 +246,6 @@ const Form = ({
     useEffect(() => {
         window.onbeforeunload = () => true;
     });
-
-    /**
-     * Check periodically for a lock status in case the entity lock was taken away by some other user
-     */
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (state.entity && state.entity.lock) {
-                service.lockStatus(state.entity.lock).catch(({ response }) => {
-                    update({
-                        lock: response.status === 423 ? response.data : null,
-                    });
-                });
-            }
-        }, 5000);
-
-        return () => clearInterval(interval);
-    }, [state.entity]);
 
     /**
      * If component is not ready to display its content yet return null
@@ -259,33 +274,17 @@ const Form = ({
 
     // after React.Fragment: <Prompt when={ state.changed } message={ NAVIGATION_MESSAGE }/>
     return (
-        <>
-            {state.lock && (
-                <Modal isOpen={!!state.lock} onRequestClose={back}>
-                    <h2>
-                        {t(`${resource}.resource`)} zárolva
-                        <strong>{state.lock.user.username}</strong> által
-                    </h2>
-                    <div>
-                        <Button name="passLock" click={passLock} />
-                        <Button name="back" click={back} />
-                    </div>
-                </Modal>
-            )}
-
-            {!state.lock && (
-                <form onSubmit={onSave} ref={ref}>
-                    <div>{childrenWithProps}</div>
-                    {!immutable && <Submit />}
-                </form>
-            )}
-        </>
+        <form onSubmit={onSave} ref={ref}>
+            <div>{childrenWithProps}</div>
+            {!immutable && <Approve />}
+            {!immutable && <Reject remove={reject} entity={entity} />}
+        </form>
     );
 };
 
-export default Form;
+export default ApproveForm;
 
-Form.propTypes = {
+ApproveForm.propTypes = {
     /**
      * Type of service
      */
@@ -315,7 +314,7 @@ Form.propTypes = {
     creates: PropTypes.string,
 };
 
-Form.defaultProps = {
+ApproveForm.defaultProps = {
     immutable: false,
     creates: null,
 };

@@ -19,4 +19,20 @@ class StoreBrandChangeRequest extends FormRequest
 
         return $rules;
     }
+
+    /**
+     * Get the validation errors.
+     *
+     * @return string[]
+     */
+    public function messages(): array
+    {
+        $messages = (new StoreBrandRequest())->messages();
+
+        $messages['brand_id.exists'] = 'A megadott márka nem létezik.';
+        $messages['created_by.required'] = 'A létrehozó megadása kötelező.';
+        $messages['created_by.exists'] = 'A megadott létrehozó nem létezik.';
+
+        return $messages;
+    }
 }

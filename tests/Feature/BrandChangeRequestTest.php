@@ -9,6 +9,7 @@ use Database\Factories\BrandFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Arr;
 use Tests\TestCase;
 
 class BrandChangeRequestTest extends TestCase
@@ -29,13 +30,16 @@ class BrandChangeRequestTest extends TestCase
     /** @test */
     public function it_can_store_a_new_brand_change_request(): void
     {
-        $brand = BrandFactory::new()->raw();
-        $brand['image']['id'] = $brand['image_id'];
+        list($brand, $user) = $this->makeDummyRequestData();
         $response = $this->post(route('admin.brand-change-requests.store'), $brand);
-        unset($brand['image_id']);
+
         $response->assertCreated();
         $response->assertJsonFragment([
-            'data' => $brand,
+            'title' => $brand['title'],
+            'where_to_find' => $brand['where_to_find'],
+            'url' => $brand['url'],
+            'description' => $brand['description'],
+            'created_by' => $user['id'],
         ]);
     }
 
@@ -53,6 +57,9 @@ class BrandChangeRequestTest extends TestCase
             'description' => $brandChangeRequest->data['description'],
             'created_by' => $brandChangeRequest->data['created_by'],
         ]);
+
+        $this->assertDatabaseHas(Brand::class, Arr::only($brandChangeRequest->data, ['title', 'where_to_find', 'url']));
+        $this->assertDatabaseMissing(BrandChangeRequest::class, Arr::only($brandChangeRequest->toArray(), ['id']));
     }
 
     /** @test */
@@ -60,15 +67,16 @@ class BrandChangeRequestTest extends TestCase
     {
         /** @var BrandChangeRequest $brand */
         $brand = BrandChangeRequest::factory()->create();
-        $brandChanged = BrandFactory::new()->raw();
-        $brandChanged['image']['id'] = $brandChanged['image_id'];
+        list($brandChanged, $user) = $this->makeDummyRequestData();
         $response = $this->put(route('admin.brand-change-requests.update', ['brand_change_request' => $brand->id]), $brandChanged);
+
         $response->assertOk();
         $response->assertJsonFragment([
             'title' => $brandChanged['title'],
             'where_to_find' => $brandChanged['where_to_find'],
+            'url' => $brandChanged['url'],
             'description' => $brandChanged['description'],
-            'created_by' => $brandChanged['created_by'],
+            'created_by' => $user['id'],
         ]);
     }
 
@@ -95,11 +103,15 @@ class BrandChangeRequestTest extends TestCase
         $brands = BrandChangeRequest::factory()->count(3)->create();
         $response = $this->get(route('admin.brand-change-requests.index'));
         $response->assertOk();
-
+        $response->assertSessionHasNoErrors();
         foreach ($brands as $brand) {
             $response->assertJsonFragment([
                 'id' => $brand['id'],
-                'data' => $brand['data'],
+                'title' => $brand['data']['title'],
+                'where_to_find' => $brand['data']['where_to_find'],
+                'url' => $brand['data']['url'],
+                'description' => $brand['data']['description'],
+                'created_by' => $brand['data']['created_by'],
             ]);
         }
     }
@@ -112,5 +124,20 @@ class BrandChangeRequestTest extends TestCase
         $response = $this->post(route('admin.brand-change-requests.reject', ['brand_change_request' => $brandChangeRequest->id]));
         $response->assertOk();
         $this->assertNull(BrandChangeRequest::find($brandChangeRequest->id));
+        $this->assertDatabaseMissing(Brand::class, Arr::only($brandChangeRequest->data, ['title', 'where_to_find', 'url']));
+        $this->assertDatabaseMissing(BrandChangeRequest::class, Arr::only($brandChangeRequest->toArray(), ['id']));
+    }
+
+    /**
+     * @return array<int, mixed>
+     */
+    public function makeDummyRequestData(): array
+    {
+        $brand = BrandFactory::new()->raw();
+        $brand['image']['id'] = $brand['image_id'];
+        $user = User::factory()->create();
+        $brand['created_by'] = $user->id;
+
+        return [$brand, $user];
     }
 }

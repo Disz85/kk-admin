@@ -9,7 +9,9 @@
 }
 
 .create,
-.submit {
+.submit,
+.approve,
+.reject {
     @apply rounded-full text-light-snow bg-dark-night h-20 uppercase;
     @apply flex justify-center content-center;
     @apply fixed bottom-4 right-4;
@@ -20,20 +22,30 @@
         @apply px-3;
 
         .createText,
-        .submitText {
+        .submitText,
+        .approveText,
+        .rejectText {
             @apply visible opacity-100 w-full mx-3 my-auto text-2xl;
         }
     }
 }
 
+.reject {
+    @apply bottom-28;
+}
+
 .createText,
-.submitText {
+.submitText,
+.approveText,
+.rejectText {
     @apply invisible opacity-0 w-0 transition-opacity;
     @apply whitespace-nowrap;
 }
 
 .createIcon,
-.submitIcon {
+.submitIcon,
+.approveIcon,
+.rejectIcon {
     @apply text-light-snow text-center m-auto text-3xl;
 }
 

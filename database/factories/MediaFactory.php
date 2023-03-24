@@ -17,12 +17,21 @@ class MediaFactory extends Factory
      */
     public function definition()
     {
+        $width = fake()->numberBetween(200, 500);
+        $height = fake()->numberBetween(200, 250);
+
+        $fakerFileName = $this->faker->image(
+            storage_path("images/seeder/"),
+            $width,
+            $height,
+        );
+
         return [
-            'path' => fake()->unique()->name(),
-            'type' => fake()->randomElement(['image/jpg', 'image/png', 'image/gif']),
-            'title' => fake()->numberBetween(0, 10),
-            'width' => fake()->numberBetween(200, 500),
-            'height' => fake()->numberBetween(200, 250),
+            'path' => "images/seeder/" . basename($fakerFileName),
+            'type' => 'image/png',
+            'title' => basename($fakerFileName),
+            'width' => $width,
+            'height' => $height,
         ];
     }
 }

@@ -11,6 +11,7 @@ use App\Http\Resources\Admin\BrandResource;
 use App\Mail\BrandChangeRequestRejectionMail;
 use App\Models\Brand;
 use App\Models\BrandChangeRequest;
+use App\Models\Media;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -85,6 +86,9 @@ class BrandChangeRequestController extends Controller
      */
     public function show(BrandChangeRequest $brandChangeRequest): BrandChangeRequestResource
     {
+        $brandChangeRequest->image = isset($brandChangeRequest->data['image']['id'])
+            ? Media::find($brandChangeRequest->data['image']['id'])
+            : null;
         $brandChangeRequest->load('brand');
 
         return new BrandChangeRequestResource($brandChangeRequest);
@@ -102,7 +106,7 @@ class BrandChangeRequestController extends Controller
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"title", "brand_id", "created_by", "image[id]"},
+     *                 required={"title", "created_by", "image[id]"},
      *                 @OA\Property(
      *                     property="title",
      *                     type="string",
@@ -275,7 +279,9 @@ class BrandChangeRequestController extends Controller
     public function approve(BrandChangeRequest $brandChangeRequest): BrandResource
     {
         $brand = DB::transaction(function () use ($brandChangeRequest) {
-            $brand = Brand::updateOrCreate(['id' => $brandChangeRequest->brand_id ?? null], $brandChangeRequest->data);
+            $data = $brandChangeRequest->data;
+            $data['image_id'] = $data['image']['id'];
+            $brand = Brand::updateOrCreate(['id' => $brandChangeRequest->brand_id ?? null], $data);
             $brandChangeRequest->delete();
 
             return $brand;

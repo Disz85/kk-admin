@@ -10,8 +10,16 @@ export default {
     'Resource cannot be deleted due to existence of related resources.':
         'A {{resource}} nem törölhető, mert függőségei vannak, amik megakadályozzák ezt.',
     save: 'Mentés',
+    approve: 'Elfogadás',
+    reject: 'Elutasítás',
     upload: 'Feltöltés',
     filter: 'Szűrő',
+
+    approved: 'Jóváhagyva',
+    rejected: 'Elutasítva',
+    approvalFailed: 'A jóváhagyás hibába ütközött!',
+    saveFailed: 'A mentés hibába ütközött!',
+    rejectionFailed: 'Az elutasítás hibába ütközött!',
 
     'image-upload': 'Képfeltöltés',
     reset: 'Visszaállítás',

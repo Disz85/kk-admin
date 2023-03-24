@@ -8,6 +8,7 @@ import categories from './Translations/categories';
 import authors from './Translations/authors';
 import articles from './Translations/articles';
 import brands from './Translations/brands';
+import brandChangeRequests from './Translations/brand-change-requests';
 import products from './Translations/products';
 import ingredients from './Translations/ingredients';
 import editor from './Translations/editor';
@@ -29,6 +30,7 @@ const resources = {
             authors,
             articles,
             brands,
+            'brand-change-requests': brandChangeRequests,
             products,
             ingredients,
             editor,

@@ -19,6 +19,10 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
+        if (! is_dir(storage_path('images/seeder'))) {
+            mkdir(storage_path('images/seeder'));
+        }
+
         Queue::fake([
             MakeSearchable::class,
             RemoveFromSearch::class,

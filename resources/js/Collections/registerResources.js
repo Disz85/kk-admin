@@ -6,6 +6,7 @@ const resourceToCollection = (
         name,
         list,
         form,
+        approve,
         groupParent,
         children,
         routes = [],
@@ -42,6 +43,30 @@ const resourceToCollection = (
             requiresPermission,
             path: `/${name}/:id/show`,
             component: form,
+            listable: false,
+        });
+    }
+
+    if (name && approve) {
+        resources.push({
+            name,
+            requiresPermission,
+            path: `/${name}/:id/show`,
+            component: approve,
+            listable: false,
+        });
+        resources.push({
+            name,
+            requiresPermission,
+            path: `/${name}/:id/approve`,
+            component: approve,
+            listable: false,
+        });
+        resources.push({
+            name,
+            requiresPermission,
+            path: `/${name}/:id/reject`,
+            component: approve,
             listable: false,
         });
     }

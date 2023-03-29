@@ -46,6 +46,7 @@ use Illuminate\Support\Collection;
  * @property int|null $ewg_score
  * @property int|null $ewg_score_max
  * @property int|null $comedogen_index
+ * @property bool|null $is_top
  * @property string|null $description
  * @property Carbon|null $published_at
  * @property Carbon|null $created_at
@@ -77,6 +78,7 @@ class Ingredient extends Model implements HasDependencies
         'ewg_score',
         'ewg_score_max',
         'comedogen_index',
+        'is_top',
         'published_at',
         'created_by',
     ];

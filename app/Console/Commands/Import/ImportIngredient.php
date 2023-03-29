@@ -88,6 +88,7 @@ class ImportIngredient extends Command
                 $ingredient->updated_at = $data["modon"] ?? null;
                 $ingredient->published_at = $data["isapproved"] ? Carbon::now() : null;
                 $ingredient->comedogen_index = $data["comedogenicindex"] ?? null;
+                $ingredient->is_top = $data["topingredient"] ?? false;
                 $ingredient->created_by = $creator;
 
                 $ingredient->save();

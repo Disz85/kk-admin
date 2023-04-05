@@ -58,7 +58,7 @@ class ImportCremeIngredients extends Command
                 NOW()
             FROM _tmp_CremeContainsIngredient
             INNER JOIN products ON _tmp_CremeContainsIngredient.CremeID = products.legacy_id
-            INNER JOIN ingredients ON _tmp_CremeContainsIngredient.IngredientID = ingredients.id
+            INNER JOIN ingredients ON _tmp_CremeContainsIngredient.IngredientID = ingredients.legacy_id
             ON DUPLICATE KEY UPDATE
                 `order` = VALUES(`order`),
                 created_at = VALUES(created_at),

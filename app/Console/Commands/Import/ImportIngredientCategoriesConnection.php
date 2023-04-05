@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Import;
 
+use App\Enum\CategoryTypeEnum;
 use App\Models\Category;
 use App\Models\Ingredient;
 use App\XMLReaders\IngredientCategoryConnectionXMLReader;
@@ -46,7 +47,10 @@ class ImportIngredientCategoriesConnection extends Command
 
         $ingredientCategoryConnectionXMLReader->read($path, function (array $data) use ($progress): void {
             $ingredient = Ingredient::where('legacy_id', '=', $data['ingredientid'])->first();
-            $category = Category::where('legacy_id', '=', $data['ingredientfunctionid'])->first();
+            $category = Category::where([
+                ['legacy_id', '=', $data['ingredientfunctionid']],
+                ['type', '=', CategoryTypeEnum::Ingredient->value],
+            ])->first();
 
             try {
                 if ($ingredient !== null && $category !== null) {

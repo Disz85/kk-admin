@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Brand;
 use App\Models\User;
+use Database\Factories\MediaFactory;
 use Illuminate\Database\Seeder;
 
 class BrandSeeder extends Seeder
@@ -19,6 +20,9 @@ class BrandSeeder extends Seeder
     {
         $users = User::query()->pluck('id');
 
-        Brand::factory()->count(self::COUNT)->create(['created_by' => $users->random()]);
+        Brand::factory()->count(self::COUNT)->create([
+            'created_by' => $users->random(),
+            'image_id' => MediaFactory::new()->withRealImage()->create()->id,
+        ]);
     }
 }

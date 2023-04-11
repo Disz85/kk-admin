@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Author;
+use Database\Factories\MediaFactory;
 use Illuminate\Database\Seeder;
 
 class AuthorSeeder extends Seeder
@@ -16,6 +17,10 @@ class AuthorSeeder extends Seeder
      */
     public function run(): void
     {
-        Author::factory()->count(self::COUNT)->create();
+        Author::factory()
+            ->count(self::COUNT)
+            ->create([
+                'image_id' => MediaFactory::new()->withRealImage()->create()->id,
+            ]);
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Article;
 use App\Models\Author;
 use App\Models\Category;
 use App\Models\Tag;
+use Database\Factories\MediaFactory;
 use Illuminate\Database\Seeder;
 
 class ArticleSeeder extends Seeder
@@ -29,7 +30,9 @@ class ArticleSeeder extends Seeder
                 ->withAuthors($authors->random(rand(1, 2)))
                 ->withTags($tags->random(rand(1, 5)))
                 ->withCategories($categories->random(rand(1, 5)))
-                ->create();
+                ->create([
+                    'image_id' => MediaFactory::new()->withRealImage()->create()->id,
+                ]);
         }
     }
 }

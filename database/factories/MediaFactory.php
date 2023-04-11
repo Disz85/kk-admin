@@ -3,7 +3,10 @@
 namespace Database\Factories;
 
 use App\Models\Media;
+use App\Repositories\MediaRepository;
+use Database\Seeders\ImageSeeder;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\File;
 
 /**
  * @extends Factory<Media>
@@ -15,23 +18,46 @@ class MediaFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
-        $width = fake()->numberBetween(200, 500);
-        $height = fake()->numberBetween(200, 250);
-
-        $fakerFileName = $this->faker->image(
-            storage_path("images/seeder/"),
-            $width,
-            $height,
-        );
-
         return [
-            'path' => "images/seeder/" . basename($fakerFileName),
+            'width' => $this->faker->numberBetween(200, 500),
+            'height' => $this->faker->numberBetween(200, 250),
+            'path' => fn (array $data) => $this->faker->imageUrl($data['width'], $data['height']),
             'type' => 'image/png',
-            'title' => basename($fakerFileName),
-            'width' => $width,
-            'height' => $height,
+            'title' => $this->faker->words(1, 3),
         ];
+    }
+
+    public function withRealImage(string $path = null): self
+    {
+        $path = $path ?? $this->randomImage();
+        $uploadedPath = $this->uploadImageToStorage($path);
+
+        return $this->state([
+            'path' => $uploadedPath,
+        ]);
+    }
+
+    private function randomImage(): string
+    {
+        $files = glob(storage_path('/images') . '/*.*');
+
+        if (! $files) {
+            (app()->make(ImageSeeder::class))->run();
+            $files = glob(storage_path('/images') . '/*.*');
+        }
+
+        $file = array_rand($files);
+
+        return $files[$file];
+    }
+
+    private function uploadImageToStorage(string $path): string
+    {
+        /** @var MediaRepository $mediaRepository */
+        $mediaRepository = app()->make(MediaRepository::class);
+
+        return $mediaRepository->store(new File($path), '/images');
     }
 }

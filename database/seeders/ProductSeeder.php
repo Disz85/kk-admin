@@ -9,6 +9,7 @@ use App\Models\Ingredient;
 use App\Models\Product;
 use App\Models\Tag;
 use App\Models\User;
+use Database\Factories\MediaFactory;
 use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
@@ -48,6 +49,7 @@ class ProductSeeder extends Seeder
                     'created_by' => $user,
                     'updated_by' => $user,
                     'ingredients_by' => $user,
+                    'image_id' => MediaFactory::new()->withRealImage()->create()->id,
                 ]);
         }
     }

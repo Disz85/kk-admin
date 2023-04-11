@@ -8,7 +8,6 @@
 /public/build/*
 /public/vendor
 /storage/*.key
-/storage/images/seeder
 /vendor
 .env
 .env.backup

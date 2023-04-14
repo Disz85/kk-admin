@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ArticleController;
+use App\Http\Controllers\Api\AutocompleteController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\IngredientController;
@@ -58,4 +59,8 @@ Route::middleware(['cache.headers:max_age=' . config('api.max-age')])->group(fun
         ->name('products.show');
     Route::get('products/ingredient-functions/{product:slug}', [ ProductController::class, 'show' ])
         ->name('products.ingredientFunctions');
+
+    Route::prefix('autocomplete')->group(function () {
+        Route::get('/brands', [AutocompleteController::class, 'brands']);
+    });
 });
